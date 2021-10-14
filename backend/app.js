@@ -1,8 +1,11 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
-
+const sequelize = require('./models/index').sequelize;
+const {QueryTypes} = require('sequelize');
 const app = express();
+
+sequelize.sync();
 dotenv.config();
 
 app.use(cors());
