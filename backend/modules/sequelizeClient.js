@@ -1,16 +1,18 @@
 const Sequelize = require('sequelize/lib/sequelize');
-const dotenv = require('dotenv');
+const config = require('../config')
 
-dotenv.config();
-
-const sequelize = new Sequelize('database1', 'root', null, {
-    dialect: 'mysql',
-    host: 'localhost',
-    port: '3306',
-    logging: false,
-    define: {
-        freezeTableName: true
-    }
+const sequelize = new Sequelize(
+    config.databases.mysql.database,
+    config.databases.mysql.username,
+    config.databases.mysql.password,
+    {
+        dialect: 'mysql',
+        host: config.databases.mysql.host,
+        port: config.databases.mysql.port,
+        logging: false,
+        define: {
+            freezeTableName: true
+        }
 });
 
 module.exports = sequelize;
