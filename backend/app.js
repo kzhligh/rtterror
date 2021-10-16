@@ -1,8 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const config = require('./config')
-const sequelize = require('./modules/sequelizeClient');
-// const customerRouters = require('./routes/customer');
+const sequelize = require('./modules/sequelize');
 const router = require('./router')
 
 const app = express();
@@ -15,8 +14,6 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/v1', router);
-
-// app.use('/customers', customerRouters);
 
 const PORT = config.port || 5000;
 
