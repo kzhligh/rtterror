@@ -1,5 +1,5 @@
 const express = require('express');
-const Customer = require('../models/customer');
+const Service = require('../models/service');
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ router.use(function (req, res, next) {
 });
 
 router.get('/', (req, res, next) => {
-    Customer.findAll({ raw: true })
+    Service.findAll({ raw: true })
         .then(data => {
             console.log(data);
             res.send(data);
@@ -21,7 +21,7 @@ router.get('/:id', (req, res, next) => {
     const { params } = req;
     const { id } = params;
     console.log(id);
-    Customer.findByPk(id)
+    Service.findByPk(id)
         .then(data => {
             console.log('the return value of findByPk() is: ', data.dataValues);
             res.send(data);
@@ -31,23 +31,23 @@ router.get('/:id', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
     const { body } = req;
-    Customer.create(body)
+    Service.create(body)
         .then(data => {
-        console.log(data);
-        res.send(data);
-    })
+            console.log(data);
+            res.send(data);
+        })
         .catch(err => {console.log(err)});
 });
 
 router.put('/:id', (req, res, next) => {
     const { params, body } = req;
     const { id } = params;
-    Customer.update(body, {
+    Service.update(body, {
         where: {
             id: id
         }
     }).then( ([numberOfUpdate]) => {
-        console.log(`${numberOfUpdate} customer(s) information has been updated`);
+        console.log(`${numberOfUpdate} service(s) information has been updated`);
         res.sendStatus(200);
     }).catch(err => {console.log(err)});
 });
@@ -55,7 +55,7 @@ router.put('/:id', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
     const { params } = req;
     const { id } = params;
-    Customer.destroy({
+    Service.destroy({
         where: {
             id: id
         }
