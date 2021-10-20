@@ -7,6 +7,9 @@ on:
   pull_request:
     branches:
       - master
+  push:
+    branches:
+      - test/github_actions-1
 
 env:
   node-version: '14'
