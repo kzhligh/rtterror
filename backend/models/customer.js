@@ -1,23 +1,25 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../modules/sequelizeClient.js');
 
-const Customer = sequelize.define('customers', {
+const Customer = sequelize.define(
+  'customers',
+  {
     id: {
-        type: DataTypes.STRING,
-        primaryKey: true
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
     },
     firstName: {
-        type: DataTypes.STRING,
+      type: DataTypes.STRING,
     },
     lastName: {
-        type: DataTypes.STRING,
-    }
-}, {
+      type: DataTypes.STRING,
+    },
+  },
+  {
     timestamps: false,
-    freezeTableName: true
-});
-Customer.sync().then(() => {
-    console.log('table created');
-});
+    freezeTableName: true,
+  }
+);
 
 module.exports = Customer;
