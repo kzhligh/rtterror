@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize/lib/sequelize');
-require('./sequelizeClient');
+require('./sequelize');
 
 jest.mock('sequelize/lib/sequelize', () => {
   const mockClient = {
