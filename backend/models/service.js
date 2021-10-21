@@ -33,7 +33,7 @@ const Service = sequelize.define('services', {
 });
 
 Service.sync().then(() => {
-    console.log('table created');
+    console.log('table \"services\" created');
 });
 
 module.exports = Service;

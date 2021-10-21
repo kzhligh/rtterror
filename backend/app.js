@@ -7,7 +7,7 @@ const router = require('./router')
 const app = express();
 
 sequelize.authenticate()
-    .then(() => { console.log('DB connected'); })
+    .then(() => { console.log('Sequelize successfully connected to MySQL database on port:  ' + config.databases.mysql.port); })
     .catch(error => console.log(error));
 
 app.use(cors());

@@ -17,7 +17,7 @@ const Customer = sequelize.define('customers', {
     freezeTableName: true
 });
 Customer.sync().then(() => {
-    console.log('table created');
+    console.log('table \"customers\" created');
 });
 
 module.exports = Customer;
