@@ -1,5 +1,6 @@
-import NavSection from "../../components/navbar"
+import NavSection from "../../components/Layout"
 import request from "superagent";
+import PrimarySearchAppBar from "../../components/Layout";
 
 // we can use regular react state or fetch the data with super agent  or use getStaticProps
 function customer(props){
@@ -8,7 +9,6 @@ function customer(props){
         <box>
             <h1>Customer</h1>
             <h2>{text}</h2>
-            <NavSection></NavSection>
         </box>
     )
 }
