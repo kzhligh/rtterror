@@ -4,7 +4,6 @@ import * as React from "react";
 import styled from '../../styles/layout.module.css'
 import {AddCircleOutlineOutlined, SubjectOutlined} from "@mui/icons-material";
 
-
 const CustomDrawer =() =>{
     const menuItems = [
         {
@@ -37,8 +36,11 @@ const CustomDrawer =() =>{
                         key={item.text}
                     >
                         <ListItemIcon>{item.icon}</ListItemIcon>
-                        <ListItemText primary={item.text} />
-                        <Link href={item.path}/>
+                        <Link href={item.path}>
+                            <a>
+                                {item.text}
+                            </a>
+                        </Link>
                     </ListItem>
                 ))}
             </List>
