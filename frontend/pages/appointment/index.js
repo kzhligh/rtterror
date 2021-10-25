@@ -7,7 +7,6 @@ function Appointment(props){
     const {text} = props
     return(
         <box>
-            <PrimarySearchAppBar />
             <h1>Appointment</h1>
             <h2>{text}</h2>
         </box>

@@ -9,15 +9,10 @@ import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
-import {useState} from "react";
-import {Drawer, List, ListItem} from "@mui/material";
-import Link from 'next/link'
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -59,14 +54,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar(props) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-    const [drawerOpen, setDrawerOpen ] = useState(false);
-    const toggleDrawer = () =>{
-        setDrawerOpen(!drawerOpen);
-    }
-    const navList = ["dashboard","service","appointment"];
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -166,16 +156,16 @@ export default function PrimarySearchAppBar() {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={toggleDrawer}
-                        sx={{ mr: 2 }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
+                    {/*<IconButton*/}
+                    {/*    size="large"*/}
+                    {/*    edge="start"*/}
+                    {/*    color="inherit"*/}
+                    {/*    aria-label="open drawer"*/}
+                    {/*    onClick={toggleDrawer}*/}
+                    {/*    sx={{ mr: 2 }}*/}
+                    {/*>*/}
+                    {/*    <MenuIcon />*/}
+                    {/*</IconButton>*/}
                     <Typography
                         variant="h6"
                         noWrap
@@ -211,30 +201,7 @@ export default function PrimarySearchAppBar() {
             </AppBar>
             {renderMobileMenu}
             {renderMenu}
-            <Drawer open={drawerOpen}>
-                <IconButton
-                    // size="large"
-                    edge="start"
-                    color="inherit"
-                    aria-label="open drawer"
-                    onClick={toggleDrawer}
-                    sx={{ mr: 2 }}
-                >
-                    <MenuIcon />
-                </IconButton>
-                <List>
-                    {navList.map((item) => (
-                        <Link href={`/${item}`}/>
-                        // <ListItem>
-                        // <IconButton
-                        //     onClick={toggleDrawer}
-                        // >
-                        //     <h1>{item}</h1>
-                        // </IconButton>
-                        // </ListItem>
-                    ))}
-                </List>
-            </Drawer>
+
         </Box>
     );
 }

@@ -7,7 +7,6 @@ function Service(props){
     const {text} = props
     return(
         <box>
-            <PrimarySearchAppBar />
             <h1>Service</h1>
             <h2>{text}</h2>
         </box>

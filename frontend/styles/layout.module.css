@@ -1,0 +1,19 @@
+.bodyWrapper{
+    display: flex;
+}
+
+.drawer {
+    width: 300px;
+}
+
+.drawerPaper {
+    width: 300px;
+}
+
+.content {
+    width: 100%
+}
+
+.contentWrapper {
+    padding-left: 10px;
+}
