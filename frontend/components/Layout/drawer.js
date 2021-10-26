@@ -1,15 +1,19 @@
-import {Drawer, List, ListItem, ListItemIcon, ListItemText} from "@mui/material";
+import {Drawer, List, ListItem, ListItemIcon} from "@mui/material";
 import Link from "next/link";
 import * as React from "react";
-import styled from '../../styles/layout.module.css'
 import {AddCircleOutlineOutlined, SubjectOutlined} from "@mui/icons-material";
 
 const CustomDrawer =() =>{
     const menuItems = [
         {
-            text: 'Customer',
+            text: 'Appointment',
             icon: <SubjectOutlined color="secondary" />,
-            path: '/customer'
+            path: '/appointment'
+        },
+        {
+            text: 'Patient',
+            icon: <AddCircleOutlineOutlined color="secondary" />,
+            path: '/patient'
         },
         {
             text: 'Service',
@@ -17,34 +21,43 @@ const CustomDrawer =() =>{
             path: '/service'
         },
         {
-            text: 'Appointment',
+            text: 'Employee',
+            icon: <SubjectOutlined color="secondary" />,
+            path: '/employee'
+        },
+        {
+            text: 'Schedule',
             icon: <AddCircleOutlineOutlined color="secondary" />,
-            path: '/appointment'
+            path: '/schedule'
+        },
+        {
+            text: 'Product',
+            icon: <AddCircleOutlineOutlined color="secondary" />,
+            path: '/product'
+        },
+        {
+            text: 'Invoice',
+            icon: <AddCircleOutlineOutlined color="secondary" />,
+            path: '/invoice'
         }
     ];
     return (
-        <Drawer
-            className={styled.drawer}
-            variant='permanent'
-            anchor='left'
-            classes={{paper: styled.drawerPaper}}
-        >
-            <List>
-                {menuItems.map((item) => (
-                    <ListItem
-                        button
-                        key={item.text}
-                    >
-                        <ListItemIcon>{item.icon}</ListItemIcon>
-                        <Link href={item.path}>
-                            <a>
-                                {item.text}
-                            </a>
-                        </Link>
-                    </ListItem>
-                ))}
-            </List>
-        </Drawer>
+
+                <List>
+                    {menuItems.map((item) => (
+                        <ListItem
+                            button
+                            key={item.text}
+                        >
+                            <ListItemIcon>{item.icon}</ListItemIcon>
+                            <Link href={item.path}>
+                                <a>
+                                    {item.text}
+                                </a>
+                            </Link>
+                        </ListItem>
+                    ))}
+                </List>
     );
 }
 export default CustomDrawer;
