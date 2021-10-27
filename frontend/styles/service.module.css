@@ -1,34 +1,33 @@
-.cardWrapper{
-    margin: 10px;
-    padding: 10px;
-    width: 85%;
+.cardWrapper {
+  margin: 10px;
+  padding: 10px;
+  width: 85%;
 }
 
 .flexAlignContainer {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .flexContainer {
-    display: flex;
+  display: flex;
 }
 
-.buttonContainer{
-    width: 80px;
-    height: 50px;
+.buttonContainer {
+  width: 80px;
+  height: 50px;
 }
 
 .addButton {
-    width: 120px;
-    height: 50px;
+  width: 120px;
+  height: 50px;
 }
 
-.separateHDiv{
-    height: 50px;
+.separateHDiv {
+  height: 50px;
 }
 
-.separateVDiv{
-    width: 50px;
+.separateVDiv {
+  width: 50px;
 }
-

@@ -1,26 +1,26 @@
-.bodyWrapper{
-    display: flex;
+.bodyWrapper {
+  display: flex;
 }
 
-.sideBar{
-    display: flex;
-    flex-direction: column;
+.sideBar {
+  display: flex;
+  flex-direction: column;
 }
 
-.drawerWrapper{
-    padding-left: 10px;
-    margin-left: 10px;
+.drawerWrapper {
+  padding-left: 10px;
+  margin-left: 10px;
 }
 
 .content {
-    width: 100%
+  width: 100%;
 }
 
 .contentWrapper {
-    padding-left: 10px;
+  padding-left: 10px;
 }
 
 .calender {
-    width: 350px;
-    display: flex;
+  width: 350px;
+  display: flex;
 }
