@@ -1,43 +1,50 @@
-import {Drawer, List, ListItem, ListItemIcon} from "@mui/material";
+import { List, ListItem, ListItemIcon} from "@mui/material";
+import styled from '../../styles/layout.module.css'
 import Link from "next/link";
 import * as React from "react";
-import {AddCircleOutlineOutlined, SubjectOutlined} from "@mui/icons-material";
+import {
+    AccessTime,
+    AccountCircle,
+    AddBox, Event,
+    Healing, Receipt,
+    Work
+} from "@mui/icons-material";
 
 const CustomDrawer =() =>{
     const menuItems = [
         {
             text: 'Appointment',
-            icon: <SubjectOutlined color="secondary" />,
+            icon: <AccessTime />,
             path: '/appointment'
         },
         {
             text: 'Patient',
-            icon: <AddCircleOutlineOutlined color="secondary" />,
+            icon: <AccountCircle  />,
             path: '/patient'
         },
         {
             text: 'Service',
-            icon: <AddCircleOutlineOutlined color="secondary" />,
+            icon: <AddBox />,
             path: '/service'
         },
         {
             text: 'Employee',
-            icon: <SubjectOutlined color="secondary" />,
+            icon: <Work />,
             path: '/employee'
         },
         {
             text: 'Schedule',
-            icon: <AddCircleOutlineOutlined color="secondary" />,
+            icon: <Event />,
             path: '/schedule'
         },
         {
             text: 'Product',
-            icon: <AddCircleOutlineOutlined color="secondary" />,
+            icon: <Healing  />,
             path: '/product'
         },
         {
             text: 'Invoice',
-            icon: <AddCircleOutlineOutlined color="secondary" />,
+            icon: <Receipt />,
             path: '/invoice'
         }
     ];
@@ -48,6 +55,7 @@ const CustomDrawer =() =>{
                         <ListItem
                             button
                             key={item.text}
+                            className={styled.drawerWrapper}
                         >
                             <ListItemIcon>{item.icon}</ListItemIcon>
                             <Link href={item.path}>

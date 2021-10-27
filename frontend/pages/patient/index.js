@@ -1,16 +1,11 @@
-import NavSection from "../../components/Layout"
-import request from "superagent";
-import PrimarySearchAppBar from "../../components/Layout";
-import CustomerTable from "../../components/customer";
-
 // we can use regular react state or fetch the data with super agent  or use getStaticProps
-function customer(props){
+function Patient(props){
     const {text} = props
     return(
 
         <div>
             <h1>
-                Customer
+                Patient
             </h1>
         </div>
 
@@ -27,4 +22,4 @@ export async function getStaticProps() {
         props: { text: resstatus }, // will be passed to the page component as props
     }
 }
-export default customer;
+export default Patient;
