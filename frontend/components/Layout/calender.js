@@ -5,7 +5,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import StaticDatePicker from '@mui/lab/StaticDatePicker';
 import styled from '../../styles/layout.module.css'
 
-export default function StaticDatePickerDemo() {
+const StaticDatePickerDemo = ()=> {
     const [value, setValue] = React.useState(new Date());
 
     return (
@@ -23,3 +23,4 @@ export default function StaticDatePickerDemo() {
         </LocalizationProvider>
     );
 }
+export default StaticDatePickerDemo;
