@@ -1,5 +1,5 @@
 import * as React from "react";
-import ServiceCardItem from "./serviceCardItem";
+import ServiceCardRow from "./serviceCardRow";
 import Button from "@mui/material/Button";
 import styled from "../../styles/service.module.css";
 import Select from "@mui/material/Select";
@@ -7,10 +7,11 @@ import { useState } from "react";
 import { FormControl, InputLabel, TextField } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import SearchInput from "./search";
+import ServiceForm from "./serviceForm";
 
 // we can use regular react state or fetch the data with super agent  or use getStaticProps
 const ServiceComponent = (props) => {
-  const serviceList = [
+  const serviceListData = [
     {
       serviceId: 1,
       treatmentType: "type1 ",
@@ -24,9 +25,9 @@ const ServiceComponent = (props) => {
     },
     {
       serviceId: 2,
-      treatmentType: "type1 ",
-      name: "name1 ",
-      description: "descriptiopn 1",
+      treatmentType: "type2 ",
+      name: "name2 ",
+      description: "descriptiopn 2",
       price: 100,
       duration: "1h30m",
       code: "code1",
@@ -35,9 +36,9 @@ const ServiceComponent = (props) => {
     },
     {
       serviceId: 3,
-      treatmentType: "type1 ",
-      name: "name1 ",
-      description: "descriptiopn 1",
+      treatmentType: "type3 ",
+      name: "name3 ",
+      description: "descriptiopn 3",
       price: 100,
       duration: "1h30m",
       code: "code1",
@@ -46,9 +47,9 @@ const ServiceComponent = (props) => {
     },
     {
       serviceId: 4,
-      treatmentType: "type1 ",
-      name: "name1 ",
-      description: "descriptiopn 1",
+      treatmentType: "type4 ",
+      name: "name4 ",
+      description: "descriptiopn 4",
       price: 100,
       duration: "1h30m",
       code: "code1",
@@ -57,19 +58,54 @@ const ServiceComponent = (props) => {
     },
   ];
   const [orderBy, setOrderBy] = useState("");
-  const handleSelectOrderBy = (event) => {};
-  const { text } = props;
+  const [searchResult, setSearchResult] = useState(new Set());
+  const [serviceList, setServiceList] = useState(serviceListData);
+  const handleSelectOrderBy = (event) => {
+    switch(event.target.value) {
+      case 'description':
+        // code block
+        break;
+      case 'code':
+        // code block
+        break;
+      case 'name':
+        // code block
+        break;
+      default:
+        setServiceList(serviceList.s)
+        // code block
+    }
+  };
+  const handleSearch = (event) => {
+
+    alert(event.target.value);
+  };
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+
+  //want on change to search directly , empty to have all back
+  //edit the service
+  //add new employee
   return (
     <box>
-      <SearchInput />
+      <SearchInput handleSearch={handleSearch}/>
       <div className={styled.separateHDiv}></div>
       <Button
         className={styled.addButton}
         variant="outlined"
-        onClick={() => alert("new service")}
+        onClick={() => setOpen(true)}
       >
         Add New
       </Button>
+      {open && <ServiceForm handleClickOpen={handleClickOpen} handleClose={handleClose} open={open}/>}
       <div className={styled.flexAlignContainer}>
         <h1>Select a service</h1>
         <div className={styled.flexContainer}>
@@ -85,9 +121,13 @@ const ServiceComponent = (props) => {
           </FormControl>
         </div>
       </div>
+
+      <div>
+
       {serviceList.map((item) => (
-        <ServiceCardItem key={item.serviceId} item={item} />
+        <ServiceCardRow key={item.serviceId} item={item} />
       ))}
+      </div>
     </box>
   );
 };

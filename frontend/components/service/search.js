@@ -1,20 +1,17 @@
 import * as React from "react";
 import Paper from "@mui/material/Paper";
-import InputBase from "@mui/material/InputBase";
-import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import DirectionsIcon from "@mui/icons-material/Directions";
 import { TextField } from "@mui/material";
 import { useState } from "react";
 
-export default function SearchInput() {
-  const [searchInput, setSearchInput] = useState("");
-  const handleSearch = () => {
-    alert(searchInput);
-    setSearchInput("");
-  };
+export default function SearchInput(props) {
+  const {handleSearch} = props;
+  const [searchInput, setSearchInput, ] = useState("");
+  // const handleSearch = () => {
+  //   alert(searchInput);
+  //   setSearchInput("");
+  // };
 
   //onChange maybe too much
   return (
@@ -22,9 +19,10 @@ export default function SearchInput() {
       component="form"
       sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 400 }}
     >
-      <IconButton sx={{ p: "10px" }} aria-label="search" onClick={handleSearch}>
-        <SearchIcon />
-      </IconButton>
+      <SearchIcon />
+      {/*<IconButton sx={{ p: "10px" }} aria-label="search" onClick={handleSearch}>*/}
+      {/*  */}
+      {/*</IconButton>*/}
       {/*<InputBase*/}
       {/*    sx={{ ml: 1, flex: 1 }}*/}
       {/*    placeholder="Search "*/}
@@ -39,7 +37,7 @@ export default function SearchInput() {
         // variant="filled"
         fullWidth
         value={searchInput}
-        onChange={(event) => setSearchInput(event.target.value)}
+        onChange={(event) => handleSearch(event)}
       />
     </Paper>
   );
