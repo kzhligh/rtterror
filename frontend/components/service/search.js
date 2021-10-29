@@ -10,7 +10,6 @@ export default function SearchInput(props) {
   const {handleSearch} = props;
   const [searchInput, setSearchInput, ] = useState("");
   const searchHandler = (val) => {
-    console.log("val"+val)
     setSearchInput(val);
     handleSearch(val);
   };

@@ -3,7 +3,7 @@ import ServiceCardRow from "./serviceCardRow";
 import Button from "@mui/material/Button";
 import styled from "../../styles/service.module.css";
 import Select from "@mui/material/Select";
-import {useEffect, useState} from "react";
+import { useState} from "react";
 import { FormControl} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import SearchInput from "./search";
@@ -22,39 +22,43 @@ const ServiceComponent = () => {
       code: "code1",
       offerBy: ["E1", "E2"],
       status: "blocked",
+      dateCreated: "2018 / 10/ 02"
     },
     {
       serviceId: 2,
       treatmentType: "type2 ",
-      name: "w ",
+      name: "a ",
       description: "c",
       price: 100,
       duration: "1h30m",
       code: "code2",
       offerBy: ["E1", "E2"],
       status: "active",
+      dateCreated: "2018 / 10/ 03"
     },
     {
       serviceId: 3,
       treatmentType: "type3 ",
-      name: "b ",
+      name: "x ",
       description: "b",
       price: 100,
       duration: "1h30m",
       code: "code3",
       offerBy: ["E1", "E2"],
       status: "blocked",
+      dateCreated: "2018 / 10/ 04"
     },
     {
       serviceId: 4,
       treatmentType: "type4 ",
-      name: "a ",
+      name: "y",
       description: "a",
       price: 100,
       duration: "1h30m",
       code: "code4",
       offerBy: ["E1", "E2"],
       status: "active",
+      dateCreated: "2018 / 10/ 08"
     },
   ];
   const [serviceListDisplay, setServiceListDisplay] = useState(true);
@@ -63,21 +67,21 @@ const ServiceComponent = () => {
 
 
   const handleSelectOrderBy = (event) => {
+
     switch(event.target.value) {
-      case 'description':
+      case 2:
         setServiceList(serviceListData.sort((item1,item2)=> (item1.description.toLowerCase() > item2.description.toLowerCase()) ? 1 : ((item2.description.toLowerCase() > item1.description.toLowerCase()) ? -1 : 0)));
         break;
-      case 'code':
+      case 1:
         setServiceList(serviceListData.sort((item1,item2)=> (item1.code.toLowerCase() > item2.code.toLowerCase()) ? 1 : ((item2.code.toLowerCase() > item1.code.toLowerCase()) ? -1 : 0)));
         break;
-      case 'name':
+      case 3:
         setServiceList(serviceListData.sort((item1,item2)=> (item1.name.toLowerCase() > item2.name.toLowerCase()) ? 1 : ((item2.name.toLowerCase() > item1.name.toLowerCase()) ? -1 : 0)));
         break;
       default:
         setServiceList(serviceListData.sort((item1,item2)=>item1.serviceId-item2.serviceId ));
-        // code block
     }
-    console.log(serviceList);
+    // console.log(serviceList);
     setServiceListDisplay(true);
   };
   const handleSearch = (val) => {
@@ -105,13 +109,12 @@ const ServiceComponent = () => {
   };
 
 
-  //want on change to search directly , empty to have all back
   //edit the service
   //add new employee
   return (
     <box>
       <SearchInput handleSearch={handleSearch}/>
-      <div className={styled.separateHDiv}></div>
+      <div className={styled.separateVDiv}></div>
       <Button
         className={styled.addButton}
         variant="outlined"
@@ -124,13 +127,13 @@ const ServiceComponent = () => {
         <h1>Select a service</h1>
         <div className={styled.flexContainer}>
           <p>Order By</p>
-          <div className={styled.separateVDiv}></div>
+          <div className={styled.separateHDiv}></div>
           <FormControl>
             <Select onChange={handleSelectOrderBy}>
-              <MenuItem value={"serviceId"}></MenuItem>
-              <MenuItem value={"code"}>Service Code</MenuItem>
-              <MenuItem value={"description"}>Description</MenuItem>
-              <MenuItem value={"name"}>Name</MenuItem>
+              <MenuItem value={0}></MenuItem>
+              <MenuItem value={1}>Service Code</MenuItem>
+              <MenuItem value={2}>Description</MenuItem>
+              <MenuItem value={3}>Name</MenuItem>
             </Select>
           </FormControl>
         </div>

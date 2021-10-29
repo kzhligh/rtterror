@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import styled from "../../styles/service.module.css";
 import {useState} from "react";
 import ServiceCard from "./serviceCard";
-import {CardHeader} from "@mui/material";
+import {CardActionArea, CardActions, CardHeader} from "@mui/material";
 
 const ServiceCardRow = (props) => {
   const { item } = props;
@@ -30,17 +30,27 @@ const ServiceCardRow = (props) => {
         }:undefined}
         style={{backgroundColor: isBlock() ? "gray": "white"}}
       >
-          <CardHeader>
-              {item['name']}
-          </CardHeader>
+          <CardHeader
+              sx={{ fontSize: 30 }}
+              title={item['name']}
+          />
         <CardContent>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-              Service Code:<div className={styled.separateVDiv}></div> {item['code']}
+          <Typography sx={{ fontSize: 24 }} color="text.secondary" >
+              Service Code: {item['code']}
           </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              Date
-          </Typography>
+            <Typography sx={{ fontSize: 24 }} color="text.secondary" >
+                Description : {item['description']}
+            </Typography>
         </CardContent>
+          <div className={styled.separateVDiv} />
+          <CardActionArea >
+              <div className={styled.dateContainer}>
+                  <Typography sx={{ fontSize: 20 }} >
+                      Created On {item['dateCreated']}
+                  </Typography>
+              </div>
+          </CardActionArea>
+
       </Card>
       <Button
         className={styled.buttonContainer}
