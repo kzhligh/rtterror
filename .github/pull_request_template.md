@@ -6,7 +6,11 @@
 
 # Related Jira Issue (ID/URL)
 
+[Sample Link Name](URL)
+
 # Related GitHub Issues
+
+- This fixes #5.
 
 # Checklist
 - [ ] Code compiles correctly
