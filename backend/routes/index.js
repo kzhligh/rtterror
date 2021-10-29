@@ -1,3 +1,3 @@
 const customer = require('./customer');
 
-module.exports = {customer};
+module.exports = { customer };
