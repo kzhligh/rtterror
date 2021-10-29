@@ -8,10 +8,11 @@ import { useState } from "react";
 export default function SearchInput(props) {
   const {handleSearch} = props;
   const [searchInput, setSearchInput, ] = useState("");
-  // const handleSearch = () => {
-  //   alert(searchInput);
-  //   setSearchInput("");
-  // };
+  const searchHandler = (event) => {
+    // alert(searchInput);
+    setSearchInput(event.target.value);
+    handleSearch(event);
+  };
 
   //onChange maybe too much
   return (
@@ -37,7 +38,7 @@ export default function SearchInput(props) {
         // variant="filled"
         fullWidth
         value={searchInput}
-        onChange={(event) => handleSearch(event)}
+        onChange={(event) => searchHandler(event)}
       />
     </Paper>
   );
