@@ -4,33 +4,26 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import { TextField } from "@mui/material";
 import { useState } from "react";
+import {Close} from "@mui/icons-material";
 
 export default function SearchInput(props) {
   const {handleSearch} = props;
   const [searchInput, setSearchInput, ] = useState("");
-  const searchHandler = (event) => {
-    // alert(searchInput);
-    setSearchInput(event.target.value);
-    handleSearch(event);
+  const searchHandler = (val) => {
+    console.log("val"+val)
+    setSearchInput(val);
+    handleSearch(val);
   };
 
-  //onChange maybe too much
   return (
     <Paper
       component="form"
       sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 400 }}
     >
-      <SearchIcon />
-      {/*<IconButton sx={{ p: "10px" }} aria-label="search" onClick={handleSearch}>*/}
-      {/*  */}
-      {/*</IconButton>*/}
-      {/*<InputBase*/}
-      {/*    sx={{ ml: 1, flex: 1 }}*/}
-      {/*    placeholder="Search "*/}
-      {/*    onChange={event => setSearchInput(event.target.value)}*/}
-      {/*    defaultValue={searchInput}*/}
-      {/*    // inputProps={{ 'aria-label': 'search google maps' }}*/}
-      {/*/>*/}
+
+      <IconButton sx={{ p: "10px" }} aria-label="search" disabled={true}>
+        <SearchIcon />
+      </IconButton>
       <TextField
         id="filled-search"
         label="Search"
@@ -38,8 +31,12 @@ export default function SearchInput(props) {
         // variant="filled"
         fullWidth
         value={searchInput}
-        onChange={(event) => searchHandler(event)}
+        onChange={(event) => searchHandler(event.target.value)}
       />
+      <IconButton sx={{ p: "10px" }} aria-label="search" onClick={()=>searchHandler('')}>
+        <Close/>
+      </IconButton>
+
     </Paper>
   );
 }

@@ -4,19 +4,19 @@ import Button from "@mui/material/Button";
 import styled from "../../styles/service.module.css";
 import Select from "@mui/material/Select";
 import {useEffect, useState} from "react";
-import {Box, FormControl, InputLabel, TextField} from "@mui/material";
+import { FormControl} from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import SearchInput from "./search";
 import ServiceForm from "./serviceForm";
 
 // we can use regular react state or fetch the data with super agent  or use getStaticProps
-const ServiceComponent = (props) => {
+const ServiceComponent = () => {
   const serviceListData = [
     {
       serviceId: 1,
       treatmentType: "type1 ",
-      name: "name1 ",
-      description: "descriptiopn 1",
+      name: "z ",
+      description: "d",
       price: 100,
       duration: "1h30m",
       code: "code1",
@@ -26,8 +26,8 @@ const ServiceComponent = (props) => {
     {
       serviceId: 2,
       treatmentType: "type2 ",
-      name: "name2 ",
-      description: "descriptiopn 2",
+      name: "w ",
+      description: "c",
       price: 100,
       duration: "1h30m",
       code: "code2",
@@ -37,8 +37,8 @@ const ServiceComponent = (props) => {
     {
       serviceId: 3,
       treatmentType: "type3 ",
-      name: "name3 ",
-      description: "descriptiopn 3",
+      name: "b ",
+      description: "b",
       price: 100,
       duration: "1h30m",
       code: "code3",
@@ -48,8 +48,8 @@ const ServiceComponent = (props) => {
     {
       serviceId: 4,
       treatmentType: "type4 ",
-      name: "name4 ",
-      description: "descriptiopn 4",
+      name: "a ",
+      description: "a",
       price: 100,
       duration: "1h30m",
       code: "code4",
@@ -57,36 +57,41 @@ const ServiceComponent = (props) => {
       status: "active",
     },
   ];
-  const [orderBy, setOrderBy] = useState("");
+  const [serviceListDisplay, setServiceListDisplay] = useState(true);
   const [searchResult, setSearchResult] = useState([]);
-  const [serviceList, setServiceList] = useState([]);
-  useEffect(() => {
-    setSearchResult(serviceListData)
-  }, []);
+  const [serviceList, setServiceList] = useState(serviceListData);
+
 
   const handleSelectOrderBy = (event) => {
-    // switch(event.target.value) {
-    //   case 'description':
-    //     // code block
-    //     break;
-    //   case 'code':
-    //     // code block
-    //     break;
-    //   case 'name':
-    //     // code block
-    //     break;
-    //   default:
-    //     setServiceList(serviceList.s)
-    //     // code block
-    // }
+    switch(event.target.value) {
+      case 'description':
+        setServiceList(serviceListData.sort((item1,item2)=> (item1.description.toLowerCase() > item2.description.toLowerCase()) ? 1 : ((item2.description.toLowerCase() > item1.description.toLowerCase()) ? -1 : 0)));
+        break;
+      case 'code':
+        setServiceList(serviceListData.sort((item1,item2)=> (item1.code.toLowerCase() > item2.code.toLowerCase()) ? 1 : ((item2.code.toLowerCase() > item1.code.toLowerCase()) ? -1 : 0)));
+        break;
+      case 'name':
+        setServiceList(serviceListData.sort((item1,item2)=> (item1.name.toLowerCase() > item2.name.toLowerCase()) ? 1 : ((item2.name.toLowerCase() > item1.name.toLowerCase()) ? -1 : 0)));
+        break;
+      default:
+        setServiceList(serviceListData.sort((item1,item2)=>item1.serviceId-item2.serviceId ));
+        // code block
+    }
+    console.log(serviceList);
+    setServiceListDisplay(true);
   };
-  const handleSearch = (event) => {
-    // service code, name or description
-    let searchValue = (event.target.value).toLowerCase();
-    // console.log(searchValue)
-    // alert(serviceListData[0].code.includes(searchValue));
-    let serviceResultList = serviceListData.filter((item)=>(item.code.includes(searchValue)||item.name.includes(searchValue)||item.description.includes(searchValue)));
-    console.log(serviceResultList)
+  const handleSearch = (val) => {
+
+    let searchValue = val.toLowerCase();
+    let serviceResultList
+    if(val.trim().length >0){
+      serviceResultList= serviceListData.filter((item)=>(item.code.includes(searchValue)||item.name.includes(searchValue)||item.description.includes(searchValue)));
+      setServiceListDisplay(false);
+    }
+    else{
+      serviceResultList=[]
+      setServiceListDisplay(true);
+    }
     setSearchResult(serviceResultList);
   };
   const [open, setOpen] = useState(false);
@@ -122,7 +127,7 @@ const ServiceComponent = (props) => {
           <div className={styled.separateVDiv}></div>
           <FormControl>
             <Select onChange={handleSelectOrderBy}>
-              <MenuItem value={""}></MenuItem>
+              <MenuItem value={"serviceId"}></MenuItem>
               <MenuItem value={"code"}>Service Code</MenuItem>
               <MenuItem value={"description"}>Description</MenuItem>
               <MenuItem value={"name"}>Name</MenuItem>
@@ -132,12 +137,14 @@ const ServiceComponent = (props) => {
       </div>
 
       <div>
+
         {searchResult.length>0 && searchResult.map((item) => (
               <ServiceCardRow key={item.serviceId} item={item} />
-          ))}
-      {/*{serviceList.map((item) => (*/}
-      {/*  <ServiceCardRow key={item.serviceId} item={item} />*/}
-      {/*))}*/}
+        ))}
+        {serviceListDisplay && serviceList.map((item) => (
+            <ServiceCardRow key={item.serviceId} item={item} />
+        ))}
+
       </div>
     </box>
   );
