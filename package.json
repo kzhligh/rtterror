@@ -4,9 +4,14 @@
   "description": "TEAM RUNTIME TERROR - SOEN 490",
   "main": ".",
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "husky": "^7.0.0",
+    "lint-staged": "^11.2.6",
+    "prettier": "^2.4.1"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -17,5 +22,10 @@
   "bugs": {
     "url": "https://github.com/kevinlizh1992/rtterror/issues"
   },
-  "homepage": "https://github.com/kevinlizh1992/rtterror#readme"
+  "homepage": "https://github.com/kevinlizh1992/rtterror#readme",
+  "lint-staged": {
+    "backend/*.{js, jsx, ts, tsx}": [
+      "yarn prettier --write ."
+    ]
+  }
 }
