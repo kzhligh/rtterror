@@ -26,8 +26,7 @@
   },
   "homepage": "https://github.com/kevinlizh1992/rtterror#readme",
   "lint-staged": {
-    "backend/*.{js, jsx, ts, tsx}": [
-      "yarn prettier --write ."
-    ]
+    "frontend/*.{js, jsx, ts, tsx}": ["yarn prettier --write ."],
+    "backend/*.{js, jsx, ts, tsx}": ["yarn prettier --write ."]
   }
 }
