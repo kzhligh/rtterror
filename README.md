@@ -18,8 +18,6 @@ _badges placeholder_
 
 ## Description
 
----
-
 A Clinic Management System that is comprised of the following modules:
 
 - Appointment
@@ -31,8 +29,6 @@ A Clinic Management System that is comprised of the following modules:
 - Notification and other
 
 ## Libraries and Frameworks
-
----
 
 - [NodeJS](https://nodejs.org/)
 - [Express.js](http://expressjs.com/)
