@@ -4,11 +4,11 @@ import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import { TextField } from "@mui/material";
 import { useState } from "react";
-import {Close} from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
 
 export default function SearchInput(props) {
-  const {handleSearch} = props;
-  const [searchInput, setSearchInput, ] = useState("");
+  const { handleSearch } = props;
+  const [searchInput, setSearchInput] = useState("");
   const searchHandler = (val) => {
     setSearchInput(val);
     handleSearch(val);
@@ -19,7 +19,6 @@ export default function SearchInput(props) {
       component="form"
       sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 400 }}
     >
-
       <IconButton sx={{ p: "10px" }} aria-label="search" disabled={true}>
         <SearchIcon />
       </IconButton>
@@ -32,10 +31,13 @@ export default function SearchInput(props) {
         value={searchInput}
         onChange={(event) => searchHandler(event.target.value)}
       />
-      <IconButton sx={{ p: "10px" }} aria-label="search" onClick={()=>searchHandler('')}>
-        <Close/>
+      <IconButton
+        sx={{ p: "10px" }}
+        aria-label="search"
+        onClick={() => searchHandler("")}
+      >
+        <Close />
       </IconButton>
-
     </Paper>
   );
 }

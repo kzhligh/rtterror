@@ -3,8 +3,8 @@ import ServiceCardRow from "./serviceCardRow";
 import Button from "@mui/material/Button";
 import styled from "../../styles/service.module.css";
 import Select from "@mui/material/Select";
-import { useState} from "react";
-import { FormControl} from "@mui/material";
+import { useState } from "react";
+import { FormControl } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import SearchInput from "./search";
 import ServiceForm from "./serviceForm";
@@ -22,7 +22,7 @@ const ServiceComponent = () => {
       code: "code1",
       offerBy: ["E1", "E2"],
       status: "blocked",
-      dateCreated: "2018 / 10/ 02"
+      dateCreated: "2018 / 10/ 02",
     },
     {
       serviceId: 2,
@@ -34,7 +34,7 @@ const ServiceComponent = () => {
       code: "code2",
       offerBy: ["E1", "E2"],
       status: "active",
-      dateCreated: "2018 / 10/ 03"
+      dateCreated: "2018 / 10/ 03",
     },
     {
       serviceId: 3,
@@ -46,7 +46,7 @@ const ServiceComponent = () => {
       code: "code3",
       offerBy: ["E1", "E2"],
       status: "blocked",
-      dateCreated: "2018 / 10/ 04"
+      dateCreated: "2018 / 10/ 04",
     },
     {
       serviceId: 4,
@@ -58,42 +58,72 @@ const ServiceComponent = () => {
       code: "code4",
       offerBy: ["E1", "E2"],
       status: "active",
-      dateCreated: "2018 / 10/ 08"
+      dateCreated: "2018 / 10/ 08",
     },
   ];
   const [serviceListDisplay, setServiceListDisplay] = useState(true);
   const [searchResult, setSearchResult] = useState([]);
   const [serviceList, setServiceList] = useState(serviceListData);
 
-
   const handleSelectOrderBy = (event) => {
-
-    switch(event.target.value) {
+    switch (event.target.value) {
       case 2:
-        setServiceList(serviceListData.sort((item1,item2)=> (item1.description.toLowerCase() > item2.description.toLowerCase()) ? 1 : ((item2.description.toLowerCase() > item1.description.toLowerCase()) ? -1 : 0)));
+        setServiceList(
+          serviceListData.sort((item1, item2) =>
+            item1.description.toLowerCase() > item2.description.toLowerCase()
+              ? 1
+              : item2.description.toLowerCase() >
+                item1.description.toLowerCase()
+              ? -1
+              : 0
+          )
+        );
         break;
       case 1:
-        setServiceList(serviceListData.sort((item1,item2)=> (item1.code.toLowerCase() > item2.code.toLowerCase()) ? 1 : ((item2.code.toLowerCase() > item1.code.toLowerCase()) ? -1 : 0)));
+        setServiceList(
+          serviceListData.sort((item1, item2) =>
+            item1.code.toLowerCase() > item2.code.toLowerCase()
+              ? 1
+              : item2.code.toLowerCase() > item1.code.toLowerCase()
+              ? -1
+              : 0
+          )
+        );
         break;
       case 3:
-        setServiceList(serviceListData.sort((item1,item2)=> (item1.name.toLowerCase() > item2.name.toLowerCase()) ? 1 : ((item2.name.toLowerCase() > item1.name.toLowerCase()) ? -1 : 0)));
+        setServiceList(
+          serviceListData.sort((item1, item2) =>
+            item1.name.toLowerCase() > item2.name.toLowerCase()
+              ? 1
+              : item2.name.toLowerCase() > item1.name.toLowerCase()
+              ? -1
+              : 0
+          )
+        );
         break;
       default:
-        setServiceList(serviceListData.sort((item1,item2)=>item1.serviceId-item2.serviceId ));
+        setServiceList(
+          serviceListData.sort(
+            (item1, item2) => item1.serviceId - item2.serviceId
+          )
+        );
     }
     // console.log(serviceList);
     setServiceListDisplay(true);
   };
   const handleSearch = (val) => {
-
     let searchValue = val.toLowerCase();
-    let serviceResultList
-    if(val.trim().length >0){
-      serviceResultList= serviceListData.filter((item)=>(item.code.includes(searchValue)||item.name.includes(searchValue)||item.description.includes(searchValue)));
+    let serviceResultList;
+    if (val.trim().length > 0) {
+      serviceResultList = serviceListData.filter(
+        (item) =>
+          item.code.includes(searchValue) ||
+          item.name.includes(searchValue) ||
+          item.description.includes(searchValue)
+      );
       setServiceListDisplay(false);
-    }
-    else{
-      serviceResultList=[]
+    } else {
+      serviceResultList = [];
       setServiceListDisplay(true);
     }
     setSearchResult(serviceResultList);
@@ -108,12 +138,11 @@ const ServiceComponent = () => {
     setOpen(false);
   };
 
-
   //edit the service
   //add new employee
   return (
     <box>
-      <SearchInput handleSearch={handleSearch}/>
+      <SearchInput handleSearch={handleSearch} />
       <div className={styled.separateVDiv}></div>
       <Button
         className={styled.addButton}
@@ -122,7 +151,13 @@ const ServiceComponent = () => {
       >
         Add New
       </Button>
-      {open && <ServiceForm handleClickOpen={handleClickOpen} handleClose={handleClose} open={open}/>}
+      {open && (
+        <ServiceForm
+          handleClickOpen={handleClickOpen}
+          handleClose={handleClose}
+          open={open}
+        />
+      )}
       <div className={styled.flexAlignContainer}>
         <h1>Select a service</h1>
         <div className={styled.flexContainer}>
@@ -140,14 +175,14 @@ const ServiceComponent = () => {
       </div>
 
       <div>
-
-        {searchResult.length>0 && searchResult.map((item) => (
-              <ServiceCardRow key={item.serviceId} item={item} />
-        ))}
-        {serviceListDisplay && serviceList.map((item) => (
+        {searchResult.length > 0 &&
+          searchResult.map((item) => (
             <ServiceCardRow key={item.serviceId} item={item} />
-        ))}
-
+          ))}
+        {serviceListDisplay &&
+          serviceList.map((item) => (
+            <ServiceCardRow key={item.serviceId} item={item} />
+          ))}
       </div>
     </box>
   );

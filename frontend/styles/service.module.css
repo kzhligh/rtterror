@@ -32,10 +32,9 @@
   width: 50px;
 }
 
-.dateContainer{
+.dateContainer {
   position: absolute;
   bottom: 8px;
   right: 16px;
   font-size: 18px;
 }
-
