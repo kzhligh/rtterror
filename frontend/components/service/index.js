@@ -8,7 +8,9 @@ import { FormControl } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import SearchInput from "./search";
 import ServiceForm from "./serviceForm";
+import Box from "@mui/material/Box";
 
+//possibly refactor the code to use more routing of next js and passing the parameter
 // we can use regular react state or fetch the data with super agent  or use getStaticProps
 const ServiceComponent = () => {
   const serviceListData = [
@@ -141,7 +143,7 @@ const ServiceComponent = () => {
   //edit the service
   //add new employee
   return (
-    <box>
+    <Box >
       <SearchInput handleSearch={handleSearch} />
       <div className={styled.separateVDiv}></div>
       <Button
@@ -184,7 +186,7 @@ const ServiceComponent = () => {
             <ServiceCardRow key={item.serviceId} item={item} />
           ))}
       </div>
-    </box>
+    </Box>
   );
 };
 

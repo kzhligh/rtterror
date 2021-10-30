@@ -9,9 +9,11 @@ import { Close } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 import ServiceEmployee from "./serviceEmployee";
 import styled from "../../styles/service.module.css";
+import {useState} from "react";
 
 const ServiceForm = (props) => {
   const { handleClose, open } = props;
+  const [employeeCheckList , setEmployeeCheckList] = useState([]);
   const item = {
     serviceId: 4,
     treatmentType: "type4 ",
@@ -27,7 +29,7 @@ const ServiceForm = (props) => {
 
   return (
     <div>
-      <Dialog open={open} fullWidth={true} maxWidth="lg">
+      <Dialog open={open} fullWidth={true} maxWidth="lg" scroll="body">
         <DialogTitle>
           New Service
           <IconButton
@@ -75,7 +77,8 @@ const ServiceForm = (props) => {
             />
           <div className={styled.separateVDiv}></div>
         {/*add Employee form*/}
-          <ServiceEmployee item={item} mode={''} />
+          <h1>Add Employee</h1>
+          <ServiceEmployee mode={''} employeeCheckList={employeeCheckList} setEmployeeCheckList={setEmployeeCheckList}/>
 
         </DialogContent>
         <DialogActions>
