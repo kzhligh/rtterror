@@ -14,7 +14,8 @@ const ServiceCardRow = (props) => {
   const toggleServiceCard = () => {
     setServiceCard(!serviceCard);
   };
-  const blocked = (id) => {
+  const toggleBlocked = (id) => {
+    // change the a
     alert("service id  " + id);
   };
 
@@ -23,7 +24,7 @@ const ServiceCardRow = (props) => {
   return (
     <div className={styled.flexAlignContainer}>
       <Card
-        // disabled={item["status"] == "blocked"}
+        // disabled={item["status"] == "toggleBlocked"}
         className={styled.cardWrapper}
         onClick={
           !isBlock()
@@ -55,7 +56,7 @@ const ServiceCardRow = (props) => {
       <Button
         className={styled.buttonContainer}
         variant={isBlock() ? "contained" : "outlined"}
-        onClick={() => blocked(item["serviceId"])}
+        onClick={() => toggleBlocked(item["serviceId"])}
         style={{ backgroundColor: isBlock() ? "gray" : "white" }}
       >
         {isBlock() ? "unblocked" : "blocked"}

@@ -25,11 +25,11 @@
 }
 
 .separateVDiv {
-  height: 50px;
+  height: 30px;
 }
 
 .separateHDiv {
-  width: 50px;
+  width: 30px;
 }
 
 .dateContainer {
@@ -37,4 +37,12 @@
   bottom: 8px;
   right: 16px;
   font-size: 18px;
+}
+
+.employeeRowDiv{
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  border: 1px solid black;
+  align-items: center;
 }

@@ -7,9 +7,23 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Close } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
+import ServiceEmployee from "./serviceEmployee";
+import styled from "../../styles/service.module.css";
 
 const ServiceForm = (props) => {
   const { handleClose, open } = props;
+  const item = {
+    serviceId: 4,
+    treatmentType: "type4 ",
+    name: "y",
+    description: "a",
+    price: 100,
+    duration: "1h30m",
+    code: "code4",
+    offerBy: ["E1", "E2"],
+    status: "active",
+    dateCreated: "2018 / 10/ 08",
+  };
 
   return (
     <div>
@@ -29,16 +43,40 @@ const ServiceForm = (props) => {
             <Close />
           </IconButton>
         </DialogTitle>
-        <DialogContent>
+        <DialogContent >
+
+          {/*form control*/}
           <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
-            fullWidth
-            variant="standard"
+              fullWidth
+              required
+              id="name"
+              label="Service name"
+              // defaultValue="" maybe value when edit
+              onChange={(event)=>alert(event.target.value)}
           />
+          <div className={styled.separateVDiv}></div>
+          <TextField
+              fullWidth
+              required
+              id="code"
+              label="Service code"
+              // defaultValue="Hello World"
+              onChange={(event)=>alert(event.target.value)}
+          />
+          <div className={styled.separateVDiv}></div>
+            <TextField
+                fullWidth
+                id="code"
+                label="Description"
+                multiline
+                rows={4}
+                // defaultValue="Default Value"
+                onChange={(event)=>alert(event.target.value)}
+            />
+          <div className={styled.separateVDiv}></div>
+        {/*add Employee form*/}
+          <ServiceEmployee item={item} mode={''} />
+
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Create Service</Button>
