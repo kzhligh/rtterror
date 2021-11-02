@@ -2,6 +2,7 @@ const express = require('express');
 const Customer = require('../models/customer');
 
 const router = express.Router();
+const customerModel = Customer();
 
 router.use(function (req, res, next) {
     console.log('%s %s %s', req.method, req.url, req.path)
@@ -9,7 +10,7 @@ router.use(function (req, res, next) {
 });
 
 router.get('/', (req, res, next) => {
-    Customer.findAll({ raw: true })
+    customerModel.findAll({ raw: true })
         .then(data => {
             console.log(data);
             res.send(data);
@@ -21,7 +22,7 @@ router.get('/:id', (req, res, next) => {
     const { params } = req;
     const { id } = params;
     console.log(id);
-    Customer.findByPk(id)
+    customerModel.findByPk(id)
         .then(data => {
             console.log('the return value of findByPk() is: ', data.dataValues);
             res.send(data);
@@ -31,7 +32,7 @@ router.get('/:id', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
     const { body } = req;
-    Customer.create(body)
+    customerModel.create(body)
         .then(data => {
         console.log(data);
         res.send(data);
@@ -42,7 +43,7 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
     const { params, body } = req;
     const { id } = params;
-    Customer.update(body, {
+    customerModel.update(body, {
         where: {
             id: id
         }
@@ -55,7 +56,7 @@ router.put('/:id', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
     const { params } = req;
     const { id } = params;
-    Customer.destroy({
+    customerModel.destroy({
         where: {
             id: id
         }

@@ -2,6 +2,7 @@ const express = require('express');
 const Service = require('../models/service');
 
 const router = express.Router();
+const serviceModel = Service();
 
 router.use(function (req, res, next) {
     console.log('%s %s %s', req.method, req.url, req.path)
@@ -9,7 +10,7 @@ router.use(function (req, res, next) {
 });
 
 router.get('/', (req, res, next) => {
-    Service.findAll({ raw: true })
+    serviceModel.findAll({ raw: true })
         .then(data => {
             console.log(data);
             res.send(data);
@@ -21,7 +22,7 @@ router.get('/:id', (req, res, next) => {
     const { params } = req;
     const { id } = params;
     console.log(id);
-    Service.findByPk(id)
+    serviceModel.findByPk(id)
         .then(data => {
             console.log('the return value of findByPk() is: ', data.dataValues);
             res.send(data);
@@ -31,7 +32,7 @@ router.get('/:id', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
     const { body } = req;
-    Service.create(body)
+    serviceModel.create(body)
         .then(data => {
             console.log(data);
             res.send(data);
@@ -42,7 +43,7 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
     const { params, body } = req;
     const { id } = params;
-    Service.update(body, {
+    serviceModel.update(body, {
         where: {
             id: id
         }
@@ -55,7 +56,7 @@ router.put('/:id', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
     const { params } = req;
     const { id } = params;
-    Service.destroy({
+    serviceModel.destroy({
         where: {
             id: id
         }
