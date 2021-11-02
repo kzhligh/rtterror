@@ -1,33 +1,33 @@
-const Service = require('../models/service');
+const Product = require('../models/product');
 
 async function getAllRecords() {
   try {
-    return await Service.findAll({ raw: true });
+    return await Product.findAll({ raw: true });
   } catch (error) {
     console.error(error);
   }
 }
 
-async function getRecordById(serviceId) {
+async function getRecordById(productId) {
   try {
-    return await Service.findByPk(serviceId);
+    return await Product.findByPk(productId);
   } catch (error) {
     console.error(error);
   }
 }
 
-async function createRecord(serviceObj) {
+async function createRecord(productObj) {
   try {
-    return Service.create(serviceObj);
+    return Product.create(productObj);
   } catch (error) {
     console.error(error);
   }
 }
 
-async function updateRecord(serviceObj) {
-  const { id } = serviceObj;
+async function updateRecord(productObj) {
+  const { id } = productObj;
   try {
-    return Service.update(serviceObj, {
+    return Product.update(productObj, {
       where: {
         id: id,
       },
@@ -37,11 +37,11 @@ async function updateRecord(serviceObj) {
   }
 }
 
-async function deleteRecordById(serviceId) {
+async function deleteRecordById(productId) {
   try {
-    return Service.destroy({
+    return Product.destroy({
       where: {
-        id: serviceId,
+        id: productId,
       },
     });
   } catch (error) {
