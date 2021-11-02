@@ -2,5 +2,7 @@
 .idea
 
 # backend
-backend/node_modules/
 backend/.env
+
+# project
+**/node_modules/

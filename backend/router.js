@@ -1,6 +1,6 @@
 const express = require('express');
-const {customer} = require('./routes/');
-const {service} = require('./routes');
+const { customer } = require('./routes');
+const { service } = require('./routes');
 
 const router = express.Router();
 
