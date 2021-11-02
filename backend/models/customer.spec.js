@@ -26,7 +26,6 @@ describe('Customer Model', () => {
         freezeTableName: true,
       }
     );
-    expect(Customer.sync).toBeCalledTimes(1);
   });
 
   afterAll(() => {
