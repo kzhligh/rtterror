@@ -1,6 +1,6 @@
 const sequelize = require('../modules/sequelize');
 const { DataTypes } = require('sequelize');
-require('./customer');
+const Customer = require('./customer');
 
 jest.mock('../modules/sequelize');
 
@@ -11,7 +11,7 @@ describe('Customer Model', () => {
       {
         id: {
           type: DataTypes.INTEGER,
-          autoIncrement: true,
+          // autoIncrement: true,
           primaryKey: true,
         },
         firstName: {
@@ -26,6 +26,7 @@ describe('Customer Model', () => {
         freezeTableName: true,
       }
     );
+    expect(Customer.sync).toBeCalledTimes(1);
   });
 
   afterAll(() => {
