@@ -1,8 +1,8 @@
 const express = require('express');
-const Service = require('../models/service');
+
+const { getAllServices, getServiceById, createService, updateService, deleteServiceById } = require('../services/service');
 
 const router = express.Router();
-const serviceModel = Service();
 
 router.use(function (req, res, next) {
   console.log('%s %s %s', req.method, req.url, req.path);
@@ -10,77 +10,68 @@ router.use(function (req, res, next) {
 });
 
 router.get('/', (req, res, next) => {
-  serviceModel
-    .findAll({ raw: true })
-    .then((data) => {
-      console.log(data);
-      res.send(data);
+    getAllServices().then(data => {
+        console.log(data);
+        res.send(data);
+    }).catch(error => {
+        console.error(error)
     })
-    .catch((err) => console.log(err));
 });
 
 router.get('/:id', (req, res, next) => {
   const { params } = req;
   const { id } = params;
   console.log(id);
-  serviceModel
-    .findByPk(id)
-    .then((data) => {
-      console.log('the return value of findByPk() is: ', data.dataValues);
+  getServiceById(id)
+      .then((data) => {
+      console.log('the return value of findByPk() is: ', data);
       res.send(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  })
+      .catch((error) => {
+      console.error(error);
+  });
 });
 
 router.post('/', (req, res, next) => {
   const { body } = req;
-  serviceModel
-    .create(body)
-    .then((data) => {
+  createService(body)
+      .then((data) => {
       console.log(data);
       res.send(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  })
+      .catch((error) => {
+      console.error(error);
+  });
 });
 
 router.put('/:id', (req, res, next) => {
   const { params, body } = req;
   const { id } = params;
-  serviceModel
-    .update(body, {
-      where: {
-        id: id,
-      },
-    })
-    .then(([numberOfUpdate]) => {
-      console.log(`${numberOfUpdate} service(s) information has been updated`);
-      res.sendStatus(200);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  const serviceObj = {
+      ...body,
+      id: id
+  };
+  updateService(serviceObj)
+      .then(([numberOfUpdate]) => {
+          console.log(`${numberOfUpdate} service(s) information has been updated`);
+          res.sendStatus(200);
+      })
+      .catch((err) => {
+          console.error(err);
+      });
 });
 
 router.delete('/:id', (req, res, next) => {
   const { params } = req;
   const { id } = params;
-  serviceModel
-    .destroy({
-      where: {
-        id: id,
-      },
-    })
-    .then((data) => {
-      console.log(`${data} customer(s) has been deleted`);
-      res.sendStatus(200);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  deleteServiceById(id)
+      .then((data) => {
+          console.log(`${data} customer(s) has been deleted`);
+          res.sendStatus(200);
+      })
+      .catch((err) => {
+          console.error(err);
+      });
 });
 
 module.exports = router;

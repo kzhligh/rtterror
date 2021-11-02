@@ -3,8 +3,16 @@ const cors = require('cors');
 const config = require('./config');
 const sequelize = require('./modules/sequelize');
 const router = require('./router');
+const syncAllTables = require('./models/syncTables');
 
 const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+app.use('/api/v1', router);
+
+const PORT = config.port || 5000;
 
 sequelize
   .authenticate()
@@ -16,12 +24,7 @@ sequelize
   })
   .catch((error) => console.log(error));
 
-app.use(cors());
-app.use(express.json());
-
-app.use('/api/v1', router);
-
-const PORT = config.port || 5000;
+syncAllTables();
 
 app.listen(PORT, () => {
   console.log('server starts on port ', PORT);
