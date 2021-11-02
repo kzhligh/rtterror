@@ -20,7 +20,7 @@
 }
 
 .addButton {
-  width: 120px;
+  width: 150px;
   height: 50px;
 }
 
@@ -51,4 +51,12 @@
   justify-content: space-evenly;
   border: 1px solid black;
   align-items: center;
+}
+
+.buttonLink {
+  border-radius: 8px;
+  cursor: pointer;
+  border-color: aqua;
+  width: 120px;
+  height: 50px;
 }

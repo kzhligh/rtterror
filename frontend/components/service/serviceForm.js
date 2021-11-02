@@ -11,8 +11,9 @@ import ServiceEmployee from "./serviceEmployee";
 import styled from "../../styles/service.module.css";
 import {useState} from "react";
 
+
 const ServiceForm = (props) => {
-  const { handleClose, open } = props;
+  const { addHandle} = props;
   const [employeeCheckList , setEmployeeCheckList] = useState([]);
   const item = {
     serviceId: 4,
@@ -26,15 +27,18 @@ const ServiceForm = (props) => {
     status: "active",
     dateCreated: "2018 / 10/ 08",
   };
+  const handleClose=()=>{
+    router.push("").then(r => console.log(r));
+  }
 
   return (
     <div>
-      <Dialog open={open} fullWidth={true} maxWidth="lg" scroll="body">
+      <Dialog open={true} fullWidth={true} maxWidth="lg" scroll="body">
         <DialogTitle>
           New Service
           <IconButton
             aria-label="close"
-            onClick={handleClose}
+            onClick={addHandle}
             size="medium"
             sx={{
               position: "absolute",
@@ -82,8 +86,8 @@ const ServiceForm = (props) => {
 
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Create Service</Button>
-          <Button onClick={handleClose}>Close</Button>
+          <Button onClick={addHandle}>Create Service</Button>
+          <Button onClick={addHandle}>Close</Button>
         </DialogActions>
       </Dialog>
     </div>
