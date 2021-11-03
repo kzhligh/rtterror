@@ -3,7 +3,7 @@ const Customer = require('./customer');
 const Product = require('./product');
 
 const syncAllTables = () => {
-  Service.sync().then(() => {
+  Service.sync({ alter: true }).then(() => {
     console.log('table "services" created');
   });
 

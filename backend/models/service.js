@@ -29,6 +29,11 @@ const Service = sequelize.define(
     sms_description: {
       type: DataTypes.STRING,
     },
+    blocked: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      default: false,
+    },
   },
   {
     timestamps: false,
