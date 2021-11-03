@@ -1,8 +1,6 @@
 const Service = require('../models/service');
 
-// const serviceModel = Service();
-
-async function getAllRecords() {
+async function getAllServiceRecords() {
   try {
     return await Service.findAll({ raw: true });
   } catch (error) {
@@ -10,7 +8,7 @@ async function getAllRecords() {
   }
 }
 
-async function getRecordById(serviceId) {
+async function getServiceRecordById(serviceId) {
   try {
     return await Service.findByPk(serviceId);
   } catch (error) {
@@ -18,7 +16,7 @@ async function getRecordById(serviceId) {
   }
 }
 
-async function createRecord(serviceObj) {
+async function createServiceRecord(serviceObj) {
   try {
     return Service.create(serviceObj);
   } catch (error) {
@@ -26,7 +24,7 @@ async function createRecord(serviceObj) {
   }
 }
 
-async function updateRecord(serviceObj) {
+async function updateServiceRecord(serviceObj) {
   const { id } = serviceObj;
   try {
     return Service.update(serviceObj, {
@@ -39,7 +37,7 @@ async function updateRecord(serviceObj) {
   }
 }
 
-async function deleteRecordById(serviceId) {
+async function deleteServiceRecordById(serviceId) {
   try {
     return Service.destroy({
       where: {
@@ -52,9 +50,9 @@ async function deleteRecordById(serviceId) {
 }
 
 module.exports = {
-  getAllRecords,
-  getRecordById,
-  createRecord,
-  updateRecord,
-  deleteRecordById,
+  getAllServiceRecords,
+  getServiceRecordById,
+  createServiceRecord,
+  updateServiceRecord,
+  deleteServiceRecordById,
 };

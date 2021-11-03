@@ -3,11 +3,11 @@ const Customer = require('./customer');
 
 const syncAllTables = () => {
   Service.sync().then(() => {
-    console.log('table "services" created');
+    console.log('table "services" synchronized');
   });
 
   Customer.sync().then(() => {
-    console.log('table "customers" created');
+    console.log('table "customers" synchronized');
   });
 };
 
