@@ -11,7 +11,7 @@ const syncAllTables = () => {
     console.log('table "customers" synchronized');
   });
 
-  Product.sync().then(() => {
+  Product.sync({ alter: true }).then(() => {
     console.log('table "products" synchronized');
   });
 };

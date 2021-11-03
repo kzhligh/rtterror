@@ -1,85 +1,67 @@
 const {
-  getAllRecords,
-  getRecordById,
-  createRecord,
-  updateRecord,
-  deleteRecordById,
+  getAllProductRecords,
+  getProductRecordById,
+  createProductRecord,
+  updateProductRecord,
+  deleteProductRecordById,
 } = require('../daos/product');
 
 async function getAllProducts() {
-  return await getAllRecords();
+  return await getAllProductRecords();
 }
 
-async function getProductById(serviceId) {
-  if (typeof serviceId === 'string') {
-    const service = await getRecordById(serviceId);
-    if (!service) {
-      console.error('ERROR - no record found of the id: ', serviceId);
+async function getProductById(productId) {
+  if (typeof productId === 'string') {
+    const product = await getProductRecordById(productId);
+    if (!product) {
+      console.error('ERROR - no record found of the id: ', productId);
       throw new Error(
-        `ERROR - No such a service is found with the id: ${serviceId}`
+        `ERROR - No such a product is found with the id: ${productId}`
       );
     }
-    return service.dataValues;
+    return product;
   } else {
-    throw new Error(`ERROR - unexpected input type: ${typeof serviceId}`);
+    throw new Error(`ERROR - unexpected input type: ${typeof productId}`);
   }
 }
 
-async function createProduct(serviceObj) {
-  const {
-    id,
-    name,
-    description,
-    treatment_type,
-    duration,
-    price,
-    barcode,
-    sms_description,
-  } = serviceObj;
-  if (
-    id &&
-    name &&
-    description &&
-    treatment_type &&
-    duration &&
-    price &&
-    barcode &&
-    sms_description
-  ) {
-    return await createRecord(serviceObj);
+async function createProduct(productObj) {
+  const { id, name, price, inventory } = productObj;
+  if (id && name && price && inventory) {
+    return await createProductRecord(productObj);
   } else {
-    throw new Error('ERROR - missing property for service');
+    throw new Error('ERROR - missing property for product');
   }
 }
 
-async function updateProduct(serviceObj) {
-  const { id } = serviceObj;
+async function updateProduct(productObj) {
+  const { id } = productObj;
   if (id && typeof id === 'string') {
-    const numberOfUpdate = await updateRecord(serviceObj);
+    const numberOfUpdate = await updateProductRecord(productObj);
     if (numberOfUpdate > 0) {
       return numberOfUpdate;
     } else {
-      throw new Error(`ERROR - No such a service is found with the id: ${id}`);
+      throw new Error(`ERROR - No such a product is found with the id: ${id}`);
     }
   } else {
     throw new Error(
-      'ERROR - no id has been specified in the input service object'
+      'ERROR - no id has been specified in the input product object'
     );
   }
 }
 
-async function deleteProductById(serviceId) {
-  if (typeof serviceId === 'string') {
-    const numberOfDeletion = await deleteRecordById(serviceId);
+async function deleteProductById(productId) {
+  if (typeof productId === 'string') {
+    const numberOfDeletion = await deleteProductRecordById(productId);
     if (numberOfDeletion > 0) {
       return numberOfDeletion;
     } else {
       throw new Error(
-        `ERROR - No such a service is found with the id: ${serviceId}`
+        `ERROR - No such a product is found with the id: ${productId}`
       );
     }
   } else {
-    throw new Error(`ERROR - unexpected input type: ${typeof serviceId}`);
+    throw new Error(`ERROR - unexpected input type: ${typeof productId}`);
   }
 }
 

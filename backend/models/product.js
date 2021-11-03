@@ -15,7 +15,7 @@ const Product = sequelize.define(
       type: DataTypes.STRING,
     },
     inventory: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
     },
   },
   {

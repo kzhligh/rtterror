@@ -74,7 +74,7 @@ router.delete('/:id', (req, res, next) => {
   const { id } = params;
   deleteProductById(id)
     .then((data) => {
-      console.log(`${data} customer(s) has been deleted`);
+      console.log(`${data} product(s) has been deleted`);
       res.sendStatus(200);
     })
     .catch((err) => {

@@ -1,6 +1,6 @@
 const { Product } = require('../models/product');
 
-async function getAllRecords() {
+async function getAllProductRecords() {
   try {
     return await Product.findAll({ raw: true });
   } catch (error) {
@@ -8,23 +8,23 @@ async function getAllRecords() {
   }
 }
 
-async function getRecordById(productId) {
+async function getProductRecordById(productId) {
   try {
-    return await Product.findByPk(productId);
+    return await Product.findByPk(productId, { raw: true });
   } catch (error) {
     console.error(error);
   }
 }
 
-async function createRecord(productObj) {
+async function createProductRecord(productObj) {
   try {
-    return Product.create(productObj);
+    return Product.create(productObj, { raw: true });
   } catch (error) {
     console.error(error);
   }
 }
 
-async function updateRecord(productObj) {
+async function updateProductRecord(productObj) {
   const { id } = productObj;
   try {
     return Product.update(productObj, {
@@ -37,7 +37,7 @@ async function updateRecord(productObj) {
   }
 }
 
-async function deleteRecordById(productId) {
+async function deleteProductRecordById(productId) {
   try {
     return Product.destroy({
       where: {
@@ -50,9 +50,9 @@ async function deleteRecordById(productId) {
 }
 
 module.exports = {
-  getAllRecords,
-  getRecordById,
-  createRecord,
-  updateRecord,
-  deleteRecordById,
+  getAllProductRecords,
+  getProductRecordById,
+  createProductRecord,
+  updateProductRecord,
+  deleteProductRecordById,
 };
