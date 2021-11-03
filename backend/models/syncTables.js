@@ -4,11 +4,11 @@ const Product = require('./product');
 
 const syncAllTables = () => {
   Service.sync({ alter: true }).then(() => {
-    console.log('table "services" created');
+    console.log('table "services" synchronized');
   });
 
   Customer.sync().then(() => {
-    console.log('table "customers" created');
+    console.log('table "customers" synchronized');
   });
 
   Product.sync().then(() => {

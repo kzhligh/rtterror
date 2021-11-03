@@ -1,18 +1,18 @@
 const {
-  getAllRecords,
-  getRecordById,
-  createRecord,
-  updateRecord,
-  deleteRecordById,
+  getAllServiceRecords,
+  getServiceRecordById,
+  createServiceRecord,
+  updateServiceRecord,
+  deleteServiceRecordById,
 } = require('../daos/service');
 
 async function getAllServices() {
-  return await getAllRecords();
+  return await getAllServiceRecords();
 }
 
 async function getServiceById(serviceId) {
   if (typeof serviceId === 'string') {
-    const service = await getRecordById(serviceId);
+    const service = await getServiceRecordById(serviceId);
     if (!service) {
       console.error('ERROR - no record found of the id: ', serviceId);
       throw new Error(
@@ -46,7 +46,7 @@ async function createService(serviceObj) {
     barcode &&
     sms_description
   ) {
-    return await createRecord(serviceObj);
+    return await createServiceRecord(serviceObj);
   } else {
     throw new Error('ERROR - missing property for service');
   }
@@ -55,7 +55,7 @@ async function createService(serviceObj) {
 async function updateService(serviceObj) {
   const { id } = serviceObj;
   if (id && typeof id === 'string') {
-    const numberOfUpdate = await updateRecord(serviceObj);
+    const numberOfUpdate = await updateServiceRecord(serviceObj);
     if (numberOfUpdate > 0) {
       return numberOfUpdate;
     } else {
@@ -70,7 +70,7 @@ async function updateService(serviceObj) {
 
 async function deleteServiceById(serviceId) {
   if (typeof serviceId === 'string') {
-    const numberOfDeletion = await deleteRecordById(serviceId);
+    const numberOfDeletion = await deleteServiceRecordById(serviceId);
     if (numberOfDeletion > 0) {
       return numberOfDeletion;
     } else {
