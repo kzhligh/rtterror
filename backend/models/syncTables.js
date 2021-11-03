@@ -1,6 +1,6 @@
-const Service = require('./service');
-const Customer = require('./customer');
-const Product = require('./product');
+const { Service } = require('./service');
+const { Customer } = require('./customer');
+const { Product } = require('./product');
 
 const syncAllTables = () => {
   Service.sync({ alter: true }).then(() => {
@@ -12,7 +12,7 @@ const syncAllTables = () => {
   });
 
   Product.sync().then(() => {
-    console.log('table "products" created');
+    console.log('table "products" synchronized');
   });
 };
 

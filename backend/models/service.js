@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../modules/sequelize');
+const { sequelize } = require('../modules/sequelize');
 
 const Service = sequelize.define(
   'services',
@@ -41,4 +41,4 @@ const Service = sequelize.define(
   }
 );
 
-module.exports = Service;
+module.exports = { Service };

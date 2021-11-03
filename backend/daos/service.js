@@ -1,4 +1,4 @@
-const Service = require('../models/service');
+const { Service } = require('../models/service');
 
 async function getAllServiceRecords() {
   try {
