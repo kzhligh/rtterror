@@ -1,5 +1,12 @@
 const express = require('express');
-const Customer = require('../models/customer');
+
+const {
+  getAllServices,
+  getServiceById,
+  createService,
+  updateService,
+  deleteServiceById,
+} = require('../services/service');
 
 const router = express.Router();
 
@@ -9,72 +16,69 @@ router.use(function (req, res, next) {
 });
 
 router.get('/', (req, res, next) => {
-  Customer.findAll({ raw: true })
+  getAllServices()
     .then((data) => {
       console.log(data);
       res.send(data);
     })
-    .catch((err) => console.log(err));
+    .catch((error) => {
+      console.error(error);
+    });
 });
 
 router.get('/:id', (req, res, next) => {
-  // const id = req.path;
   const { params } = req;
   const { id } = params;
   console.log(id);
-  Customer.findByPk(id)
+  getServiceById(id)
     .then((data) => {
-      console.log('the return value of findByPk() is: ', data.dataValues);
+      console.log('the return value of findByPk() is: ', data);
       res.send(data);
     })
-    .catch((err) => {
-      console.log(err);
+    .catch((error) => {
+      console.error(error);
     });
 });
 
 router.post('/', (req, res, next) => {
   const { body } = req;
-  Customer.create(body)
+  createService(body)
     .then((data) => {
       console.log(data);
       res.send(data);
     })
-    .catch((err) => {
-      console.log(err);
+    .catch((error) => {
+      console.error(error);
     });
 });
 
 router.put('/:id', (req, res, next) => {
   const { params, body } = req;
   const { id } = params;
-  Customer.update(body, {
-    where: {
-      id: id,
-    },
-  })
+  const serviceObj = {
+    ...body,
+    id: id,
+  };
+  updateService(serviceObj)
     .then(([numberOfUpdate]) => {
-      console.log(`${numberOfUpdate} customer(s) information has been updated`);
+      console.log(`${numberOfUpdate} service(s) information has been updated`);
       res.sendStatus(200);
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
     });
 });
 
 router.delete('/:id', (req, res, next) => {
   const { params } = req;
   const { id } = params;
-  Customer.destroy({
-    where: {
-      id: id,
-    },
-  })
+  deleteServiceById(id)
     .then((data) => {
       console.log(`${data} customer(s) has been deleted`);
       res.sendStatus(200);
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
     });
 });
 

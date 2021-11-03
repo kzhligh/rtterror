@@ -1,8 +1,8 @@
-const sequelize = require('../modules/sequelizeClient');
+const sequelize = require('../modules/sequelize');
 const { DataTypes } = require('sequelize');
 require('./customer');
 
-jest.mock('../modules/sequelizeClient');
+jest.mock('../modules/sequelize');
 
 describe('Customer Model', () => {
   it('should setup the customer table', async () => {
