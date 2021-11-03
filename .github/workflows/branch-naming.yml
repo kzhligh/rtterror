@@ -1,0 +1,16 @@
+name: 'Assert Branch Naming Convention'
+on:
+  create
+
+# <type>/branch-name
+# where <type> is defined as one of allowed_prefixes
+
+jobs:
+  branch-naming-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: yuxiang-zhang/action-branch-name@master
+        with:
+          regex: '([a-z])+\/([a-z\-])+' # Regex the branch should match. This example enforces grouping
+          allowed_prefixes:   'build,chore,ci,docs,feat,fix,perf,refactor,revert,style,test'
+          min_length: 10 # Min length of the branch name
