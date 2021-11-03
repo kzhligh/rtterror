@@ -46,10 +46,8 @@
 }
 
 .employeeRowDiv{
-  width: 80%;
   display: flex;
   justify-content: space-evenly;
-  border: 1px solid black;
   align-items: center;
 }
 
@@ -59,4 +57,12 @@
   border-color: aqua;
   width: 120px;
   height: 50px;
+}
+
+.addRightButton{
+  width: 150px;
+  height: 50px;
+  position: absolute;
+  bottom: 10px;
+  right: 16px;
 }

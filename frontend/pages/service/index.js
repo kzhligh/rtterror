@@ -72,23 +72,5 @@ export async function getStaticProps() {
     revalidate: 10
   };
 }
-// pre build the static path , this will not run in the front end
-// export async function getStaticPath() {
-//   const res = await fetch(
-//       "https://api.github.com/repos/visionmedia/superagent"
-//   );
-//
-//   return {
-//     props: { text: ""}
-//   };
-// }export async function getStaticPath() {
-//   const res = await fetch(
-//       "https://api.github.com/repos/visionmedia/superagent"
-//   );
-//
-//   return {
-//     props: { text: ""}
-//   };
-// }
 
 export default Service;

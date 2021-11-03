@@ -1,8 +1,9 @@
 import * as React from "react";
 import IconButton from "@mui/material/IconButton";
 import {
+    CardActionArea,
     CardHeader, Checkbox,
-    Dialog,
+    Dialog, DialogActions,
     DialogContent,
     DialogTitle, Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 } from "@mui/material";
@@ -13,21 +14,17 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
-import ServiceEmployee from "./serviceEmployee";
 import {useState} from "react";
 import Paper from "@mui/material/Paper";
-import ServiceForm from "./serviceForm";
+import {useRouter} from "next/router";
 
-function CloseIcon() {
-  return null;
-}
 
 const ServiceCard = (props) => {
-  const { closeServiceCard, open, item } = props;
+  const { closeServiceCard, item } = props;
   const [employeeCheckList , setEmployeeCheckList] = useState([]);
-  const [viewMode ,setViewMode] = useState(true);
+  // const [viewMode ,setViewMode] = useState(true);
+  const router = useRouter();
     const handleCheck =(e)=>{
-        //check is to remove from the service ,
         if(e.target.checked){
             setEmployeeCheckList([...employeeCheckList,e.target.value]);
         }
@@ -35,21 +32,26 @@ const ServiceCard = (props) => {
             setEmployeeCheckList(employeeCheckList.filter((name)=>e.target.value!=name));
         }
     }
+    const handleEditClick = ()=>{
+        router.push('/service/' + item.serviceId + '/edit').then( r => console.log(r));
+    }
+
 
   return (
     <Dialog
       fullWidth={true}
       maxWidth="lg"
-      open={open}
+      open={true}
       // onClose={closeServiceCard}
+      scroll="body"
     >
       <DialogTitle>
           <Button
               className={styled.addButton}
               variant="outlined"
-              onClick={() => setViewMode(false)}
+              onClick={handleEditClick}
           >
-              Edit
+              Edit Service
           </Button>
           <div className={styled.separateVDiv}></div>
           Service Detail
@@ -66,7 +68,8 @@ const ServiceCard = (props) => {
           <Close />
         </IconButton>
       </DialogTitle>
-        {viewMode ?
+
+
         <DialogContent>
             <Card>
                 <CardHeader sx={{fontSize: 30}} title={item["name"]}>
@@ -96,8 +99,8 @@ const ServiceCard = (props) => {
                         <Table sx={{minWidth: 650}} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell align="right">Employee name</TableCell>
-                                    <TableCell align="left">Title</TableCell>
+                                    <TableCell align="center"><h1>Employee name</h1></TableCell>
+                                    <TableCell align="right"><h4>Tittle</h4></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -107,6 +110,7 @@ const ServiceCard = (props) => {
                                         sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                     >
                                         <TableCell component="th" scope="row">
+                                            <div className={styled.employeeRowDiv}>
                                             <Checkbox
                                                 key={ename}
                                                 aria-label={ename}
@@ -116,26 +120,30 @@ const ServiceCard = (props) => {
                                                     handleCheck(event)
                                                 }}
                                             />
-                                            {ename}
+                                                <h3>{ename}</h3>
+                                            </div>
                                         </TableCell>
-                                        <TableCell align="right">title</TableCell>
+                                        <TableCell align="right"><h4>Tittle</h4></TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <Button
-                        className={styled.addButton}
-                        variant="outlined"
-                        onClick={() => console.log('press')}
-                    >
-                        {/*the employee that not in the service employeeCheckList.filter((name)=>e.target.value!=name) */}
-                        Add Employee
-                    </Button>
                 </Box>
+
             </Card>
         </DialogContent>
-        : <ServiceForm />}
+            <DialogActions>
+                <Button
+                    // className={styled.addRightButton}
+                    variant="outlined"
+                    onClick={() => console.log('press')}
+                >
+                    {/*the employee that not in the service employeeCheckList.filter((name)=>e.target.value!=name) */}
+                    Add Employee
+                </Button>
+            </DialogActions>
+
     </Dialog>
   );
 };

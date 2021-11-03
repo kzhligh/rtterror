@@ -7,7 +7,7 @@ import {useEffect, useState} from "react";
 import { FormControl } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import SearchInput from "./search";
-import ServiceForm from "./serviceForm";
+import AddServiceForm from "./addServiceForm";
 import Box from "@mui/material/Box";
 import Link from "next/link";
 
@@ -25,50 +25,105 @@ const ServiceComponent = (props) => {
 
 
   const handleSelectOrderBy = (event) => {
+    let value = false;
     setSelect(event.target.value);
     switch (event.target.value) {
       case 2:
-        setSortServiceList(
-            serviceListData.sort((item1, item2) =>
-            item1.description.toLowerCase() > item2.description.toLowerCase()
-              ? 1
-              : item2.description.toLowerCase() >
-                item1.description.toLowerCase()
-              ? -1
-              : 0
-          )
-        );
+        if(searchResult.length > 0){
+          setSearchResult(
+              searchResult.sort((item1, item2) =>
+                  item1.description.toLowerCase() > item2.description.toLowerCase()
+                      ? 1
+                      : item2.description.toLowerCase() >
+                      item1.description.toLowerCase()
+                          ? -1
+                          : 0
+              )
+          );
+        }
+        else {
+          setSortServiceList(
+              serviceListData.sort((item1, item2) =>
+                  item1.description.toLowerCase() > item2.description.toLowerCase()
+                      ? 1
+                      : item2.description.toLowerCase() >
+                      item1.description.toLowerCase()
+                          ? -1
+                          : 0
+              )
+          );
+          value = true;
+        }
         break;
       case 1:
-        setSortServiceList(
-            serviceListData.sort((item1, item2) =>
-            item1.code.toLowerCase() > item2.code.toLowerCase()
-              ? 1
-              : item2.code.toLowerCase() > item1.code.toLowerCase()
-              ? -1
-              : 0
-          )
-        );
+        if(searchResult.length > 0){
+          setSearchResult(
+              searchResult.sort((item1, item2) =>
+                  item1.code.toLowerCase() > item2.code.toLowerCase()
+                      ? 1
+                      : item2.code.toLowerCase() > item1.code.toLowerCase()
+                          ? -1
+                          : 0
+              )
+          );
+        }
+        else {
+          setSortServiceList(
+              serviceListData.sort((item1, item2) =>
+                  item1.code.toLowerCase() > item2.code.toLowerCase()
+                      ? 1
+                      : item2.code.toLowerCase() > item1.code.toLowerCase()
+                          ? -1
+                          : 0
+              )
+          );
+          value = true;
+        }
         break;
       case 3:
-        setSortServiceList(
-            serviceListData.sort((item1, item2) =>
-            item1.name.toLowerCase() > item2.name.toLowerCase()
-              ? 1
-              : item2.name.toLowerCase() > item1.name.toLowerCase()
-              ? -1
-              : 0
-          )
-        );
+        if(searchResult.length > 0){
+          setSearchResult(
+              searchResult.sort((item1, item2) =>
+                  item1.name.toLowerCase() > item2.name.toLowerCase()
+                      ? 1
+                      : item2.name.toLowerCase() > item1.name.toLowerCase()
+                          ? -1
+                          : 0
+              )
+          );
+        }
+        else {
+          setSortServiceList(
+              serviceListData.sort((item1, item2) =>
+                  item1.name.toLowerCase() > item2.name.toLowerCase()
+                      ? 1
+                      : item2.name.toLowerCase() > item1.name.toLowerCase()
+                          ? -1
+                          : 0
+              )
+          );
+          value = true;
+        }
         break;
       default:
-        setSortServiceList(
-            serviceListData.sort(
-            (item1, item2) => item1.serviceId - item2.serviceId
-          )
-        );
+        if(searchResult.length > 0){
+          setSearchResult(
+              searchResult.sort(
+                  (item1, item2) => item1.serviceId - item2.serviceId
+              )
+          );
+        }
+        else {
+          setSortServiceList(
+              serviceListData.sort(
+                  (item1, item2) => item1.serviceId - item2.serviceId
+              )
+          );
+          value = true;
+        }
     }
-    setServiceListDisplay(true);
+    console.log(sortServiceList);
+    setServiceListDisplay(value);
   };
   const handleSearch = (val) => {
     let searchValue = val.toLowerCase();
@@ -83,6 +138,7 @@ const ServiceComponent = (props) => {
       setServiceListDisplay(false);
     } else {
       serviceResultList = [];
+      setSortServiceList(serviceListData)
       setServiceListDisplay(true);
     }
     setSearchResult(serviceResultList);
@@ -103,7 +159,7 @@ const ServiceComponent = (props) => {
         </Link>
       </Button>
       {/*{open && (*/}
-      {/*  <ServiceForm*/}
+      {/*  <AddServiceForm*/}
       {/*    handleClickOpen={handleClickOpen}*/}
       {/*    handleClose={handleClose}*/}
       {/*    open={open}*/}
