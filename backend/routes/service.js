@@ -6,6 +6,8 @@ const {
   createService,
   updateService,
   deleteServiceById,
+  blockServiceById,
+  unblockServiceById,
 } = require('../services/service');
 
 const router = express.Router();
@@ -32,7 +34,6 @@ router.get('/:id', (req, res, next) => {
   console.log(id);
   getServiceById(id)
     .then((data) => {
-      console.log('the return value of findByPk() is: ', data);
       res.send(data);
     })
     .catch((error) => {
@@ -79,6 +80,30 @@ router.delete('/:id', (req, res, next) => {
     })
     .catch((err) => {
       console.error(err);
+    });
+});
+
+router.put('/block/:id', (req, res, next) => {
+  const { params } = req;
+  const { id } = params;
+  blockServiceById(id)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
+router.put('/unblock/:id', (req, res, next) => {
+  const { params } = req;
+  const { id } = params;
+  unblockServiceById(id)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((error) => {
+      console.error(error);
     });
 });
 
