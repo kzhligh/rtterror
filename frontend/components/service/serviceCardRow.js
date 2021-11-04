@@ -5,28 +5,20 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styled from "../../styles/service.module.css";
 import { useState } from "react";
-import ServiceCard from "./serviceCard";
 import { CardActionArea, CardActions, CardHeader } from "@mui/material";
 import {useRouter} from "next/router";
 
 const ServiceCardRow = (props) => {
     const router = useRouter();
   const { item } = props;
-  const [serviceCard, setServiceCard] = useState(false);
-  // const toggleServiceCard = () => {
-  //   setServiceCard(!serviceCard);
-  // };
   const toggleBlocked = (id) => {
-    // change the a
     alert("service id  " + id);
   };
 
   const isBlock = () => item["status"] == "blocked";
-  //click on service card does not work
   return (
     <div className={styled.flexAlignContainer}>
       <Card
-        // disabled={item["status"] == "toggleBlocked"}
         className={styled.cardWrapper}
         onClick={
           !isBlock()
@@ -64,13 +56,6 @@ const ServiceCardRow = (props) => {
       >
         {isBlock() ? "unblocked" : "blocked"}
       </Button>
-      {/*{serviceCard && (*/}
-      {/*  <ServiceCard*/}
-      {/*    closeServiceCard={toggleServiceCard}*/}
-      {/*    open={serviceCard}*/}
-      {/*    item={item}*/}
-      {/*  />*/}
-      {/*)}*/}
     </div>
   );
 };

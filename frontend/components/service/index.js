@@ -4,15 +4,11 @@ import Button from "@mui/material/Button";
 import styled from "../../styles/service.module.css";
 import Select from "@mui/material/Select";
 import {useEffect, useState} from "react";
-import { FormControl } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import SearchInput from "./search";
-import AddServiceForm from "./addServiceForm";
 import Box from "@mui/material/Box";
 import Link from "next/link";
 
-//possibly refactor the code to use more routing of next js and passing the parameter
-// we can use regular react state or fetch the data with super agent  or use getStaticProps
 const ServiceComponent = (props) => {
   const {serviceListData}= props;
   const [serviceListDisplay, setServiceListDisplay] = useState(true);
@@ -149,15 +145,12 @@ const ServiceComponent = (props) => {
       }
     } else {
       serviceResultList = [];
-      // setSortServiceList(serviceListData)
       handleSelectOrderBy('');
       setServiceListDisplay(true);
     }
     setSearchResult(serviceResultList);
   };
 
-  //edit the service
-  //add new employee
   return (
     <Box >
       <SearchInput handleSearch={handleSearch} />

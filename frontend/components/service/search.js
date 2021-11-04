@@ -25,8 +25,6 @@ export default function SearchInput(props) {
       <TextField
         id="filled-search"
         label="Search"
-        // type="search"
-        // variant="filled"
         fullWidth
         value={searchInput}
         onChange={(event) => searchHandler(event.target.value)}

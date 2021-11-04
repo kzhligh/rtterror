@@ -40,7 +40,6 @@ const ServiceEmployee = (props) => {
     return (
         <div>
             <Dialog
-                // fullWidth={serviceEmployeeDialog}
                 maxWidth="lg"
                 open={serviceEmployeeDialog}
                 scroll="body"
