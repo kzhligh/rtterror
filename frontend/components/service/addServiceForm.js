@@ -10,7 +10,18 @@ import IconButton from "@mui/material/IconButton";
 import styled from "../../styles/service.module.css";
 import {useState} from "react";
 import Paper from "@mui/material/Paper";
-import {Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {
+  Checkbox,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Fab,
+  InputAdornment
+} from "@mui/material";
+import ServiceCardRow from "./serviceCardRow";
 
 
 const AddServiceForm = (props) => {
@@ -19,14 +30,16 @@ const AddServiceForm = (props) => {
   const [name , setName] = useState('');
   const [code , setCode] = useState('');
   const [description , setDescription] = useState('');
+  const [duration , setDuration] = useState(0);
+  const [price, setPrice] = useState(0);
   const processAddService=()=>{
     //processData from the code name description and emplyee list
-    let Data = [];
-    console.log(employeeCheckList);
-    console.log(name);
-    console.log(code);
-    console.log(description);
-    addHandle(Data);
+
+    if(validationInput()){
+      let Data = {}
+      addHandle(Data);
+    }
+
   }
   const handleCheck =(e)=>{
     if(e.target.checked){
@@ -36,6 +49,13 @@ const AddServiceForm = (props) => {
       setEmployeeCheckList(employeeCheckList.filter((name)=>e.target.value!=name));
     }
   }
+  const durationSelect=(hour)=>{
+    setDuration(hour*60000)
+    // console.log(Object.keys(item)==duration)
+  }
+
+  const durationList = [{30:'30 M'},{ 60: '1 H'}, { 90: '1.5H'},{120: '2H'}]
+
 
   const handleSetValue = (e)=>{
     let label = e.target.id;
@@ -50,9 +70,20 @@ const AddServiceForm = (props) => {
       case 'description':
           setDescription(value);
         break;
+      case 'price':
+        setPrice(value);
+        break;
     }
   }
 
+  const validationInput = ()=>{
+    if(name =='' ||code =='' ||price<=0){
+      return false;
+    }
+    return true;
+
+
+  }
   return (
     <div>
       <Dialog open={true} fullWidth={true} maxWidth="lg" scroll="body">
@@ -73,7 +104,7 @@ const AddServiceForm = (props) => {
         </DialogTitle>
         <DialogContent >
 
-          {/*form control*/}
+          <div className={styled.separateVDiv}></div>
           <TextField
               fullWidth
               required
@@ -101,6 +132,25 @@ const AddServiceForm = (props) => {
                 value={description}
                 onChange={(event)=>handleSetValue(event)}
             />
+          <div className={styled.separateVDiv}></div>
+          <div className={styled.flexAlignContainer}>
+            <h3>Duration</h3>
+            {durationList.map((item) => (
+                <Fab key={Object.keys(item)} onClick={()=>durationSelect(Object.keys(item))} color={Object.keys(item)*60000==duration?'primary':null} variant="extended">{Object.values(item)}</Fab>
+            ))}
+          </div>
+          <div className={styled.separateVDiv}></div>
+          <TextField
+              id="price"
+              label="price"
+              type='number'
+              value={price}
+              required
+              onChange={(event)=>handleSetValue(event)}
+              InputProps={{
+                startAdornment: <InputAdornment position="start">$</InputAdornment>
+              }}
+          />
           <div className={styled.separateVDiv}></div>
           <h1>Add Employee</h1>
           <TableContainer component={Paper}>

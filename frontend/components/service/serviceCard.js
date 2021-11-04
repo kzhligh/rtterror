@@ -1,7 +1,6 @@
 import * as React from "react";
 import IconButton from "@mui/material/IconButton";
 import {
-    CardActionArea,
     CardHeader, Checkbox,
     Dialog, DialogActions,
     DialogContent,
@@ -22,7 +21,7 @@ import {useRouter} from "next/router";
 const ServiceCard = (props) => {
   const { closeServiceCard, item } = props;
   const [employeeCheckList , setEmployeeCheckList] = useState([]);
-  // const [viewMode ,setViewMode] = useState(true);
+
   const router = useRouter();
     const handleCheck =(e)=>{
         if(e.target.checked){
@@ -42,7 +41,6 @@ const ServiceCard = (props) => {
       fullWidth={true}
       maxWidth="lg"
       open={true}
-      // onClose={closeServiceCard}
       scroll="body"
     >
       <DialogTitle>
@@ -100,7 +98,7 @@ const ServiceCard = (props) => {
                             <TableHead>
                                 <TableRow>
                                     <TableCell align="center"><h1>Employee name</h1></TableCell>
-                                    <TableCell align="right"><h4>Tittle</h4></TableCell>
+                                    <TableCell align="left"><h4>Tittle</h4></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -123,7 +121,7 @@ const ServiceCard = (props) => {
                                                 <h3>{ename}</h3>
                                             </div>
                                         </TableCell>
-                                        <TableCell align="right"><h4>Tittle</h4></TableCell>
+                                        <TableCell align="left"><h4>Tittle</h4></TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

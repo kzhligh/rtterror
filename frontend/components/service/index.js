@@ -24,10 +24,10 @@ const ServiceComponent = (props) => {
   }, [select]);
 
 
-  const handleSelectOrderBy = (event) => {
+  const handleSelectOrderBy = (val) => {
     let value = false;
-    setSelect(event.target.value);
-    switch (event.target.value) {
+    setSelect(val);
+    switch (val) {
       case 2:
         if(searchResult.length > 0){
           setSearchResult(
@@ -129,16 +129,28 @@ const ServiceComponent = (props) => {
     let searchValue = val.toLowerCase();
     let serviceResultList;
     if (val.trim().length > 0) {
-      serviceResultList = serviceListData.filter(
-        (item) =>
-          item.code.includes(searchValue) ||
-          item.name.includes(searchValue) ||
-          item.description.includes(searchValue)
-      );
-      setServiceListDisplay(false);
+      if(serviceListDisplay){
+        serviceResultList = sortServiceList.filter(
+            (item) =>
+                item.code.includes(searchValue) ||
+                item.name.includes(searchValue) ||
+                item.description.includes(searchValue)
+        );
+        setServiceListDisplay(false);
+      }
+      else{
+        serviceResultList = serviceListData.filter(
+            (item) =>
+                item.code.includes(searchValue) ||
+                item.name.includes(searchValue) ||
+                item.description.includes(searchValue)
+        );
+        setServiceListDisplay(false);
+      }
     } else {
       serviceResultList = [];
-      setSortServiceList(serviceListData)
+      // setSortServiceList(serviceListData)
+      handleSelectOrderBy('');
       setServiceListDisplay(true);
     }
     setSearchResult(serviceResultList);
@@ -171,7 +183,7 @@ const ServiceComponent = (props) => {
           <p>Order By</p>
           <div className={styled.separateHDiv}></div>
           {/*<FormControl>*/}
-            <Select onChange={handleSelectOrderBy}>
+            <Select onChange={()=>handleSelectOrderBy(event.target.value)}>
               <MenuItem value={0}></MenuItem>
               <MenuItem value={1}>Service Code</MenuItem>
               <MenuItem value={2}>Description</MenuItem>

@@ -130,9 +130,9 @@ function ServiceEditFormPage(props){
         console.log('add');
     }
     const closeAddDialog = ()=>{
-        router.replace('/service/'+serviceItem.serviceId).then(r => console.log(r));
+        router.replace('/service/'+serviceItem.serviceId+'/details').then(r => console.log(r));
     }
-    console.log(serviceItem);
+    // console.log(serviceItem);
     return (
         <>
             <EditServiceForm editHandle={editHandle} serviceItem={serviceItem} closeAddDialog={closeAddDialog} employeeList={employeeList}/>

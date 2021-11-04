@@ -76,12 +76,14 @@ const EditServiceForm = (props) => {
         </DialogTitle>
         <DialogContent >
 
-          {/*form control*/}
+          <div className={styled.separateVDiv}></div>
           <TextField
               fullWidth
               required
               id="name"
               label="Service name"
+              value={name}
+              variant="outlined"
               // defaultValue="" maybe value when edit
               onChange={(event)=>handleSetValue(event)}
           />
@@ -92,18 +94,23 @@ const EditServiceForm = (props) => {
               id="code"
               label="Service code"
               // defaultValue="Hello World"
+              value={code}
+              variant="outlined"
               onChange={(event)=>handleSetValue(event)}
           />
           <div className={styled.separateVDiv}></div>
             <TextField
                 fullWidth
-                id="code"
+                id="description"
                 label="Description"
                 multiline
                 rows={4}
                 // defaultValue="Default Value"
+                value={description}
+                variant="outlined"
                 onChange={(event)=>handleSetValue(event)}
             />
+
           <div className={styled.separateVDiv}></div>
           <h1>Add Employee</h1>
           <TableContainer component={Paper}>
