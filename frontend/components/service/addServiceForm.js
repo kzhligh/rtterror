@@ -33,13 +33,10 @@ const AddServiceForm = (props) => {
   const [duration , setDuration] = useState(0);
   const [price, setPrice] = useState(0);
   const processAddService=()=>{
-    //processData from the code name description and emplyee list
-
     if(validationInput()){
       let Data = {}
       addHandle(Data);
     }
-
   }
   const handleCheck =(e)=>{
     if(e.target.checked){
@@ -51,12 +48,8 @@ const AddServiceForm = (props) => {
   }
   const durationSelect=(hour)=>{
     setDuration(hour*60000)
-    // console.log(Object.keys(item)==duration)
   }
-
-  const durationList = [{30:'30 M'},{ 60: '1 H'}, { 90: '1.5H'},{120: '2H'}]
-
-
+  const durationList = [{30:'30 M'},{ 60: '1 H'}, { 90: '1.5 H'},{120: '2 H'}]
   const handleSetValue = (e)=>{
     let label = e.target.id;
     let value = e.target.value.trim();

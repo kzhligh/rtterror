@@ -16,11 +16,14 @@ import Box from "@mui/material/Box";
 import {useState} from "react";
 import Paper from "@mui/material/Paper";
 import {useRouter} from "next/router";
+import ServiceEmployee from "./serviceEmployee";
 
 
 const ServiceCard = (props) => {
-  const { closeServiceCard, item } = props;
+  const { closeServiceCard, item , employeeList} = props;
   const [employeeCheckList , setEmployeeCheckList] = useState([]);
+  const [serviceEmployeeDialog , setServiceEmployeeDialog] = useState(false);
+  const [remainEmployeeList , setRemainEmployeeList] = useState([]);
 
   const router = useRouter();
     const handleCheck =(e)=>{
@@ -34,7 +37,13 @@ const ServiceCard = (props) => {
     const handleEditClick = ()=>{
         router.push('/service/' + item.serviceId + '/edit').then( r => console.log(r));
     }
+    const handleAddEmployee =()=>{
+    //    extract the employ not in the service
+    //    set the display service employee dialog
+        setServiceEmployeeDialog(true);
+        setRemainEmployeeList(employeeList);
 
+    }
 
   return (
     <Dialog
@@ -133,15 +142,14 @@ const ServiceCard = (props) => {
         </DialogContent>
             <DialogActions>
                 <Button
-                    // className={styled.addRightButton}
                     variant="outlined"
-                    onClick={() => console.log('press')}
+                    onClick={handleAddEmployee}
                 >
                     {/*the employee that not in the service employeeCheckList.filter((name)=>e.target.value!=name) */}
                     Add Employee
                 </Button>
             </DialogActions>
-
+        {serviceEmployeeDialog && <ServiceEmployee remainEmployeeList={remainEmployeeList} serviceEmployeeDialog={serviceEmployeeDialog} setServiceEmployeeDialog={setServiceEmployeeDialog} item={item}/>}
     </Dialog>
   );
 };

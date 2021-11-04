@@ -10,24 +10,33 @@ import IconButton from "@mui/material/IconButton";
 import styled from "../../styles/service.module.css";
 import {useState} from "react";
 import Paper from "@mui/material/Paper";
-import {Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {
+  Checkbox,
+  Fab,
+  InputAdornment,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
+} from "@mui/material";
 
 
 const EditServiceForm = (props) => {
-  const { editHandle, serviceItem , closeAddDialog, employeeList} = props;
+  const { editHandle, serviceItem , closeDialog, employeeList} = props;
   const [employeeCheckList , setEmployeeCheckList] = useState(serviceItem.offerBy);
   const [name , setName] = useState(serviceItem.name);
   const [code , setCode] = useState(serviceItem.code);
   const [description , setDescription] = useState(serviceItem.description);
+  const [duration , setDuration] = useState(serviceItem.duration);
+  const [price, setPrice] = useState(serviceItem.price);
 
   const processUpdateService = ()=>{
-    // process data
-    console.log(employeeCheckList);
-    console.log(name);
-    console.log(code);
-    console.log(description);
-    const data = [];
-    editHandle(data);
+    if(validationInput()){
+      let Data = {}
+      editHandle(Data);
+    }
   }
 
   const handleCheck =(e)=>{
@@ -37,6 +46,10 @@ const EditServiceForm = (props) => {
     else{
       setEmployeeCheckList(employeeCheckList.filter((name)=>e.target.value!=name));
     }
+  }
+  const durationList = [{30:'30 M'},{ 60: '1 H'}, { 90: '1.5 H'},{120: '2 H'}]
+  const durationSelect=(hour)=>{
+    setDuration(hour*60000)
   }
 
   const handleSetValue = (e)=>{
@@ -52,9 +65,18 @@ const EditServiceForm = (props) => {
       case 'description':
         setDescription(value);
         break;
+      case 'price':
+        setPrice(value);
+        break;
     }
   }
 
+  const validationInput = ()=>{
+    if(name =='' ||code =='' ||price<=0){
+      return false;
+    }
+    return true;
+  }
 
   return (
     <div>
@@ -63,7 +85,7 @@ const EditServiceForm = (props) => {
           Update Service
           <IconButton
             aria-label="close"
-            onClick={closeAddDialog}
+            onClick={closeDialog}
             size="medium"
             sx={{
               position: "absolute",
@@ -112,7 +134,26 @@ const EditServiceForm = (props) => {
             />
 
           <div className={styled.separateVDiv}></div>
-          <h1>Add Employee</h1>
+          <div className={styled.flexAlignContainer}>
+            <h3>Duration</h3>
+            {durationList.map((item) => (
+                <Fab key={Object.keys(item)} onClick={()=>durationSelect(Object.keys(item))} color={Object.keys(item)*60000==duration?'primary':null} variant="extended">{Object.values(item)}</Fab>
+            ))}
+          </div>
+          <div className={styled.separateVDiv}></div>
+          <TextField
+              id="price"
+              label="price"
+              type='number'
+              value={price}
+              required
+              onChange={(event)=>handleSetValue(event)}
+              InputProps={{
+                startAdornment: <InputAdornment position="start">$</InputAdornment>
+              }}
+          />
+          <div className={styled.separateVDiv}></div>
+          <h1>Employee</h1>
           <TableContainer component={Paper}>
             <Table sx={{minWidth: 650}} aria-label="simple table">
               <TableHead>
@@ -150,8 +191,8 @@ const EditServiceForm = (props) => {
 
         </DialogContent>
         <DialogActions>
-          <Button onClick={processUpdateService}>Create Service</Button>
-          <Button onClick={closeAddDialog}>Close</Button>
+          <Button onClick={processUpdateService}>Submit</Button>
+          <Button onClick={closeDialog}>Close</Button>
         </DialogActions>
       </Dialog>
     </div>

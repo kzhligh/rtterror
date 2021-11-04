@@ -127,15 +127,15 @@ function ServiceEditFormPage(props){
     const {serviceItem} = props;
     const employeeList = ['E1','E2','E3','E4','E5','E6','E7','E8']
     const editHandle=(data)=>{
-        console.log('add');
+        closeDialog();
     }
-    const closeAddDialog = ()=>{
-        router.replace('/service/'+serviceItem.serviceId+'/details').then(r => console.log(r));
+    const closeDialog = ()=>{
+        router.push('/service/' + serviceItem.serviceId + '/edit').then( r => console.log(r));
     }
-    // console.log(serviceItem);
+
     return (
         <>
-            <EditServiceForm editHandle={editHandle} serviceItem={serviceItem} closeAddDialog={closeAddDialog} employeeList={employeeList}/>
+            <EditServiceForm editHandle={editHandle} serviceItem={serviceItem} closeDialog={closeDialog} employeeList={employeeList}/>
         </>
     )
 }
