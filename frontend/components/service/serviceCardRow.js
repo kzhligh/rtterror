@@ -6,17 +6,12 @@ import Typography from "@mui/material/Typography";
 import styled from "../../styles/service.module.css";
 import { CardActionArea, CardActions, CardHeader } from "@mui/material";
 import {useRouter} from "next/router";
-import {useState} from "react";
 
 const ServiceCardRow = (props) => {
     const router = useRouter();
-     const { item } = props;
+     const { item ,toggleBlocked ,deleteService }= props;
 
-  const toggleBlocked = (id) => {
-    alert("service id  " + id);
-  };
-
-  const isBlock = () => item["status"] == "blocked";
+  const isBlock = () => item.blocked;
   return (
     <div className={styled.flexAlignContainer}>
       <Card
@@ -31,7 +26,7 @@ const ServiceCardRow = (props) => {
         }
         style={{ backgroundColor: isBlock() ? "gray" : "white" }}
       >
-        <CardHeader sx={{ fontSize: 30 }} title={item["name"]} />
+        <CardHeader sx={{ fontSize: 30 }} title={item.name} />
         <CardContent>
           <Typography sx={{ fontSize: 24 }} color="text.secondary">
             Service Code: {item.barcode}
@@ -53,7 +48,7 @@ const ServiceCardRow = (props) => {
       <Button
         className={styled.buttonContainer}
         variant={isBlock() ? "contained" : "outlined"}
-        onClick={() => toggleBlocked(item.id)}
+        onClick={() => toggleBlocked(item)}
         style={{ backgroundColor: isBlock() ? "gray" : "white" }}
       >
         {isBlock() ? "unblocked" : "blocked"}
@@ -61,7 +56,7 @@ const ServiceCardRow = (props) => {
         <Button
             className={styled.buttonContainer}
             variant= "outlined"
-            onClick={() => toggleBlocked(item.id)}
+            onClick={() => deleteService(item)}
         >
             Delete
         </Button>

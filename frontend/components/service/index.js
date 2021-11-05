@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 import Link from "next/link";
 
 const ServiceComponent = (props) => {
-  const {serviceListData}= props;
+  const {serviceListData ,toggleBlocked ,deleteService}= props;
   const [serviceListDisplay, setServiceListDisplay] = useState(true);
   const [searchResult, setSearchResult] = useState([]);
   const [sortServiceList, setSortServiceList] = useState(serviceListData);
@@ -189,11 +189,11 @@ const ServiceComponent = (props) => {
       <div>
         {searchResult.length > 0 &&
           searchResult.map((item) => (
-            <ServiceCardRow key={item.id} item={item} handleServiceCheck={handleServiceCheck} />
+            <ServiceCardRow key={item.id} item={item} handleServiceCheck={handleServiceCheck} toggleBlocked={toggleBlocked} deleteService={deleteService} />
           ))}
 
         {serviceListDisplay && sortServiceList.map((item) => (
-            <ServiceCardRow key={item.id} item={item} handleServiceCheck={handleServiceCheck}/>
+            <ServiceCardRow key={item.id} item={item} handleServiceCheck={handleServiceCheck} toggleBlocked={toggleBlocked} deleteService={deleteService}/>
           ))}
       </div>
     </Box>

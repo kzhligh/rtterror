@@ -19,8 +19,8 @@ function ServiceFormPage({employeeList}){
         router.push("/service").then(r => console.log('then of push'+r));
         setOpen(false);
     }
-    const addHandle=(data)=>{
-        request
+    const addHandle=async (data) => {
+        await request
             .post(BuildPath("services"))
             .send(data)
             .set("Accept", "application/json")

@@ -33,14 +33,15 @@ const AddServiceForm = (props) => {
   const processAddService=()=>{
     if(validationInput()){
       let Data = {
-          "id":Math.random(),
+          "id":Math.round(Math.random()*10) ,
           "name":name,
           "description": description,
           "treatment_type": "treatment",
           "duration":duration,
           "price": price,
           "barcode":barcode,
-          "sms_description":"sms description"
+          "sms_description":"sms description",
+          "blocked":false
       }
       addHandle(Data);
     }
