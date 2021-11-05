@@ -19,7 +19,7 @@ async function getServiceById(serviceId) {
         `ERROR - No such a service is found with the id: ${serviceId}`
       );
     }
-    return service.dataValues;
+    return service;
   } else {
     throw new Error(`ERROR - unexpected input type: ${typeof serviceId}`);
   }
@@ -83,10 +83,28 @@ async function deleteServiceById(serviceId) {
   }
 }
 
+async function blockServiceById(serviceId) {
+  const serviceObj = await getServiceById(serviceId);
+  serviceObj.blocked = true;
+  await updateService(serviceObj);
+  const updatedService = await getServiceById(serviceId);
+  return updatedService;
+}
+
+async function unblockServiceById(serviceId) {
+  const serviceObj = await getServiceById(serviceId);
+  serviceObj.blocked = false;
+  await updateService(serviceObj);
+  const updatedService = await getServiceById(serviceId);
+  return updatedService;
+}
+
 module.exports = {
   getAllServices,
   getServiceById,
   createService,
   updateService,
   deleteServiceById,
+  blockServiceById,
+  unblockServiceById,
 };

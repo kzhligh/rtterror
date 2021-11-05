@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../modules/sequelize.js');
+const { sequelize } = require('../modules/sequelize.js');
 
 const Customer = sequelize.define(
   'customers',
@@ -22,4 +22,4 @@ const Customer = sequelize.define(
   }
 );
 
-module.exports = Customer;
+module.exports = { Customer };

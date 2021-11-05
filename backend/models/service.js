@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../modules/sequelize');
+const { sequelize } = require('../modules/sequelize');
 
 const Service = sequelize.define(
   'services',
@@ -29,6 +29,11 @@ const Service = sequelize.define(
     sms_description: {
       type: DataTypes.STRING,
     },
+    blocked: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      default: false,
+    },
   },
   {
     timestamps: false,
@@ -36,4 +41,4 @@ const Service = sequelize.define(
   }
 );
 
-module.exports = Service;
+module.exports = { Service };
