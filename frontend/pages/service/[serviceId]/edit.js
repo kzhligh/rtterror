@@ -4,27 +4,6 @@ import request from "superagent";
 import BuildPath from "../../../components/pathBuilder";
 import {useState} from "react";
 
-// pre build the static path , this will not run in the front end
-// export async function getStaticPaths() {
-//     let serviceListData =[];
-//     await request
-//         .get(BuildPath("services"))
-//         .set("Accept", "application/json")
-//         .then((res) => {
-//             serviceListData=res.body;
-//         })
-//         .catch((err) => {
-//             console.log(err);
-//         });
-//     const pathParams = serviceListData.map((item) => {
-//         return { params: { serviceId: item.id.toString()} }
-//     });
-//     return {
-//         paths: pathParams,
-//         fallback:  false // See the "fallback" section below
-//     };
-// }
-
 export async function getServerSideProps(context) {
     const id = context.params.serviceId;
     let serviceItem ={};
@@ -38,7 +17,7 @@ export async function getServerSideProps(context) {
             console.log(err);
         });
     return {
-        props: { serviceItem: serviceItem  }, // will be passed to the page component as props
+        props: { serviceItem: serviceItem  },
     };
 }
 

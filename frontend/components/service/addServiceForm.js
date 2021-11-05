@@ -26,13 +26,22 @@ const AddServiceForm = (props) => {
   const { addHandle , employeeList ,open, closeDialog} = props;
   const [employeeCheckList , setEmployeeCheckList] = useState([]);
   const [name , setName] = useState('');
-  const [code , setCode] = useState('');
+  const [barcode , setBarcode] = useState('');
   const [description , setDescription] = useState('');
   const [duration , setDuration] = useState(0);
   const [price, setPrice] = useState(0);
   const processAddService=()=>{
     if(validationInput()){
-      let Data = {}
+      let Data = {
+          "id":Math.random(),
+          "name":name,
+          "description": description,
+          "treatment_type": "treatment",
+          "duration":duration,
+          "price": price,
+          "barcode":barcode,
+          "sms_description":"sms description"
+      }
       addHandle(Data);
     }
   }
@@ -50,13 +59,13 @@ const AddServiceForm = (props) => {
   const durationList = [{30:'30 M'},{ 60: '1 H'}, { 90: '1.5 H'},{120: '2 H'}]
   const handleSetValue = (e)=>{
     let label = e.target.id;
-    let value = e.target.value.trim();
+    let value = e.target.value;
     switch (label){
       case 'name':
           setName(value);
         break;
       case 'code':
-          setCode(value);
+          setBarcode(value);
         break;
       case 'description':
           setDescription(value);
@@ -68,7 +77,7 @@ const AddServiceForm = (props) => {
   }
 
   const validationInput = ()=>{
-    if(name =='' ||code =='' ||price<=0){
+    if(name =='' ||barcode =='' ||price<=0){
       return false;
     }
     return true;
@@ -110,7 +119,7 @@ const AddServiceForm = (props) => {
               required
               id="code"
               label="Service code"
-              value={code}
+              value={barcode}
               onChange={(event)=>handleSetValue(event)}
           />
           <div className={styled.separateVDiv}></div>

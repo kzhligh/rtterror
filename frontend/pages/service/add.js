@@ -14,6 +14,7 @@ export async function getServerSideProps() {
 function ServiceFormPage({employeeList}){
     const router = useRouter();
     const [open, setOpen] = useState(true);
+
     const closeDialog=()=>{
         router.push("/service").then(r => console.log('then of push'+r));
         setOpen(false);
