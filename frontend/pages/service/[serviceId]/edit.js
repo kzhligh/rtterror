@@ -27,6 +27,17 @@ function ServiceEditFormPage(props){
     const [open, setOpen] = useState(true);
     const employeeList = ['E1','E2','E3','E4','E5','E6','E7','E8']
     const editHandle=(data)=>{
+        await request
+            .put(BuildPath("services/"+id))
+            .send(data)
+            .set("Accept", "application/json")
+            .then((res) => {
+                console.log(res.status);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        closeDialog();
         closeDialog();
     }
     const closeDialog=()=>{

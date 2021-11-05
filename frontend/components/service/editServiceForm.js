@@ -27,14 +27,24 @@ const EditServiceForm = (props) => {
   const { editHandle, serviceItem , closeDialog, employeeList, open} = props;
   const [employeeCheckList , setEmployeeCheckList] = useState([]);//serviceItem.offerBy
   const [name , setName] = useState(serviceItem.name);
-  const [code , setCode] = useState(serviceItem.barcode);
+  const [barcode , setBarcode] = useState(serviceItem.barcode);
   const [description , setDescription] = useState(serviceItem.description);
   const [duration , setDuration] = useState(serviceItem.duration);
   const [price, setPrice] = useState(serviceItem.price);
 
   const processUpdateService = ()=>{
     if(validationInput()){
-      let Data = {}
+      let Data = {
+        "id":Math.round(Math.random()*10) ,
+        "name":name,
+        "description": description,
+        "treatment_type": "treatment",
+        "duration":duration,
+        "price": price,
+        "barcode":barcode,
+        "sms_description":"sms description",
+        "blocked":false
+      }
       editHandle(Data);
     }
   }
@@ -60,7 +70,7 @@ const EditServiceForm = (props) => {
         setName(value);
         break;
       case 'code':
-        setCode(value);
+        setBarcode(value);
         break;
       case 'description':
         setDescription(value);
@@ -72,7 +82,7 @@ const EditServiceForm = (props) => {
   }
 
   const validationInput = ()=>{
-    if(name =='' ||code =='' ||price<=0){
+    if(name =='' ||barcode =='' ||price<=0){
       return false;
     }
     return true;
@@ -116,7 +126,7 @@ const EditServiceForm = (props) => {
               id="code"
               label="Service code"
               // defaultValue="Hello World"
-              value={code}
+              value={barcode}
               variant="outlined"
               onChange={(event)=>handleSetValue(event)}
           />
