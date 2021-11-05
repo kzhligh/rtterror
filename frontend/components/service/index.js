@@ -15,6 +15,16 @@ const ServiceComponent = (props) => {
   const [searchResult, setSearchResult] = useState([]);
   const [sortServiceList, setSortServiceList] = useState(serviceListData);
   const [select, setSelect] = useState(-1);
+  const [serviceCheckList , setServiceCheckList] = useState([]);
+
+  const handleServiceCheck =(e)=>{
+    if(e.target.checked){
+      setServiceCheckList([...serviceCheckList,e.target.value]);
+    }
+    else{
+      setServiceCheckList(serviceCheckList.filter((name)=>e.target.value!=name));
+    }
+  }
   useEffect(() => {
 
   }, [select]);
@@ -118,7 +128,6 @@ const ServiceComponent = (props) => {
           value = true;
         }
     }
-    console.log(sortServiceList);
     setServiceListDisplay(value);
   };
   const handleSearch = (val) => {
@@ -128,7 +137,7 @@ const ServiceComponent = (props) => {
       if(serviceListDisplay){
         serviceResultList = sortServiceList.filter(
             (item) =>
-                item.code.includes(searchValue) ||
+                item.barcode.includes(searchValue) ||
                 item.name.includes(searchValue) ||
                 item.description.includes(searchValue)
         );
@@ -137,7 +146,7 @@ const ServiceComponent = (props) => {
       else{
         serviceResultList = serviceListData.filter(
             (item) =>
-                item.code.includes(searchValue) ||
+                item.barcode.includes(searchValue) ||
                 item.name.includes(searchValue) ||
                 item.description.includes(searchValue)
         );
@@ -163,37 +172,28 @@ const ServiceComponent = (props) => {
           <a>New Service</a>
         </Link>
       </Button>
-      {/*{open && (*/}
-      {/*  <AddServiceForm*/}
-      {/*    handleClickOpen={handleClickOpen}*/}
-      {/*    handleClose={handleClose}*/}
-      {/*    open={open}*/}
-      {/*  />*/}
-      {/*)}*/}
       <div className={styled.flexAlignContainer}>
         <h1>Select a service</h1>
         <div className={styled.flexContainer}>
           <p>Order By</p>
           <div className={styled.separateHDiv}></div>
-          {/*<FormControl>*/}
             <Select onChange={()=>handleSelectOrderBy(event.target.value)}>
               <MenuItem value={0}></MenuItem>
               <MenuItem value={1}>Service Code</MenuItem>
               <MenuItem value={2}>Description</MenuItem>
               <MenuItem value={3}>Name</MenuItem>
             </Select>
-          {/*</FormControl>*/}
         </div>
       </div>
 
       <div>
         {searchResult.length > 0 &&
           searchResult.map((item) => (
-            <ServiceCardRow key={item.serviceId} item={item} />
+            <ServiceCardRow key={item.id} item={item} handleServiceCheck={handleServiceCheck} />
           ))}
 
         {serviceListDisplay && sortServiceList.map((item) => (
-            <ServiceCardRow key={item.serviceId} item={item} />
+            <ServiceCardRow key={item.id} item={item} handleServiceCheck={handleServiceCheck}/>
           ))}
       </div>
     </Box>

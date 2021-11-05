@@ -4,13 +4,14 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import styled from "../../styles/service.module.css";
-import { useState } from "react";
 import { CardActionArea, CardActions, CardHeader } from "@mui/material";
 import {useRouter} from "next/router";
+import {useState} from "react";
 
 const ServiceCardRow = (props) => {
     const router = useRouter();
-  const { item } = props;
+     const { item } = props;
+
   const toggleBlocked = (id) => {
     alert("service id  " + id);
   };
@@ -24,7 +25,7 @@ const ServiceCardRow = (props) => {
           !isBlock()
             ? () => {
                console.log("card click");
-                router.push('/service/' + item.serviceId+ '/details').then( r => console.log(r))
+                router.push('/service/' + item.id+ '/details').then( r => console.log(r))
               }
             : undefined
         }
@@ -33,29 +34,38 @@ const ServiceCardRow = (props) => {
         <CardHeader sx={{ fontSize: 30 }} title={item["name"]} />
         <CardContent>
           <Typography sx={{ fontSize: 24 }} color="text.secondary">
-            Service Code: {item["code"]}
+            Service Code: {item.barcode}
           </Typography>
           <Typography sx={{ fontSize: 24 }} color="text.secondary">
-            Description : {item["description"]}
+            Description : {item.description}
           </Typography>
         </CardContent>
         <div className={styled.separateVDiv} />
         <CardActionArea>
           <div className={styled.dateContainer}>
             <Typography sx={{ fontSize: 20 }}>
-              Created On {item["dateCreated"]}
+              Created On
             </Typography>
           </div>
         </CardActionArea>
       </Card>
+        <div className={styled.flexVerticalDisplay}>
       <Button
         className={styled.buttonContainer}
         variant={isBlock() ? "contained" : "outlined"}
-        onClick={() => toggleBlocked(item["serviceId"])}
+        onClick={() => toggleBlocked(item.id)}
         style={{ backgroundColor: isBlock() ? "gray" : "white" }}
       >
         {isBlock() ? "unblocked" : "blocked"}
       </Button>
+        <Button
+            className={styled.buttonContainer}
+            variant= "outlined"
+            onClick={() => toggleBlocked(item.id)}
+        >
+            Delete
+        </Button>
+        </div>
     </div>
   );
 };

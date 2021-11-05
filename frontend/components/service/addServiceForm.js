@@ -23,7 +23,7 @@ import {
 } from "@mui/material";
 
 const AddServiceForm = (props) => {
-  const { addHandle , employeeList ,closeAddDialog} = props;
+  const { addHandle , employeeList ,open, closeDialog} = props;
   const [employeeCheckList , setEmployeeCheckList] = useState([]);
   const [name , setName] = useState('');
   const [code , setCode] = useState('');
@@ -77,12 +77,12 @@ const AddServiceForm = (props) => {
   }
   return (
     <div>
-      <Dialog open={true} fullWidth={true} maxWidth="lg" scroll="body">
+      <Dialog open={open} fullWidth={true} maxWidth="lg" scroll="body">
         <DialogTitle>
           New Service
           <IconButton
             aria-label="close"
-            onClick={closeAddDialog}
+            onClick={closeDialog}
             size="medium"
             sx={{
               position: "absolute",
@@ -180,7 +180,7 @@ const AddServiceForm = (props) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={processAddService}>Create Service</Button>
-          <Button onClick={closeAddDialog}>Close</Button>
+          <Button onClick={closeDialog}>Close</Button>
         </DialogActions>
       </Dialog>
     </div>

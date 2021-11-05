@@ -24,10 +24,10 @@ import {
 
 
 const EditServiceForm = (props) => {
-  const { editHandle, serviceItem , closeDialog, employeeList} = props;
-  const [employeeCheckList , setEmployeeCheckList] = useState(serviceItem.offerBy);
+  const { editHandle, serviceItem , closeDialog, employeeList, open} = props;
+  const [employeeCheckList , setEmployeeCheckList] = useState([]);//serviceItem.offerBy
   const [name , setName] = useState(serviceItem.name);
-  const [code , setCode] = useState(serviceItem.code);
+  const [code , setCode] = useState(serviceItem.barcode);
   const [description , setDescription] = useState(serviceItem.description);
   const [duration , setDuration] = useState(serviceItem.duration);
   const [price, setPrice] = useState(serviceItem.price);
@@ -80,7 +80,7 @@ const EditServiceForm = (props) => {
 
   return (
     <div>
-      <Dialog open={true} fullWidth={true} maxWidth="lg" scroll="body">
+      <Dialog open={open} fullWidth={true} maxWidth="lg" scroll="body">
         <DialogTitle>
           Update Service
           <IconButton
