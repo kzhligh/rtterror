@@ -26,8 +26,9 @@ async function getServiceById(serviceId) {
 }
 
 async function createService(serviceObj) {
+  console.log('createService()/serviceObj', serviceObj);
   const {
-    id,
+    serviceCode,
     name,
     description,
     treatment_type,
@@ -38,7 +39,7 @@ async function createService(serviceObj) {
     blocked,
   } = serviceObj;
   if (
-    id &&
+    serviceCode &&
     name &&
     description &&
     treatment_type &&

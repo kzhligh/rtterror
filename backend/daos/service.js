@@ -1,4 +1,5 @@
 const { Service } = require('../models/service');
+const { v4: uuidv4 } = require('uuid');
 
 async function getAllServiceRecords() {
   try {
@@ -18,6 +19,8 @@ async function getServiceRecordById(serviceId) {
 
 async function createServiceRecord(serviceObj) {
   try {
+    serviceObj.id = uuidv4();
+    console.log(serviceObj);
     return Service.create(serviceObj);
   } catch (error) {
     console.error(error);
