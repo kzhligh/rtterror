@@ -47,11 +47,14 @@ async function updateServiceRecord(serviceObj) {
 
 async function deleteServiceRecordById(serviceId) {
   try {
-    return Service.destroy({
-      where: {
-        id: serviceId,
-      },
-    });
+    return Service.update(
+      { hidden: true },
+      {
+        where: {
+          id: serviceId,
+        },
+      }
+    );
   } catch (error) {
     console.error(error);
   }
