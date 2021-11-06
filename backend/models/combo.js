@@ -1,29 +1,34 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../modules/sequelize');
 
-const Service = sequelize.define(
-  'services',
+const Combo = sequelize.define(
+  'combos',
   {
     id: {
       type: DataTypes.STRING,
       primaryKey: true,
     },
-    serviceCode: {
-      type: DataTypes.STRING,
-    },
     name: {
       type: DataTypes.STRING,
+      required: true,
+      allowNull: false,
+    },
+    serviceCode: {
+      type: DataTypes.STRING,
+      required: true,
+      allowNull: false,
+    },
+    total_duration: {
+      type: DataTypes.INTEGER,
+      required: true,
+      allowNull: false,
+    },
+    total_price: {
+      type: DataTypes.STRING,
+      required: true,
+      allowNull: false,
     },
     description: {
-      type: DataTypes.STRING,
-    },
-    treatment_type: {
-      type: DataTypes.STRING,
-    },
-    duration: {
-      type: DataTypes.INTEGER,
-    },
-    price: {
       type: DataTypes.STRING,
     },
     barcode: {
@@ -51,4 +56,4 @@ const Service = sequelize.define(
   }
 );
 
-module.exports = { Service };
+module.exports = { Combo };

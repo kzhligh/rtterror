@@ -36,7 +36,6 @@ async function createService(serviceObj) {
     price,
     barcode,
     sms_description,
-    // blocked,
   } = serviceObj;
   if (
     serviceCode &&
@@ -47,7 +46,6 @@ async function createService(serviceObj) {
     price &&
     barcode &&
     sms_description
-    // blocked
   ) {
     return await createServiceRecord(serviceObj);
   } else {
