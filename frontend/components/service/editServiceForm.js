@@ -34,7 +34,7 @@ const EditServiceForm = (props) => {
 
   const processUpdateService = ()=>{
     if(validationInput()){
-      let Data = {
+      let data = {
         "id":Math.round(Math.random()*10) ,
         "name":name,
         "description": description,
@@ -43,9 +43,9 @@ const EditServiceForm = (props) => {
         "price": price,
         "barcode":barcode,
         "sms_description":"sms description",
-        "blocked":false
+        "blocked":"false"
       }
-      editHandle(Data);
+      editHandle(data);
     }
   }
 

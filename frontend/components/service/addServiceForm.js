@@ -32,8 +32,8 @@ const AddServiceForm = (props) => {
   const [price, setPrice] = useState(0);
   const processAddService=()=>{
     if(validationInput()){
-      let Data = {
-          "id":Math.round(Math.random()*10) ,
+      let data = {
+          "id":Math.round(Math.random()*10)+1 ,
           "name":name,
           "description": description,
           "treatment_type": "treatment",
@@ -41,9 +41,9 @@ const AddServiceForm = (props) => {
           "price": price,
           "barcode":barcode,
           "sms_description":"sms description",
-          "blocked":false
+          "blocked":"false"
       }
-      addHandle(Data);
+      addHandle(data);
     }
   }
   const handleCheck =(e)=>{

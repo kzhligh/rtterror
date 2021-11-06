@@ -11,6 +11,7 @@ import Link from "next/link";
 
 const ServiceComponent = (props) => {
   const {serviceListData ,toggleBlocked ,deleteService}= props;
+  console.log(serviceListData);
   const [serviceListDisplay, setServiceListDisplay] = useState(true);
   const [searchResult, setSearchResult] = useState([]);
   const [sortServiceList, setSortServiceList] = useState(serviceListData);
@@ -115,14 +116,14 @@ const ServiceComponent = (props) => {
         if(searchResult.length > 0){
           setSearchResult(
               searchResult.sort(
-                  (item1, item2) => item1.serviceId - item2.serviceId
+                  (item1, item2) => item1.id - item2.id
               )
           );
         }
         else {
           setSortServiceList(
               serviceListData.sort(
-                  (item1, item2) => item1.serviceId - item2.serviceId
+                  (item1, item2) => item1.id - item2.id
               )
           );
           value = true;

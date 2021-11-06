@@ -11,7 +11,8 @@ const ServiceCardRow = (props) => {
     const router = useRouter();
      const { item ,toggleBlocked ,deleteService }= props;
 
-  const isBlock = () => item.blocked;
+  // const isBlock = () => item.blocked;
+    const isBlock = () =>false;
   return (
     <div className={styled.flexAlignContainer}>
       <Card
@@ -19,8 +20,8 @@ const ServiceCardRow = (props) => {
         onClick={
           !isBlock()
             ? () => {
-               console.log("card click");
-                router.push('/service/' + item.id+ '/details').then( r => console.log(r))
+               console.log(item.id);
+                router.push('/service/details/' + item.id).then( r => console.log(r))
               }
             : undefined
         }

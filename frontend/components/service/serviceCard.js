@@ -35,7 +35,7 @@ const ServiceCard = (props) => {
         }
     }
     const handleEditClick = ()=>{
-        router.push('/service/' + item.serviceId + '/edit').then( r => console.log(r));
+        router.push('/service/' + item.id + '/edit').then( r => console.log(r));
     }
     const handleAddEmployee =()=>{
     //    extract the employ not in the service
@@ -111,7 +111,7 @@ const ServiceCard = (props) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {item.offerBy.map((ename) => (
+                                {employeeList.map((ename) => (
                                     <TableRow
                                         key={ename}
                                         sx={{'&:last-child td, &:last-child th': {border: 0}}}
