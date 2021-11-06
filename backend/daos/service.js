@@ -1,9 +1,14 @@
 const { Service } = require('../models/service');
 const { v4: uuidv4 } = require('uuid');
 
-async function getAllServiceRecords() {
+async function getAllValidServiceRecords() {
   try {
-    return await Service.findAll({ raw: true });
+    return await Service.findAll({
+      raw: true,
+      where: {
+        hidden: false,
+      },
+    });
   } catch (error) {
     console.error(error);
   }
@@ -53,7 +58,7 @@ async function deleteServiceRecordById(serviceId) {
 }
 
 module.exports = {
-  getAllServiceRecords,
+  getAllValidServiceRecords,
   getServiceRecordById,
   createServiceRecord,
   updateServiceRecord,

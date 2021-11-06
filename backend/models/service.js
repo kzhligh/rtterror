@@ -34,6 +34,15 @@ const Service = sequelize.define(
     },
     blocked: {
       type: DataTypes.BOOLEAN,
+      required: true,
+      allowNull: false,
+      defaultValue: false,
+    },
+    hidden: {
+      type: DataTypes.BOOLEAN,
+      required: true,
+      allowNull: false,
+      defaultValue: false,
     },
   },
   {

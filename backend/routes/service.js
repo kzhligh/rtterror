@@ -1,7 +1,7 @@
 const express = require('express');
 
 const {
-  getAllServices,
+  getAllValidServices,
   getServiceById,
   createService,
   updateService,
@@ -18,7 +18,7 @@ router.use(function (req, res, next) {
 });
 
 router.get('/', (req, res, next) => {
-  getAllServices()
+  getAllValidServices()
     .then((data) => {
       console.log(data);
       res.send(data);
