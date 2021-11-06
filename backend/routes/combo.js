@@ -1,14 +1,14 @@
 const express = require('express');
 
 const {
-  getAllValidServices,
-  getServiceById,
-  createService,
-  updateService,
-  deleteServiceById,
-  blockServiceById,
-  unblockServiceById,
-} = require('../services/service');
+  getAllValidCombos,
+  getComboById,
+  createCombo,
+  updateCombo,
+  deleteComboById,
+  blockComboById,
+  unblockComboById,
+} = require('../services/combo');
 
 const router = express.Router();
 
@@ -18,7 +18,7 @@ router.use(function (req, res, next) {
 });
 
 router.get('/', (req, res, next) => {
-  getAllValidServices()
+  getAllValidCombos()
     .then((data) => {
       console.log(data);
       res.send(data);
@@ -32,7 +32,7 @@ router.get('/:id', (req, res, next) => {
   const { params } = req;
   const { id } = params;
   console.log(id);
-  getServiceById(id)
+  getComboById(id)
     .then((data) => {
       res.send(data);
     })
@@ -43,9 +43,10 @@ router.get('/:id', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   const { body } = req;
-  createService(body)
+  const { comboObj, serviceIds } = body;
+  createCombo(comboObj, serviceIds)
     .then((data) => {
-      console.log(data);
+      // console.log(data);
       res.send(data);
     })
     .catch((error) => {
@@ -53,40 +54,34 @@ router.post('/', (req, res, next) => {
     });
 });
 
-router.put('/:id', (req, res, next) => {
-  const { params, body } = req;
-  const { id } = params;
-  const serviceObj = {
-    ...body,
-    id: id,
-  };
-  updateService(serviceObj)
-    .then(([numberOfUpdate]) => {
-      console.log(`${numberOfUpdate} service(s) information has been updated`);
-      res.sendStatus(200);
+router.put('/', (req, res, next) => {
+  const { body } = req;
+  const { comboObj, serviceIds } = body;
+  updateCombo(comboObj, serviceIds)
+    .then((data) => {
+      res.send(data);
     })
-    .catch((err) => {
-      console.error(err);
+    .catch((error) => {
+      console.error(error);
     });
 });
 
 router.delete('/:id', (req, res, next) => {
   const { params } = req;
   const { id } = params;
-  deleteServiceById(id)
+  deleteComboById(id)
     .then((data) => {
-      console.log(`${data} customer(s) has been deleted`);
       res.sendStatus(200);
     })
-    .catch((err) => {
-      console.error(err);
+    .catch((error) => {
+      console.error(error);
     });
 });
 
 router.put('/block/:id', (req, res, next) => {
   const { params } = req;
   const { id } = params;
-  blockServiceById(id)
+  blockComboById(id)
     .then((data) => {
       res.send(data);
     })
@@ -98,7 +93,7 @@ router.put('/block/:id', (req, res, next) => {
 router.put('/unblock/:id', (req, res, next) => {
   const { params } = req;
   const { id } = params;
-  unblockServiceById(id)
+  unblockComboById(id)
     .then((data) => {
       res.send(data);
     })

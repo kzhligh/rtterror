@@ -1,8 +1,14 @@
 const { Service } = require('../models/service');
+const { v4: uuidv4 } = require('uuid');
 
-async function getAllServiceRecords() {
+async function getAllValidServiceRecords() {
   try {
-    return await Service.findAll({ raw: true });
+    return await Service.findAll({
+      raw: true,
+      where: {
+        hidden: false,
+      },
+    });
   } catch (error) {
     console.error(error);
   }
@@ -16,8 +22,18 @@ async function getServiceRecordById(serviceId) {
   }
 }
 
+async function getServiceRecordByIdForCombo(serviceId) {
+  try {
+    return await Service.findByPk(serviceId);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 async function createServiceRecord(serviceObj) {
   try {
+    serviceObj.id = uuidv4();
+    console.log(serviceObj);
     return Service.create(serviceObj);
   } catch (error) {
     console.error(error);
@@ -39,19 +55,23 @@ async function updateServiceRecord(serviceObj) {
 
 async function deleteServiceRecordById(serviceId) {
   try {
-    return Service.destroy({
-      where: {
-        id: serviceId,
-      },
-    });
+    return Service.update(
+      { hidden: true },
+      {
+        where: {
+          id: serviceId,
+        },
+      }
+    );
   } catch (error) {
     console.error(error);
   }
 }
 
 module.exports = {
-  getAllServiceRecords,
+  getAllValidServiceRecords,
   getServiceRecordById,
+  getServiceRecordByIdForCombo,
   createServiceRecord,
   updateServiceRecord,
   deleteServiceRecordById,
