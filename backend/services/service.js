@@ -1,13 +1,13 @@
 const {
-  getAllServiceRecords,
+  getAllValidServiceRecords,
   getServiceRecordById,
   createServiceRecord,
   updateServiceRecord,
   deleteServiceRecordById,
 } = require('../daos/service');
 
-async function getAllServices() {
-  return await getAllServiceRecords();
+async function getAllValidServices() {
+  return await getAllValidServiceRecords();
 }
 
 async function getServiceById(serviceId) {
@@ -26,8 +26,9 @@ async function getServiceById(serviceId) {
 }
 
 async function createService(serviceObj) {
+  console.log('createService()/serviceObj', serviceObj);
   const {
-    id,
+    serviceCode,
     name,
     description,
     treatment_type,
@@ -35,18 +36,16 @@ async function createService(serviceObj) {
     price,
     barcode,
     sms_description,
-    blocked,
   } = serviceObj;
   if (
-    id &&
+    serviceCode &&
     name &&
     description &&
     treatment_type &&
     duration &&
     price &&
     barcode &&
-    sms_description &&
-    blocked
+    sms_description
   ) {
     return await createServiceRecord(serviceObj);
   } else {
@@ -102,7 +101,7 @@ async function unblockServiceById(serviceId) {
 }
 
 module.exports = {
-  getAllServices,
+  getAllValidServices,
   getServiceById,
   createService,
   updateService,
