@@ -66,11 +66,12 @@ async function updateCombo(comboObj, serviceIds) {
 
 async function deleteComboById(comboId) {
   // todo - validate comboId
-  console.log('deleteComboById()/comboId: ', comboId);
 
-  // delete combo item
+  // soft delete combo item
+  await deleteComboRecordById(comboId);
 
   // delete service_combo items
+  await deleteServiceComboRecordsByComboId(comboId);
 }
 
 async function blockComboById(comboId) {

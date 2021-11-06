@@ -53,14 +53,19 @@ async function updateComboRecord(comboObj) {
 
 async function deleteComboRecordById(comboId) {
   try {
-    return Combo.update(
-      { hidden: true },
-      {
-        where: {
-          id: comboId,
-        },
-      }
-    );
+    return Combo.destroy({
+      where: {
+        id: comboId,
+      },
+    });
+    // return Combo.update(
+    //   { hidden: true },
+    //   {
+    //     where: {
+    //       id: comboId,
+    //     },
+    //   }
+    // );
   } catch (error) {
     console.error(error);
   }

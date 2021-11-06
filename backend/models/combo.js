@@ -43,12 +43,6 @@ const Combo = sequelize.define(
       allowNull: false,
       defaultValue: false,
     },
-    hidden: {
-      type: DataTypes.BOOLEAN,
-      required: true,
-      allowNull: false,
-      defaultValue: false,
-    },
   },
   {
     timestamps: true,

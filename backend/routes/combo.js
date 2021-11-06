@@ -59,7 +59,6 @@ router.put('/', (req, res, next) => {
   const { comboObj, serviceIds } = body;
   updateCombo(comboObj, serviceIds)
     .then((data) => {
-      console.log('PUT update combo route: ', data);
       res.send(data);
     })
     .catch((error) => {
@@ -70,7 +69,13 @@ router.put('/', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
   const { params } = req;
   const { id } = params;
-  console.log('DELETE delete combo route: ', id);
+  deleteComboById(id)
+    .then((data) => {
+      res.sendStatus(200);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 });
 
 router.put('/block/:id', (req, res, next) => {
