@@ -39,8 +39,8 @@ router.get('/:id', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   const { body } = req;
-  const { comboObj, serviceIdQts } = body;
-  createCombo(comboObj, serviceIdQts)
+  const { comboObj, serviceIds } = body;
+  createCombo(comboObj, serviceIds)
     .then((data) => {
       // console.log(data);
       res.send(data);

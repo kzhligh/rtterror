@@ -26,12 +26,12 @@ async function getComboById(comboId) {
   }
 }
 
-async function createCombo(comboObj, serviceIdQts) {
+async function createCombo(comboObj, serviceIds) {
   // todo - validate serviceIds
 
   const { name, serviceCode, total_duration, total_price } = comboObj;
   if (name && serviceCode && total_duration && total_price) {
-    return await createComboRecord(comboObj, serviceIdQts);
+    return await createComboRecord(comboObj, serviceIds);
   } else {
     throw new Error('ERROR - missing property for service');
   }
