@@ -58,14 +58,6 @@ async function deleteComboRecordById(comboId) {
         id: comboId,
       },
     });
-    // return Combo.update(
-    //   { hidden: true },
-    //   {
-    //     where: {
-    //       id: comboId,
-    //     },
-    //   }
-    // );
   } catch (error) {
     console.error(error);
   }

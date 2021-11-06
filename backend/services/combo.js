@@ -6,13 +6,7 @@ const {
   updateComboRecord,
   deleteComboRecordById,
 } = require('../daos/combo');
-const {
-  getServiceComboRecordsByComboId,
-  createServiceComboRecord,
-  updateServiceComboRecordsByComboId,
-  deleteServiceComboRecordsByComboId,
-} = require('../daos/serviceCombo');
-const { Service_Combo } = require('../models/serviceCombo');
+const { deleteServiceComboRecordsByComboId } = require('../daos/serviceCombo');
 const { getServiceRecordByIdForCombo } = require('../daos/service');
 
 async function getAllValidCombos() {
@@ -45,6 +39,7 @@ async function createCombo(comboObj, serviceIds) {
   }
 }
 
+// update both combo and service_combo table
 async function updateCombo(comboObj, serviceIds) {
   // todo - validate comboObj and serviceIds
 
@@ -53,10 +48,8 @@ async function updateCombo(comboObj, serviceIds) {
   await updateComboRecord(comboObj);
   const combo = await getComboById(id);
 
-  // delete serviceCombo records by comboObj.id
   await deleteServiceComboRecordsByComboId(id);
 
-  // associate combo with new serviceIds
   for (let serviceId of serviceIds) {
     let service = await getServiceRecordByIdForCombo(serviceId);
     await combo.addService(service);
@@ -67,21 +60,30 @@ async function updateCombo(comboObj, serviceIds) {
 async function deleteComboById(comboId) {
   // todo - validate comboId
 
-  // soft delete combo item
   await deleteComboRecordById(comboId);
-
-  // delete service_combo items
   await deleteServiceComboRecordsByComboId(comboId);
 }
 
 async function blockComboById(comboId) {
   // todo - validate comboId
-  console.log('blockComboById()/comboId: ', comboId);
+
+  const comboObj = await getComboById(comboId);
+  const newCombo = comboObj.get({ plain: true });
+  delete newCombo.services;
+  newCombo.blocked = true;
+  await updateComboRecord(newCombo);
+  return await getComboById(comboId);
 }
 
 async function unblockComboById(comboId) {
   // todo - validate comboId
-  console.log('unblockComboById()/comboId: ', comboId);
+
+  const comboObj = await getComboById(comboId);
+  const newCombo = comboObj.get({ plain: true });
+  delete newCombo.services;
+  newCombo.blocked = false;
+  await updateComboRecord(newCombo);
+  return await getComboById(comboId);
 }
 
 module.exports = {

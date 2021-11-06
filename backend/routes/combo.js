@@ -81,13 +81,25 @@ router.delete('/:id', (req, res, next) => {
 router.put('/block/:id', (req, res, next) => {
   const { params } = req;
   const { id } = params;
-  console.log('PUT block combo route: ', id);
+  blockComboById(id)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 });
 
 router.put('/unblock/:id', (req, res, next) => {
   const { params } = req;
   const { id } = params;
-  console.log('PUT unblock combo route: ', id);
+  unblockComboById(id)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 });
 
 module.exports = router;
