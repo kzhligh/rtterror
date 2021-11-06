@@ -16,6 +16,14 @@ async function getServiceRecordById(serviceId) {
   }
 }
 
+async function getServiceRecordByIdForEmployee(serviceId) {
+  try {
+    return await Service.findByPk(serviceId);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 async function createServiceRecord(serviceObj) {
   try {
     return Service.create(serviceObj);
@@ -52,6 +60,7 @@ async function deleteServiceRecordById(serviceId) {
 module.exports = {
   getAllServiceRecords,
   getServiceRecordById,
+  getServiceRecordByIdForEmployee,
   createServiceRecord,
   updateServiceRecord,
   deleteServiceRecordById,
