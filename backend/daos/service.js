@@ -1,4 +1,4 @@
-const Service = require('../models/service');
+const { Service } = require('../models/service');
 
 async function getAllServiceRecords() {
   try {
@@ -10,7 +10,7 @@ async function getAllServiceRecords() {
 
 async function getServiceRecordById(serviceId) {
   try {
-    return await Service.findByPk(serviceId);
+    return await Service.findByPk(serviceId, { raw: true });
   } catch (error) {
     console.error(error);
   }

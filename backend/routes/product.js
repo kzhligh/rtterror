@@ -1,14 +1,12 @@
 const express = require('express');
 
 const {
-  getAllServices,
-  getServiceById,
-  createService,
-  updateService,
-  deleteServiceById,
-  blockServiceById,
-  unblockServiceById,
-} = require('../services/service');
+  getAllProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProductById,
+} = require('../services/product');
 
 const router = express.Router();
 
@@ -18,7 +16,7 @@ router.use(function (req, res, next) {
 });
 
 router.get('/', (req, res, next) => {
-  getAllServices()
+  getAllProducts()
     .then((data) => {
       console.log(data);
       res.send(data);
@@ -32,8 +30,9 @@ router.get('/:id', (req, res, next) => {
   const { params } = req;
   const { id } = params;
   console.log(id);
-  getServiceById(id)
+  getProductById(id)
     .then((data) => {
+      console.log('the return value of findByPk() is: ', data);
       res.send(data);
     })
     .catch((error) => {
@@ -43,7 +42,7 @@ router.get('/:id', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   const { body } = req;
-  createService(body)
+  createProduct(body)
     .then((data) => {
       console.log(data);
       res.send(data);
@@ -56,13 +55,13 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
   const { params, body } = req;
   const { id } = params;
-  const serviceObj = {
+  const productObj = {
     ...body,
     id: id,
   };
-  updateService(serviceObj)
+  updateProduct(productObj)
     .then(([numberOfUpdate]) => {
-      console.log(`${numberOfUpdate} service(s) information has been updated`);
+      console.log(`${numberOfUpdate} product(s) information has been updated`);
       res.sendStatus(200);
     })
     .catch((err) => {
@@ -73,37 +72,13 @@ router.put('/:id', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
   const { params } = req;
   const { id } = params;
-  deleteServiceById(id)
+  deleteProductById(id)
     .then((data) => {
-      console.log(`${data} customer(s) has been deleted`);
+      console.log(`${data} product(s) has been deleted`);
       res.sendStatus(200);
     })
     .catch((err) => {
       console.error(err);
-    });
-});
-
-router.put('/block/:id', (req, res, next) => {
-  const { params } = req;
-  const { id } = params;
-  blockServiceById(id)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-});
-
-router.put('/unblock/:id', (req, res, next) => {
-  const { params } = req;
-  const { id } = params;
-  unblockServiceById(id)
-    .then((data) => {
-      res.send(data);
-    })
-    .catch((error) => {
-      console.error(error);
     });
 });
 

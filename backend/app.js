@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const config = require('./config');
-const sequelize = require('./modules/sequelize');
+const { sequelize } = require('./modules/sequelize');
 const router = require('./router');
 const syncAllTables = require('./models/syncTables');
 
