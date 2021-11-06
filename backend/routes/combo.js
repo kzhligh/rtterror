@@ -4,6 +4,10 @@ const {
   getAllValidCombos,
   getComboById,
   createCombo,
+  updateCombo,
+  deleteComboById,
+  blockComboById,
+  unblockComboById,
 } = require('../services/combo');
 
 const router = express.Router();
@@ -48,6 +52,37 @@ router.post('/', (req, res, next) => {
     .catch((error) => {
       console.error(error);
     });
+});
+
+router.put('/', (req, res, next) => {
+  const { body } = req;
+  const { comboObj, serviceIds } = body;
+  updateCombo(comboObj, serviceIds)
+    .then((data) => {
+      console.log('PUT update combo route: ', data);
+      res.send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
+router.delete('/:id', (req, res, next) => {
+  const { params } = req;
+  const { id } = params;
+  console.log('DELETE delete combo route: ', id);
+});
+
+router.put('/block/:id', (req, res, next) => {
+  const { params } = req;
+  const { id } = params;
+  console.log('PUT block combo route: ', id);
+});
+
+router.put('/unblock/:id', (req, res, next) => {
+  const { params } = req;
+  const { id } = params;
+  console.log('PUT unblock combo route: ', id);
 });
 
 module.exports = router;
