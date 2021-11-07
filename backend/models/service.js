@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../modules/sequelize');
+const { Employee } = require('./employees.js');
 
 const Service = sequelize.define(
   'services',
@@ -50,5 +51,7 @@ const Service = sequelize.define(
     freezeTableName: true,
   }
 );
+
+
 
 module.exports = { Service };

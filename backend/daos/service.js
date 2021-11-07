@@ -30,6 +30,14 @@ async function getServiceRecordByIdForCombo(serviceId) {
   }
 }
 
+async function getServiceRecordByIdForEmployee(serviceId) {
+  try {
+    return await Service.findByPk(serviceId);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 async function createServiceRecord(serviceObj) {
   try {
     serviceObj.id = uuidv4();
@@ -72,6 +80,7 @@ module.exports = {
   getAllValidServiceRecords,
   getServiceRecordById,
   getServiceRecordByIdForCombo,
+  getServiceRecordByIdForEmployee,
   createServiceRecord,
   updateServiceRecord,
   deleteServiceRecordById,
