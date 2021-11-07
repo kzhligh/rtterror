@@ -1,24 +1,41 @@
 const { validate: uuidValidate } = require('uuid');
-
 const {
   getAllValidEmployeeRecords,
-  getServiceEmployeeRecordsByEmployeeId,
-  createServiceEmployeeRecord,
-  updateServiceEmployeeRecordsByEmployeeId,
-  deleteServiceEmployeeRecordsByEmployeeId,
-} = require('../daos/services_employees');
+  getEmployeeRecordById,
+  createEmployeeRecord,
+  updateEmployeeRecord,
+  deleteEmployeeRecordById,
+} = require('../daos/employees');
+const { deleteServiceEmployeeRecordsByEmployeeId} = require('../daos/services_employees');
 const { getServiceRecordByIdForEmployee } = require('../daos/service');
 
 async function getAllValidEmployee() {
   return await getAllValidEmployeeRecords();
 }
 
+async function getEmployeeById(EmployeeId) {
+  if (typeof EmployeeId === INTEGER && uuidValidate(EmployeeId)) {
+    const employees = await getEmployeeRecordById(EmployeeId);
+    if (!employees) {
+      console.error('ERROR - no record found of the id: ', EmployeeId);
+      throw new Error(
+        `ERROR - No such a service is found with the id: ${EmployeeId}`
+      );
+    }
+    return employees;
+  } else {
+    throw new Error(`ERROR - unexpected input type: ${typeof EmployeeId}`);
+  }
+}
+
 async function addEmployee(EmployeeObj, serviceIds) {
+
+
   const { firstName, lastName, speciality } = EmployeeObj;
   if (firstName && lastName && speciality) {
-    return await addEmployeeRecord(EmployeeObj, serviceIds);
+    return await createEmployeeRecord(EmployeeObj, serviceIds);
   } else {
-    throw new Error('ERROR ');
+    throw new Error('ERROR -missing attribute');
   }
 }
 
@@ -29,6 +46,7 @@ async function deleteEmployeeById(EmployeeId) {
 
 module.exports = {
   getAllValidEmployee,
+  getEmployeeById,
   addEmployee,
   deleteEmployeeById,
 };
