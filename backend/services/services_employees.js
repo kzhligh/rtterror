@@ -39,6 +39,21 @@ async function addEmployee(EmployeeObj, serviceIds) {
   }
 }
 
+async function updateEmployee(EmployeeObj, serviceIds) {
+
+  const { id } = EmployeeObj;
+  await updateEmployeeRecord(EmployeeObj);
+  const employee = await getEmployeeById(id);
+
+  await deleteServiceEmployeeRecordsByEmployeeId(id);
+
+  for (let serviceId of serviceIds) {
+    let service = await getServiceRecordByIdForEmployee(serviceId);
+    await employee.addService(service);
+  }
+  return await getEmployeeRecordById(id);
+}
+
 async function deleteEmployeeById(EmployeeId) {
   await deleteEmployeeRecordById(EmployeeId);
   await deleteServiceEmployeeRecordsByEmployeeId(EmployeeId);
@@ -48,5 +63,6 @@ module.exports = {
   getAllValidEmployee,
   getEmployeeById,
   addEmployee,
+  updateEmployee,
   deleteEmployeeById,
 };

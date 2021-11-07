@@ -2,7 +2,9 @@ const express = require('express');
 
 const {
   getAllValidEmployee,
+  getEmployeeById,
   addEmployee,
+  updateEmployee,
   deleteEmployeeById,
 } = require('../services/services_employees');
 
@@ -39,16 +41,28 @@ router.get('/:id', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   const { body } = req;
-  const { serviceEmployeeObjObj, serviceIds } = body;
-  addEmployee(serviceEmployeeObjObj, serviceIds)
+  const { serviceEmployeeObj, serviceIds } = body;
+  addEmployee(serviceEmployeeObj, serviceIds)
     .then((data) => {
-      // console.log(data);
       res.send(data);
     })
     .catch((error) => {
       console.error(error);
     });
 });
+
+router.put('/', (req, res, next) => {
+  const { body } = req;
+  const { serviceEmployeeObj, serviceIds } = body;
+  updateEmployee(serviceEmployeeObj, serviceIds)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+});
+
 
 router.delete('/:id', (req, res, next) => {
   const { params } = req;
