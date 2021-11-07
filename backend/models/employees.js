@@ -19,7 +19,7 @@ const Employee = sequelize.define(
       speciality: {
         type: DataTypes.STRING,
       },
-    },
+  },
       {
         timestamps: false,
         freezeTableName: true,

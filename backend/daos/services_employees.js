@@ -1,5 +1,16 @@
+const { Employee } = require('../models/employees');
 const { Services_Employees } = require('../models/services_employees');
 
+
+async function getAllValidEmployeeRecords() {
+  try {
+    return await Employee.findAll({
+      
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 async function getServiceEmployeeRecordsByEmployeeId(EmployeeId) {
     try {
@@ -53,6 +64,7 @@ async function getServiceEmployeeRecordsByEmployeeId(EmployeeId) {
   }
   
   module.exports = {
+    getAllValidEmployeeRecords,
     getServiceEmployeeRecordsByEmployeeId,
     createServiceEmployeeRecord,
     updateServiceEmployeeRecordsByEmployeeId,

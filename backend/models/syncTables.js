@@ -2,6 +2,7 @@ const { Service } = require('./service');
 const { Customer } = require('./customer');
 const { Product } = require('./product');
 const { Employee } = require('./employees');
+const { ServiceEmployee } = require('./services_employees');
 
 const syncAllTables = () => {
   Service.sync({ alter: true }).then(() => {
@@ -18,6 +19,10 @@ const syncAllTables = () => {
 
   Employee.sync().then(() => {
     console.log('table "employees" synchronized');
+  });
+
+  ServiceEmployee.sync().then(() => {
+    console.log('table "service_employees" synchronized');
   });
 };
 
