@@ -8,9 +8,6 @@ const Service = sequelize.define(
       type: DataTypes.STRING,
       primaryKey: true,
     },
-    serviceCode: {
-      type: DataTypes.STRING,
-    },
     name: {
       type: DataTypes.STRING,
     },
@@ -34,19 +31,12 @@ const Service = sequelize.define(
     },
     blocked: {
       type: DataTypes.BOOLEAN,
-      required: true,
       allowNull: false,
-      defaultValue: false,
-    },
-    hidden: {
-      type: DataTypes.BOOLEAN,
-      required: true,
-      allowNull: false,
-      defaultValue: false,
+      default: false,
     },
   },
   {
-    timestamps: true,
+    timestamps: false,
     freezeTableName: true,
   }
 );

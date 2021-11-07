@@ -1,10 +1,8 @@
-const { Combo } = require('./combo');
 const { Service } = require('./service');
 const { Customer } = require('./customer');
 const { Product } = require('./product');
-const { Service_Combo } = require('./serviceCombo');
 
-const syncAllTables = async () => {
+const syncAllTables = () => {
   Service.sync({ alter: true }).then(() => {
     console.log('table "services" synchronized');
   });
@@ -15,14 +13,6 @@ const syncAllTables = async () => {
 
   Product.sync({ alter: true }).then(() => {
     console.log('table "products" synchronized');
-  });
-
-  Combo.sync({ alter: true }).then(() => {
-    console.log('table "combos" synchronized');
-  });
-
-  Service_Combo.sync({ alter: true }).then(() => {
-    console.log('table "service_combo" synchronized');
   });
 };
 
