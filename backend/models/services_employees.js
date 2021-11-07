@@ -32,11 +32,15 @@ const ServiceEmployee = sequelize.define(
   );
 
 Employee.belongsToMany(Service, {
-  through: 'services_employees'
+  through: 'services_employees',
+  foreignKey: 'id', 
+  as: 'service'
 });
 
 Service.belongsToMany(Employee, {
-  through: 'services_employees'
+  through: 'services_employees',
+  foreignKey: 'id', 
+  as: 'employees'
 });
 
 module.exports = { ServiceEmployee };

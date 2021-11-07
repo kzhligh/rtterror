@@ -38,3 +38,13 @@ async function getAllValidEmployee() {
     await deleteEmployeeRecordById(EmployeeId);
     await deleteServiceEmployeeRecordsByEmployeeId(EmployeeId);
   }
+
+
+
+  module.exports = {
+    getAllValidEmployee,
+    addEmployee,
+    deleteEmployeeById,
+
+
+  };
