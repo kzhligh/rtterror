@@ -12,6 +12,9 @@ const ServiceCardRow = (props) => {
      const { item ,toggleBlocked ,deleteService }= props;
   const isBlock = () => item.blocked;
   //   const isBlock = () =>false;
+    const getCreateDate = (item)=>{
+        return (new Date(item['createdAt']).toDateString());
+    }
   return (
     <div className={styled.flexAlignContainer}>
       <Card
@@ -30,6 +33,9 @@ const ServiceCardRow = (props) => {
           <Typography sx={{ fontSize: 24 }} color="text.secondary">
             Service Code: {item.barcode}
           </Typography>
+            <Typography sx={{ fontSize: 24 }} color="text.secondary">
+                Duration: {(item.duration/3600000).toFixed(1)} H
+            </Typography>
           <Typography sx={{ fontSize: 24 }} color="text.secondary">
             Description : {item.description}
           </Typography>
@@ -38,7 +44,7 @@ const ServiceCardRow = (props) => {
         <CardActionArea>
           <div className={styled.dateContainer}>
             <Typography sx={{ fontSize: 20 }}>
-              Created On
+              Created On : {getCreateDate(item)}
             </Typography>
           </div>
         </CardActionArea>

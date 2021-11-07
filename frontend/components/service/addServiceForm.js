@@ -34,7 +34,7 @@ const AddServiceForm = (props) => {
     if(validationInput()){
       let data = {
         "serviceCode":barcode,
-        "name": "service 1",
+        "name": "service "+ barcode,
         "description": description,
         "treatment_type": "type 1",
         "duration":duration,

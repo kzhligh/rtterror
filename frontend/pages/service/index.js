@@ -33,8 +33,21 @@ const Service =({serviceList})=> {
           .get(BuildPath("services"))
           .set("Accept", "application/json")
           .then((res) => {
-              console.log(res.body);
-              setServiceListData(res.body);
+              let serList = res.body;
+              serList.sort((item1, item2)=>{
+                      const date1 = new Date(item1['createdAt']);
+                      const date2 = new Date(item2['createdAt']);
+
+                      if(date1 > date2){
+                          return -1;
+                      } else if(date1 < date2){
+                          return 1;
+                      } else{
+                          return 0;
+                      }
+                  }
+              )
+              setServiceListData(serList);
           })
           .catch((err) => {
               console.log(err);

@@ -11,7 +11,6 @@ import Link from "next/link";
 
 const ServiceComponent = (props) => {
   const {serviceListData ,toggleBlocked ,deleteService}= props;
-  console.log(serviceListData);
   const [serviceListDisplay, setServiceListDisplay] = useState(true);
   const [searchResult, setSearchResult] = useState([]);
   const [sortServiceList, setSortServiceList] = useState(serviceListData);
@@ -27,13 +26,25 @@ const ServiceComponent = (props) => {
     }
   }
   useEffect(() => {
-
   }, [select]);
 
+  const compareDateFunction =(item1, item2)=>{
+    const date1 = new Date(item1['createdAt']);
+    const date2 = new Date(item2['createdAt']);
+
+    if(date1 > date2){
+      return -1;
+    } else if(date1 < date2){
+      return 1;
+    } else{
+      return 0;
+    }
+  }
 
   const handleSelectOrderBy = (val) => {
     let value = false;
     setSelect(val);
+    console.log(val);
     switch (val) {
       case 2:
         if(searchResult.length > 0){
@@ -66,9 +77,9 @@ const ServiceComponent = (props) => {
         if(searchResult.length > 0){
           setSearchResult(
               searchResult.sort((item1, item2) =>
-                  item1.code.toLowerCase() > item2.code.toLowerCase()
+                  item1.barcode.toLowerCase() > item2.barcode.toLowerCase()
                       ? 1
-                      : item2.code.toLowerCase() > item1.code.toLowerCase()
+                      : item2.barcode.toLowerCase() > item1.barcode.toLowerCase()
                           ? -1
                           : 0
               )
@@ -77,9 +88,9 @@ const ServiceComponent = (props) => {
         else {
           setSortServiceList(
               serviceListData.sort((item1, item2) =>
-                  item1.code.toLowerCase() > item2.code.toLowerCase()
+                  item1.barcode.toLowerCase() > item2.barcode.toLowerCase()
                       ? 1
-                      : item2.code.toLowerCase() > item1.code.toLowerCase()
+                      : item2.barcode.toLowerCase() > item1.barcode.toLowerCase()
                           ? -1
                           : 0
               )
@@ -116,14 +127,14 @@ const ServiceComponent = (props) => {
         if(searchResult.length > 0){
           setSearchResult(
               searchResult.sort(
-                  (item1, item2) => item1.id - item2.id
+                  compareDateFunction
               )
           );
         }
         else {
           setSortServiceList(
               serviceListData.sort(
-                  (item1, item2) => item1.id - item2.id
+                  compareDateFunction
               )
           );
           value = true;
@@ -178,7 +189,7 @@ const ServiceComponent = (props) => {
         <div className={styled.flexContainer}>
           <p>Order By</p>
           <div className={styled.separateHDiv}></div>
-            <Select onChange={()=>handleSelectOrderBy(event.target.value)}>
+            <Select onChange={(event)=>handleSelectOrderBy(event.target.value)}>
               <MenuItem value={0}></MenuItem>
               <MenuItem value={1}>Service Code</MenuItem>
               <MenuItem value={2}>Description</MenuItem>
