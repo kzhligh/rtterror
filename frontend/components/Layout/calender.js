@@ -1,9 +1,9 @@
-import * as React from "react";
-import TextField from "@mui/material/TextField";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import StaticDatePicker from "@mui/lab/StaticDatePicker";
-import styled from "../../styles/layout.module.css";
+import * as React from 'react';
+import TextField from '@mui/material/TextField';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import StaticDatePicker from '@mui/lab/StaticDatePicker';
+import styled from '../../styles/layout.module.css';
 
 const StaticDatePickerDemo = () => {
   const [value, setValue] = React.useState(new Date());

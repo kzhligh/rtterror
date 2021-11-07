@@ -10,11 +10,11 @@ function Patient(props) {
 
 // fetch the data from the back end without using the set prop, drawback not update
 export async function getStaticProps() {
-  var resstatus = "";
+  var resstatus = '';
   const res = await fetch(
-    "https://api.github.com/repos/visionmedia/superagent"
+    'https://api.github.com/repos/visionmedia/superagent'
   );
-  resstatus = "sucess";
+  resstatus = 'sucess';
 
   return {
     props: { text: resstatus }, // will be passed to the page component as props

@@ -11,23 +11,19 @@ const Employee = sequelize.define(
       primaryKey: true,
     },
     firstName: {
-        type: DataTypes.STRING,
-      },
-      lastName: {
-        type: DataTypes.STRING,
-      },
-      speciality: {
-        type: DataTypes.STRING,
-      },
+      type: DataTypes.STRING,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+    },
+    speciality: {
+      type: DataTypes.STRING,
+    },
   },
-      {
-        timestamps: false,
-        freezeTableName: true,
-      }
-    );
+  {
+    timestamps: false,
+    freezeTableName: true,
+  }
+);
 
-
-
-    
-    
- module.exports = { Employee };
+module.exports = { Employee };

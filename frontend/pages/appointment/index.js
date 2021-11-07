@@ -1,6 +1,6 @@
-import NavSection from "../../components/Layout";
-import request from "superagent";
-import PrimarySearchAppBar from "../../components/Layout";
+import NavSection from '../../components/Layout';
+import request from 'superagent';
+import PrimarySearchAppBar from '../../components/Layout';
 
 // we can use regular react state or fetch the data with super agent  or use getStaticProps
 function Appointment(props) {
@@ -15,11 +15,11 @@ function Appointment(props) {
 
 // fetch the data from the back end without using the set prop, drawback not update
 export async function getStaticProps() {
-  var resstatus = "";
+  var resstatus = '';
   const res = await fetch(
-    "https://api.github.com/repos/visionmedia/superagent"
+    'https://api.github.com/repos/visionmedia/superagent'
   );
-  resstatus = "sucess";
+  resstatus = 'sucess';
 
   return {
     props: { text: resstatus }, // will be passed to the page component as props

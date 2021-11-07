@@ -1,18 +1,18 @@
-import * as React from "react";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import styled from "../../styles/service.module.css";
-import { CardActionArea, CardActions, CardHeader } from "@mui/material";
-import {useRouter} from "next/router";
+import * as React from 'react';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import styled from '../../styles/service.module.css';
+import { CardActionArea, CardActions, CardHeader } from '@mui/material';
+import { useRouter } from 'next/router';
 
 const ServiceCardRow = (props) => {
-    const router = useRouter();
-     const { item ,toggleBlocked ,deleteService }= props;
+  const router = useRouter();
+  const { item, toggleBlocked, deleteService } = props;
 
   // const isBlock = () => item.blocked;
-    const isBlock = () =>false;
+  const isBlock = () => false;
   return (
     <div className={styled.flexAlignContainer}>
       <Card
@@ -20,12 +20,14 @@ const ServiceCardRow = (props) => {
         onClick={
           !isBlock()
             ? () => {
-               console.log(item.id);
-                router.push('/service/details/' + item.id).then( r => console.log(r))
+                console.log(item.id);
+                router
+                  .push('/service/details/' + item.id)
+                  .then((r) => console.log(r));
               }
             : undefined
         }
-        style={{ backgroundColor: isBlock() ? "gray" : "white" }}
+        style={{ backgroundColor: isBlock() ? 'gray' : 'white' }}
       >
         <CardHeader sx={{ fontSize: 30 }} title={item.name} />
         <CardContent>
@@ -39,29 +41,27 @@ const ServiceCardRow = (props) => {
         <div className={styled.separateVDiv} />
         <CardActionArea>
           <div className={styled.dateContainer}>
-            <Typography sx={{ fontSize: 20 }}>
-              Created On
-            </Typography>
+            <Typography sx={{ fontSize: 20 }}>Created On</Typography>
           </div>
         </CardActionArea>
       </Card>
-        <div className={styled.flexVerticalDisplay}>
-      <Button
-        className={styled.buttonContainer}
-        variant={isBlock() ? "contained" : "outlined"}
-        onClick={() => toggleBlocked(item)}
-        style={{ backgroundColor: isBlock() ? "gray" : "white" }}
-      >
-        {isBlock() ? "unblocked" : "blocked"}
-      </Button>
+      <div className={styled.flexVerticalDisplay}>
         <Button
-            className={styled.buttonContainer}
-            variant= "outlined"
-            onClick={() => deleteService(item)}
+          className={styled.buttonContainer}
+          variant={isBlock() ? 'contained' : 'outlined'}
+          onClick={() => toggleBlocked(item)}
+          style={{ backgroundColor: isBlock() ? 'gray' : 'white' }}
         >
-            Delete
+          {isBlock() ? 'unblocked' : 'blocked'}
         </Button>
-        </div>
+        <Button
+          className={styled.buttonContainer}
+          variant="outlined"
+          onClick={() => deleteService(item)}
+        >
+          Delete
+        </Button>
+      </div>
     </div>
   );
 };

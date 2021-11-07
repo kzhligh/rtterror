@@ -1,6 +1,5 @@
 name: 'Assert Branch Naming Convention'
-on:
-  create
+on: create
 
 # <type>/branch-name
 # where <type> is defined as one of allowed_prefixes
@@ -12,5 +11,5 @@ jobs:
       - uses: yuxiang-zhang/action-branch-name@master
         with:
           regex: '([a-z])+\/([a-z\-])+' # Regex the branch should match. This example enforces grouping
-          allowed_prefixes:   'build,chore,ci,docs,feat,fix,perf,refactor,revert,style,test'
+          allowed_prefixes: 'build,chore,ci,docs,feat,fix,perf,refactor,revert,style,test'
           min_length: 10 # Min length of the branch name
