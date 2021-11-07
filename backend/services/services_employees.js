@@ -27,7 +27,7 @@ async function getAllValidEmployee() {
     if (firstName && lastName && speciality ) {
       return await addEmployeeRecord(EmployeeObj, serviceIds);
     } else {
-      throw new Error('ERROR - missing property for service');
+      throw new Error('ERROR ');
     }
   }
 
