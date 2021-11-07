@@ -26,12 +26,10 @@ const Service =({serviceList})=> {
   const router = useRouter();
     const [serviceListData, setServiceListData] =useState(serviceList);
     const [refresh, setRefresh] = useState(false);
-    const refreshData = () => {
-        router.push(router.asPath).then(r => console.log(r));
-        router.reload();
-    }
-  const getServiceList =()=>{
-      request
+    const [loading, setLoading] = useState(undefined);
+
+  const getServiceList = async ()=>{
+      await request
           .get(BuildPath("services"))
           .set("Accept", "application/json")
           .then((res) => {
@@ -42,11 +40,10 @@ const Service =({serviceList})=> {
               console.log(err);
           });
   }
+
     useEffect(()=>{
-        getServiceList();
-    },[])
-    useEffect(()=>{
-        getServiceList();
+        setLoading(true);
+        getServiceList().then(r => setLoading(false));
     },[refresh])
 
 
@@ -55,22 +52,21 @@ const Service =({serviceList})=> {
             .delete(BuildPath("services/"+ item.id))
             .set("Accept", "application/json")
             .then((res) => {
-                // console.log(res.status);
                 setRefresh(!refresh);
-                refreshData()
             })
             .catch((err) => {
                 console.log(err);
             });
     }
     const toggleBlocked=  (item) => {
+
+        let path = "services/"+(item.blocked?'unblock/':'block/')+item.id;
+
        request
-          .put(BuildPath("services/"+item.blocked?'unblock/':'block/'+item.id))
+          .put(BuildPath(path))
           .set("Accept", "application/json")
           .then((res) => {
-              // console.log(res.status);
               setRefresh(!refresh);
-              refreshData();
           })
           .catch((err) => {
               console.log(err);
@@ -79,8 +75,7 @@ const Service =({serviceList})=> {
   return (
     <div>
       <h1>Service</h1>
-        {  console.log(serviceListData)}
-      <ServiceComponent serviceListData={serviceListData} toggleBlocked={toggleBlocked} deleteService={deleteService}/>
+        {!loading && <ServiceComponent serviceListData={serviceListData} toggleBlocked={toggleBlocked} deleteService={deleteService}/>}
     </div>
   );
 }

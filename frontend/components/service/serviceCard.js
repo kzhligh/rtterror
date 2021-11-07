@@ -35,7 +35,7 @@ const ServiceCard = (props) => {
         }
     }
     const handleEditClick = ()=>{
-        router.push('/service/' + item.id + '/edit').then( r => console.log(r));
+        router.push('/service/' + item.id ).then( r => console.log(r));
     }
     const handleAddEmployee =()=>{
     //    extract the employ not in the service

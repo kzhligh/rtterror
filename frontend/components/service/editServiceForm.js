@@ -1,4 +1,3 @@
-import * as React from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -8,7 +7,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Close } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 import styled from "../../styles/service.module.css";
-import {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Paper from "@mui/material/Paper";
 import {
   Checkbox,
@@ -21,31 +20,39 @@ import {
   TableHead,
   TableRow
 } from "@mui/material";
+import {useRouter} from "next/router";
 
 
 const EditServiceForm = (props) => {
-  const { editHandle, serviceItem , closeDialog, employeeList, open} = props;
+  const router = useRouter();
+  const { editHandle, serviceItem , employeeList, open ,setOpen} = props;
+
   const [employeeCheckList , setEmployeeCheckList] = useState([]);//serviceItem.offerBy
   const [name , setName] = useState(serviceItem.name);
+
   const [barcode , setBarcode] = useState(serviceItem.barcode);
   const [description , setDescription] = useState(serviceItem.description);
   const [duration , setDuration] = useState(serviceItem.duration);
   const [price, setPrice] = useState(serviceItem.price);
 
+  const closeDialog=()=>{
+    router.push("/service/details/"+serviceItem.id).then(r => console.log(r));
+    setOpen(false);
+  }
   const processUpdateService = ()=>{
     if(validationInput()){
       let data = {
-        "id":Math.round(Math.random()*10) ,
-        "name":name,
+        "serviceCode":barcode,
+        "name": "service 1",
         "description": description,
-        "treatment_type": "treatment",
+        "treatment_type": "type 1",
         "duration":duration,
         "price": price,
         "barcode":barcode,
-        "sms_description":"sms description",
-        "blocked":"false"
+        "sms_description": "sms description 1"
       }
       editHandle(data);
+      closeDialog();
     }
   }
 
@@ -64,7 +71,7 @@ const EditServiceForm = (props) => {
 
   const handleSetValue = (e)=>{
     let label = e.target.id;
-    let value = e.target.value.trim();
+    let value = e.target.value;
     switch (label){
       case 'name':
         setName(value);
@@ -115,7 +122,7 @@ const EditServiceForm = (props) => {
               id="name"
               label="Service name"
               value={name}
-              variant="outlined"
+              // variant="outlined"
               // defaultValue="" maybe value when edit
               onChange={(event)=>handleSetValue(event)}
           />
@@ -127,7 +134,7 @@ const EditServiceForm = (props) => {
               label="Service code"
               // defaultValue="Hello World"
               value={barcode}
-              variant="outlined"
+              // variant="outlined"
               onChange={(event)=>handleSetValue(event)}
           />
           <div className={styled.separateVDiv}></div>
@@ -139,7 +146,7 @@ const EditServiceForm = (props) => {
                 rows={4}
                 // defaultValue="Default Value"
                 value={description}
-                variant="outlined"
+                // variant="outlined"
                 onChange={(event)=>handleSetValue(event)}
             />
 

@@ -10,9 +10,8 @@ import {useRouter} from "next/router";
 const ServiceCardRow = (props) => {
     const router = useRouter();
      const { item ,toggleBlocked ,deleteService }= props;
-
-  // const isBlock = () => item.blocked;
-    const isBlock = () =>false;
+  const isBlock = () => item.blocked;
+  //   const isBlock = () =>false;
   return (
     <div className={styled.flexAlignContainer}>
       <Card
@@ -20,7 +19,6 @@ const ServiceCardRow = (props) => {
         onClick={
           !isBlock()
             ? () => {
-               console.log(item.id);
                 router.push('/service/details/' + item.id).then( r => console.log(r))
               }
             : undefined
