@@ -7,10 +7,6 @@ const {
   updateServiceEmployeeRecordsByEmployeeId,
   deleteServiceEmployeeRecordsByEmployeeId,
 } = require('../daos/services_employees');
-
-const {
-  deleteServiceEmployeeRecordsByEmployeeId,
-} = require('../daos/services_employees');
 const { getServiceRecordByIdForEmployee } = require('../daos/service');
 
 async function getAllValidEmployee() {

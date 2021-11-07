@@ -7,7 +7,7 @@ const ServiceEmployee = sequelize.define(
   'services_employees',
   {
     employee_id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       references: {
@@ -16,7 +16,7 @@ const ServiceEmployee = sequelize.define(
       },
     },
     service_id: {
-      type: Sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       references: {
