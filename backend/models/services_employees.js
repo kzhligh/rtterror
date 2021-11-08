@@ -6,24 +6,24 @@ const { Employee } = require('./employees.js');
 const ServiceEmployee = sequelize.define(
   'services_employees',
   {
-    employee_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'services_employees',
-        key: 'id',
-      },
-    },
-    service_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'services',
-        key: 'id',
-      },
-    },
+    // employee_id: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false,
+    //   primaryKey: true,
+    //   references: {
+    //     model: 'services_employees',
+    //     key: 'id',
+    //   },
+    // },
+    // service_id: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false,
+    //   primaryKey: true,
+    //   references: {
+    //     model: 'services',
+    //     key: 'id',
+    //   },
+    // },
   },
   {
     timestamps: true,
@@ -32,15 +32,15 @@ const ServiceEmployee = sequelize.define(
 );
 
 Employee.belongsToMany(Service, {
-  through: 'services_employees',
-  foreignKey: 'id',
-  as: 'service',
+  through: ServiceEmployee,
+  // foreignKey: 'id',
+  // as: 'service',
 });
 
 Service.belongsToMany(Employee, {
-  through: 'services_employees',
-  foreignKey: 'id',
-  as: 'employees',
+  through: ServiceEmployee,
+  // foreignKey: 'id',
+  // as: 'employees',
 });
 
 module.exports = { ServiceEmployee };
