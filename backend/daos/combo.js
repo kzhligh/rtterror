@@ -6,10 +6,7 @@ const { Service } = require('../models/service');
 async function getAllValidComboRecords() {
   try {
     return await Combo.findAll({
-      include: Service,
-      where: {
-        hidden: false,
-      },
+      include: Service
     });
   } catch (error) {
     console.error(error);
