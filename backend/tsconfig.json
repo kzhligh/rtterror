@@ -1,0 +1,14 @@
+{
+  "include": ["./src/**/*"],
+  "exclude": ["./dist", "./node_modules"],
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "strict": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "lib": ["ES6", "dom", "ES2017"],
+    "esModuleInterop": true
+  }
+}
