@@ -58,4 +58,4 @@ jobs:
         run: touch .env
 
       - name: Run unit tests
-        run: npm run test:ci
+        run: npm run coverage
