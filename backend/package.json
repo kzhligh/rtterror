@@ -28,7 +28,12 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "coveragePathIgnorePatterns": ["/node_modules/"],
+    "collectCoverageFrom": [
+      "./**/*.{js,jsx,ts,tsx}",
+      "!**/coverage/**",
+      "!**/node_modules/**",
+      "!**/vendor/**"
+    ],
     "coverageThreshold": {
       "global": {
         "functions": 80
