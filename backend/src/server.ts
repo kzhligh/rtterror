@@ -20,6 +20,8 @@ const startServer = async () => {
       console.error('ERROR - connection failed: ', error);
     });
 
+  console.log('this is a test code');
+
   sequelize
     .sync({
       alter: true,
