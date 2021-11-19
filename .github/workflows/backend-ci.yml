@@ -57,5 +57,5 @@ jobs:
       - name: Create blank .env file for testing purposes
         run: touch .env
 
-      - name: Run unit tests
+      - name: Run tests and generate coverage files
         run: npm run coverage
