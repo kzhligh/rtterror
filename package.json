@@ -3,11 +3,16 @@
   "version": "1.0.0",
   "description": "TEAM RUNTIME TERROR - SOEN 490",
   "main": ".",
+  "engines": {
+    "npm": "please-use-yarn",
+    "yarn": ">= 1.22.11"
+  },
+  "engineStrict": true,
   "dependencies": {},
   "devDependencies": {
     "@commitlint/cli": "^13.2.1",
     "@commitlint/config-conventional": "^13.2.0",
-    "husky": "^7.0.0",
+    "husky": "^7.0.4",
     "lint-staged": "^11.2.6",
     "prettier": "^2.4.1"
   },
@@ -26,11 +31,7 @@
   },
   "homepage": "https://github.com/kevinlizh1992/rtterror#readme",
   "lint-staged": {
-    "frontend/*.{js, jsx, ts, tsx}": [
-      "yarn prettier --write ."
-    ],
-    "backend/*.{js, jsx, ts, tsx}": [
-      "yarn prettier --write ."
-    ]
+    "frontend/*.{js, jsx, ts, tsx}": ["yarn prettier --write ."],
+    "backend/*.{js, jsx, ts, tsx}": ["yarn prettier --write ."]
   }
 }
