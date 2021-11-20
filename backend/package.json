@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "jest --watchAll",
-    "test:ci": "jest --coverage",
+    "coverage": "jest --coverage",
     "start": "nodemon app.js"
   },
   "repository": {
@@ -28,8 +28,11 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "coveragePathIgnorePatterns": [
-      "/node_modules/"
+    "collectCoverageFrom": [
+      "./**/*.{js,jsx,ts,tsx}",
+      "!**/coverage/**",
+      "!**/node_modules/**",
+      "!**/vendor/**"
     ],
     "coverageThreshold": {
       "global": {

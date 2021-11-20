@@ -16,4 +16,4 @@ const syncAllTables = () => {
   });
 };
 
-module.exports = syncAllTables;
+module.exports = { syncAllTables };
