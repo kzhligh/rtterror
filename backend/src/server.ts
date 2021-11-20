@@ -2,11 +2,13 @@ import express from 'express';
 import sequelize from './modules/sequelize';
 import config from './config';
 import router from './routes';
+import cors from 'cors';
 
 const startServer = async () => {
   const app = express();
 
   app.use(express.json());
+  app.use(cors());
   app.use('/api/v1', router);
 
   sequelize
