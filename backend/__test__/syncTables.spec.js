@@ -1,4 +1,4 @@
-const { syncAllTables } = require('../models/syncTables')
+const { syncAllTables } = require('../models/syncTables');
 
 jest.mock('../models/syncTables');
 
