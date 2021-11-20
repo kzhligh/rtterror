@@ -1,5 +1,4 @@
 const { sequelize } = require('../modules/sequelize');
-const { DataTypes } = require('sequelize');
 const { Product } = require('../models/product');
 
 jest.mock('../modules/sequelize');
