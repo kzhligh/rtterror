@@ -1,12 +1,13 @@
 import express from 'express';
 import sequelize from './modules/sequelize';
 import config from './config';
+import router from './routes';
 
 const startServer = async () => {
   const app = express();
 
   app.use(express.json());
-  // app.use('/api/v1', router);
+  app.use('/api/v1', router);
 
   sequelize
     .authenticate()
@@ -20,14 +21,12 @@ const startServer = async () => {
       console.error('ERROR - connection failed: ', error);
     });
 
-  console.log('this is a test code');
-
   sequelize
     .sync({
       alter: true,
     })
     .then(() => {
-      console.log('ALl database tables have been synchronized');
+      console.log('All database tables have been synchronized');
     })
     .catch((error) => {
       console.error('ERROR - database table synchronization failed: ', error);
