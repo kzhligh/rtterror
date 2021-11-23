@@ -82,3 +82,8 @@
   display: flex;
   justify-content: space-between;
 }
+
+.flexServiceCombo{
+  display: flex;
+  align-items: flex-start;
+}

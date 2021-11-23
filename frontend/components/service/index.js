@@ -8,42 +8,35 @@ import MenuItem from '@mui/material/MenuItem';
 import SearchInput from './search';
 import Box from '@mui/material/Box';
 import Link from 'next/link';
-import AddComboForm from "./addComboForm";
+import ComboForm from "./comboForm";
 
 const ServiceComponent = (props) => {
   const { serviceListData, toggleBlocked, deleteService } = props;
   const [serviceListDisplay, setServiceListDisplay] = useState(serviceListData);
   // const [searchResult, setSearchResult] = useState([]);
   const [sortServiceList, setSortServiceList] = useState(serviceListData);
-  const [select, setSelect] = useState('id');
+  const [select, setSelect] = useState('None');
   const [search, setSearch] = useState(false);
-  const [serviceCheckList, setServiceCheckList] = useState([{
-      "id": 3,
-      "serviceCode":"a SWEM",
-      "name": "SWEDISH MASSAGE",
-      "description": "d The Swedish massage is a manual physical technique, which aims to relieve the musculature from its tensions and to improve the circulation of blood and nutrients throughout the body while obtaining a state of relaxation. ",
-      "treatment_type": "SWEDISH MASSAGE",
-      "duration":3600000,
-      "price": 120,
-      "barcode":"SWEM 001",
-      "sms_description": "SWEDISH MASSAGE"
-  }]);
+  const [serviceCheckList, setServiceCheckList] = useState([]); // the service to create the combo
   const sortedList = ['None','name','description','code'];
   const [comboDialog, setComboDialog] = useState(false);
 
+  console.log(serviceCheckList)
   const handleCloseComboDialog = ()=>{
     setComboDialog(false);
   }
 
   //to create the combo
-  const handleServiceCheck = (e) => {
-    if (e.target.checked) {
-      setServiceCheckList([...serviceCheckList, e.target.value]);
+  const handleServiceCheck = (val, item) => {
+    if (val) {
+      setServiceCheckList([...serviceCheckList, item]);
     } else {
       setServiceCheckList(
-        serviceCheckList.filter((name) => e.target.value != name)
+        serviceCheckList.filter((itemService) => itemService.id != item.id)
       );
     }
+    console.log(serviceCheckList)
+    return serviceCheckList.length;
   };
   useEffect(() => {}, [select]);
 
@@ -125,7 +118,7 @@ const ServiceComponent = (props) => {
       <SearchInput handleSearch={handleSearch} />
       <div className={styled.separateVDiv}></div>
       <Button className={styled.addButton} variant="outlined">
-        <Link href={'service/add'}>
+        <Link href={'/service/add'}>
           <a>New Service</a>
         </Link>
       </Button>
@@ -157,19 +150,20 @@ const ServiceComponent = (props) => {
                 item={item}
                 toggleBlocked={toggleBlocked}
                 deleteService={deleteService}
+                serviceCheckList={serviceCheckList}
+                handleServiceCheck={handleServiceCheck}
             />
         ))}
-        {/*{serviceListDisplay &&*/}
-        {/*  sortServiceList.map((item) => (*/}
-        {/*    <ServiceCardRow*/}
-        {/*      key={item.id}*/}
-        {/*      item={item}*/}
-        {/*      toggleBlocked={toggleBlocked}*/}
-        {/*      deleteService={deleteService}*/}
-        {/*    />*/}
-        {/*  ))}*/}
       </div>
-        {/*{serviceCheckList.length >0 && <AddComboForm openDialog={comboDialog} handleCloseComboDialog={handleCloseComboDialog} serviceCheckList={serviceCheckList} handleServiceCheck={handleServiceCheck}></AddComboForm>}*/}
+        {serviceCheckList.length>0 &&
+        <ComboForm
+            openDialog={comboDialog}
+            handleCloseComboDialog={handleCloseComboDialog}
+            serviceCheckList={serviceCheckList}
+            handleServiceCheck={handleServiceCheck}
+            type={"add"}
+        >
+        </ComboForm>}
          </Box>
   );
 };

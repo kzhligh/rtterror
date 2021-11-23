@@ -8,7 +8,7 @@ const ServiceEmployeeTable = (props) => {
     // useEffect(() => {
     //     setEmployeeList(['E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7', 'E8'])
     // }, [])
-    console.log(employeeList);
+
     return (<TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>

@@ -112,7 +112,7 @@ const AddServiceForm = (props) => {
             fullWidth
             required
             id="name"
-            label="Service name"
+            label="name"
             value={name}
             onChange={(event) => handleSetValue(event)}
           />
