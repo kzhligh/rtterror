@@ -1,4 +1,4 @@
-import ServiceCard from '../../../components/service/serviceCard';
+import ServiceDetailsCard from '../../../components/service/serviceDetailsCard';
 import { useRouter } from 'next/router';
 import request from 'superagent';
 import BuildPath from '../../../components/pathBuilder';
@@ -9,19 +9,37 @@ function DetailPage() {
   const [serviceItem, setServiceItem] = useState({});
 
   const id = router.query.detailsId;
-  console.log(id);
+
   const getServiceInfo = () => {
-    request
-      .get(BuildPath('services/' + id))
-      .set('Accept', 'application/json')
-      .then((res) => {
-        console.log(typeof res.body);
-        setServiceItem(res.body);
-        console.log(serviceItem);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    setServiceItem({
+            "serviceCode":"ACU",
+            "name": "Acupuncture",
+            "description": "A curative and preventive therapy, which can be used on its own or as a complement to conventional medicine ",
+            "treatment_type": "Acupuncture",
+            "duration":1800000,
+            "price": 100,
+            "barcode":"ACU 001",
+            "sms_description": "Acupuncture"
+          });
+    // request
+    //   .get(BuildPath('services/' + id))
+    //   .set('Accept', 'application/json')
+    //   .then((res) => {
+    //     // setServiceItem(res.body);
+    //     setServiceItem({
+    //       "serviceCode":"ACU",
+    //       "name": "Acupuncture",
+    //       "description": "A curative and preventive therapy, which can be used on its own or as a complement to conventional medicine ",
+    //       "treatment_type": "Acupuncture",
+    //       "duration":1800000,
+    //       "price": 100,
+    //       "barcode":"ACU 001",
+    //       "sms_description": "Acupuncture"
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
   useEffect(() => {
     getServiceInfo();
@@ -34,8 +52,7 @@ function DetailPage() {
   const employeeList = ['E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7', 'E8'];
   return (
     <>
-      {console.log(serviceItem)}
-      <ServiceCard
+      <ServiceDetailsCard
         item={serviceItem}
         closeServiceCard={closeServiceCard}
         employeeList={employeeList}

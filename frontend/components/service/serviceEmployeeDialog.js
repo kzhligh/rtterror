@@ -19,7 +19,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { Close } from '@mui/icons-material';
 
-const ServiceEmployee = (props) => {
+const ServiceEmployeeDialog = (props) => {
   const {
     remainEmployeeList,
     serviceEmployeeDialog,
@@ -110,4 +110,4 @@ const ServiceEmployee = (props) => {
     </div>
   );
 };
-export default ServiceEmployee;
+export default ServiceEmployeeDialog;

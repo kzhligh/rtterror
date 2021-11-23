@@ -6,23 +6,54 @@ import { useRouter } from 'next/router';
 
 export async function getServerSideProps(context) {
   let serviceList = [];
-  await request
-    .get(BuildPath('services'))
-    .set('Accept', 'application/json')
-    .then((res) => {
-      serviceList = res.body;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  serviceList= [{"id": 2,
+    "serviceCode":"x OST",
+    "name": "OSTEOPATHY",
+    "description": "b Osteopathy is a therapeutic method of a preventative and curative approach considering all factors surrounding the patient. ",
+    "treatment_type": "OSTEOPATHY",
+    "duration":3600000,
+    "price": 150,
+    "barcode":"OST 001",
+    "sms_description": "OSTEOPATHY"
+  },
+    {
+    "id": 1,
+    "serviceCode":"z ACU",
+    "name": "Acupuncture",
+    "description": "A curative and preventive therapy, which can be used on its own or as a complement to conventional medicine ",
+    "treatment_type": "Acupuncture",
+    "duration":1800000,
+    "price": 100,
+    "barcode":"ACU 001",
+    "sms_description": "c Acupuncture"
+  },
+
+    {
+      "id": 3,
+      "serviceCode":"a SWEM",
+      "name": "SWEDISH MASSAGE",
+      "description": "d The Swedish massage is a manual physical technique, which aims to relieve the musculature from its tensions and to improve the circulation of blood and nutrients throughout the body while obtaining a state of relaxation. ",
+      "treatment_type": "SWEDISH MASSAGE",
+      "duration":3600000,
+      "price": 120,
+      "barcode":"SWEM 001",
+      "sms_description": "SWEDISH MASSAGE"
+    }];
+  // await request
+  //   .get(BuildPath('services'))
+  //   .set('Accept', 'application/json')
+  //   .then((res) => {
+      // serviceList = res.body;
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
   return {
     props: { serviceList: serviceList },
   };
 }
 
 const Service = ({ serviceList }) => {
-  // router.push('/?counter=10', '/about?counter=10', { shallow: true })
-  const router = useRouter();
   const [serviceListData, setServiceListData] = useState(serviceList);
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(undefined);

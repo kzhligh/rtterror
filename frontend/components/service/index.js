@@ -8,15 +8,34 @@ import MenuItem from '@mui/material/MenuItem';
 import SearchInput from './search';
 import Box from '@mui/material/Box';
 import Link from 'next/link';
+import AddComboForm from "./addComboForm";
 
 const ServiceComponent = (props) => {
   const { serviceListData, toggleBlocked, deleteService } = props;
-  const [serviceListDisplay, setServiceListDisplay] = useState(true);
-  const [searchResult, setSearchResult] = useState([]);
+  const [serviceListDisplay, setServiceListDisplay] = useState(serviceListData);
+  // const [searchResult, setSearchResult] = useState([]);
   const [sortServiceList, setSortServiceList] = useState(serviceListData);
-  const [select, setSelect] = useState(-1);
-  const [serviceCheckList, setServiceCheckList] = useState([]);
+  const [select, setSelect] = useState('id');
+  const [search, setSearch] = useState(false);
+  const [serviceCheckList, setServiceCheckList] = useState([{
+      "id": 3,
+      "serviceCode":"a SWEM",
+      "name": "SWEDISH MASSAGE",
+      "description": "d The Swedish massage is a manual physical technique, which aims to relieve the musculature from its tensions and to improve the circulation of blood and nutrients throughout the body while obtaining a state of relaxation. ",
+      "treatment_type": "SWEDISH MASSAGE",
+      "duration":3600000,
+      "price": 120,
+      "barcode":"SWEM 001",
+      "sms_description": "SWEDISH MASSAGE"
+  }]);
+  const sortedList = ['None','name','description','code'];
+  const [comboDialog, setComboDialog] = useState(false);
 
+  const handleCloseComboDialog = ()=>{
+    setComboDialog(false);
+  }
+
+  //to create the combo
   const handleServiceCheck = (e) => {
     if (e.target.checked) {
       setServiceCheckList([...serviceCheckList, e.target.value]);
@@ -42,121 +61,63 @@ const ServiceComponent = (props) => {
   };
 
   const handleSelectOrderBy = (val) => {
-    let value = false;
+    let sortResult;
     setSelect(val);
-    console.log(val);
-    switch (val) {
-      case 2:
-        if (searchResult.length > 0) {
-          setSearchResult(
-            searchResult.sort((item1, item2) =>
-              item1.description.toLowerCase() > item2.description.toLowerCase()
-                ? 1
-                : item2.description.toLowerCase() >
-                  item1.description.toLowerCase()
-                ? -1
-                : 0
-            )
-          );
-        } else {
-          setSortServiceList(
-            serviceListData.sort((item1, item2) =>
-              item1.description.toLowerCase() > item2.description.toLowerCase()
-                ? 1
-                : item2.description.toLowerCase() >
-                  item1.description.toLowerCase()
-                ? -1
-                : 0
-            )
-          );
-          value = true;
-        }
+    switch (val){
+      case 'code':
+          sortResult = serviceListDisplay.sort((item1, item2) =>
+                  item1.barcode.toLowerCase() > item2.barcode.toLowerCase()
+                    ? 1
+                    : item2.barcode.toLowerCase() > item1.barcode.toLowerCase()
+                    ? -1
+                    : 0
+              );
+          setServiceListDisplay(sortResult);
+          break;
+      case 'name':
+        sortResult= serviceListDisplay.sort((item1, item2) =>
+                      item1.name.toLowerCase() > item2.name.toLowerCase()
+                        ? 1
+                        : item2.name.toLowerCase() > item1.name.toLowerCase()
+                        ? -1
+                        : 0
+                    );
+        setServiceListDisplay(sortResult);
         break;
-      case 1:
-        if (searchResult.length > 0) {
-          setSearchResult(
-            searchResult.sort((item1, item2) =>
-              item1.barcode.toLowerCase() > item2.barcode.toLowerCase()
-                ? 1
-                : item2.barcode.toLowerCase() > item1.barcode.toLowerCase()
-                ? -1
-                : 0
-            )
-          );
-        } else {
-          setSortServiceList(
-            serviceListData.sort((item1, item2) =>
-              item1.barcode.toLowerCase() > item2.barcode.toLowerCase()
-                ? 1
-                : item2.barcode.toLowerCase() > item1.barcode.toLowerCase()
-                ? -1
-                : 0
-            )
-          );
-          value = true;
-        }
-        break;
-      case 3:
-        if (searchResult.length > 0) {
-          setSearchResult(
-            searchResult.sort((item1, item2) =>
-              item1.name.toLowerCase() > item2.name.toLowerCase()
-                ? 1
-                : item2.name.toLowerCase() > item1.name.toLowerCase()
-                ? -1
-                : 0
-            )
-          );
-        } else {
-          setSortServiceList(
-            serviceListData.sort((item1, item2) =>
-              item1.name.toLowerCase() > item2.name.toLowerCase()
-                ? 1
-                : item2.name.toLowerCase() > item1.name.toLowerCase()
-                ? -1
-                : 0
-            )
-          );
-          value = true;
-        }
+      case 'description':
+        sortResult = serviceListDisplay.sort((item1, item2) =>
+                      item1.description.toLowerCase() > item2.description.toLowerCase()
+                        ? 1
+                        : item2.description.toLowerCase() >
+                          item1.description.toLowerCase()
+                        ? -1
+                        : 0
+                    );
+        setServiceListDisplay(sortResult);
         break;
       default:
-        if (searchResult.length > 0) {
-          setSearchResult(searchResult.sort(compareDateFunction));
-        } else {
-          setSortServiceList(serviceListData.sort(compareDateFunction));
-          value = true;
-        }
+        // sortResult =serviceListData.sort(compareDateFunction);
+        // setServiceListDisplay(sortResult);
     }
-    setServiceListDisplay(value);
   };
   const handleSearch = (val) => {
+    let searchList = select != 'id'? sortServiceList: serviceListData;
     let searchValue = val.toLowerCase();
     let serviceResultList;
-    if (val.trim().length > 0) {
-      if (serviceListDisplay) {
-        serviceResultList = sortServiceList.filter(
-          (item) =>
-            item.barcode.toLowerCase().includes(searchValue) ||
-            item.name.toLowerCase().includes(searchValue) ||
-            item.description.toLowerCase().includes(searchValue)
-        );
-        setServiceListDisplay(false);
-      } else {
-        serviceResultList = serviceListData.filter(
-          (item) =>
-            item.barcode.toLowerCase().includes(searchValue) ||
-            item.name.toLowerCase().includes(searchValue) ||
-            item.description.toLowerCase().includes(searchValue)
-        );
-        setServiceListDisplay(false);
-      }
-    } else {
-      serviceResultList = [];
-      handleSelectOrderBy('');
-      setServiceListDisplay(true);
+    if(val.trim().length>0){
+      setSearch(true);
+      serviceResultList= searchList.filter(
+            (item) =>
+              item.barcode.toLowerCase().includes(searchValue) ||
+              item.name.toLowerCase().includes(searchValue) ||
+              item.description.toLowerCase().includes(searchValue)
+          );
+      setServiceListDisplay(serviceResultList);
     }
-    setSearchResult(serviceResultList);
+    else {
+      setSearch(false);
+        setServiceListDisplay(serviceListData);
+    }
   };
 
   return (
@@ -168,44 +129,48 @@ const ServiceComponent = (props) => {
           <a>New Service</a>
         </Link>
       </Button>
+      <Button className={styled.addButton} variant="outlined" onClick={()=>setComboDialog(true)}>
+          Create Combo
+      </Button>
       <div className={styled.flexAlignContainer}>
         <h1>Select a service</h1>
         <div className={styled.flexContainer}>
           <p>Order By</p>
           <div className={styled.separateHDiv}></div>
-          <Select onChange={(event) => handleSelectOrderBy(event.target.value)}>
-            <MenuItem value={0}></MenuItem>
-            <MenuItem value={1}>Service Code</MenuItem>
-            <MenuItem value={2}>Description</MenuItem>
-            <MenuItem value={3}>Name</MenuItem>
+          <Select onChange={(event) => handleSelectOrderBy(event.target.value)} value={select}>
+            {sortedList.map((name) => (
+                <MenuItem
+                    key={name}
+                    value={name}
+                >
+                  {name}
+                </MenuItem>
+            ))}
           </Select>
         </div>
       </div>
 
       <div>
-        {searchResult.length > 0 &&
-          searchResult.map((item) => (
+        {serviceListDisplay.map((item) => (
             <ServiceCardRow
-              key={item.id}
-              item={item}
-              handleServiceCheck={handleServiceCheck}
-              toggleBlocked={toggleBlocked}
-              deleteService={deleteService}
+                key={item.id}
+                item={item}
+                toggleBlocked={toggleBlocked}
+                deleteService={deleteService}
             />
-          ))}
-
-        {serviceListDisplay &&
-          sortServiceList.map((item) => (
-            <ServiceCardRow
-              key={item.id}
-              item={item}
-              handleServiceCheck={handleServiceCheck}
-              toggleBlocked={toggleBlocked}
-              deleteService={deleteService}
-            />
-          ))}
+        ))}
+        {/*{serviceListDisplay &&*/}
+        {/*  sortServiceList.map((item) => (*/}
+        {/*    <ServiceCardRow*/}
+        {/*      key={item.id}*/}
+        {/*      item={item}*/}
+        {/*      toggleBlocked={toggleBlocked}*/}
+        {/*      deleteService={deleteService}*/}
+        {/*    />*/}
+        {/*  ))}*/}
       </div>
-    </Box>
+        {/*{serviceCheckList.length >0 && <AddComboForm openDialog={comboDialog} handleCloseComboDialog={handleCloseComboDialog} serviceCheckList={serviceCheckList} handleServiceCheck={handleServiceCheck}></AddComboForm>}*/}
+         </Box>
   );
 };
 
