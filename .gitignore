@@ -8,3 +8,4 @@ backend/dist/
 # project
 **/node_modules/
 
+./package-lock.json

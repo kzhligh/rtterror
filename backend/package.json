@@ -5,7 +5,7 @@
   "main": "./src/server.ts",
   "scripts": {
     "test": "jest --watchAll",
-    "test:ci": "jest --coverage",
+    "coverage": "jest --coverage",
     "start": "ts-node-dev --respawn --transpile-only ./src/server.ts"
   },
   "repository": {
@@ -32,8 +32,11 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "coveragePathIgnorePatterns": [
-      "/node_modules/"
+    "collectCoverageFrom": [
+      "./**/*.{js,jsx,ts,tsx}",
+      "!**/coverage/**",
+      "!**/node_modules/**",
+      "!**/vendor/**"
     ],
     "coverageThreshold": {
       "global": {
