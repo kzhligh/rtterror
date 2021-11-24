@@ -27,6 +27,7 @@ import Paper from '@mui/material/Paper';
 import { useRouter } from 'next/router';
 import ServiceEmployeeTable from "./serviceEmployeeTable";
 import SearchInput from "./search";
+import TextField from "@mui/material/TextField";
 
 const ServiceDetailsCard = (props) => {
   const { closeServiceCard, item, employeeList } = props;
@@ -54,6 +55,11 @@ const ServiceDetailsCard = (props) => {
     setRemainEmployeeList(employeeList);
   };
 
+  const handleSaveService = ()=>{
+    // get the data
+    // send to backend
+  }
+
   return (
       <Box>
         <Card>
@@ -61,7 +67,16 @@ const ServiceDetailsCard = (props) => {
           <CardContent>
             search
             {/*<SearchInput handleSearch={} />*/}
-            <div className={styled.separateVDiv}></div>
+            <h1>Service name</h1>
+            <h3>Service Code</h3>
+            <TextField
+                fullWidth
+                id="comboName"
+                required
+                // value={comboName}
+                // onChange={(event) => handleSetValue(event)}
+            />
+            <h5>Description</h5>
             <Divider />
             <div className={styled.flexAlignContainer}>
               <div>duration</div>

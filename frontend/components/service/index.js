@@ -20,10 +20,16 @@ const ServiceComponent = (props) => {
   const [serviceCheckList, setServiceCheckList] = useState([]); // the service to create the combo
   const sortedList = ['None','name','description','code'];
   const [comboDialog, setComboDialog] = useState(false);
+  const [type ,setType] = useState('');
 
   console.log(serviceCheckList)
   const handleCloseComboDialog = ()=>{
     setComboDialog(false);
+    setType('');
+  }
+  const handleCreateCombo=()=>{
+      setType('add');
+      setComboDialog(true)
   }
 
   //to create the combo
@@ -35,7 +41,7 @@ const ServiceComponent = (props) => {
         serviceCheckList.filter((itemService) => itemService.id != item.id)
       );
     }
-    console.log(serviceCheckList)
+    // console.log(serviceCheckList)
     return serviceCheckList.length;
   };
   useEffect(() => {}, [select]);
@@ -122,7 +128,7 @@ const ServiceComponent = (props) => {
           <a>New Service</a>
         </Link>
       </Button>
-      <Button className={styled.addButton} variant="outlined" onClick={()=>setComboDialog(true)}>
+      <Button className={styled.addButton} variant="outlined" onClick={handleCreateCombo} disabled={serviceCheckList.length==0}>
           Create Combo
       </Button>
       <div className={styled.flexAlignContainer}>
@@ -152,6 +158,9 @@ const ServiceComponent = (props) => {
                 deleteService={deleteService}
                 serviceCheckList={serviceCheckList}
                 handleServiceCheck={handleServiceCheck}
+                type={type}
+                setType={setType}
+                setServiceCheckList={setServiceCheckList}
             />
         ))}
       </div>
@@ -161,7 +170,8 @@ const ServiceComponent = (props) => {
             handleCloseComboDialog={handleCloseComboDialog}
             serviceCheckList={serviceCheckList}
             handleServiceCheck={handleServiceCheck}
-            type={"add"}
+            type={type}
+            setServiceCheckList={setServiceCheckList}
         >
         </ComboForm>}
          </Box>

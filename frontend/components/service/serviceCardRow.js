@@ -4,20 +4,72 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import styled from '../../styles/service.module.css';
-import {CardActionArea, CardActions, CardHeader, Checkbox, Stack} from '@mui/material';
+import {
+  CardActionArea,
+  CardActions,
+  CardHeader,
+  Checkbox,
+  Dialog, DialogActions,
+  DialogContent, DialogContentText,
+  DialogTitle,
+  Stack
+} from '@mui/material';
 import { useRouter } from 'next/router';
 import {useState} from "react";
 import ComboForm from "./comboForm";
+const ConfirmDelete = (props) => {
+  const {open, setOpen, item , step ,setStep} =props;
+  // const handleClickOpen = () => {
+  //   setOpen(true);
+  // };
+  const handleClose = () => {
+    setOpen(false);
+    setStep(0);
+  };
+  const handleConfirm = () =>{
+    if(step == 0){
+      setStep(1)
+    }
+    else{
+      // delete
+      // deleteService(item)
+    }
+  }
+  return (
+      <div>
+        <Dialog
+            open={open}
+            onClose={handleClose}
+        >
+          <DialogContent>
+            <DialogContentText >
+              {step == 0 ? `Delete ${item.name}`: `Attention: All Combos with ${item.name} will be deleted . Are you sure you want to continue`}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleConfirm}>Confirm</Button>
+            <Button onClick={handleClose} >
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+  );
+}
 
 const ServiceCardRow = (props) => {
   const router = useRouter();
-  const { item, toggleBlocked, deleteService , serviceCheckList  , handleServiceCheck} = props;
+  const { item, toggleBlocked, deleteService , serviceCheckList  , handleServiceCheck ,setType , setServiceCheckList} = props;
   const [editComboDialog, setEditComboDialog] = useState(false);
   const isBlock = () => item.blocked;
   const isCombo = ()=> item.hasOwnProperty('services');
+  const [open, setOpen] = useState(false);
+  const [step, setStep] = useState(0);
   const detailsPage =()=>{
     if(isCombo()){
+      setType('edit');
       setEditComboDialog(true);
+      setServiceCheckList(item.services)
     }
     else{
       router
@@ -27,6 +79,8 @@ const ServiceCardRow = (props) => {
   }
   const handleCloseEditDialog =()=>{
     setEditComboDialog(false);
+    setType('');
+    setServiceCheckList([]);
   }
   const getCreateDate = (item) => {
     return new Date(item['createdAt']).toDateString();
@@ -93,19 +147,28 @@ const ServiceCardRow = (props) => {
         <Button
             className={styled.buttonContainer}
             variant="outlined"
-            onClick={() => deleteService(item)}
+            onClick={() =>setOpen(true) }
         >
           Delete
         </Button>
       </Stack>
-      <ComboForm
+      <ConfirmDelete
+          open={open}
+          setOpen={setOpen}
+          item={item}
+          step={step}
+          setStep={setStep}
+      />
+      {isCombo()?<ComboForm
           openDialog={editComboDialog}
           handleCloseComboDialog={handleCloseEditDialog}
           serviceCheckList={serviceCheckList}
           handleServiceCheck={handleServiceCheck}
-          type={"edit"}
+          type="edit"
+          setServiceCheckList={setServiceCheckList}
       >
-      </ComboForm>
+      </ComboForm>:null}
+
     </div>
   );
 };
