@@ -15,8 +15,11 @@
   "author": "rtterror",
   "license": "MIT",
   "dependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
     "@types/cors": "^2.8.12",
     "@types/jest": "^27.0.3",
+    "babel-jest": "^27.3.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
