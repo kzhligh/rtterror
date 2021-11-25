@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest --watchAll",
     "test:ci": "jest --coverage",
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "start:ci": "node app.js"
   },
   "repository": {
     "type": "git",
