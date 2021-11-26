@@ -19,7 +19,10 @@ import {
   TableHead,
   TableRow,
   Fab,
+  Slider,
   InputAdornment,
+  Box,
+  Container,
 } from '@mui/material';
 
 const AddServiceForm = (props) => {
@@ -137,8 +140,10 @@ const AddServiceForm = (props) => {
           />
           <div className={styled.separateVDiv}></div>
           <div className={styled.flexAlignContainer}>
-            <h3>Duration</h3>
-            {durationList.map((item) => (
+           
+          
+            
+            {/* {durationList.map((item) => (
               <Fab
                 key={Object.keys(item)}
                 onClick={() => durationSelect(Object.keys(item))}
@@ -147,24 +152,50 @@ const AddServiceForm = (props) => {
               >
                 {Object.values(item)}
               </Fab>
-            ))}
+            ))} */}
+       
+           <div className="card  container-md bg-light">
+              <div className="card-body"  >
+              <label for="customRange2" className="form-label">Duration (in hours): </label> 
+            
+              <div className={styled.separateVDiv}></div>
+                <Slider 
+              
+                aria-label="Always visible"
+                defaultValue={0.5}
+                //getAriaValueText={valuetext}
+                min={0.5}
+                step={0.5}
+                max={2}
+                
+                //marks={marks}
+                valueLabelDisplay="on"
+                />
+              
+
+              <div className={styled.separateVDiv}></div>
+              <TextField
+              id="price"
+              label="price"
+              type="number"
+              value={price}
+              required
+              onChange={(event) => handleSetValue(event)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">$</InputAdornment>
+                ),
+              }}
+              />
+              </div>
+           </div>
+
           </div>
+
+          <div className="bg-success p-2 text-dark bg-opacity-10"  >New Service for 1H has been successfully added! </div>
+      
           <div className={styled.separateVDiv}></div>
-          <TextField
-            id="price"
-            label="price"
-            type="number"
-            value={price}
-            required
-            onChange={(event) => handleSetValue(event)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">$</InputAdornment>
-              ),
-            }}
-          />
-          <div className={styled.separateVDiv}></div>
-          <h1>Add Employee</h1>
+          <h1>Add Employee </h1>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
