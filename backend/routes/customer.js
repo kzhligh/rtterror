@@ -47,6 +47,19 @@ router
       res.status(400).send(error);
     }
   })
+  .get('/:id/appointments', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+      const { dataValues } = await CustomerService.getCustomerWithAppointments(
+        id
+      );
+      res.status(200).send(dataValues);
+    } catch (error) {
+      console.log(error);
+      res.status(400).send(error);
+    }
+  })
   .post('/', async (req, res) => {
     try {
       const { dataValues } = await CustomerService.createCustomer(req.body);

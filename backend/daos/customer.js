@@ -1,6 +1,7 @@
 const { Customer } = require('../models/customer');
 const { Op } = require('sequelize');
 const { sequelize } = require('../modules/sequelize');
+const { Appointment } = require('../models/appointment.js');
 
 function createCustomer(customer) {
   return Customer.create(customer);
@@ -78,10 +79,17 @@ async function checkDuplicateCustomer(firstName, lastName) {
   };
 }
 
+function getCustomerWithAppointments(customerId) {
+  return Customer.findByPk(customerId, {
+    include: Appointment,
+  });
+}
+
 module.exports = {
   createCustomer,
   getAllCustomers,
   getCustomerByID,
+  getCustomerWithAppointments,
   deleteCustomers,
   updateCustomer,
   searchCustomer,

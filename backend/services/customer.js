@@ -1,20 +1,20 @@
 const CustomerDAO = require('../daos/customer');
 
-async function createCustomer(customer) {
+function createCustomer(customer) {
   return CustomerDAO.createCustomer(customer);
 }
 
-async function getAllCustomers(sortBy) {
+function getAllCustomers(sortBy) {
   return sortBy
     ? CustomerDAO.getAllCustomers(sortBy)
     : CustomerDAO.getAllCustomers();
 }
 
-async function getCustomerByID(customerId) {
+function getCustomerByID(customerId) {
   return CustomerDAO.getCustomerByID(customerId);
 }
 
-async function deleteCustomers(customers) {
+function deleteCustomers(customers) {
   return CustomerDAO.deleteCustomers(customers);
 }
 
@@ -30,10 +30,15 @@ function checkDuplicateCustomer(firstName, lastName) {
   return CustomerDAO.checkDuplicateCustomer(firstName, lastName);
 }
 
+function getCustomerWithAppointments(customerId) {
+  return CustomerDAO.getCustomerWithAppointments(customerId);
+}
+
 module.exports = {
   createCustomer,
   getAllCustomers,
   getCustomerByID,
+  getCustomerWithAppointments,
   deleteCustomers,
   updateCustomer,
   searchCustomer,
