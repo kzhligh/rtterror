@@ -9,24 +9,16 @@ import { Close } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton';
 import styled from '../../styles/service.module.css';
 import {useEffect, useState} from 'react';
-import Paper from '@mui/material/Paper';
 import {
-  Checkbox,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Fab,
-  Slider,
-  InputAdornment,
-  Box,
-  Container, Grid,
+  Grid,
 } from '@mui/material';
 import ServiceEmployeeTable from "./serviceEmployeeTable";
+import DurationPrice from "./durationPrice";
+import AddIcon from "@mui/icons-material/Add";
 
 const AddServiceForm = (props) => {
+  const hourToMs = 60000;
+  const MsToHour = 3600000;
   const { addHandle, employeeList, open, closeDialog } = props;
   const [employeeCheckList, setEmployeeCheckList] = useState([]);
   const [name, setName] = useState('');
@@ -34,6 +26,9 @@ const AddServiceForm = (props) => {
   const [description, setDescription] = useState('');
   const [duration, setDuration] = useState(0);
   const [price, setPrice] = useState(0);
+  const [durationPriceList, setDurationPriceList] = useState([{price:0, duration:0.5}]);
+  const [reload, setReload] = useState(false);
+
   const processAddService = () => {
     if (validationInput()) {
       let data = {
@@ -59,17 +54,8 @@ const AddServiceForm = (props) => {
     }
   };
 
-  useEffect(()=>{},[employeeCheckList]);
+  useEffect(()=>{},[employeeCheckList, durationPriceList ,reload]);
 
-  const durationSelect = (hour) => {
-    setDuration(hour * 60000);
-  };
-  const durationList = [
-    { 30: '30 M' },
-    { 60: '1 H' },
-    { 90: '1.5 H' },
-    { 120: '2 H' },
-  ];
   const handleSetValue = (e) => {
     let label = e.target.id;
     let value = e.target.value;
@@ -95,6 +81,12 @@ const AddServiceForm = (props) => {
     }
     return true;
   };
+  const handleAddDurationPrice = ()=>{
+    setDurationPriceList([...durationPriceList, {price:0, duration:0.5}]);
+  };
+  const handleRemoveDurationPrice =(index)=>{
+    setDurationPriceList([...durationPriceList.slice(0, index),...durationPriceList.slice(index+1)])
+  }
   return (
     <div>
       <Dialog open={open} fullWidth={true} maxWidth="lg" scroll="body">
@@ -117,10 +109,11 @@ const AddServiceForm = (props) => {
           <Grid
               container
               direction="column"
-              alignItems="center"
+              alignItems="stretch"
           >
             <Grid item xs={12}>
               <TextField
+                  margin="normal"
                   fullWidth
                   required
                   id="name"
@@ -131,6 +124,7 @@ const AddServiceForm = (props) => {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                  margin="normal"
                   fullWidth
                   required
                   id="code"
@@ -140,7 +134,35 @@ const AddServiceForm = (props) => {
               />
             </Grid>
             <Grid item xs={12}>
+              {durationPriceList.map((element, index) =>(
+                  <DurationPrice
+                      key={index}
+                      index={index}
+                      item={element}
+                      durationPriceList={durationPriceList}
+                      handleRemoveDurationPrice={handleRemoveDurationPrice}
+                      reload = {reload}
+                      setReload = {setReload}
+                  />
+                  ))
+              }
+
+              <Grid
+                  container
+                  direction="column"
+                  justifyContent="center"
+                  alignItems="center"
+              >
+                <Grid item={3}>
+                  <IconButton onClick={handleAddDurationPrice}>
+                    <AddIcon/>
+                  </IconButton>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
               <TextField
+                  margin="normal"
                   fullWidth
                   id="description"
                   label="Description"
@@ -150,54 +172,10 @@ const AddServiceForm = (props) => {
                   onChange={(event) => handleSetValue(event)}
               />
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                  id="price"
-                  label="price"
-                  type="number"
-                  value={price}
-                  required
-                  onChange={(event) => handleSetValue(event)}
-                  InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">$</InputAdornment>
-                    ),
-                  }}
-              />
-            </Grid>
           </Grid>
 
+          {/*<div className="bg-success p-2 text-dark bg-opacity-10"  >New Service for 1H has been successfully added! </div>*/}
 
-
-          <div className={styled.separateVDiv}></div>
-          <div className={styled.flexAlignContainer}>
-       
-           <div className="card  container-md bg-light">
-              <div className="card-body"  >
-              <label for="customRange2" className="form-label">Duration (in hours): </label> 
-            
-              <div className={styled.separateVDiv}></div>
-                <Slider
-                    onChange={(event) => setDuration(event.target.value)}
-                aria-label="Always visible"
-                defaultValue={0.5}
-                //getAriaValueText={valuetext}
-                min={0.5}
-                step={0.5}
-                max={2}
-                valueLabelDisplay="on"
-                />
-              
-
-              <div className={styled.separateVDiv}></div>
-
-              </div>
-           </div>
-
-          </div>
-
-          <div className="bg-success p-2 text-dark bg-opacity-10"  >New Service for 1H has been successfully added! </div>
-      
           <div className={styled.separateVDiv}></div>
           <h1>Add Employee </h1>
           <ServiceEmployeeTable

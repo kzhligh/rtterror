@@ -1,37 +1,29 @@
 import * as React from 'react';
-import IconButton from '@mui/material/IconButton';
 import {
-  CardActionArea,
-  CardHeader,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle, Divider, Grid,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
+ Divider, Grid,
 } from '@mui/material';
-import { Close } from '@mui/icons-material';
 import styled from '../../styles/service.module.css';
 import Button from '@mui/material/Button';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import Box from '@mui/material/Box';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import Paper from '@mui/material/Paper';
 import { useRouter } from 'next/router';
 import ServiceEmployeeTable from "./serviceEmployeeTable";
 import SearchInput from "./search";
 import TextField from "@mui/material/TextField";
 import ServiceEmployeeDialog from "./serviceEmployeeDialog";
+import EditIcon from '@mui/icons-material/Edit';
+import DurationPrice from "./durationPrice";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
 
 // in the service detail page display only the employee of the service
 // add employee display the employee not in the service
+
+
 // add selected , add teh chcek employee list to the service employeelist
 const ServiceDetailsCard = (props) => {
   const {item, serviceEmployeeList, employeeList} = props;
@@ -40,6 +32,10 @@ const ServiceDetailsCard = (props) => {
   const [serviceEmployeeDialog, setServiceEmployeeDialog] = useState(false);
   const [remainEmployeeList, setRemainEmployeeList] = useState([]);
   const [serviceEmployList, setServiceEmployList] = useState(serviceEmployeeList);
+  const [descriptionDisable, setDescriptionDisable] = useState(true);
+  const [durationPriceList, setDurationPriceList] = useState([{price:0, duration:0.5}]);
+  const [reload, setReload] = useState(false);
+  useEffect(()=>{},[ durationPriceList ,reload]);
 
   const handleAddEmployeeCheck = (val, employee) => {
     if (val) {
@@ -83,6 +79,12 @@ const ServiceDetailsCard = (props) => {
     // send to backend
   }
 
+  const handleAddDurationPrice = ()=>{
+    setDurationPriceList([...durationPriceList, {price:0, duration:0.5}]);
+  };
+  const handleRemoveDurationPrice =(index)=>{
+    setDurationPriceList([...durationPriceList.slice(0, index),...durationPriceList.slice(index+1)])
+  }
   return (
       <Box>
         <Card>
@@ -91,19 +93,65 @@ const ServiceDetailsCard = (props) => {
             search
             {/*<SearchInput handleSearch={} />*/}
             <h1>Service name</h1>
-            <h3>Service Code</h3>
-            <TextField
-                fullWidth
-                id="comboName"
-                required
-                // value={comboName}
-                // onChange={(event) => handleSetValue(event)}
-            />
-            <h5>Description</h5>
+            <Grid
+                container
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="center"
+            >
+              <h3>Service Code</h3>
+              <TextField
+                  id="comboName"
+                  required
+                  // value={comboName}
+                  // onChange={(event) => handleSetValue(event)}
+              />
+            </Grid>
+            <Grid
+                container
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="center"
+            >
+              {descriptionDisable?<Typography>
+                Descriptipn
+              </Typography>:<TextField
+                  fullWidth
+                  id="description"
+                  multiline
+                  rows={4}
+                  // value={comboName}
+                  // onChange={(event) => handleSetValue(event)}
+              />}
+              <EditIcon  onClick={()=>setDescriptionDisable(!descriptionDisable)}/>
+            </Grid>
             <Divider />
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
               <Grid item xs={6}>
-                duration
+                {durationPriceList.map((element, index) =>(
+                    <DurationPrice
+                        key={index}
+                        index={index}
+                        item={element}
+                        durationPriceList={durationPriceList}
+                        handleRemoveDurationPrice={handleRemoveDurationPrice}
+                        reload = {reload}
+                        setReload = {setReload}
+                    />
+                ))
+                }
+                <Grid
+                    container
+                    direction="column"
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                  <Grid item={3}>
+                    <IconButton onClick={handleAddDurationPrice}>
+                      <AddIcon/>
+                    </IconButton>
+                  </Grid>
+                </Grid>
               </Grid>
               <Grid item xs={6}>
                 <h1>Employee table
@@ -145,22 +193,20 @@ const ServiceDetailsCard = (props) => {
                 employeeCheckList={addEmployeeCheckList}
             />
           </CardContent>
-          <CardActionArea>
-            <Grid
-                container
-                direction="row"
-                justifyContent="flex-end"
-                alignItems="center"
+          <Grid
+              container
+              direction="row"
+              justifyContent="flex-end"
+              alignItems="center"
+          >
+            <Button
+                className={styled.addRightButton}
+                variant="outlined"
+                onClick={() => alert('save')}
             >
-              <Button
-                  className={styled.addRightButton}
-                  variant="outlined"
-                  onClick={() => alert('save')}
-              >
-                Save
-              </Button>
-            </Grid>
-          </CardActionArea>
+              Save
+            </Button>
+          </Grid>
         </Card>
       </Box>
   );

@@ -6,12 +6,10 @@ import Typography from '@mui/material/Typography';
 import styled from '../../styles/service.module.css';
 import {
   CardActionArea,
-  CardActions,
-  CardHeader,
   Checkbox,
-  Dialog, DialogActions,
-  DialogContent, DialogContentText,
-  DialogTitle, Grid,
+  Dialog,
+  DialogContent,
+  Grid,
   Stack
 } from '@mui/material';
 import { useRouter } from 'next/router';

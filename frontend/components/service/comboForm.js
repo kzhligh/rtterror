@@ -79,12 +79,13 @@ const EditCombo = (props)=>{
     const handleClose =()=>{
         setEditDialog(false);
     }
-    return (<Grid
+    return (
+        <Grid
         container
         direction="column"
         justifyContent="center"
         alignItems="center"
-    >
+        >
             <Grid item={3}>
                 <IconButton onClick={()=>setEditDialog(true)}>
                     <AddIcon/>
