@@ -173,6 +173,7 @@ export default function Patient({ customers: initialCustomers }) {
             <Button
               variant="outlined"
               disabled={!rowSelection.length}
+              data-cy="patientDelete"
               onClick={handleDelete}
             >
               Delete
@@ -197,6 +198,9 @@ export default function Patient({ customers: initialCustomers }) {
           })
         }
         rowsPerPageOptions={[8]}
+        componentsProps={{
+          'data-cy': 'patientTable',
+        }}
         checkboxSelection
         hideFooterSelectedRowCount
         disableColumnMenu
