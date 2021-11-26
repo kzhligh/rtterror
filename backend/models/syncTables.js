@@ -8,7 +8,7 @@ const syncAllTables = () => {
     console.log('table "services" synchronized');
   });
 
-  Customer.sync().then(() => {
+  Customer.sync({ alter: true }).then(() => {
     console.log('table "customers" synchronized');
   });
 

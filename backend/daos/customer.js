@@ -79,10 +79,12 @@ async function checkDuplicateCustomer(firstName, lastName) {
   };
 }
 
-function getCustomerWithAppointments(customerId) {
-  return Customer.findByPk(customerId, {
+async function getCustomerWithAppointments(customerId) {
+  const customer_appointment = await Customer.findByPk(customerId, {
     include: Appointment,
   });
+  console.log(customer_appointment);
+  return customer_appointment;
 }
 
 module.exports = {
