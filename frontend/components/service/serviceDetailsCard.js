@@ -7,7 +7,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle, Divider,
+  DialogTitle, Divider, Grid,
   Table,
   TableBody,
   TableCell,
@@ -28,33 +28,56 @@ import { useRouter } from 'next/router';
 import ServiceEmployeeTable from "./serviceEmployeeTable";
 import SearchInput from "./search";
 import TextField from "@mui/material/TextField";
+import ServiceEmployeeDialog from "./serviceEmployeeDialog";
 
+// in the service detail page display only the employee of the service
+// add employee display the employee not in the service
+// add selected , add teh chcek employee list to the service employeelist
 const ServiceDetailsCard = (props) => {
-  const { closeServiceCard, item, employeeList } = props;
-  const [employeeCheckList, setEmployeeCheckList] = useState([]);
+  const {item, serviceEmployeeList, employeeList} = props;
+  const [addEmployeeCheckList, setAddEmployeeCheckList] = useState([]);
+  const [deleteEmployeeCheckList, setDeleteEmployeeCheckList] = useState([]);
   const [serviceEmployeeDialog, setServiceEmployeeDialog] = useState(false);
   const [remainEmployeeList, setRemainEmployeeList] = useState([]);
+  const [serviceEmployList, setServiceEmployList] = useState(serviceEmployeeList);
 
-  const router = useRouter();
-  const handleCheck = (e) => {
-    if (e.target.checked) {
-      setEmployeeCheckList([...employeeCheckList, e.target.value]);
+  const handleAddEmployeeCheck = (val, employee) => {
+    if (val) {
+      setAddEmployeeCheckList([...addEmployeeCheckList, employee]);
     } else {
-      setEmployeeCheckList(
-        employeeCheckList.filter((name) => e.target.value != name)
+      setAddEmployeeCheckList(
+          addEmployeeCheckList.filter((emp) => emp.firstname != employee.firstname)
       );
     }
   };
-  const handleEditClick = () => {
-    router.push('/service/' + item.id).then((r) => console.log(r));
+
+  const handleDeleteEmployeeCheck = (val, employee) => {
+    if (val) {
+      setDeleteEmployeeCheckList([...deleteEmployeeCheckList, employee]);
+    } else {
+      setDeleteEmployeeCheckList(
+          deleteEmployeeCheckList.filter((emp) => emp.firstname != employee.firstname)
+      );
+    }
   };
   const handleAddEmployee = () => {
     //    extract the employ not in the service
     //    set the display service employee dialog
     setServiceEmployeeDialog(true);
-    setRemainEmployeeList(employeeList);
+    // filter the employee that are in employeelist but not in the serviceEmployelist , mean the employee who not yet in the service
+    setRemainEmployeeList(employeeList.filter(({ firstname: val1 }) => !serviceEmployList.some(({ firstname: val2 }) => val2 === val1)));
   };
 
+  const handleAddSelected = ()=>{
+    setServiceEmployList([...serviceEmployList,...addEmployeeCheckList]);
+    setServiceEmployeeDialog(false);
+    setAddEmployeeCheckList([]);
+  }
+
+  const handleDeleteEmployee = ()=>{
+    setServiceEmployList(serviceEmployList.filter(({ firstname: val1 }) => !deleteEmployeeCheckList.some(({ firstname: val2 }) => val2 === val1)))
+    setDeleteEmployeeCheckList([]);
+  }
   const handleSaveService = ()=>{
     // get the data
     // send to backend
@@ -78,21 +101,65 @@ const ServiceDetailsCard = (props) => {
             />
             <h5>Description</h5>
             <Divider />
-            <div className={styled.flexAlignContainer}>
-              <div>duration</div>
-              <div>Employee table
-                  <ServiceEmployeeTable />
-              </div>
-            </div>
+            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+              <Grid item xs={6}>
+                duration
+              </Grid>
+              <Grid item xs={6}>
+                <h1>Employee table
+                  <ServiceEmployeeTable
+                      displayEmployeeList = {serviceEmployList}
+                      handleEmployeeCheck ={handleDeleteEmployeeCheck}
+                      employeeCheckList = {deleteEmployeeCheckList}
+                  />
+                </h1>
+                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+                  <Grid item xs={6}>
+                    <Button
+                        className={styled.addRightButton}
+                        variant="outlined"
+                        onClick={handleAddEmployee}
+                    >
+                      Add Employee
+                    </Button>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                        className={styled.addRightButton}
+                        variant="outlined"
+                        onClick={() => handleDeleteEmployee()}
+                    >
+                      Delete Employee
+                    </Button>
+
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            <ServiceEmployeeDialog
+                serviceEmployeeDialog={serviceEmployeeDialog}
+                setServiceEmployeeDialog={setServiceEmployeeDialog}
+                handleAddSelected={handleAddSelected}
+                displayEmployeeList={remainEmployeeList}
+                handleEmployeeCheck={handleAddEmployeeCheck}
+                employeeCheckList={addEmployeeCheckList}
+            />
           </CardContent>
           <CardActionArea>
-            <Button
-                className={styled.addRightButton}
-                variant="outlined"
-                onClick={() => alert('save')}
+            <Grid
+                container
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="center"
             >
-              Save
-            </Button>
+              <Button
+                  className={styled.addRightButton}
+                  variant="outlined"
+                  onClick={() => alert('save')}
+              >
+                Save
+              </Button>
+            </Grid>
           </CardActionArea>
         </Card>
       </Box>

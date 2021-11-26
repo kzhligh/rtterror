@@ -22,7 +22,7 @@ const ServiceComponent = (props) => {
   const [comboDialog, setComboDialog] = useState(false);
   const [type ,setType] = useState('');
 
-  console.log(serviceCheckList)
+  // console.log(serviceCheckList)
   const handleCloseComboDialog = ()=>{
     setComboDialog(false);
     setType('');

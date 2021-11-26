@@ -11,12 +11,13 @@ import {
   Checkbox,
   Dialog, DialogActions,
   DialogContent, DialogContentText,
-  DialogTitle,
+  DialogTitle, Grid,
   Stack
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import {useState} from "react";
 import ComboForm from "./comboForm";
+import Box from "@mui/material/Box";
 const ConfirmDelete = (props) => {
   const {open, setOpen, item , step ,setStep} =props;
   // const handleClickOpen = () => {
@@ -36,24 +37,50 @@ const ConfirmDelete = (props) => {
     }
   }
   return (
-      <div>
+
         <Dialog
             open={open}
             onClose={handleClose}
+            fullWidth={true}
+            maxWidth="lg"
         >
+
           <DialogContent>
-            <DialogContentText >
-              {step == 0 ? `Delete ${item.name}`: `Attention: All Combos with ${item.name} will be deleted . Are you sure you want to continue`}
-            </DialogContentText>
+            <Grid
+                container
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+            >
+
+              <Box padding="160px 200px">
+                <Typography variant="h4">
+                  {step == 0 ? `Delete ${item.name}`: `Attention: All Combos with ${item.name} will be deleted . Are you sure you want to continue`}
+                </Typography>
+              </Box>
+
+            </Grid>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={handleConfirm}>Confirm</Button>
+          <Grid
+              container
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+          >
+            <Button
+                className={styled.buttonContainer}
+                variant="outlined"
+                onClick={handleConfirm}
+            >
+              Confirm
+            </Button>
             <Button onClick={handleClose} >
               Cancel
             </Button>
-          </DialogActions>
+            </Grid>
+
         </Dialog>
-      </div>
+
   );
 }
 

@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Close } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton';
 import styled from '../../styles/service.module.css';
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import Paper from '@mui/material/Paper';
 import {
   Checkbox,
@@ -22,8 +22,9 @@ import {
   Slider,
   InputAdornment,
   Box,
-  Container,
+  Container, Grid,
 } from '@mui/material';
+import ServiceEmployeeTable from "./serviceEmployeeTable";
 
 const AddServiceForm = (props) => {
   const { addHandle, employeeList, open, closeDialog } = props;
@@ -48,15 +49,18 @@ const AddServiceForm = (props) => {
       addHandle(data);
     }
   };
-  const handleCheck = (e) => {
-    if (e.target.checked) {
-      setEmployeeCheckList([...employeeCheckList, e.target.value]);
+  const handleAddEmployeeCheck = (val, employee) => {
+    if (val) {
+      setEmployeeCheckList([...employeeCheckList, employee]);
     } else {
       setEmployeeCheckList(
-        employeeCheckList.filter((name) => e.target.value != name)
+          employeeCheckList.filter((emp) => emp.firstname != employee.firstname)
       );
     }
   };
+
+  useEffect(()=>{},[employeeCheckList]);
+
   const durationSelect = (hour) => {
     setDuration(hour * 60000);
   };
@@ -110,83 +114,83 @@ const AddServiceForm = (props) => {
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <div className={styled.separateVDiv}></div>
-          <TextField
-            fullWidth
-            required
-            id="name"
-            label="name"
-            value={name}
-            onChange={(event) => handleSetValue(event)}
-          />
-          <div className={styled.separateVDiv}></div>
-          <TextField
-            fullWidth
-            required
-            id="code"
-            label="Service code"
-            value={barcode}
-            onChange={(event) => handleSetValue(event)}
-          />
-          <div className={styled.separateVDiv}></div>
-          <TextField
-            fullWidth
-            id="description"
-            label="Description"
-            multiline
-            rows={4}
-            value={description}
-            onChange={(event) => handleSetValue(event)}
-          />
+          <Grid
+              container
+              direction="column"
+              alignItems="center"
+          >
+            <Grid item xs={12}>
+              <TextField
+                  fullWidth
+                  required
+                  id="name"
+                  label="name"
+                  value={name}
+                  onChange={(event) => handleSetValue(event)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                  fullWidth
+                  required
+                  id="code"
+                  label="Service code"
+                  value={barcode}
+                  onChange={(event) => handleSetValue(event)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                  fullWidth
+                  id="description"
+                  label="Description"
+                  multiline
+                  rows={4}
+                  value={description}
+                  onChange={(event) => handleSetValue(event)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                  id="price"
+                  label="price"
+                  type="number"
+                  value={price}
+                  required
+                  onChange={(event) => handleSetValue(event)}
+                  InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">$</InputAdornment>
+                    ),
+                  }}
+              />
+            </Grid>
+          </Grid>
+
+
+
           <div className={styled.separateVDiv}></div>
           <div className={styled.flexAlignContainer}>
-           
-          
-            
-            {/* {durationList.map((item) => (
-              <Fab
-                key={Object.keys(item)}
-                onClick={() => durationSelect(Object.keys(item))}
-                color={Object.keys(item) * 60000 == duration ? 'primary' : null}
-                variant="extended"
-              >
-                {Object.values(item)}
-              </Fab>
-            ))} */}
        
            <div className="card  container-md bg-light">
               <div className="card-body"  >
               <label for="customRange2" className="form-label">Duration (in hours): </label> 
             
               <div className={styled.separateVDiv}></div>
-                <Slider 
-              
+                <Slider
+                    onChange={(event) => setDuration(event.target.value)}
                 aria-label="Always visible"
                 defaultValue={0.5}
                 //getAriaValueText={valuetext}
                 min={0.5}
                 step={0.5}
                 max={2}
-                
-                //marks={marks}
                 valueLabelDisplay="on"
                 />
               
 
               <div className={styled.separateVDiv}></div>
-              <TextField
-              id="price"
-              label="price"
-              type="number"
-              value={price}
-              required
-              onChange={(event) => handleSetValue(event)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">$</InputAdornment>
-                ),
-              }}
-              />
+
               </div>
            </div>
 
@@ -196,40 +200,11 @@ const AddServiceForm = (props) => {
       
           <div className={styled.separateVDiv}></div>
           <h1>Add Employee </h1>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center">
-                    <h1>Employee name</h1>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {employeeList.map((ename) => (
-                  <TableRow
-                    key={ename}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      <div className={styled.employeeRowDiv}>
-                        {ename}
-                        <Checkbox
-                          key={ename}
-                          aria-label={ename}
-                          value={ename}
-                          checked={employeeCheckList.includes(ename)}
-                          onChange={(event) => {
-                            handleCheck(event);
-                          }}
-                        />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <ServiceEmployeeTable
+              displayEmployeeList = {employeeList}
+              handleEmployeeCheck ={handleAddEmployeeCheck}
+              employeeCheckList = {employeeCheckList}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={processAddService}>Create Service</Button>

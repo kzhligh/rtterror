@@ -18,30 +18,14 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { Close } from '@mui/icons-material';
+import ServiceEmployeeTable from "./serviceEmployeeTable";
 
 const ServiceEmployeeDialog = (props) => {
-  const {
-    remainEmployeeList,
-    serviceEmployeeDialog,
-    setServiceEmployeeDialog,
-    item,
-  } = props;
-  const [employeeCheckList, setEmployeeCheckList] = useState([]);
+  const {serviceEmployeeDialog, setServiceEmployeeDialog, displayEmployeeList, handleEmployeeCheck , handleAddSelected ,employeeCheckList} = props;
 
   const closeDialog = () => {
     setServiceEmployeeDialog(false);
   };
-  const handleCheck = (e) => {
-    if (e.target.checked) {
-      setEmployeeCheckList([...employeeCheckList, e.target.value]);
-    } else {
-      setEmployeeCheckList(
-        employeeCheckList.filter((name) => e.target.value != name)
-      );
-    }
-  };
-  console.log(employeeCheckList);
-  const addEmployee = () => {};
 
   return (
     <div>
@@ -62,48 +46,18 @@ const ServiceEmployeeDialog = (props) => {
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center">
-                    <h1>Employee name</h1>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {remainEmployeeList.map((ename) => (
-                  <TableRow
-                    key={ename}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row" align="center">
-                      <div className={styled.employeeRowDiv}>
-                        {ename}
-                        <Checkbox
-                          key={ename}
-                          aria-label={ename}
-                          value={ename}
-                          checked={
-                            employeeCheckList
-                              ? employeeCheckList.includes(ename)
-                              : false
-                          }
-                          onChange={(event) => {
-                            handleCheck(event);
-                          }}
-                        />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <ServiceEmployeeTable
+              displayEmployeeList = {displayEmployeeList}
+              handleEmployeeCheck ={handleEmployeeCheck}
+              employeeCheckList = {employeeCheckList}
+          />
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" onClick={addEmployee}>
-            Submit
+          <Button variant="outlined" onClick={handleAddSelected}>
+            Add Selected
+          </Button>
+          <Button variant="outlined" onClick={()=>setServiceEmployeeDialog(false)}>
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>
