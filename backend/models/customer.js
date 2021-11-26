@@ -45,7 +45,7 @@ const Customer = sequelize.define(
   }
 );
 
-Customer.hasMany(Appointment);
-Appointment.belongsTo(Customer);
+Customer?.hasMany(Appointment);
+Appointment?.belongsTo(Customer);
 
 module.exports = { Customer };

@@ -172,14 +172,14 @@ jobs:
 
       - name: Setup web server for testing
         run: |
-          yarn install --frozen-lockfile --silent
+          yarn install --production --frozen-lockfile --silent
           cd backend
           npm ci
           touch .env
 
       - name: Build client application
         run: |
-          yarn install --frozen-lockfile --silent
+          yarn install --production --frozen-lockfile --silent
           yarn build
         working-directory: ./frontend
 

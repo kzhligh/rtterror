@@ -2,6 +2,7 @@ const CustomerDAO = require('./customer');
 const { Customer } = require('../models/customer');
 const { sequelize } = require('../modules/sequelize');
 const { Op } = require('sequelize');
+const { Appointment } = require('../models/appointment');
 
 jest.mock('../models/customer');
 
@@ -158,5 +159,23 @@ describe('Customer DAO', () => {
     expect(CustomerDAO.checkDuplicateCustomer).toBeCalledTimes(1);
     expect(Customer.count).toBeCalledWith(mockSearchOptions);
     expect(Customer.count).toBeCalledTimes(1);
+  });
+
+  it("should be able to perform joins on a customer's appointments", () => {
+    const mockCustomerId = 'mock customer id';
+    const mockMethodParam = {
+      include: Appointment,
+    };
+    jest.spyOn(CustomerDAO, 'getCustomerWithAppointments');
+
+    CustomerDAO.getCustomerWithAppointments(mockCustomerId, mockMethodParam);
+
+    expect(CustomerDAO.getCustomerWithAppointments).toBeCalledWith(
+      mockCustomerId,
+      mockMethodParam
+    );
+    expect(CustomerDAO.getCustomerWithAppointments).toBeCalledTimes(1);
+    expect(Customer.findByPk).toBeCalledWith(mockCustomerId, mockMethodParam);
+    expect(Customer.findByPk).toBeCalledTimes(1);
   });
 });
