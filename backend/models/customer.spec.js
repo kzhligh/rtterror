@@ -20,6 +20,28 @@ describe('Customer Model', () => {
         lastName: {
           type: DataTypes.STRING,
         },
+        email: {
+          type: DataTypes.STRING,
+          unique: true,
+        },
+        dob: {
+          type: DataTypes.DATEONLY,
+        },
+        gender: {
+          type: DataTypes.ENUM(['M', 'F', 'N/A']),
+        },
+        address: {
+          type: DataTypes.STRING,
+        },
+        postalCode: {
+          type: DataTypes.STRING,
+        },
+        phone: {
+          type: DataTypes.STRING,
+        },
+        confirmationType: {
+          type: DataTypes.ENUM(['SMS', 'email']),
+        },
       },
       {
         timestamps: false,
