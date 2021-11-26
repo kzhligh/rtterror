@@ -137,6 +137,7 @@ export default function Patient({ customers: initialCustomers }) {
             <Select
               placeholder="Sort..."
               label="Sort"
+              data-cy="patientSort"
               value={sortOption}
               defaultValue=""
               onChange={(e) => setSortOption(e.target.value)}
@@ -147,7 +148,9 @@ export default function Patient({ customers: initialCustomers }) {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={'firstName'}>First Name</MenuItem>
+              <MenuItem data-cy="sortFirstName" value={'firstName'}>
+                First Name
+              </MenuItem>
               <MenuItem value={'lastName'}>Last Name</MenuItem>
               <MenuItem value={'email'}>Email</MenuItem>
             </Select>
@@ -162,6 +165,7 @@ export default function Patient({ customers: initialCustomers }) {
           >
             <Button
               variant="outlined"
+              data-cy="patientCreate"
               onClick={() => setAddCustomerDialogIsOpen(true)}
             >
               New Client
