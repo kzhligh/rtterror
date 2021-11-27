@@ -6,8 +6,7 @@
   "scripts": {
     "test": "jest --watchAll",
     "coverage": "jest --coverage",
-    "build": "tsc --build",
-    "clean": "tsc --build --clean",
+    "build": "tsc",
     "start": "ts-node-dev --respawn --transpile-only ./src/server.ts"
   },
   "repository": {

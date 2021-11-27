@@ -1,26 +1,7 @@
-import { DataTypes } from 'sequelize';
+import { Model, DataTypes } from 'sequelize';
 import sequelize from '../modules/sequelize';
-import GeneralModel from './model';
-import { IService } from '../interfaces/IService';
 
-export default class ServiceModel extends GeneralModel {
-  static async getAllItems(): Promise<IService[] | undefined> {
-    try {
-      const allItems = await this.findAll({
-        where: {
-          hidden: false,
-        },
-      });
-      const result = allItems.map((item) => {
-        let itemJson = item.toJSON() as IService;
-        return itemJson;
-      });
-      return allItems.length > 0 ? result : undefined;
-    } catch (error) {
-      console.error('ServiceClass/getAllItems()/ERROR: ', error);
-      throw error;
-    }
-  }
+export default class ServiceModel extends Model{
 }
 
 ServiceModel.init(

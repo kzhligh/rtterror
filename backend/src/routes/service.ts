@@ -9,8 +9,9 @@ router.use(function (req, res, next) {
 });
 
 router.get('/', (req, res, next) => {
+  console.log('route/service')
   serviceService
-    .getAllItems()
+    .getAllValidItems()
     .then((data) => {
       res.status(200).send(data);
     })
@@ -65,7 +66,7 @@ router.delete('/:id', (req, res, next) => {
   const { params } = req;
   const { id } = params;
   serviceService
-    .hideItemById(id)
+    .updateItemById(id, { hidden: true })
     .then((data) => {
       res.status(200).send(data);
     })
@@ -79,7 +80,7 @@ router.put('/block/:id', (req, res, next) => {
   const { params } = req;
   const { id } = params;
   serviceService
-    .blockItemById(id)
+    .updateItemById(id, { blocked: true })
     .then((data) => {
       res.status(200).send(data);
     })
@@ -93,7 +94,7 @@ router.put('/unblock/:id', (req, res, next) => {
   const { params } = req;
   const { id } = params;
   serviceService
-    .unblockItemById(id)
+    .updateItemById(id, { blocked: false })
     .then((data) => {
       res.status(200).send(data);
     })

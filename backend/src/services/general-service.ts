@@ -1,54 +1,100 @@
-import GeneralModel from '../models/model';
-import { ModelCtor } from 'sequelize';
+import sequelize from "../modules/sequelize";
+import { Model } from "sequelize";
+import IAll from "../interfaces/IAll";
 
-export default class GeneralService<T, TDto> {
-  public Model: ModelCtor<GeneralModel>;
+export default class GeneralService<T extends IAll, TDto> {
 
-  constructor(Model: ModelCtor<GeneralModel>) {
-    this.Model = Model;
+  public model: any;
+
+  constructor(modelName: string) {
+    this.model = sequelize.model(modelName);
   }
 
-  async createItem(itemInfo: TDto): Promise<T | undefined> {
+  async createItem(itemInfo: TDto): Promise<T> {
+    const t = await sequelize.transaction();
     try {
-      return (await this.Model.createItem(itemInfo)) as T;
+      const newItem = await this.model.create(itemInfo);
+      await t.commit();
+      return newItem.toJSON() as T;
     } catch (error) {
       console.log('GeneralService/createItem()/ERROR: ', error);
+      await t.rollback();
       throw error;
     }
   }
 
-  async getAllItems(): Promise<T[] | undefined> {
+  async getAllItems(): Promise<T[]> {
+    console.log('GeneralService/getAllItems()')
     try {
-      return (await this.Model.getAllItems()) as T[];
+      const allItems = await this.model.findAll();
+      const jsonItems = allItems.map((item: Model) => {
+        return item.toJSON();
+      });
+      return jsonItems as T[];
     } catch (error) {
       console.log('GeneralService/getAllItems()/ERROR: ', error);
       throw error;
     }
   }
 
-  async getItemById(id: string): Promise<T | undefined> {
+  async getItemById(id: string): Promise<T> {
     try {
-      return (await this.Model.getItemById(id)) as T;
+      return (await this.model.findByPk(id)).toJSON() as T;
     } catch (error) {
       console.log('GeneralService/getItemById()/ERROR: ', error);
       throw error;
     }
   }
 
-  async updateItem(updateInfo: TDto): Promise<T | undefined> {
+  async updateItem(updateInfo: T): Promise<T> {
+    const t = await sequelize.transaction();
     try {
-      return (await this.Model.updateItem(updateInfo)) as T;
+      const [updatedItem, created] = await this.model.upsert(updateInfo, { transaction: t });
+      if (created) {
+        throw new Error(`ERROR - no item has been found with the id: ${updateInfo.id}`)
+      }
+      await t.commit()
+      return updatedItem.toJSON() as T;
     } catch (error) {
       console.log('GeneralService/updateItem()/ERROR: ', error);
+      await t.rollback();
       throw error;
     }
   }
 
-  async deleteItemById(id: string): Promise<number | undefined> {
+  async updateItemById(id: string, updateFields: any): Promise<T> {
+    const updateInfo = {
+      ...updateFields,
+      id: id
+    };
     try {
-      return await this.Model.deleteItemById(id);
+      return this.updateItem(updateInfo);
+    } catch (error) {
+      console.log('GeneralService/updateItemById()/ERROR: ', error);
+      throw error;
+    }
+  }
+
+  async deleteItemById(id: string): Promise<number> {
+    const t = await sequelize.transaction();
+    try {
+      const numberOfDeletion = await this.model.destroy({
+        where: {
+          id: id
+        },
+        transaction: t
+      });
+      if (numberOfDeletion === 0) {
+        throw new Error(`ERROR - no item has been found with the id: ${id}`);
+      } else if (numberOfDeletion > 1) {
+        throw new Error(`ERROR - database error, multiple items have been found with the id: ${id}`);
+      } else {
+        await t.commit();
+        return numberOfDeletion;
+      }
     } catch (error) {
       console.log('GeneralService/updateItem()/ERROR: ', error);
+      await t.rollback();
       throw error;
     }
   }

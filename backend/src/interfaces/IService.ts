@@ -1,4 +1,6 @@
-export interface IService {
+import IAll from "./IAll";
+
+export interface IService extends IAll{
   id: string;
   service_code: string;
   name: string;
