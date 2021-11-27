@@ -12,10 +12,11 @@ router.get('/', (req, res, next) => {
   serviceService
     .getAllItems()
     .then((data) => {
-      res.send(data);
+      res.status(200).send(data);
     })
     .catch((error) => {
       console.error('ERROR - /service/(GET)/error: ', error);
+      res.status(400).send(error);
     });
 });
 
@@ -26,10 +27,11 @@ router.get('/:id', (req, res, next) => {
   serviceService
     .getItemById(id)
     .then((data) => {
-      res.send(data);
+      res.status(200).send(data);
     })
     .catch((error) => {
       console.error('ERROR - /service/:id/(GET)/error: ', error);
+      res.status(400).send(error);
     });
 });
 
@@ -38,10 +40,11 @@ router.post('/', (req, res, next) => {
   serviceService
     .createItem(body)
     .then((data) => {
-      res.send(data);
+      res.status(200).send(data);
     })
     .catch((error) => {
       console.error('ERROR - /service/(POST)/error: ', error);
+      res.status(400).send(error);
     });
 });
 
@@ -50,10 +53,11 @@ router.put('/', (req, res, next) => {
   serviceService
     .updateItem(body)
     .then((data) => {
-      res.send(data);
+      res.status(200).send(data);
     })
     .catch((error) => {
       console.error('ERROR - /service/(PUT)/error: ', error);
+      res.status(400).send(error);
     });
 });
 
@@ -63,10 +67,11 @@ router.delete('/:id', (req, res, next) => {
   serviceService
     .hideItemById(id)
     .then((data) => {
-      res.send(data);
+      res.status(200).send(data);
     })
     .catch((error) => {
       console.error('ERROR - /service/(DELETE)/error: ', error);
+      res.status(400).send(error);
     });
 });
 
@@ -76,10 +81,11 @@ router.put('/block/:id', (req, res, next) => {
   serviceService
     .blockItemById(id)
     .then((data) => {
-      res.send(data);
+      res.status(200).send(data);
     })
     .catch((error) => {
       console.error('ERROR - /service/block/:id/(PUT)/error: ', error);
+      res.status(400).send(error);
     });
 });
 
@@ -89,10 +95,11 @@ router.put('/unblock/:id', (req, res, next) => {
   serviceService
     .unblockItemById(id)
     .then((data) => {
-      res.send(data);
+      res.status(200).send(data);
     })
     .catch((error) => {
       console.error('ERROR - /service/unblock/:id/(PUT)/error: ', error);
+      res.status(400).send(error);
     });
 });
 

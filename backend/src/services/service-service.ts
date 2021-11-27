@@ -11,6 +11,7 @@ class ServiceService extends GeneralService<IService, IServiceDto> {
       return updatedService ? (updatedService as IService) : undefined;
     } catch (error) {
       console.log('ServiceService/hideItemById()/ERROR: ', error);
+      throw error;
     }
   }
 
@@ -23,6 +24,7 @@ class ServiceService extends GeneralService<IService, IServiceDto> {
       return updatedItem ? (updatedItem as IService) : undefined;
     } catch (error) {
       console.log('ServiceService/blockItemById()/ERROR: ', error);
+      throw error;
     }
   }
 
@@ -35,6 +37,7 @@ class ServiceService extends GeneralService<IService, IServiceDto> {
       return updatedItem ? (updatedItem as IService) : undefined;
     } catch (error) {
       console.log('ServiceService/unblockItemById()/ERROR: ', error);
+      throw error;
     }
   }
 }

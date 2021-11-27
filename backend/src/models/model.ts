@@ -6,6 +6,7 @@ export default class GeneralModel extends Model {
       return await this.create(itemInfo);
     } catch (error) {
       console.log('GeneralModel/createItem()/ERROR: ', error);
+      throw error;
     }
   }
 
@@ -14,6 +15,7 @@ export default class GeneralModel extends Model {
       return await this.findAll({ raw: true });
     } catch (error) {
       console.log('GeneralModel/getAllItems()/ERROR: ', error);
+      throw error;
     }
   }
 
@@ -22,6 +24,7 @@ export default class GeneralModel extends Model {
       return await this.findByPk(id, { raw: true });
     } catch (error) {
       console.log('GeneralModel/getItemById()/ERROR: ', error);
+      throw error;
     }
   }
 
@@ -37,6 +40,7 @@ export default class GeneralModel extends Model {
       return this.findByPk(id, { raw: true });
     } catch (error) {
       console.log('GeneralModel/getItemById()/ERROR: ', error);
+      throw error;
     }
   }
 
@@ -58,6 +62,7 @@ export default class GeneralModel extends Model {
       }
     } catch (error) {
       console.log('GeneralModel/deleteItemById()/ERROR: ', error);
+      throw error;
     }
   }
 }

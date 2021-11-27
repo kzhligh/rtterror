@@ -18,6 +18,7 @@ export default class ServiceModel extends GeneralModel {
       return allItems.length > 0 ? result : undefined;
     } catch (error) {
       console.error('ServiceClass/getAllItems()/ERROR: ', error);
+      throw error;
     }
   }
 }
