@@ -75,7 +75,7 @@ export default class GeneralService<T extends IAll, TDto> {
     }
   }
 
-  async deleteItemById(id: string): Promise<number> {
+  async deleteItemById(id: string): Promise<void> {
     const t = await sequelize.transaction();
     try {
       const numberOfDeletion = await this.model.destroy({
@@ -90,7 +90,6 @@ export default class GeneralService<T extends IAll, TDto> {
         throw new Error(`ERROR - database error, multiple items have been found with the id: ${id}`);
       } else {
         await t.commit();
-        return numberOfDeletion;
       }
     } catch (error) {
       console.log('GeneralService/updateItem()/ERROR: ', error);

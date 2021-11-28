@@ -54,5 +54,6 @@ ServiceModel.init(
     sequelize,
     timestamps: true,
     tableName: 'service',
+      modelName: 'service'
   }
 );

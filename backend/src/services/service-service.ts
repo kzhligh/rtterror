@@ -21,4 +21,4 @@ class ServiceService extends GeneralService<IService, IServiceDto> {
     }
 }
 
-export default new ServiceService('ServiceModel');
+export default new ServiceService('service');
