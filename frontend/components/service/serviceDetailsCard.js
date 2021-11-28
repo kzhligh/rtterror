@@ -21,7 +21,7 @@ import AddIcon from "@mui/icons-material/Add";
 
 // add selected , add teh chcek employee list to the service employeelist
 const ServiceDetailsCard = (props) => {
-  const {item, serviceEmployeeList, employeeList} = props;
+  const {item, serviceEmployeeList, employeeList , editHandle} = props;
   const [addEmployeeCheckList, setAddEmployeeCheckList] = useState([]);
   const [deleteEmployeeCheckList, setDeleteEmployeeCheckList] = useState([]);
   const [serviceEmployeeDialog, setServiceEmployeeDialog] = useState(false);
@@ -73,8 +73,17 @@ const ServiceDetailsCard = (props) => {
     setDeleteEmployeeCheckList([]);
   }
   const handleSaveService = ()=>{
-    // get the data
-    // send to backend
+    let data = {
+      "serviceCode":barcode,
+      "name": "service 1",
+      "description": description,
+      "treatment_type": "type 1",
+      "duration":60*3600000,
+      "price": 120,
+      "barcode":barcode,
+      "sms_description": "sms description 1"
+    }
+    editHandle(data, item.id)
   }
 
   const handleAddDurationPrice = ()=>{

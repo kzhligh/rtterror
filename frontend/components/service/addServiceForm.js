@@ -41,16 +41,6 @@ const AddServiceForm = (props) => {
         "barcode":barcode,
         "sms_description": 'sms description 1'
       }
-      // let data = {
-      //   serviceCode: barcode,
-      //   name: 'service ' + barcode,
-      //   description: description,
-      //   treatment_type: 'type 1',
-      //   duration: duration,
-      //   price: price,
-      //   barcode: barcode,
-      //   sms_description: 'sms description 1',
-      // };
       addHandle(data);
     }
   };
