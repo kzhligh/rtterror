@@ -149,7 +149,7 @@ const ComboForm =(props)=>{
             for(let serviceItem of serviceCheckList){
                 // console.log(serviceItem)
                 name += serviceItem.barcode + " + ";
-                price +=serviceItem.price;
+                price +=serviceItem.price *1;
                 duration +=serviceItem.duration;
             }
             setComboName(name.slice(0, -2)); // remove the last +

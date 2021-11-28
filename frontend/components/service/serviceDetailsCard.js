@@ -5,17 +5,12 @@ import {
 import styled from '../../styles/service.module.css';
 import Button from '@mui/material/Button';
 import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import Box from '@mui/material/Box';
 import {useEffect, useState} from 'react';
-import Paper from '@mui/material/Paper';
-import { useRouter } from 'next/router';
 import ServiceEmployeeTable from "./serviceEmployeeTable";
-import SearchInput from "./search";
 import TextField from "@mui/material/TextField";
 import ServiceEmployeeDialog from "./serviceEmployeeDialog";
-import EditIcon from '@mui/icons-material/Edit';
 import DurationPrice from "./durationPrice";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
@@ -33,9 +28,12 @@ const ServiceDetailsCard = (props) => {
   const [remainEmployeeList, setRemainEmployeeList] = useState([]);
   const [serviceEmployList, setServiceEmployList] = useState(serviceEmployeeList);
   const [descriptionDisable, setDescriptionDisable] = useState(true);
-  const [durationPriceList, setDurationPriceList] = useState([{price:0, duration:0.5}]);
+  const [durationPriceList, setDurationPriceList] = useState([{price:item.price, duration:item.duration/3600000}]);
   const [reload, setReload] = useState(false);
   useEffect(()=>{},[ durationPriceList ,reload]);
+  const [name, setName] = useState('');
+  const [barcode, setBarcode] = useState(item.barcode);
+  const [description, setDescription] = useState(item.description);
 
   const handleAddEmployeeCheck = (val, employee) => {
     if (val) {
@@ -84,14 +82,29 @@ const ServiceDetailsCard = (props) => {
   };
   const handleRemoveDurationPrice =(index)=>{
     setDurationPriceList([...durationPriceList.slice(0, index),...durationPriceList.slice(index+1)])
-  }
+  };
+
+  const handleSetValue = (e) => {
+    let label = e.target.id;
+    let value = e.target.value;
+    switch (label) {
+      case 'name':
+        setName(value);
+        break;
+      case 'code':
+        setBarcode(value);
+        break;
+      case 'description':
+        setDescription(value);
+        break;
+    }
+  };
+  console.log(item);
   return (
       <Box>
         <Card>
 
           <CardContent>
-            search
-            {/*<SearchInput handleSearch={} />*/}
             <h1>Service name</h1>
             <Grid
                 container
@@ -103,8 +116,8 @@ const ServiceDetailsCard = (props) => {
               <TextField
                   id="comboName"
                   required
-                  // value={comboName}
-                  // onChange={(event) => handleSetValue(event)}
+                  value={barcode}
+                  onChange={(event) => handleSetValue(event)}
               />
             </Grid>
             <Grid
@@ -113,17 +126,14 @@ const ServiceDetailsCard = (props) => {
                 justifyContent="flex-start"
                 alignItems="center"
             >
-              {descriptionDisable?<Typography>
-                Descriptipn
-              </Typography>:<TextField
+              <TextField
                   fullWidth
                   id="description"
                   multiline
                   rows={4}
-                  // value={comboName}
-                  // onChange={(event) => handleSetValue(event)}
-              />}
-              <EditIcon  onClick={()=>setDescriptionDisable(!descriptionDisable)}/>
+                  value={description}
+                  onChange={(event) => handleSetValue(event)}
+              />
             </Grid>
             <Divider />
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -146,7 +156,7 @@ const ServiceDetailsCard = (props) => {
                     justifyContent="center"
                     alignItems="center"
                 >
-                  <Grid item={3}>
+                  <Grid item xs={3}>
                     <IconButton onClick={handleAddDurationPrice}>
                       <AddIcon/>
                     </IconButton>

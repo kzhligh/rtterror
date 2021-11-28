@@ -31,16 +31,26 @@ const AddServiceForm = (props) => {
 
   const processAddService = () => {
     if (validationInput()) {
-      let data = {
-        serviceCode: barcode,
-        name: 'service ' + barcode,
-        description: description,
-        treatment_type: 'type 1',
-        duration: duration,
-        price: price,
-        barcode: barcode,
-        sms_description: 'sms description 1',
-      };
+      let data ={
+        "service_code":barcode,
+        "name": 'service ' + barcode,
+        "description": description,
+        "treatment_type": 'type 1',
+        "duration":3600000,
+        "price": 120,
+        "barcode":barcode,
+        "sms_description": 'sms description 1'
+      }
+      // let data = {
+      //   serviceCode: barcode,
+      //   name: 'service ' + barcode,
+      //   description: description,
+      //   treatment_type: 'type 1',
+      //   duration: duration,
+      //   price: price,
+      //   barcode: barcode,
+      //   sms_description: 'sms description 1',
+      // };
       addHandle(data);
     }
   };
@@ -69,14 +79,11 @@ const AddServiceForm = (props) => {
       case 'description':
         setDescription(value);
         break;
-      case 'price':
-        setPrice(value);
-        break;
     }
   };
 
   const validationInput = () => {
-    if (name == '' || barcode == '' || price <= 0) {
+    if (name == '' || barcode == '' ) {
       return false;
     }
     return true;

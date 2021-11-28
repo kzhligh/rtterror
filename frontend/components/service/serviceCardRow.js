@@ -17,7 +17,7 @@ import {useState} from "react";
 import ComboForm from "./comboForm";
 import Box from "@mui/material/Box";
 const ConfirmDelete = (props) => {
-  const {open, setOpen, item , step ,setStep} =props;
+  const {open, setOpen, item , step ,setStep , deleteService} =props;
   // const handleClickOpen = () => {
   //   setOpen(true);
   // };
@@ -31,7 +31,7 @@ const ConfirmDelete = (props) => {
     }
     else{
       // delete
-      // deleteService(item)
+      deleteService(item)
     }
   }
   return (
@@ -183,6 +183,7 @@ const ServiceCardRow = (props) => {
           item={item}
           step={step}
           setStep={setStep}
+          deleteService={deleteService}
       />
       {isCombo()?<ComboForm
           openDialog={editComboDialog}
