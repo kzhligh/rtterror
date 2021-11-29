@@ -3,6 +3,7 @@
 
 # backend
 backend/.env
+backend/dist/
 
 # project
 **/node_modules/

@@ -2,11 +2,12 @@
   "name": "rtterror-backend",
   "version": "1.0.0",
   "description": "nodejs+expressjs backend",
-  "main": "app.js",
+  "main": "./src/server.ts",
   "scripts": {
     "test": "jest --watchAll",
     "coverage": "jest --coverage",
-    "start": "nodemon app.js"
+    "build": "tsc",
+    "start": "ts-node-dev --respawn --transpile-only ./src/server.ts"
   },
   "repository": {
     "type": "git",
@@ -15,6 +16,11 @@
   "author": "rtterror",
   "license": "MIT",
   "dependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "@types/cors": "^2.8.12",
+    "@types/jest": "^27.0.3",
+    "babel-jest": "^27.3.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
@@ -22,9 +28,14 @@
     "sequelize": "^6.7.0"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.16.0",
+    "@types/express": "^4.17.13",
+    "@types/validator": "^13.7.0",
     "jest": "^27.3.1",
     "nodemon": "^2.0.13",
-    "supertest": "^6.1.6"
+    "supertest": "^6.1.6",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.5.2"
   },
   "jest": {
     "testEnvironment": "node",

@@ -1,13 +1,13 @@
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 
 const envFile = dotenv.config();
 if (envFile.error) {
-  throw new Error('ERROR - .env file is not found');
+  throw new Error('ERROR - .env file not found');
 }
 
 const config = {
-  port: parseInt(process.env.PORT) || 5000,
-  databases: {
+  port: parseInt(process.env.PORT ? process.env.PORT : '5000'),
+  database: {
     mysql: {
       host: process.env.MYSQL_HOST || 'localhost',
       port: process.env.MYSQL_PORT || '3306',
@@ -18,4 +18,4 @@ const config = {
   },
 };
 
-module.exports = config;
+export default config;
