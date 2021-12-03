@@ -5,6 +5,8 @@
 .sideBar {
   display: flex;
   flex-direction: column;
+
+  background: #c5c5c5;
 }
 
 .menuList {
@@ -30,10 +32,4 @@
 
 .contentWrapper {
   padding-left: 10px;
-}
-
-.calender {
-  width: 350px;
-  display: flex;
-  background-color: #888888;
 }
