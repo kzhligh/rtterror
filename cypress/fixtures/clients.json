@@ -1,0 +1,18 @@
+[
+  {
+    "firstName": "Amy",
+    "lastName": "Zhang",
+    "email": "amy.zhang@explorance.io",
+    "gender": "F",
+    "address": "4310 Boulevard Cléroux",
+    "phone": "5142385468"
+  },
+  {
+    "firstName": "Zed",
+    "lastName": "Applehouse",
+    "email": "zed.applehouse@solaris.com",
+    "gender": "M",
+    "address": "999 De Maisonneuve W.",
+    "phone": "4382305518"
+  }
+]

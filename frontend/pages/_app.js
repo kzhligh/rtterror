@@ -1,11 +1,15 @@
 import '../styles/globals.css';
 import Layout from '../components/Layout';
+import { LocalizationProvider } from '@mui/lab';
+import DateAdapter from '@mui/lab/AdapterDateFns';
 
 function MyApp({ Component, pageProps }) {
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <LocalizationProvider dateAdapter={DateAdapter}>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </LocalizationProvider>
   );
 }
 

@@ -53,12 +53,17 @@ const CustomDrawer = () => {
   return (
     <List>
       {menuItems.map((item) => (
-        <ListItem button key={item.text} className={styled.drawerWrapper}>
-          <ListItemIcon>{item.icon}</ListItemIcon>
-          <Link href={item.path}>
+        <Link href={item.path}>
+          <ListItem
+            button
+            key={item.text}
+            data-cy={`${item.text}Route`}
+            className={styled.drawerWrapper}
+          >
+            <ListItemIcon>{item.icon}</ListItemIcon>
             <a>{item.text}</a>
-          </Link>
-        </ListItem>
+          </ListItem>
+        </Link>
       ))}
     </List>
   );
