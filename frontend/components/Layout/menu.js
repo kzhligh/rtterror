@@ -1,7 +1,7 @@
-import { List, ListItem, ListItemIcon } from '@mui/material';
-import styled from '../../styles/layout.module.css';
-import Link from 'next/link';
 import * as React from 'react';
+import { List, ListItem, ListItemIcon } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Link from 'next/link';
 import {
   AccessTime,
   AccountCircle,
@@ -11,6 +11,38 @@ import {
   Receipt,
   Work,
 } from '@mui/icons-material';
+
+
+const theme = createTheme({
+  components: {
+    MuiList: {
+      styleOverrides: {
+        root: {
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+
+          background: '#c5c5c5',
+        },
+      },
+    },
+    MuiListItem: {
+      styleOverrides: {
+        root: {
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          paddingLeft: '25%',
+
+          fontFamily: 'Montserrat, sans-serif',
+          fontWeight: 500,
+          fontSize: 16,
+        }
+      }
+    }
+  }
+});
 
 const MenuList = () => {
   const menuItems = [
@@ -50,17 +82,16 @@ const MenuList = () => {
       path: '/invoice',
     },
   ];
-  return (
-    <List className={styled.menuList}>
-      {menuItems.map((item) => (
-        <ListItem button key={item.text} className={styled.menuItem}>
-          <ListItemIcon>{item.icon}</ListItemIcon>
-          <Link href={item.path}>
-            <a>{item.text}</a>
-          </Link>
-        </ListItem>
-      ))}
-    </List>
+  return (<ThemeProvider theme={theme}><List>
+    {menuItems.map((item) => (
+      <ListItem button key={item.text}>
+        <ListItemIcon>{item.icon}</ListItemIcon>
+        <Link href={item.path}>
+          <a>{item.text}</a>
+        </Link>
+      </ListItem>
+    ))}
+  </List></ThemeProvider>
   );
 };
 export default MenuList;

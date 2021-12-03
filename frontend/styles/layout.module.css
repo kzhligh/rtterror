@@ -9,23 +9,6 @@
   background: #c5c5c5;
 }
 
-.menuList {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 0px 20px;
-
-  background: #c5c5c5;
-}
-
-.menuItem {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding-left: 25%;
-}
-
 .content {
   width: 100%;
 }
