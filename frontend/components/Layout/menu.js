@@ -12,7 +12,6 @@ import {
   Work,
 } from '@mui/icons-material';
 
-
 const theme = createTheme({
   components: {
     MuiList: {
@@ -39,8 +38,8 @@ const theme = createTheme({
           fontFamily: 'Montserrat, sans-serif',
           fontWeight: 500,
           fontSize: 18,
-        }
-      }
+        },
+      },
     },
     MuiListItemIcon: {
       styleOverrides: {
@@ -49,7 +48,7 @@ const theme = createTheme({
         },
       },
     },
-  }
+  },
 });
 
 const MenuList = () => {
@@ -90,16 +89,19 @@ const MenuList = () => {
       path: '/invoice',
     },
   ];
-  return (<ThemeProvider theme={theme}><List>
-    {menuItems.map((item) => (
-      <ListItem button key={item.text}>
-        <ListItemIcon>{item.icon}</ListItemIcon>
-        <Link href={item.path}>
-          <a>{item.text}</a>
-        </Link>
-      </ListItem>
-    ))}
-  </List></ThemeProvider>
+  return (
+    <ThemeProvider theme={theme}>
+      <List>
+        {menuItems.map((item) => (
+          <ListItem button key={item.text}>
+            <ListItemIcon>{item.icon}</ListItemIcon>
+            <Link href={item.path}>
+              <a>{item.text}</a>
+            </Link>
+          </ListItem>
+        ))}
+      </List>
+    </ThemeProvider>
   );
 };
 export default MenuList;

@@ -26,7 +26,7 @@ const theme = createTheme({
           color: 'white',
           ':hover': {
             backgroundColor: 'rgba(255,255,255,0.4)',
-          }
+          },
         },
       },
     },
@@ -36,8 +36,8 @@ const theme = createTheme({
           fontWeight: 'bold',
           color: 'rgba(255,255,255,1)',
           caption: {
-            color: 'rgba(255,255,255,1)'
-          }
+            color: 'rgba(255,255,255,1)',
+          },
         },
       },
     },
@@ -47,18 +47,18 @@ const theme = createTheme({
           color: 'white',
           background: '#888888',
           fontSize: 14,
-          "&.Mui-selected": {
+          '&.Mui-selected': {
             fontWeight: 'bold',
             color: 'black',
             background: '#E8E8E8',
             ':hover': {
               backgroundColor: 'rgba(255,255,255,0.4)',
-            }
+            },
           },
           ':hover': {
             color: 'black',
             backgroundColor: 'rgba(255,255,255,0.4)',
-          }
+          },
         },
       },
     },
@@ -68,17 +68,20 @@ const theme = createTheme({
 const Calendar = () => {
   const [date, setDate] = React.useState(new Date());
 
-  return (<ThemeProvider theme={theme}><LocalizationProvider dateAdapter={AdapterDateFns}>
-    <StaticDatePicker
-      displayStaticWrapperAs="desktop"
-      // openTo="year"
-      value={date}
-      onChange={(newDate) => {
-        setDate(newDate);
-      }}
-      renderInput={(params) => <TextField {...params} />}
-    />
-  </LocalizationProvider></ThemeProvider>
+  return (
+    <ThemeProvider theme={theme}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <StaticDatePicker
+          displayStaticWrapperAs="desktop"
+          // openTo="year"
+          value={date}
+          onChange={(newDate) => {
+            setDate(newDate);
+          }}
+          renderInput={(params) => <TextField {...params} />}
+        />
+      </LocalizationProvider>
+    </ThemeProvider>
   );
 };
 export default Calendar;

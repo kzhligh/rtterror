@@ -6,11 +6,10 @@ import Calendar from './calendar';
 import { Divider } from '@mui/material';
 import * as React from 'react';
 
-
 const globalTheme = createTheme({
   typography: {
     fontFamily: 'Montserrat, sans-serif',
-  }
+  },
 });
 
 const Layout = ({ children }) => {
