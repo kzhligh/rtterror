@@ -34,13 +34,21 @@ const theme = createTheme({
           flexDirection: 'row',
           alignItems: 'center',
           paddingLeft: '25%',
+          marginBottom: '15px',
 
           fontFamily: 'Montserrat, sans-serif',
           fontWeight: 500,
-          fontSize: 16,
+          fontSize: 18,
         }
       }
-    }
+    },
+    MuiListItemIcon: {
+      styleOverrides: {
+        root: {
+          minWidth: '35px',
+        },
+      },
+    },
   }
 });
 
