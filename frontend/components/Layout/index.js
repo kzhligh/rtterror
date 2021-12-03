@@ -1,5 +1,5 @@
 import PrimarySearchAppBar from './appbar';
-import CustomDrawer from './drawer';
+import MenuList from './menu';
 import styled from '../../styles/layout.module.css';
 import StaticDatePickerDemo from './calender';
 import { Divider } from '@mui/material';
@@ -11,7 +11,7 @@ const Layout = ({ children }) => {
       <div className={styled.sideBar}>
         <StaticDatePickerDemo />
         <Divider />
-        <CustomDrawer />
+        <MenuList />
       </div>
       <div className={styled.content}>
         <PrimarySearchAppBar />

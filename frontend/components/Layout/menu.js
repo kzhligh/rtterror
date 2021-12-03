@@ -12,7 +12,7 @@ import {
   Work,
 } from '@mui/icons-material';
 
-const CustomDrawer = () => {
+const MenuList = () => {
   const menuItems = [
     {
       text: 'Appointment',
@@ -51,9 +51,9 @@ const CustomDrawer = () => {
     },
   ];
   return (
-    <List>
+    <List className={styled.menuList}>
       {menuItems.map((item) => (
-        <ListItem button key={item.text} className={styled.drawerWrapper}>
+        <ListItem button key={item.text} className={styled.menuItem}>
           <ListItemIcon>{item.icon}</ListItemIcon>
           <Link href={item.path}>
             <a>{item.text}</a>
@@ -63,4 +63,4 @@ const CustomDrawer = () => {
     </List>
   );
 };
-export default CustomDrawer;
+export default MenuList;
