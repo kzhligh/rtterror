@@ -1,9 +1,8 @@
-import sequelize from "../modules/sequelize";
-import { Model } from "sequelize";
-import IAll from "../interfaces/IAll";
+import sequelize from '../modules/sequelize';
+import { Model } from 'sequelize';
+import IAll from '../interfaces/IAll';
 
 export default class GeneralService<T extends IAll, TDto> {
-
   public model: any;
 
   constructor(modelName: string) {
@@ -24,7 +23,7 @@ export default class GeneralService<T extends IAll, TDto> {
   }
 
   async getAllItems(): Promise<T[]> {
-    console.log('GeneralService/getAllItems()')
+    console.log('GeneralService/getAllItems()');
     try {
       const allItems = await this.model.findAll();
       const jsonItems = allItems.map((item: Model) => {
@@ -49,11 +48,15 @@ export default class GeneralService<T extends IAll, TDto> {
   async updateItem(updateInfo: T): Promise<T> {
     const t = await sequelize.transaction();
     try {
-      const [updatedItem, created] = await this.model.upsert(updateInfo, { transaction: t });
+      const [updatedItem, created] = await this.model.upsert(updateInfo, {
+        transaction: t,
+      });
       if (created) {
-        throw new Error(`ERROR - no item has been found with the id: ${updateInfo.id}`)
+        throw new Error(
+          `ERROR - no item has been found with the id: ${updateInfo.id}`
+        );
       }
-      await t.commit()
+      await t.commit();
       return updatedItem.toJSON() as T;
     } catch (error) {
       console.log('GeneralService/updateItem()/ERROR: ', error);
@@ -65,7 +68,7 @@ export default class GeneralService<T extends IAll, TDto> {
   async updateItemById(id: string, updateFields: any): Promise<T> {
     const updateInfo = {
       ...updateFields,
-      id: id
+      id: id,
     };
     try {
       return this.updateItem(updateInfo);
@@ -80,14 +83,16 @@ export default class GeneralService<T extends IAll, TDto> {
     try {
       const numberOfDeletion = await this.model.destroy({
         where: {
-          id: id
+          id: id,
         },
-        transaction: t
+        transaction: t,
       });
       if (numberOfDeletion === 0) {
         throw new Error(`ERROR - no item has been found with the id: ${id}`);
       } else if (numberOfDeletion > 1) {
-        throw new Error(`ERROR - database error, multiple items have been found with the id: ${id}`);
+        throw new Error(
+          `ERROR - database error, multiple items have been found with the id: ${id}`
+        );
       } else {
         await t.commit();
       }

@@ -9,7 +9,7 @@ router.use(function (req, res, next) {
 });
 
 router.get('/', (req, res, next) => {
-  console.log('route/service')
+  console.log('route/service');
   serviceService
     .getAllValidItems()
     .then((data) => {

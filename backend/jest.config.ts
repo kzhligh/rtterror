@@ -20,21 +20,16 @@ export default {
   collectCoverage: true,
 
   // An array of glob patterns indicating a set of files for which coverage information should be collected
-  collectCoverageFrom: [
-    "**/src/**/*.{ts,tsx}",
-  ],
+  collectCoverageFrom: ['**/src/**/*.{ts,tsx}'],
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: "coverage",
+  coverageDirectory: 'coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
-  coveragePathIgnorePatterns: [
-    "/node_modules/",
-    "/dist/"
-  ],
+  coveragePathIgnorePatterns: ['/node_modules/', '/dist/'],
 
   // Indicates which provider should be used to instrument code for coverage
-  coverageProvider: "v8",
+  coverageProvider: 'v8',
 
   // A list of reporter names that Jest uses when writing coverage reports
   // coverageReporters: [
@@ -46,9 +41,9 @@ export default {
 
   // An object that configures minimum threshold enforcement for coverage results
   coverageThreshold: {
-    "./src/": {
-      "branches": 80,
-      "statements": 80,
+    './src/': {
+      branches: 80,
+      statements: 80,
     },
   },
 
@@ -80,12 +75,12 @@ export default {
 
   // An array of file extensions your modules use
   moduleFileExtensions: [
-    "js",
-    "jsx",
-    "ts",
-    "tsx",
-  //   "json",
-  //   "node"
+    'js',
+    'jsx',
+    'ts',
+    'tsx',
+    //   "json",
+    //   "node"
   ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module

@@ -1,8 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../modules/sequelize';
 
-export default class ServiceModel extends Model{
-}
+export default class ServiceModel extends Model {}
 
 ServiceModel.init(
   {
@@ -54,6 +53,6 @@ ServiceModel.init(
     sequelize,
     timestamps: true,
     tableName: 'service',
-      modelName: 'service'
+    modelName: 'service',
   }
 );
