@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 
 const mSequelize = {};
 
-jest.mock('../modules/sequelize', () => {
+jest.mock('../../modules/sequelize', () => {
   return mSequelize;
 });
 
@@ -12,7 +12,7 @@ const modelStaticMethodMocks = {
 
 jest.doMock('sequelize', () => {
   class MockModel {
-    public static init(attributes: any, options: any) {
+    public static init (attributes: any, options: any) {
       modelStaticMethodMocks.init(attributes, options);
     }
   }
@@ -24,7 +24,7 @@ jest.doMock('sequelize', () => {
 
 describe('Service Model', () => {
   it('should setup the service table', async () => {
-    await import('../models/service');
+    await import('../service');
     expect(modelStaticMethodMocks.init).toBeCalledWith(
       {
         id: {
