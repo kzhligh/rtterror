@@ -1,4 +1,4 @@
-const CustomerDAO = require('./customer');
+7const CustomerDAO = require('./customer');
 const { Customer } = require('../models/customer');
 const { sequelize } = require('../modules/sequelize');
 const { Op } = require('sequelize');

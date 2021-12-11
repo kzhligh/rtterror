@@ -1,7 +1,7 @@
-const { sequelize } = require('../modules/sequelize');
-const { DataTypes } = require('sequelize');
+import sequelize from 'src/modules/sequelize';
+import { DataTypes } from 'sequelize';
 
-const Appointment = sequelize.define(
+export const Appointment = sequelize.define(
   'appointments',
   {
     id: {
@@ -29,7 +29,7 @@ const Appointment = sequelize.define(
       type: DataTypes.STRING,
     },
     status: {
-      type: DataTypes.ENUM(['COMPLETED', 'CANCELLED', 'NO_SHOW']),
+      type: DataTypes.ENUM<string>('COMPLETED', 'CANCELLED', 'NO_SHOW'),
     },
     cancellationTime: {
       type: DataTypes.DATE,
@@ -43,7 +43,3 @@ const Appointment = sequelize.define(
     timestamps: false,
   }
 );
-
-module.exports = {
-  Appointment,
-};

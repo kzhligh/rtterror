@@ -1,8 +1,8 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../modules/sequelize.js');
-const { Appointment } = require('./appointment.js');
+import { DataTypes } from 'sequelize';
+import sequelize from 'src/modules/sequelize';
+import { Appointment } from './appointment.model';
 
-const Customer = sequelize.define(
+export const Customer = sequelize.define(
   'customers',
   {
     id: {
@@ -24,7 +24,7 @@ const Customer = sequelize.define(
       type: DataTypes.DATEONLY,
     },
     gender: {
-      type: DataTypes.ENUM(['M', 'F', 'N/A']),
+      type: DataTypes.ENUM<string>('M', 'F', 'N/A'),
     },
     address: {
       type: DataTypes.STRING,
@@ -36,7 +36,7 @@ const Customer = sequelize.define(
       type: DataTypes.STRING,
     },
     confirmationType: {
-      type: DataTypes.ENUM(['SMS', 'email']),
+      type: DataTypes.ENUM<string>('SMS', 'email'),
     },
   },
   {
@@ -47,5 +47,3 @@ const Customer = sequelize.define(
 
 Customer?.hasMany(Appointment);
 Appointment?.belongsTo(Customer);
-
-module.exports = { Customer };

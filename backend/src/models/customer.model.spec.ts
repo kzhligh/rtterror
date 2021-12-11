@@ -1,8 +1,9 @@
-const { sequelize } = require('../modules/sequelize');
-const { DataTypes } = require('sequelize');
+import { DataTypes } from 'sequelize/types';
+import sequelize from 'src/modules/sequelize';
+
 require('./customer');
 
-jest.mock('../modules/sequelize');
+jest.mock('src/modules/sequelize');
 
 describe('Customer Model', () => {
   it('should setup the customer table', async () => {
@@ -28,7 +29,7 @@ describe('Customer Model', () => {
           type: DataTypes.DATEONLY,
         },
         gender: {
-          type: DataTypes.ENUM(['M', 'F', 'N/A']),
+          type: DataTypes.ENUM<string>('M', 'F', 'N/A'),
         },
         address: {
           type: DataTypes.STRING,
@@ -40,7 +41,7 @@ describe('Customer Model', () => {
           type: DataTypes.STRING,
         },
         confirmationType: {
-          type: DataTypes.ENUM(['SMS', 'email']),
+          type: DataTypes.ENUM<string>('SMS', 'email'),
         },
       },
       {
