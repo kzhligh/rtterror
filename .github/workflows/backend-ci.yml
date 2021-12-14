@@ -34,7 +34,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build application
-        run: yarn run build --if-present
+        run: yarn build
 
   Test:
     name: Run server application unit tests
