@@ -12,7 +12,7 @@ const modelStaticMethodMocks = {
 
 jest.doMock('sequelize', () => {
   class MockModel {
-    public static init (attributes: any, options: any) {
+    public static init(attributes: any, options: any) {
       modelStaticMethodMocks.init(attributes, options);
     }
   }

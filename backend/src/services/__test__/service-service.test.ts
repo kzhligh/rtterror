@@ -9,7 +9,7 @@ jest.mock('sequelize', () => ({
 jest.mock('../../modules/sequelize', () => ({
   Sequelize: jest.fn(),
   model: jest.fn(() => ({
-      findAll: jest.fn(() => Promise.resolve([])),
+    findAll: jest.fn(() => Promise.resolve([])),
   })),
   authenticate: jest.fn(() => {
     return Promise.resolve('value');
