@@ -21,6 +21,6 @@ const getAllValidItems = jest.spyOn(serviceService, 'getAllValidItems');
 describe('Services for Service Module', () => {
   it.only('should get all valid items as json', async () => {
     serviceService.getAllValidItems();
-    expect(getAllValidItems).toReturnWith(Promise.resolve({}));
+    expect(getAllValidItems).toHaveReturnedWith(Promise.resolve({}));
   });
 });
