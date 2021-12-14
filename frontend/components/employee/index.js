@@ -11,6 +11,8 @@ import {useState} from "react";
 import NewEmployeeDialog from "./newEmployee";
 import {Rowing} from "@mui/icons-material";
 import styled from '../../styles/employee.module.css';
+import {useRouter} from "next/router";
+import EmployeeDetailComponent from "./details";
 
 const HeaderTable =()=>{
     return (
@@ -27,9 +29,10 @@ const HeaderTable =()=>{
         </Grid>
     );
 }
-const TableRow = ()=>{
+const TableRow = (props)=>{
+    const {setDetailOpen} = props
     return (
-        <Grid container item onClick={()=>alert('clicked')}>
+        <Grid container item onClick={()=>setDetailOpen(true)}>
             <Grid item xs={4}>
                 <div className={styled.tableRow} > test </div>
             </Grid>
@@ -45,17 +48,21 @@ const TableRow = ()=>{
 const EmployeeComponent =(props)=>{
     const {employeeList } = props;
     const [addOpen, setAddOpen]= useState(false);
+    const [detailOpen, setDetailOpen]= useState(false);
     const closeAddOpen = ()=>{
         setAddOpen(false);
     };
+    const closeDetailsDialog =()=>{
+        setDetailOpen(false);
+    }
 
     const handleSearch =()=>{
         console.log('search');
     }
 
 
-
     return (
+
         <Box>
             <SearchInput handleSearch={handleSearch} />
             <Grid
@@ -77,14 +84,7 @@ const EmployeeComponent =(props)=>{
 
             </Grid>
             <Divider />
-                {/*<Grid container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>*/}
-                {/*    {Array.from(Array(6)).map((_, index) => (*/}
-                {/*        <Grid item xs={2} sm={4} md={4} key={index}>*/}
-                {/*            Item*/}
-                {/*        </Grid>*/}
-                {/*    ))}*/}
-                {/*</Grid>*/}
-            {/*padding="160px 200px"*/}
+
             <Box padding='100px'>
 
                 <Grid
@@ -94,57 +94,18 @@ const EmployeeComponent =(props)=>{
                     alignItems="center"
                 >
                     <HeaderTable />
-                    <TableRow />
+                    <TableRow setDetailOpen={setDetailOpen}/>
 
-                    <TableRow />
-                    <TableRow />
+                    <TableRow setDetailOpen={setDetailOpen}/>
+                    <TableRow setDetailOpen={setDetailOpen}/>
 
-                    <TableRow />
+                    <TableRow setDetailOpen={setDetailOpen}/>
 
-                    {/*<Grid container item >*/}
-                    {/*    <Grid item xs={4} >*/}
-                    {/*        <div style={{backgroundColor: '#e1e1e1'}} > test </div>*/}
-                    {/*    </Grid>*/}
-                    {/*    <Grid item xs={4} >*/}
-                    {/*        <div style={{backgroundColor: '#e1e1e1'}} > test </div>*/}
-                    {/*    </Grid>*/}
-                    {/*    <Grid item xs={4} >*/}
-                    {/*        <div style={{backgroundColor: '#e1e1e1'}} > test </div>*/}
-                    {/*    </Grid>*/}
-                    {/*</Grid>*/}
-                    {/*<Grid container item spacing={3}>*/}
-                    {/*    <Grid item xs={4} >*/}
-                    {/*        <div style={{backgroundColor: '#e1e1e1'}} > test </div>*/}
-                    {/*    </Grid>*/}
-                    {/*    <Grid item xs={4} >*/}
-                    {/*        <div style={{backgroundColor: '#e1e1e1'}} > test </div>*/}
-                    {/*    </Grid>*/}
-                    {/*    <Grid item xs={4} >*/}
-                    {/*        <div style={{backgroundColor: '#e1e1e1'}} > test </div>*/}
-                    {/*    </Grid>*/}
-                    {/*</Grid>*/}
                 </Grid>
             </Box>
-                {/*<Grid container style={{backgroundColor:'#e1e1e1'}}*/ }
-                {/*      direction="column"*/}
-                {/*      justifyContent="center"*/}
-                {/*      alignItems="center"*/}
-                {/*      spacing={3}*/}
-                {/*>*/}
-                {/*    <HeaderTable />*/}
-                {/*    <TableRow />*/}
-                {/*</Grid>*/}
 
-            {/*<div style={{ height: 400, width: '100%' }}>*/}
-            {/*    <DataGrid*/}
-            {/*        rows={rows}*/}
-            {/*        columns={columns}*/}
-            {/*        pageSize={5}*/}
-            {/*        rowsPerPageOptions={[5]}*/}
-            {/*        checkboxSelection*/}
-            {/*    />*/}
-            {/*</div>*/}
             <NewEmployeeDialog open={addOpen} handleClose={closeAddOpen} />
+            <EmployeeDetailComponent open={detailOpen} handleClose={closeDetailsDialog} />
         </Box>
     );
 }
