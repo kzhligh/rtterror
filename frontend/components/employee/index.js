@@ -1,18 +1,12 @@
-import ServiceComponent from "../service";
 import SearchInput from "../service/search";
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { DataGrid } from '@mui/x-data-grid';
 import {Divider, Grid} from "@mui/material";
-
-import Link from "next/link";
 import Button from "@mui/material/Button";
 import {useState} from "react";
-import NewEmployeeDialog from "./newEmployee";
-import {Rowing} from "@mui/icons-material";
 import styled from '../../styles/employee.module.css';
-import {useRouter} from "next/router";
 import EmployeeDetailComponent from "./details";
+import NewEmployeeDialog from "./newEmployeeDialog";
 
 const HeaderTable =()=>{
     return (

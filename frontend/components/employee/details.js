@@ -1,12 +1,11 @@
-import EmployeeComponent from "./index";
 import Box from "@mui/material/Box";
-import {Tabs, Tab, Dialog, DialogContent, Grid} from "@mui/material";
-import Typography from "@mui/material/Typography";
+import {Tab, Dialog, DialogContent, Grid} from "@mui/material";
 import {useState} from "react";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import * as React from "react";
+import EmployeeForm from "./employee";
 
 const EmployeeDetailComponent =(props)=>{
     const {open, handleClose} = props
@@ -33,7 +32,7 @@ const EmployeeDetailComponent =(props)=>{
                     </Box>
                     <TabPanel value="1">
                         <div style={{ height: 600, width: '100%' }}>
-
+                            <EmployeeForm />
                         </div>
                     </TabPanel>
                     <TabPanel value="2">
