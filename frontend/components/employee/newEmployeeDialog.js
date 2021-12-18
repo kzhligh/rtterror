@@ -9,7 +9,9 @@ import EmployeeForm from "./employee";
 
 const NewEmployeeDialog =(props)=>{
     const {open , handleClose} = props;
-    return (<Dialog open={open} fullWidth={true} maxWidth="lg" scroll="body">
+
+    return (
+        <Dialog open={open} fullWidth={true} maxWidth="lg" scroll="body">
         <DialogTitle>
             New Service
         </DialogTitle>

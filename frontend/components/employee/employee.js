@@ -135,6 +135,7 @@ const EmployeeForm = (props)=>{
         startdate: new Date(),
         services:[]
     };
+    const errorMessage = {}
     const handleSetEmployeeValue = (obj)=>{
         const {name, value} = obj.target;
         setEmployeeValue({...employeeValue, [name]:value});
@@ -151,6 +152,17 @@ const EmployeeForm = (props)=>{
     const checkedIcon = <CheckBoxIcon fontSize="small" />;
     const {open , handleClose} =props;
     //(date: Date)=>handleSetEmployeeValue({name:'startdate',value:new Date(event.target.value)})
+
+
+    const validate = () => {
+        let temp = {}
+        temp.firstname = employeeValue.firstname ? "" : "This field is required."
+        temp.lastname = employeeValue.lastname ? "" : "This field is required."
+        temp.email = (/$^|.+@.+..+/).test(employeeValue.lastname) ? "" : "Email is not valid."
+        temp.phone =(/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/).test(employeeValue.phone)? "" : "Invalid Phone number."
+        return Object.values(temp).every(x => x == "")
+    }
+
     return (
         <div>
             <Grid
