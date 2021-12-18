@@ -78,12 +78,12 @@
 /*  margin: 1em 0;*/
 /*}*/
 
-.flexSpaceBetween{
+.flexSpaceBetween {
   display: flex;
   justify-content: space-between;
 }
 
-.flexServiceCombo{
+.flexServiceCombo {
   display: flex;
   align-items: flex-start;
 }
