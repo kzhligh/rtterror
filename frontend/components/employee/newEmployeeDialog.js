@@ -10,26 +10,36 @@ import EmployeeForm from "./employee";
 const NewEmployeeDialog =(props)=>{
     const {open , handleClose} = props;
 
+    const initValues = {
+        id: 0,
+        firstname: '',
+        lastname: '',
+        address: '',
+        phone: '',
+        email: '',
+        gender: 'na',
+        startDate: new Date(),
+        services: []
+    };
+    const saveEmployee = (data)=>{
+        console.log(data);
+    }
+
     return (
         <Dialog open={open} fullWidth={true} maxWidth="lg" scroll="body">
         <DialogTitle>
             New Service
         </DialogTitle>
         <DialogContent>
-            <EmployeeForm />
+            <EmployeeForm
+                open={open}
+                handleClose={handleClose}
+                initValues={initValues}
+                mode='add'
+                saveEmployee={saveEmployee}
+            />
         </DialogContent>
-        <DialogActions>
-            <Grid
-                container
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-            >
 
-                <Button onClick={()=>alert('create ')}>Add New Employee</Button>
-                <Button onClick={handleClose}>Close</Button>
-            </Grid>
-        </DialogActions>
     </Dialog>
     );
 };
