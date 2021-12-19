@@ -11,10 +11,10 @@ class ServiceComboService extends GeneralService<IAll, IServiceCombo> {
           combo_id: comboId,
         },
       });
-      const serviceIds = allItems.map((item: Model) => {
+      console.log('it works!!!!');
+      return allItems.map((item: Model) => {
         return item.getDataValue('service_id');
       });
-      return serviceIds;
     } catch (error) {
       console.error(
         'ServiceComboService/getServiceIdsByComboId()/ERROR: ',
@@ -31,7 +31,7 @@ class ServiceComboService extends GeneralService<IAll, IServiceCombo> {
   ): Promise<number> {
     try {
       let numberOfDeletion = 0;
-      for (let serviceId of serviceIds) {
+      for (const serviceId of serviceIds) {
         const deletion = await this.model.destroy({
           where: {
             combo_id: comboId,
@@ -59,8 +59,8 @@ class ServiceComboService extends GeneralService<IAll, IServiceCombo> {
   ): Promise<number> {
     try {
       let numberOfAdd = 0;
-      for (let serviceId of serviceIds) {
-        let newItemInfo = {
+      for (const serviceId of serviceIds) {
+        const newItemInfo = {
           combo_id: comboId,
           service_id: serviceId,
         };

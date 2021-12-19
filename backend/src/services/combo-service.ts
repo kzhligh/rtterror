@@ -43,18 +43,16 @@ class ComboService extends GeneralService<ICombo, IComboDto> {
   }
 
   async createItem(itemInfo: IComboDto): Promise<ICombo> {
-    console.log('ComboService/createItem()');
     const t = await sequelize.transaction();
     try {
       const { service_ids, ...comboInfo } = itemInfo;
       const newCombo = await this.model.create(comboInfo, { transaction: t });
-      for (let serviceId of service_ids) {
+      for (const serviceId of service_ids) {
         let serviceItem = await this.serviceModel.findByPk(serviceId);
         await newCombo.addService(serviceItem, { transaction: t });
       }
       await t.commit();
-      const jsonCombo = await this.getItemById(newCombo.getDataValue('id'));
-      return jsonCombo;
+      return await this.getItemById(newCombo.getDataValue('id'));
     } catch (error) {
       console.error('ComboService/createItem()/ERROR: ', error);
       await t.rollback();
@@ -66,7 +64,6 @@ class ComboService extends GeneralService<ICombo, IComboDto> {
     const t = await sequelize.transaction();
     try {
       const { id, service_ids, ...comboInfo } = comboObj;
-      // update combo info
       const [numberOfUpdates] = await this.model.update(comboInfo, {
         where: {
           id: id,

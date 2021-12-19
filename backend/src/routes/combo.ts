@@ -15,7 +15,7 @@ router.get('/', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error('ERROR - /combo/(GET)/error: ', error);
+      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
@@ -29,7 +29,7 @@ router.get('/:id', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error('ERROR - /combo/:id/(GET)/error: ', error);
+      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
@@ -42,20 +42,21 @@ router.post('/', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error('ERROR - /combo/(POST)/error: ', error);
+      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
 
 router.put('/', (req, res, next) => {
   const { body } = req;
+  console.dir(body);
   comboService
     .updateItem(body)
     .then((data) => {
-      // console.log(data);
       res.status(200).send(data);
     })
     .catch((error) => {
+      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
@@ -69,11 +70,12 @@ router.delete('/:id', (req, res, next) => {
       res.sendStatus(200);
     })
     .catch((error) => {
+      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
 
-router.put('/block/:id', (req, res, next) => {
+router.put('/:id/block', (req, res, next) => {
   const { params } = req;
   const { id } = params;
   comboService
@@ -82,12 +84,12 @@ router.put('/block/:id', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error('ERROR - /service/block/:id/(PUT)/error: ', error);
+      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
 
-router.put('/unblock/:id', (req, res, next) => {
+router.put('/:id/unblock', (req, res, next) => {
   const { params } = req;
   const { id } = params;
   comboService
@@ -96,7 +98,7 @@ router.put('/unblock/:id', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error('ERROR - /service/unblock/:id/(PUT)/error: ', error);
+      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
