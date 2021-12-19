@@ -11,7 +11,6 @@ class ServiceComboService extends GeneralService<IAll, IServiceCombo> {
           combo_id: comboId,
         },
       });
-      console.log('it works!!!!');
       return allItems.map((item: Model) => {
         return item.getDataValue('service_id');
       });
