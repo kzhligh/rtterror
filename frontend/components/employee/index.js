@@ -7,6 +7,7 @@ import {useState} from "react";
 import styled from '../../styles/employee.module.css';
 import EmployeeDetailComponent from "./details";
 import NewEmployeeDialog from "./newEmployeeDialog";
+import {useRouter} from "next/router";
 
 const HeaderTable =()=>{
     return (
@@ -24,9 +25,10 @@ const HeaderTable =()=>{
     );
 }
 const TableRow = (props)=>{
-    const {setDetailOpen} = props
+    const {detailPage} = props
+
     return (
-        <Grid container item onClick={()=>setDetailOpen(true)}>
+        <Grid container item onClick={()=>detailPage(1)}>
             <Grid item xs={4}>
                 <div className={styled.tableRow} > test </div>
             </Grid>
@@ -40,14 +42,15 @@ const TableRow = (props)=>{
     );
 }
 const EmployeeComponent =(props)=>{
+    const router = useRouter();
     const {employeeList } = props;
     const [addOpen, setAddOpen]= useState(false);
-    const [detailOpen, setDetailOpen]= useState(false);
+    // const [detailOpen, setDetailOpen]= useState(false);
     const closeAddOpen = ()=>{
         setAddOpen(false);
     };
-    const closeDetailsDialog =()=>{
-        setDetailOpen(false);
+    const detailPage = (id)=>{
+        router.push('/employee/' + id).then((r) => console.log(r));
     }
 
     const handleSearch =()=>{
@@ -88,18 +91,18 @@ const EmployeeComponent =(props)=>{
                     alignItems="center"
                 >
                     <HeaderTable />
-                    <TableRow setDetailOpen={setDetailOpen}/>
+                    <TableRow detailPage={detailPage}/>
 
-                    <TableRow setDetailOpen={setDetailOpen}/>
-                    <TableRow setDetailOpen={setDetailOpen}/>
+                    <TableRow detailPage={detailPage}/>
+                    <TableRow detailPage={detailPage}/>
 
-                    <TableRow setDetailOpen={setDetailOpen}/>
+                    <TableRow detailPage={detailPage}/>
 
                 </Grid>
             </Box>
 
             <NewEmployeeDialog open={addOpen} handleClose={closeAddOpen} />
-            <EmployeeDetailComponent open={detailOpen} handleClose={closeDetailsDialog} />
+            <EmployeeDetailComponent  />
         </Box>
     );
 }

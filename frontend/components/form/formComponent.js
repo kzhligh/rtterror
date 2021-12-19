@@ -25,7 +25,7 @@ const InputTextField = (props)=>{
 export {InputTextField};
 
 const CustomCheckBox =(props)=>{
-    const { name, label, value, onChange, items } = props;
+    const { name, label, value, onChange, item ,key} = props;
     const convertToTargetObject = (name, value, checked) => {
 
         if(checked){
@@ -40,32 +40,23 @@ const CustomCheckBox =(props)=>{
         }
 
     }
-    //onChange(convertToTargetObject('gender', e.target.checked))
-    // console.log(e.target.value)
     return (
-        <FormControl>
-
-            {
-                items.map((item,index) => (
-                        <>
-                            <FormControlLabel
-                                key={index}
-                                control={
-                                    <Checkbox
-                                        id={item.id}
-                                        value={item.name}
-                                        color="primary"
-                                        checked={value == item.name}
-                                        onChange={e => onChange(convertToTargetObject(item.name,e.target.value,e.target.checked))}
-                                    />
-                                }
-                                label={item.title}
-                            />
-                        </>
-                    )
-                )
-            }
-        </FormControl>
+        <>
+            {console.log(item)}
+            <FormControlLabel
+                key={key}
+                control={
+                    <Checkbox
+                        id={key}
+                        value={item.name}
+                        color="primary"
+                        checked={value == item.name}
+                        onChange={e => onChange(convertToTargetObject(props.name,e.target.value,e.target.checked))}
+                    />
+                }
+                label={item.title}
+            />
+        </>
     );
 }
 export {CustomCheckBox};

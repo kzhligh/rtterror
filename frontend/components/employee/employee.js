@@ -1,4 +1,4 @@
-import {Grid} from "@mui/material";
+import {Checkbox, FormControl, FormControlLabel, Grid} from "@mui/material";
 import * as React from "react";
 import {useState} from "react";
 import {CustomDatePicker, CustomAutoComplete, InputTextField, CustomCheckBox} from '../form/formComponent';
@@ -138,13 +138,22 @@ const EmployeeForm = (props) => {
                         onChange={handleSetEmployeeValue}
                         error={errorMessage.email}
                     />
-                    <CustomCheckBox
-                        name="gender"
-                        label="Gender"
-                        value={employeeValue.gender}
-                        onChange={handleSetEmployeeValue}
-                        items={genderList}
-                    />
+                    <FormControl>
+                        {
+                            genderList.map((item,index) => (
+                                <CustomCheckBox
+                                    name="gender"
+                                    label="Gender"
+                                    value={employeeValue.gender}
+                                    onChange={handleSetEmployeeValue}
+                                    item={item}
+                                    key={index}
+                                />
+                                )
+                            )
+                        }
+                    </FormControl>
+
                     <CustomDatePicker
                         name="startDate"
                         label="Start Date"

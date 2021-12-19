@@ -8,14 +8,23 @@ import * as React from "react";
 import EmployeeForm from "./employee";
 
 const EmployeeDetailComponent =(props)=>{
+    const initValues = {
+        id: 0,
+        firstname: '',
+        lastname: '',
+        address: '',
+        phone: '',
+        email: '',
+        gender: 'na',
+        startDate: new Date(),
+        services: []
+    };
+    const saveEmployee = (data)=>{
+        console.log(data);
+    }
     const {open, handleClose} = props
     const [tabValue, setTabValue] = useState('1');
     return (
-        <Dialog open={open} fullWidth={true} maxWidth="lg" scroll="body">
-            <DialogContent>
-
-
-
         <Box>
             <Box sx={{ width: '100%', typography: 'body1' }}>
                 <TabContext value={tabValue}>
@@ -32,7 +41,11 @@ const EmployeeDetailComponent =(props)=>{
                     </Box>
                     <TabPanel value="1">
                         <div style={{ height: 600, width: '100%' }}>
-                            <EmployeeForm />
+                            <EmployeeForm
+                                initValues={initValues}
+                                mode='edit'
+                                saveEmployee={saveEmployee}
+                            />
                         </div>
                     </TabPanel>
                     <TabPanel value="2">
@@ -42,9 +55,7 @@ const EmployeeDetailComponent =(props)=>{
                     </TabPanel>
                 </TabContext>
             </Box>
-        </Box>
-            </DialogContent>
-            <DialogActions>
+            {tabValue ==1 &&
                 <Grid
                     container
                     direction="row"
@@ -53,10 +64,9 @@ const EmployeeDetailComponent =(props)=>{
                 >
 
                     <Button onClick={()=>alert('create ')}>Save</Button>
-                    <Button onClick={handleClose}>Close</Button>
                 </Grid>
-            </DialogActions>
-        </Dialog>
+            }
+        </Box>
     );
 }
 
