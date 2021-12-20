@@ -49,7 +49,6 @@ router.post('/', (req, res, next) => {
 
 router.put('/', (req, res, next) => {
   const { body } = req;
-  console.dir(body);
   comboService
     .updateItem(body)
     .then((data) => {
