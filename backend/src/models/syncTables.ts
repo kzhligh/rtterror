@@ -1,5 +1,3 @@
-import { Appointment } from './appointment.model';
-import { Customer } from './customer.model';
 import ServiceModel from './service';
 import ComboModel from './combo';
 import ServiceComboModel from './service-combo';
