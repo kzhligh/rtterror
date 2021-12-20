@@ -1,4 +1,5 @@
 import { Sequelize } from 'sequelize';
+import Container from 'typedi';
 import config from '../config';
 
 let sequelize: Sequelize = new Sequelize({
@@ -13,5 +14,7 @@ let sequelize: Sequelize = new Sequelize({
     freezeTableName: true,
   },
 });
+
+Container.set(Sequelize, sequelize);
 
 export default sequelize;

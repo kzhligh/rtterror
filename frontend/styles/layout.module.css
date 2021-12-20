@@ -13,8 +13,12 @@
 
 .content {
   width: 100%;
+  flex: 1;
 }
 
 .contentWrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   padding-left: 10px;
 }
