@@ -1,5 +1,4 @@
 import express from 'express';
-import cors from 'cors';
 import { Server } from 'http';
 import request, { SuperTest } from 'supertest';
 import serviceRouter from '../service';
