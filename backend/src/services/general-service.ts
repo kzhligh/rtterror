@@ -1,5 +1,5 @@
-import sequelize from '../modules/sequelize';
 import { Model } from 'sequelize';
+import sequelize from '../modules/sequelize';
 import IAll from '../interfaces/IAll';
 
 export default class GeneralService<T extends IAll, TDto> {
@@ -16,7 +16,7 @@ export default class GeneralService<T extends IAll, TDto> {
       await t.commit();
       return newItem.toJSON() as T;
     } catch (error) {
-      console.log('GeneralService/createItem()/ERROR: ', error);
+      console.error('GeneralService/createItem()/ERROR: ', error);
       await t.rollback();
       throw error;
     }
@@ -31,7 +31,7 @@ export default class GeneralService<T extends IAll, TDto> {
       });
       return jsonItems as T[];
     } catch (error) {
-      console.log('GeneralService/getAllItems()/ERROR: ', error);
+      console.error('GeneralService/getAllItems()/ERROR: ', error);
       throw error;
     }
   }
@@ -40,7 +40,7 @@ export default class GeneralService<T extends IAll, TDto> {
     try {
       return (await this.model.findByPk(id)).toJSON() as T;
     } catch (error) {
-      console.log('GeneralService/getItemById()/ERROR: ', error);
+      console.error('GeneralService/getItemById()/ERROR: ', error);
       throw error;
     }
   }
@@ -59,7 +59,7 @@ export default class GeneralService<T extends IAll, TDto> {
       await t.commit();
       return updatedItem.toJSON() as T;
     } catch (error) {
-      console.log('GeneralService/updateItem()/ERROR: ', error);
+      console.error('GeneralService/updateItem()/ERROR: ', error);
       await t.rollback();
       throw error;
     }
@@ -73,7 +73,7 @@ export default class GeneralService<T extends IAll, TDto> {
     try {
       return this.updateItem(updateInfo);
     } catch (error) {
-      console.log('GeneralService/updateItemById()/ERROR: ', error);
+      console.error('GeneralService/updateItemById()/ERROR: ', error);
       throw error;
     }
   }
@@ -97,7 +97,7 @@ export default class GeneralService<T extends IAll, TDto> {
         await t.commit();
       }
     } catch (error) {
-      console.log('GeneralService/updateItem()/ERROR: ', error);
+      console.error('GeneralService/updateItem()/ERROR: ', error);
       await t.rollback();
       throw error;
     }

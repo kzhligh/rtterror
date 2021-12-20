@@ -18,10 +18,17 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import { Close } from '@mui/icons-material';
-import ServiceEmployeeTable from "./serviceEmployeeTable";
+import ServiceEmployeeTable from './serviceEmployeeTable';
 
 const ServiceEmployeeDialog = (props) => {
-  const {serviceEmployeeDialog, setServiceEmployeeDialog, displayEmployeeList, handleEmployeeCheck , handleAddSelected ,employeeCheckList} = props;
+  const {
+    serviceEmployeeDialog,
+    setServiceEmployeeDialog,
+    displayEmployeeList,
+    handleEmployeeCheck,
+    handleAddSelected,
+    employeeCheckList,
+  } = props;
 
   const closeDialog = () => {
     setServiceEmployeeDialog(false);
@@ -47,16 +54,19 @@ const ServiceEmployeeDialog = (props) => {
         </DialogTitle>
         <DialogContent>
           <ServiceEmployeeTable
-              displayEmployeeList = {displayEmployeeList}
-              handleEmployeeCheck ={handleEmployeeCheck}
-              employeeCheckList = {employeeCheckList}
+            displayEmployeeList={displayEmployeeList}
+            handleEmployeeCheck={handleEmployeeCheck}
+            employeeCheckList={employeeCheckList}
           />
         </DialogContent>
         <DialogActions>
           <Button variant="outlined" onClick={handleAddSelected}>
             Add Selected
           </Button>
-          <Button variant="outlined" onClick={()=>setServiceEmployeeDialog(false)}>
+          <Button
+            variant="outlined"
+            onClick={() => setServiceEmployeeDialog(false)}
+          >
             Cancel
           </Button>
         </DialogActions>

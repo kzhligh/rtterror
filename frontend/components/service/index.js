@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import SearchInput from './search';
 import Box from '@mui/material/Box';
 import Link from 'next/link';
-import ComboForm from "./comboForm";
+import ComboForm from './comboForm';
 
 const ServiceComponent = (props) => {
   const { serviceListData, toggleBlocked, deleteService } = props;
@@ -18,19 +18,19 @@ const ServiceComponent = (props) => {
   const [select, setSelect] = useState('None');
   const [search, setSearch] = useState(false);
   const [serviceCheckList, setServiceCheckList] = useState([]); // the service to create the combo
-  const sortedList = ['None','name','description','code'];
+  const sortedList = ['None', 'name', 'description', 'code'];
   const [comboDialog, setComboDialog] = useState(false);
-  const [type ,setType] = useState('');
+  const [type, setType] = useState('');
 
   // console.log(serviceCheckList)
-  const handleCloseComboDialog = ()=>{
+  const handleCloseComboDialog = () => {
     setComboDialog(false);
     setType('');
-  }
-  const handleCreateCombo=()=>{
-      setType('add');
-      setComboDialog(true)
-  }
+  };
+  const handleCreateCombo = () => {
+    setType('add');
+    setComboDialog(true);
+  };
 
   //to create the combo
   const handleServiceCheck = (val, item) => {
@@ -62,60 +62,58 @@ const ServiceComponent = (props) => {
   const handleSelectOrderBy = (val) => {
     let sortResult;
     setSelect(val);
-    switch (val){
+    switch (val) {
       case 'code':
-          sortResult = serviceListDisplay.sort((item1, item2) =>
-                  item1.barcode.toLowerCase() > item2.barcode.toLowerCase()
-                    ? 1
-                    : item2.barcode.toLowerCase() > item1.barcode.toLowerCase()
-                    ? -1
-                    : 0
-              );
-          setServiceListDisplay(sortResult);
-          break;
+        sortResult = serviceListDisplay.sort((item1, item2) =>
+          item1.barcode.toLowerCase() > item2.barcode.toLowerCase()
+            ? 1
+            : item2.barcode.toLowerCase() > item1.barcode.toLowerCase()
+            ? -1
+            : 0
+        );
+        setServiceListDisplay(sortResult);
+        break;
       case 'name':
-        sortResult= serviceListDisplay.sort((item1, item2) =>
-                      item1.name.toLowerCase() > item2.name.toLowerCase()
-                        ? 1
-                        : item2.name.toLowerCase() > item1.name.toLowerCase()
-                        ? -1
-                        : 0
-                    );
+        sortResult = serviceListDisplay.sort((item1, item2) =>
+          item1.name.toLowerCase() > item2.name.toLowerCase()
+            ? 1
+            : item2.name.toLowerCase() > item1.name.toLowerCase()
+            ? -1
+            : 0
+        );
         setServiceListDisplay(sortResult);
         break;
       case 'description':
         sortResult = serviceListDisplay.sort((item1, item2) =>
-                      item1.description.toLowerCase() > item2.description.toLowerCase()
-                        ? 1
-                        : item2.description.toLowerCase() >
-                          item1.description.toLowerCase()
-                        ? -1
-                        : 0
-                    );
+          item1.description.toLowerCase() > item2.description.toLowerCase()
+            ? 1
+            : item2.description.toLowerCase() > item1.description.toLowerCase()
+            ? -1
+            : 0
+        );
         setServiceListDisplay(sortResult);
         break;
       default:
-        // sortResult =serviceListData.sort(compareDateFunction);
-        // setServiceListDisplay(sortResult);
+      // sortResult =serviceListData.sort(compareDateFunction);
+      // setServiceListDisplay(sortResult);
     }
   };
   const handleSearch = (val) => {
-    let searchList = select != 'id'? sortServiceList: serviceListData;
+    let searchList = select != 'id' ? sortServiceList : serviceListData;
     let searchValue = val.toLowerCase();
     let serviceResultList;
-    if(val.trim().length>0){
+    if (val.trim().length > 0) {
       setSearch(true);
-      serviceResultList= searchList.filter(
-            (item) =>
-              item.barcode.toLowerCase().includes(searchValue) ||
-              item.name.toLowerCase().includes(searchValue) ||
-              item.description.toLowerCase().includes(searchValue)
-          );
+      serviceResultList = searchList.filter(
+        (item) =>
+          item.barcode.toLowerCase().includes(searchValue) ||
+          item.name.toLowerCase().includes(searchValue) ||
+          item.description.toLowerCase().includes(searchValue)
+      );
       setServiceListDisplay(serviceResultList);
-    }
-    else {
+    } else {
       setSearch(false);
-        setServiceListDisplay(serviceListData);
+      setServiceListDisplay(serviceListData);
     }
   };
 
@@ -128,22 +126,27 @@ const ServiceComponent = (props) => {
           <a>New Service</a>
         </Link>
       </Button>
-      <Button className={styled.addButton} variant="outlined" onClick={handleCreateCombo} disabled={serviceCheckList.length==0}>
-          Create Combo
+      <Button
+        className={styled.addButton}
+        variant="outlined"
+        onClick={handleCreateCombo}
+        disabled={serviceCheckList.length == 0}
+      >
+        Create Combo
       </Button>
       <div className={styled.flexAlignContainer}>
         <h1>Select a service</h1>
         <div className={styled.flexContainer}>
           <p>Order By</p>
           <div className={styled.separateHDiv}></div>
-          <Select onChange={(event) => handleSelectOrderBy(event.target.value)} value={select}>
+          <Select
+            onChange={(event) => handleSelectOrderBy(event.target.value)}
+            value={select}
+          >
             {sortedList.map((name) => (
-                <MenuItem
-                    key={name}
-                    value={name}
-                >
-                  {name}
-                </MenuItem>
+              <MenuItem key={name} value={name}>
+                {name}
+              </MenuItem>
             ))}
           </Select>
         </div>
@@ -151,30 +154,30 @@ const ServiceComponent = (props) => {
 
       <div>
         {serviceListDisplay.map((item) => (
-            <ServiceCardRow
-                key={item.id}
-                item={item}
-                toggleBlocked={toggleBlocked}
-                deleteService={deleteService}
-                serviceCheckList={serviceCheckList}
-                handleServiceCheck={handleServiceCheck}
-                type={type}
-                setType={setType}
-                setServiceCheckList={setServiceCheckList}
-            />
-        ))}
-      </div>
-        {serviceCheckList.length>0 &&
-        <ComboForm
-            openDialog={comboDialog}
-            handleCloseComboDialog={handleCloseComboDialog}
+          <ServiceCardRow
+            key={item.id}
+            item={item}
+            toggleBlocked={toggleBlocked}
+            deleteService={deleteService}
             serviceCheckList={serviceCheckList}
             handleServiceCheck={handleServiceCheck}
             type={type}
+            setType={setType}
             setServiceCheckList={setServiceCheckList}
-        >
-        </ComboForm>}
-         </Box>
+          />
+        ))}
+      </div>
+      {serviceCheckList.length > 0 && (
+        <ComboForm
+          openDialog={comboDialog}
+          handleCloseComboDialog={handleCloseComboDialog}
+          serviceCheckList={serviceCheckList}
+          handleServiceCheck={handleServiceCheck}
+          type={type}
+          setServiceCheckList={setServiceCheckList}
+        ></ComboForm>
+      )}
+    </Box>
   );
 };
 

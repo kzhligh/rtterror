@@ -26,6 +26,9 @@ const startServer = async () => {
       });
 
     await syncTables(); // syncTables() should always before app.use('/api/v1', router)
+    app.use('/api/v1', router);
+
+    await syncTables(); // syncTables() should always before app.use('/api/v1', router)
 
     // Set api path
     app.use('/api/v1', router);
