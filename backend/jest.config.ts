@@ -6,6 +6,8 @@ const config: Config.InitialOptions = {
   coverageThreshold: {
     global: {
       functions: 80,
+      statements: 80,
+      lines: 80,
     },
   },
   moduleDirectories: ['node_modules', 'src'],

@@ -25,6 +25,11 @@ import { useState, useEffect } from 'react';
 import { AddCustomerDialog } from 'components/patient/AddCustomerDialog';
 import { useRouter } from 'next/router';
 import { formatPhoneNumber } from 'utils';
+import { GetServerSidePropsResult } from 'next';
+
+interface PatientProps {
+  customers: Array<any>;
+}
 
 const columns: GridColumns = [
   { field: 'firstName', headerName: 'First name', width: 250, sortable: false },
@@ -47,7 +52,7 @@ const columns: GridColumns = [
   { field: 'email', headerName: 'Email', width: 330, sortable: false },
 ];
 
-export default function Patient({ customers: initialCustomers }) {
+export default function Patient({ customers: initialCustomers }: PatientProps) {
   const router = useRouter();
 
   const [searchResults, setSearchResults] = useState(undefined);
@@ -248,4 +253,16 @@ export default function Patient({ customers: initialCustomers }) {
       />
     </Box>
   );
+}
+
+export async function getServerSideProps(): Promise<
+  GetServerSidePropsResult<PatientProps>
+> {
+  const customers = await http(`/api/v1/customer`);
+
+  return {
+    props: {
+      customers,
+    },
+  };
 }

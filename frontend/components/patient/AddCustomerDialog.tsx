@@ -17,8 +17,8 @@ import {
   DialogProps,
 } from '@mui/material';
 import DatePicker from '@mui/lab/DatePicker';
-import { useEffect, useState } from 'react';
-import { http } from '../../utils/http';
+import { useState } from 'react';
+import { http } from 'utils/http';
 import { formatPhoneNumber } from 'utils';
 
 interface Props extends DialogProps {

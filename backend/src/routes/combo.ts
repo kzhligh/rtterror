@@ -1,5 +1,5 @@
 import express from 'express';
-import serviceService from '../services/service-service';
+import comboService from '../services/combo-service';
 
 const router = express.Router();
 
@@ -9,13 +9,13 @@ router.use(function (req, res, next) {
 });
 
 router.get('/', (req, res, next) => {
-  serviceService
-    .getAllValidItems()
+  comboService
+    .getAllItems()
     .then((data) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
+      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
@@ -23,40 +23,39 @@ router.get('/', (req, res, next) => {
 router.get('/:id', (req, res, next) => {
   const { params } = req;
   const { id } = params;
-  console.log(id);
-  serviceService
+  comboService
     .getItemById(id)
     .then((data) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
+      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
 
 router.post('/', (req, res, next) => {
   const { body } = req;
-  serviceService
+  comboService
     .createItem(body)
     .then((data) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
+      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
 
 router.put('/', (req, res, next) => {
   const { body } = req;
-  serviceService
+  comboService
     .updateItem(body)
     .then((data) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
+      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
@@ -64,41 +63,41 @@ router.put('/', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
   const { params } = req;
   const { id } = params;
-  serviceService
-    .updateItemById(id, { hidden: true })
-    .then((data) => {
-      res.status(200).send(data);
+  comboService
+    .deleteItemById(id)
+    .then(() => {
+      res.sendStatus(200);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
+      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
 
-router.put('/block/:id', (req, res, next) => {
+router.put('/:id/block', (req, res, next) => {
   const { params } = req;
   const { id } = params;
-  serviceService
+  comboService
     .updateItemById(id, { blocked: true })
     .then((data) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
+      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
 
-router.put('/unblock/:id', (req, res, next) => {
+router.put('/:id/unblock', (req, res, next) => {
   const { params } = req;
   const { id } = params;
-  serviceService
+  comboService
     .updateItemById(id, { blocked: false })
     .then((data) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
+      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
