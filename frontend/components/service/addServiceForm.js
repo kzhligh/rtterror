@@ -8,21 +8,17 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { Close } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton';
 import styled from '../../styles/service.module.css';
-import { useState } from 'react';
-import Paper from '@mui/material/Paper';
+import {useEffect, useState} from 'react';
 import {
-  Checkbox,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Fab,
-  InputAdornment,
+  Grid,
 } from '@mui/material';
+import ServiceEmployeeTable from "./serviceEmployeeTable";
+import DurationPrice from "./durationPrice";
+import AddIcon from "@mui/icons-material/Add";
 
 const AddServiceForm = (props) => {
+  const hourToMs = 60000;
+  const MsToHour = 3600000;
   const { addHandle, employeeList, open, closeDialog } = props;
   const [employeeCheckList, setEmployeeCheckList] = useState([]);
   const [name, setName] = useState('');
@@ -30,39 +26,36 @@ const AddServiceForm = (props) => {
   const [description, setDescription] = useState('');
   const [duration, setDuration] = useState(0);
   const [price, setPrice] = useState(0);
+  const [durationPriceList, setDurationPriceList] = useState([{price:0, duration:0.5}]);
+  const [reload, setReload] = useState(false);
+
   const processAddService = () => {
     if (validationInput()) {
-      let data = {
-        serviceCode: barcode,
-        name: 'service ' + barcode,
-        description: description,
-        treatment_type: 'type 1',
-        duration: duration,
-        price: price,
-        barcode: barcode,
-        sms_description: 'sms description 1',
-      };
+      let data ={
+        "service_code":barcode,
+        "name": 'service ' + barcode,
+        "description": description,
+        "treatment_type": 'type 1',
+        "duration":3600000,
+        "price": 120,
+        "barcode":barcode,
+        "sms_description": 'sms description 1'
+      }
       addHandle(data);
     }
   };
-  const handleCheck = (e) => {
-    if (e.target.checked) {
-      setEmployeeCheckList([...employeeCheckList, e.target.value]);
+  const handleAddEmployeeCheck = (val, employee) => {
+    if (val) {
+      setEmployeeCheckList([...employeeCheckList, employee]);
     } else {
       setEmployeeCheckList(
-        employeeCheckList.filter((name) => e.target.value != name)
+          employeeCheckList.filter((emp) => emp.firstname != employee.firstname)
       );
     }
   };
-  const durationSelect = (hour) => {
-    setDuration(hour * 60000);
-  };
-  const durationList = [
-    { 30: '30 M' },
-    { 60: '1 H' },
-    { 90: '1.5 H' },
-    { 120: '2 H' },
-  ];
+
+  useEffect(()=>{},[employeeCheckList, durationPriceList ,reload]);
+
   const handleSetValue = (e) => {
     let label = e.target.id;
     let value = e.target.value;
@@ -76,18 +69,21 @@ const AddServiceForm = (props) => {
       case 'description':
         setDescription(value);
         break;
-      case 'price':
-        setPrice(value);
-        break;
     }
   };
 
   const validationInput = () => {
-    if (name == '' || barcode == '' || price <= 0) {
+    if (name == '' || barcode == '' ) {
       return false;
     }
     return true;
   };
+  const handleAddDurationPrice = ()=>{
+    setDurationPriceList([...durationPriceList, {price:0, duration:0.5}]);
+  };
+  const handleRemoveDurationPrice =(index)=>{
+    setDurationPriceList([...durationPriceList.slice(0, index),...durationPriceList.slice(index+1)])
+  }
   return (
     <div>
       <Dialog open={open} fullWidth={true} maxWidth="lg" scroll="body">
@@ -107,98 +103,83 @@ const AddServiceForm = (props) => {
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <div className={styled.separateVDiv}></div>
-          <TextField
-            fullWidth
-            required
-            id="name"
-            label="Service name"
-            value={name}
-            onChange={(event) => handleSetValue(event)}
-          />
-          <div className={styled.separateVDiv}></div>
-          <TextField
-            fullWidth
-            required
-            id="code"
-            label="Service code"
-            value={barcode}
-            onChange={(event) => handleSetValue(event)}
-          />
-          <div className={styled.separateVDiv}></div>
-          <TextField
-            fullWidth
-            id="description"
-            label="Description"
-            multiline
-            rows={4}
-            value={description}
-            onChange={(event) => handleSetValue(event)}
-          />
-          <div className={styled.separateVDiv}></div>
-          <div className={styled.flexAlignContainer}>
-            <h3>Duration</h3>
-            {durationList.map((item) => (
-              <Fab
-                key={Object.keys(item)}
-                onClick={() => durationSelect(Object.keys(item))}
-                color={Object.keys(item) * 60000 == duration ? 'primary' : null}
-                variant="extended"
+          <Grid
+              container
+              direction="column"
+              alignItems="stretch"
+          >
+            <Grid item xs={12}>
+              <TextField
+                  margin="normal"
+                  fullWidth
+                  required
+                  id="name"
+                  label="name"
+                  value={name}
+                  onChange={(event) => handleSetValue(event)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                  margin="normal"
+                  fullWidth
+                  required
+                  id="code"
+                  label="Service code"
+                  value={barcode}
+                  onChange={(event) => handleSetValue(event)}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              {durationPriceList.map((element, index) =>(
+                  <DurationPrice
+                      key={index}
+                      index={index}
+                      item={element}
+                      durationPriceList={durationPriceList}
+                      handleRemoveDurationPrice={handleRemoveDurationPrice}
+                      reload = {reload}
+                      setReload = {setReload}
+                  />
+                  ))
+              }
+
+              <Grid
+                  container
+                  direction="column"
+                  justifyContent="center"
+                  alignItems="center"
               >
-                {Object.values(item)}
-              </Fab>
-            ))}
-          </div>
+                <Grid item={3}>
+                  <IconButton onClick={handleAddDurationPrice}>
+                    <AddIcon/>
+                  </IconButton>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                  margin="normal"
+                  fullWidth
+                  id="description"
+                  label="Description"
+                  multiline
+                  rows={4}
+                  value={description}
+                  onChange={(event) => handleSetValue(event)}
+              />
+            </Grid>
+          </Grid>
+
+          {/*<div className="bg-success p-2 text-dark bg-opacity-10"  >New Service for 1H has been successfully added! </div>*/}
+
           <div className={styled.separateVDiv}></div>
-          <TextField
-            id="price"
-            label="price"
-            type="number"
-            value={price}
-            required
-            onChange={(event) => handleSetValue(event)}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">$</InputAdornment>
-              ),
-            }}
+          <h1>Add Employee </h1>
+          <ServiceEmployeeTable
+              displayEmployeeList = {employeeList}
+              handleEmployeeCheck ={handleAddEmployeeCheck}
+              employeeCheckList = {employeeCheckList}
           />
-          <div className={styled.separateVDiv}></div>
-          <h1>Add Employee</h1>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell align="center">
-                    <h1>Employee name</h1>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {employeeList.map((ename) => (
-                  <TableRow
-                    key={ename}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      <div className={styled.employeeRowDiv}>
-                        {ename}
-                        <Checkbox
-                          key={ename}
-                          aria-label={ename}
-                          value={ename}
-                          checked={employeeCheckList.includes(ename)}
-                          onChange={(event) => {
-                            handleCheck(event);
-                          }}
-                        />
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
         </DialogContent>
         <DialogActions>
           <Button onClick={processAddService}>Create Service</Button>

@@ -1,4 +1,4 @@
-import ServiceCard from '../../../components/service/serviceCard';
+import ServiceDetailsCard from '../../../components/service/serviceDetailsCard';
 import { useRouter } from 'next/router';
 import request from 'superagent';
 import BuildPath from '../../../components/pathBuilder';
@@ -9,15 +9,13 @@ function DetailPage() {
   const [serviceItem, setServiceItem] = useState({});
 
   const id = router.query.detailsId;
-  console.log(id);
+
   const getServiceInfo = () => {
     request
       .get(BuildPath('services/' + id))
       .set('Accept', 'application/json')
       .then((res) => {
-        console.log(typeof res.body);
         setServiceItem(res.body);
-        console.log(serviceItem);
       })
       .catch((err) => {
         console.log(err);
@@ -31,14 +29,35 @@ function DetailPage() {
   const closeServiceCard = () => {
     router.push('/service').then((r) => console.log('then of push' + r));
   };
-  const employeeList = ['E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7', 'E8'];
+  const employeeList = [
+      {'id': 1 , 'firstname': 'Jessica','lastname':'Lee', 'primary':'General Practice'},
+      {'id': 2 ,'firstname': 'Shanna','lastname':'Huang', 'primary':'Acupuncture'},
+      {'id': 3 ,'firstname': 'Albert','lastname':'Sheng', 'primary':'General Practice'},
+      {'id': 4 ,'firstname': 'Greg','lastname':'Allard', 'primary':'General Practice'},
+      {'id': 5 ,'firstname': 'Alan','lastname':'Rod', 'primary':'General Practice'},
+      {'id': 6 ,'firstname': 'Beatrice','lastname':'Beauchamp', 'primary':'General Practice'},
+      {'id': 7 ,'firstname': 'Sydney','lastname':'Shi', 'primary':'General Practice'}
+  ];
+  const serviceEmployeeList = employeeList.slice(5);
+    const editHandle= (data , id) => {
+        request
+            .put(BuildPath("services/" + id))
+            .send(data)
+            .set("Accept", "application/json")
+            .then((res) => {
+                console.log(res.status);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
   return (
     <>
-      {console.log(serviceItem)}
-      <ServiceCard
+      <ServiceDetailsCard
         item={serviceItem}
-        closeServiceCard={closeServiceCard}
         employeeList={employeeList}
+        serviceEmployeeList={serviceEmployeeList}
+        editHandle={editHandle}
       />
     </>
   );

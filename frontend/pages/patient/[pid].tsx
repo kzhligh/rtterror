@@ -1,9 +1,11 @@
 import { TabPanel, TabContext, TabList, DatePicker } from '@mui/lab';
-import styles from '../../styles/client.module.css';
+import styles from 'styles/client.module.css';
 import {
+  Alert,
   Box,
   Button,
   Checkbox,
+  CircularProgress,
   FormControlLabel,
   FormGroup,
   InputLabel,
@@ -12,27 +14,17 @@ import {
   Tab,
   TextField,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { putUser } from '../../utils/httpRequests';
-import { useRouter } from 'next/dist/client/router';
-import { http } from '../../utils/http';
+import React, { useState } from 'react';
+import { http } from 'utils/http';
 import { DataGrid } from '@mui/x-data-grid';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { formatPhoneNumber } from 'utils';
 
-const blankUser = {
-  firstName: 'firstName',
-  lastName: 'lastName',
-  phone: '1234567890',
-  address: '123 Stone',
-  email: 'email@email.com',
-  postalCode: 'A1B 2C3',
-  dob: ' 1 January 2021',
-  gender: 'M',
-  confirmationType: 'SMS',
-  appointments: [],
-};
-const PatientPage = () => {
-  const [userForm, setUser] = useState(blankUser);
+const PatientPage = ({ customer: initialCustomer }) => {
+  const [userForm, setUser] = useState(initialCustomer);
   const [tabValue, toggleTab] = useState('1');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(undefined);
   const [rows, setRows] = useState([]);
 
   const columns = [
@@ -43,24 +35,27 @@ const PatientPage = () => {
     { field: 'duration', headerName: 'Duration', width: 100 },
   ];
 
-  const router = useRouter();
-  const editUser = () => {
-    putUser(userForm);
+  const editUser = async () => {
+    setError(undefined);
+    setLoading(true);
+    try {
+      await http('/api/v1/customer', {
+        method: 'PUT',
+        body: userForm,
+      });
+    } catch (error) {
+      setError(error);
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => {
-    const fetchUser = () => {
-      http(`/api/v1/customer/${router.query.pid}/appointments`)
-        .then(setUser)
-        .then(() => {
-          setRows(userForm.appointments);
-        });
-    };
-    if (router) fetchUser();
-  }, [router]);
   return (
-    <>
-      <h3>{userForm.firstName + ' ' + userForm.lastName}</h3>
+    <Box>
+      {error && <Alert severity="error">Something wrong happened!</Alert>}
+
+      <h3>{`${userForm.firstName} ${userForm.lastName}`}</h3>
       <Box sx={{ width: '100%', typography: 'body1' }}>
         <TabContext value={tabValue}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -119,11 +114,13 @@ const PatientPage = () => {
                     className={styles.userTextField}
                     margin="normal"
                     required
-                    value={userForm.phone}
+                    value={formatPhoneNumber(userForm.phone)}
                     onChange={(e) =>
                       setUser((state) => ({
                         ...state,
-                        phone: e.target.value,
+                        phone: e.target.value
+                          .replace(/\D/g, '')
+                          .substring(0, 10),
                       }))
                     }
                   />
@@ -245,12 +242,10 @@ const PatientPage = () => {
                       disabled
                     />
                   )}
-                  onChange={(date) =>
+                  onChange={(date: Date) =>
                     setUser((state) => ({
                       ...state,
-                      dob: Intl.DateTimeFormat('sv-SE').format(
-                        date as unknown as Date
-                      ),
+                      dob: Intl.DateTimeFormat('sv-SE').format(date),
                     }))
                   }
                 />
@@ -302,13 +297,24 @@ const PatientPage = () => {
         <Button
           variant="outlined"
           style={{ width: '10%' }}
-          onClick={() => editUser()}
+          onClick={editUser}
+          disabled={loading}
         >
-          Save
+          {loading ? <CircularProgress /> : 'Save'}
         </Button>
       )}
-    </>
+    </Box>
   );
 };
 
 export default PatientPage;
+
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  return {
+    props: {
+      customer: await http(`/api/v1/customer/${context.params.pid}`),
+    },
+  };
+};

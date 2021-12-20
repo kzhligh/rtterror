@@ -21,8 +21,6 @@ export async function getServerSideProps(context) {
 }
 
 const Service = ({ serviceList }) => {
-  // router.push('/?counter=10', '/about?counter=10', { shallow: true })
-  const router = useRouter();
   const [serviceListData, setServiceListData] = useState(serviceList);
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(undefined);

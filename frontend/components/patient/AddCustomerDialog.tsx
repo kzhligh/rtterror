@@ -17,32 +17,25 @@ import {
   DialogProps,
 } from '@mui/material';
 import DatePicker from '@mui/lab/DatePicker';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { http } from '../../utils/http';
+import { formatPhoneNumber } from 'utils';
 
 interface Props extends DialogProps {
   onCustomerAdded: Function;
   onClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
 }
 
-const formatPhoneNumber = (input) =>
-  input.length === 10
-    ? `(${input.substring(0, 3)}) ${input.substring(3, 6)}-${input.substring(
-        6,
-        10
-      )}`
-    : input;
-
 const initialFormValue = {
   firstName: '',
   lastName: '',
   email: '',
   dob: '',
-  gender: null,
+  gender: 'N/A',
   address: '',
   postalCode: '',
   phone: '',
-  confirmationType: null,
+  confirmationType: 'email',
 };
 
 export const AddCustomerDialog = ({
@@ -59,10 +52,16 @@ export const AddCustomerDialog = ({
     e.preventDefault();
     setError(null);
     setLoading(true);
+
+    const { firstName, lastName } = formInputs;
+
     try {
-      const { duplicate } = await http(
-        `/api/v1/customer/duplicate?firstName=${formInputs.firstName}&lastName=${formInputs.lastName}`
-      );
+      const { duplicate } = await http(`/api/v1/customer/duplicate`, {
+        searchParams: {
+          firstName,
+          lastName,
+        },
+      });
 
       if (duplicate) {
         setWarning(duplicate);
@@ -70,33 +69,34 @@ export const AddCustomerDialog = ({
         return;
       }
 
-      const result = await http('/api/v1/customer', 'POST', {
-        headers: {},
+      const result = await http('/api/v1/customer', {
+        method: 'POST',
         body: formInputs,
       });
+
       onCustomerAdded(result);
+      setFormInputs(initialFormValue);
     } catch (error) {
       setError(error);
     } finally {
       setLoading(false);
-      setFormInputs(initialFormValue);
     }
   };
 
   const handleConfirm = async () => {
     setLoading(true);
     try {
-      const result = await http('/api/v1/customer', 'POST', {
-        headers: {},
+      const result = await http('/api/v1/customer', {
+        method: 'POST',
         body: formInputs,
       });
       onCustomerAdded(result);
+      setFormInputs(initialFormValue);
     } catch (error) {
       setError(error);
     } finally {
       setLoading(false);
       setWarning(false);
-      setFormInputs(initialFormValue);
     }
   };
 
@@ -123,14 +123,18 @@ export const AddCustomerDialog = ({
           py="1.125rem"
           mx="2rem"
         >
-          <Button variant="outlined" onClick={handleConfirm}>
+          <Button
+            variant="outlined"
+            onClick={handleConfirm}
+            data-cy="confirm-duplicate-customer"
+          >
             {loading ? <CircularProgress /> : 'Confirm'}
           </Button>
           <Button
             variant="outlined"
             color="error"
             onClick={(e) => {
-              onClose(e, 'backdropClick');
+              setWarning(false);
             }}
           >
             Cancel
@@ -267,12 +271,10 @@ export const AddCustomerDialog = ({
                 disabled
               />
             )}
-            onChange={(date) =>
+            onChange={(date: Date) =>
               setFormInputs((state) => ({
                 ...state,
-                dob: Intl.DateTimeFormat('sv-SE').format(
-                  date as unknown as Date
-                ),
+                dob: Intl.DateTimeFormat('sv-SE').format(date),
               }))
             }
           />
@@ -294,7 +296,8 @@ export const AddCustomerDialog = ({
               placeholder="Sort..."
               label="Confirmation Type"
               data-cy="patientNotification"
-              value={formInputs.confirmationType || 'email'}
+              value={formInputs.confirmationType}
+              defaultValue="email"
               onChange={(e) =>
                 setFormInputs((state) => ({
                   ...state,

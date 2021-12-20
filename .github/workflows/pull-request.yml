@@ -35,17 +35,17 @@ jobs:
           cache-name: cache-server
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
       - name: Install dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile --silent
 
       - name: Build application
-        run: npm run build --if-present
+        run: yarn build
 
   BuildClient:
     name: Build client application
@@ -112,14 +112,14 @@ jobs:
           cache-name: cache-server
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
       - name: Install dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile --silent
 
       - name: Create blank .env file for testing purposes
         run: touch .env
@@ -172,14 +172,14 @@ jobs:
 
       - name: Setup web server for testing
         run: |
-          yarn install --production --frozen-lockfile --silent
+          yarn install --frozen-lockfile --silent
           cd backend
-          npm ci
+          yarn install --frozen-lockfile --silent
           touch .env
 
       - name: Build client application
         run: |
-          yarn install --production --frozen-lockfile --silent
+          yarn install --frozen-lockfile --silent
           yarn build
         working-directory: ./frontend
 
@@ -187,4 +187,4 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           start: yarn start:client:ci, yarn start:server:ci
-          wait-on: 'http://localhost:3000, http://localhost:5000/api/v1/services'
+          wait-on: 'http://localhost:3000, http://localhost:5000/api/v1/customer'

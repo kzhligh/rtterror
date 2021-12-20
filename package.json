@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "TEAM RUNTIME TERROR - SOEN 490",
   "main": ".",
+  "engines": {
+    "npm": "please-use-yarn",
+    "yarn": ">= 1.22.10"
+  },
+  "engineStrict": true,
   "dependencies": {},
   "devDependencies": {
     "@commitlint/cli": "^13.2.1",
@@ -10,13 +15,13 @@
     "@types/jest": "^27.0.2",
     "@types/node": "^16.11.6",
     "cypress": "^8.7.0",
-    "husky": "^7.0.0",
+    "husky": "^7.0.4",
     "lint-staged": "^12.0.2",
     "prettier": "^2.4.1"
   },
   "scripts": {
     "start:client:ci": "yarn --cwd frontend start",
-    "start:server:ci": "yarn --cwd backend start:ci",
+    "start:server:ci": "yarn --cwd backend start:prod",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install"
   },
