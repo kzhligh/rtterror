@@ -8,7 +8,6 @@ const router = express.Router();
 router.use('/services', serviceRouter);
 router.use('/customer', customerRouter);
 router.use('/combos', comboRouter);
-router.use('/combos', comboRouter);
 router.get('/', (_req, res) => {
   res.send('OK');
 });
