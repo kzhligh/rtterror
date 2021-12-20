@@ -29,7 +29,6 @@ let server: Server;
 beforeAll(() => {
   const app = express();
   app.use(express.json());
-  app.use(cors());
   app.use('/services', serviceRouter);
   server = app.listen(5000);
   req = request(app);
