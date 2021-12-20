@@ -1,3 +1,3 @@
 export default interface IAll {
-    id: string
+  id: string;
 }

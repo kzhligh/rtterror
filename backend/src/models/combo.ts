@@ -1,36 +1,33 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../modules/sequelize';
 
-export default class ServiceModel extends Model {}
+export default class ComboModel extends Model {}
 
-ServiceModel.init(
+ComboModel.init(
   {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     service_code: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    name: {
+    total_duration: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    total_price: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     description: {
       type: DataTypes.STRING,
-    },
-    treatment_type: {
-      type: DataTypes.STRING,
-    },
-    duration: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false,
-    },
-    price: {
-      type: DataTypes.STRING,
-      allowNull: false,
     },
     barcode: {
       type: DataTypes.STRING,
@@ -43,16 +40,11 @@ ServiceModel.init(
       allowNull: false,
       defaultValue: false,
     },
-    hidden: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
   },
   {
     sequelize,
     timestamps: true,
-    tableName: 'service',
-    modelName: 'service',
+    tableName: 'combo',
+    modelName: 'combo',
   }
 );
