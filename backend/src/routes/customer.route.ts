@@ -1,10 +1,12 @@
 import 'reflect-metadata';
-import { CustomerService } from 'src/services/customer.service';
+
 import express from 'express';
 import type { Request, Response } from 'express';
-import { Container, Service } from 'typedi';
-import { Frozen } from 'src/utils/decorators';
 import type core from 'express-serve-static-core';
+import { Container, Service } from 'typedi';
+
+import { CustomerService } from 'src/services/customer.service';
+import { Frozen } from 'src/utils/decorators';
 import { Customer } from 'src/models/customer.model';
 
 @Frozen
@@ -26,7 +28,10 @@ class CustomerController {
   }
 
   private getAllCustomers() {
-    return async (req: Request, res: Response) => {
+    return async (
+      req: Request<core.ParamsDictionary, null, null, { sortBy: string }>,
+      res: Response
+    ) => {
       const { sortBy } = req.query;
       try {
         const customers = await this.customerService.getAllCustomers(sortBy);

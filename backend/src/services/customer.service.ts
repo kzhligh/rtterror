@@ -1,7 +1,7 @@
 import { Customer } from 'src/models/customer.model';
 import { Frozen } from 'src/utils/decorators';
 import { Service } from 'typedi';
-import { Op, Sequelize, Transaction } from 'sequelize';
+import { Op, Order, Sequelize, Transaction } from 'sequelize';
 import { Appointment } from 'src/models/appointment.model';
 
 @Frozen
@@ -13,9 +13,9 @@ export class CustomerService {
     return Customer.create(customer);
   }
 
-  getAllCustomers(sortBy: any) {
+  getAllCustomers(sortBy?: string) {
     return Customer.findAll({
-      order: sortBy && [[sortBy, 'ASC']],
+      order: (sortBy && [[sortBy, 'ASC']]) as Order | undefined,
     });
   }
 

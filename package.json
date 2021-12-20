@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start:client:ci": "yarn --cwd frontend start",
-    "start:server:ci": "yarn --cwd backend start:ci",
+    "start:server:ci": "yarn --cwd backend start:prod",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install"
   },
