@@ -6,9 +6,7 @@ on:
       - '**'
   push:
     branches:
-      - '*'
-      - '*/*'
-      - '!main'
+      - 'main'
 
 env:
   node-version: '14'
@@ -163,6 +161,7 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Cache node_modules
+        id: cache-dependencies
         uses: actions/cache@v2
         with:
           path: node_modules
@@ -182,6 +181,11 @@ jobs:
           yarn install --frozen-lockfile --silent
           yarn build
         working-directory: ./frontend
+
+      - name: Install cypress binary
+        if: steps.cache-dependencies.outputs.cache-hit == 'true'
+        run: |
+          yarn install --frozen-lockfile --silent
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
