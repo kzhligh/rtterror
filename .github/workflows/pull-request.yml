@@ -187,4 +187,4 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           start: yarn start:client:ci, yarn start:server:ci
-          wait-on: 'http://localhost:3000, http://localhost:5000/api/v1/customer'
+          wait-on: 'http://localhost:3000, http://localhost:5000/api/v1/'

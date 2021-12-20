@@ -4,7 +4,7 @@ import { Service } from 'typedi';
 import { Op, Order, Sequelize, Transaction } from 'sequelize';
 import { Appointment } from 'src/models/appointment.model';
 
-@Frozen
+@Frozen()
 @Service()
 export class CustomerService {
   constructor(private sqlService: Sequelize) {}

@@ -9,7 +9,7 @@ import { CustomerService } from 'src/services/customer.service';
 import { Frozen } from 'src/utils/decorators';
 import { Customer } from 'src/models/customer.model';
 
-@Frozen
+@Frozen()
 @Service()
 class CustomerController {
   constructor(private customerService: CustomerService) {}
