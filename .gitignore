@@ -7,5 +7,5 @@ backend/dist/
 
 # project
 **/node_modules/
-
+cypress/screenshots/
 ./package-lock.json

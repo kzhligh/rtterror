@@ -5,7 +5,7 @@
   "main": "./src/server.ts",
   "scripts": {
     "test": "jest --watchAll",
-    "start:ci": "jest --coverage",
+    "test:ci": "jest --coverage",
     "build": "tsc",
     "start": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only ./src/server.ts",
     "start:prod": "tsc && tspath -f && node dist/src/server.js"
