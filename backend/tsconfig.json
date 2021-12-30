@@ -2,9 +2,17 @@
   "include": ["./src/**/*"],
   "exclude": ["./dist", "./node_modules/**"],
   "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "removeComments": true,
     "target": "ES6",
     "module": "commonjs",
     "outDir": "./dist",
+    "baseUrl": ".",
+    "rootDir": ".",
+    "paths": {
+      "src/*": ["src/*"]
+    },
     "strict": true,
     "moduleResolution": "node",
     "sourceMap": true,

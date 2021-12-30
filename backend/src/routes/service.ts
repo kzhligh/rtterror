@@ -9,14 +9,13 @@ router.use(function (req, res, next) {
 });
 
 router.get('/', (req, res, next) => {
-  console.log('route/service')
   serviceService
     .getAllValidItems()
     .then((data) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error('ERROR - /service/(GET)/error: ', error);
+      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
@@ -31,7 +30,7 @@ router.get('/:id', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error('ERROR - /service/:id/(GET)/error: ', error);
+      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
@@ -44,7 +43,7 @@ router.post('/', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error('ERROR - /service/(POST)/error: ', error);
+      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
@@ -57,7 +56,7 @@ router.put('/', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error('ERROR - /service/(PUT)/error: ', error);
+      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
@@ -71,7 +70,7 @@ router.delete('/:id', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error('ERROR - /service/(DELETE)/error: ', error);
+      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
@@ -85,7 +84,7 @@ router.put('/block/:id', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error('ERROR - /service/block/:id/(PUT)/error: ', error);
+      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
@@ -99,7 +98,7 @@ router.put('/unblock/:id', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error('ERROR - /service/unblock/:id/(PUT)/error: ', error);
+      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
       res.status(400).send(error);
     });
 });
