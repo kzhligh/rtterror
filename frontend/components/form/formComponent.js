@@ -1,6 +1,6 @@
 import TextField from "@mui/material/TextField";
 import * as React from "react";
-import {Checkbox, FormControl, FormControlLabel} from "@mui/material";
+import {Checkbox, FormControl, FormControlLabel, InputAdornment} from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
@@ -19,6 +19,12 @@ const InputTextField = (props)=>{
             value={props.value}
             onChange={props.onChange}
             {...(props.error && {error:true,helperText:props.error})}
+            {...(props.rows?{multiline:true,rows:props.rows}:"")}
+            {...(props.InputProps? {InputProps : {
+                endAdornment: (
+                    <InputAdornment position="end">{props.InputProps}</InputAdornment>
+                ),
+            }}:"")}
         />
     );
 }

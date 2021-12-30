@@ -14,6 +14,7 @@ import Card from '@mui/material/Card';
 import {useEffect, useState} from 'react';
 import request from 'superagent';
 import BuildPath from '../pathBuilder';
+import {InputTextField} from "../form/formComponent";
 
 const ComboItem = (props) => {
     const {item, handleServiceCheck, removeService, isEdit, serviceCheckList} =
@@ -138,7 +139,7 @@ const EditCombo = (props) => {
         </Grid>
     );
 };
-
+// remove the service from combo does not work
 const ComboForm = (props) => {
     const {
         openDialog,
@@ -148,9 +149,14 @@ const ComboForm = (props) => {
         type,
         setServiceCheckList,
     } = props;
-    const [comboName, setComboName] = useState('');
-    const [comboPrice, setComboPrice] = useState(0);
-    const [comboDuration, setComboDuration] = useState(0);
+    const initValue = {
+        name: '',
+        serviceCode: '',
+        total_duration: '',
+        total_price: '',
+        service_ids: ['id', 'id'],
+    };
+    const [comboValue, setComboValue] = useState(initValue);
     const [editDialog, setEditDialog] = useState(false);
     const isEdit = () => type == 'edit';
     const handleSave = (serviceToAdd) => {
@@ -160,21 +166,38 @@ const ComboForm = (props) => {
         let name = '';
         let price = 0;
         let duration = 0;
+        let code = '';
+        let id = [];
         for (let serviceItem of serviceCheckList) {
-            // console.log(serviceItem)
             name += serviceItem.barcode + ' + ';
             price += serviceItem.price * 1;
             duration += serviceItem.duration;
+            code += serviceItem.service_code;
+            id.push(serviceItem.id);
         }
-        setComboName(name.slice(0, -2)); // remove the last +
-        setComboPrice(price);
-        setComboDuration(duration);
+        setComboValue({
+            name: name.slice(0, -2),
+            serviceCode: code,
+            total_duration: duration,
+            total_price: price,
+            service_ids: id
+        });
     }, [serviceCheckList]);
+    const handleSetComboValue = (obj) => {
+        const {name, value} = obj.target;
+        if(name == 'total_duration'){
+            setComboValue({...comboValue, [name]: value*3600000});
+        }
+        else{
+            setComboValue({...comboValue, [name]: value});
+        }
+    };
 
     const clearValue = () => {
-        setComboPrice(0);
-        setComboName('');
-        setComboDuration(0);
+        // setComboPrice(0);
+        // setComboName('');
+        // setComboDuration(0);
+        setComboValue(initValue);
     };
     const closeClearValue = () => {
         clearValue();
@@ -212,17 +235,10 @@ const ComboForm = (props) => {
     };
 
     const handleCreateCombo = () => {
-        //if all the madatory is not empty
-        let data = {
-            name: '',
-            serviceCode: '',
-            total_duration: '',
-            total_price: '',
-            service_ids: ['id', 'id'],
-        };
+        //no validate , since it would be used the default value of each service to create Combo
         request
             .post(BuildPath('services'))
-            .send(data)
+            .send(comboValue)
             .set('Accept', 'application/json')
             .then((res) => {
                 console.log(res.status);
@@ -233,17 +249,19 @@ const ComboForm = (props) => {
         closeClearValue();
     };
     const handleEditSubmit = () => {
+
         //if all the madatory is not empty
-        let data = {
-            name: '',
-            serviceCode: '',
-            total_duration: '',
-            total_price: '',
-            service_ids: ['id', 'id'],
-        };
+        // it should be combo code not service code
+        // let data = {
+        //     name: '',
+        //     serviceCode: '',
+        //     total_duration: '',
+        //     total_price: '',
+        //     service_ids: ['id', 'id'],
+        // };
         request
             .post(BuildPath('services/combo/edit/id'))
-            .send(data)
+            .send(comboValue)
             .set('Accept', 'application/json')
             .then((res) => {
                 console.log(res.status);
@@ -274,11 +292,11 @@ const ComboForm = (props) => {
                 </DialogTitle>
                 <DialogContent>
                     <Stack spacing={2}>
-                        <TextField
-                            fullWidth
-                            id="comboName"
-                            value={comboName}
-                            onChange={(event) => handleSetValue(event)}
+                        <InputTextField
+                            label='Name'
+                            name='name'
+                            value={comboValue.name}
+                            onChange={handleSetComboValue}
                         />
                         {serviceCheckList &&
                             serviceCheckList.map((item) => (
@@ -304,30 +322,22 @@ const ComboForm = (props) => {
 
                         <div className={styled.flexAlignContainer}>
                             <label>Total Duration: </label>
-                            <TextField
-                                id="comboDuration"
-                                value={(comboDuration / 3600000).toFixed(1)}
-                                // type="number"
-                                onChange={(event) => handleSetValue(event)}
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end">H</InputAdornment>
-                                    ),
-                                }}
+                            <InputTextField
+                                label='Combo Duration'
+                                name='total_duration'
+                                value={(comboValue.total_duration/ 3600000).toFixed(1)}
+                                onChange={handleSetComboValue}
+                                InputProps='H'
                             />
                         </div>
 
                         <div className={styled.flexAlignContainer}>
-                            <label>Total Duration: </label>
-                            <TextField
-                                id="comboPrice"
-                                value={comboPrice}
-                                onChange={(event) => handleSetValue(event)}
-                                InputProps={{
-                                    endAdornment: (
-                                        <InputAdornment position="end">$</InputAdornment>
-                                    ),
-                                }}
+                            <InputTextField
+                                label='Combo price'
+                                name='total_price'
+                                value={comboValue.total_price}
+                                onChange={handleSetComboValue}
+                                InputProps='$'
                             />
                         </div>
                     </Stack>
