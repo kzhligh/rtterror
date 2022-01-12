@@ -17,6 +17,16 @@ router.post('/', (req, res) => {
         .catch((error) => {
             res.status(400).send(error);
         });
+});
+
+router.get('/', (req, res) => {
+    employeeService.getAllItems()
+        .then((allEmployees) => {
+            res.status(200).send(allEmployees);
+        })
+        .catch((error) => {
+            res.status(400).send(error);
+        });
 })
 
 export default router;

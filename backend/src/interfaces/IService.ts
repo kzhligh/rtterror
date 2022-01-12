@@ -12,6 +12,7 @@ export interface IService extends IAll {
   sms_description?: string;
   blocked: boolean;
   hidden: boolean;
+  employee_ids?: string[];
 }
 
 export interface IServiceDto {
@@ -25,4 +26,5 @@ export interface IServiceDto {
   sms_description?: string;
   blocked?: boolean;
   hidden?: boolean;
+  employee_ids?: string[];
 }
