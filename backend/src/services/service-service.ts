@@ -2,7 +2,6 @@ import { Model } from 'sequelize';
 import GeneralService from './general-service';
 import { IService, IServiceDto } from '../interfaces/IService';
 import sequelize from "src/modules/sequelize";
-import internal from "stream";
 
 class ServiceService extends GeneralService<IService, IServiceDto> {
   private readonly employeeModel: any;
@@ -23,10 +22,9 @@ class ServiceService extends GeneralService<IService, IServiceDto> {
         },
         include: this.employeeModel
       });
-      const jsonItems: IService[] = allItems.map((item: Model) => {
+      return allItems.map((item: Model) => {
         return item.toJSON() as IService;
       });
-      return jsonItems;
     } catch (error) {
       console.error('ServiceService/getAllValidItems()/ERROR: ', error);
       throw error;
