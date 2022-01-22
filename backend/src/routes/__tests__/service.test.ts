@@ -42,27 +42,27 @@ describe('Service Routes', () => {
   it(`should route get(${pathService}) to getAllValidItems`, async () => {
     const response = await req.get('/services').expect(200);
 
-    expect(response.body.method).toBe('getAllValidItems');
+    expect(response.body.method).toEqual('getAllValidItems');
   });
 
   const pathServiceNonExistentId = '/services/0';
   it(`should route get(${pathServiceNonExistentId}) to getItemById`, async () => {
     const response = await req.get(pathServiceNonExistentId).expect(200);
 
-    expect(response.body.method).toBe('getItemById');
+    expect(response.body.method).toEqual('getItemById');
     expect(response.body.value).toBe('0');
   });
 
   it(`should route post(${pathService}) to createItem`, async () => {
     const response = await req.post(pathService).expect(200);
 
-    expect(response.body.method).toBe('createItem');
+    expect(response.body.method).toEqual('createItem');
   });
 
   it(`should route put(${pathService}) to updateItem`, async () => {
     const response = await req.put(pathService).expect(200);
 
-    expect(response.body.method).toBe('updateItem');
+    expect(response.body.method).toEqual('updateItem');
   });
 
   it(`should route delete(${pathServiceNonExistentId}) with json to updateItemById`, async () => {
@@ -71,7 +71,7 @@ describe('Service Routes', () => {
       .send({ hidden: true })
       .expect(200);
 
-    expect(response.body.method).toBe('updateItemById');
+    expect(response.body.method).toEqual('updateItemById');
     expect(response.body.value.hidden).toBe(true);
   });
 
@@ -82,7 +82,7 @@ describe('Service Routes', () => {
       .send({ blocked: true })
       .expect(200);
 
-    expect(response.body.method).toBe('updateItemById');
+    expect(response.body.method).toEqual('updateItemById');
     expect(response.body.value.blocked).toBe(true);
   });
 
@@ -93,7 +93,7 @@ describe('Service Routes', () => {
       .send({ blocked: false })
       .expect(200);
 
-    expect(response.body.method).toBe('updateItemById');
+    expect(response.body.method).toEqual('updateItemById');
     expect(response.body.value.blocked).toBe(false);
   });
 });

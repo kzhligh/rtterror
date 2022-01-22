@@ -2,11 +2,11 @@ import serviceRouter from '../service';
 import comboRouter from '../combo';
 import { customerRouter } from '../customer.route';
 
-const useSpy = jest.fn();
+const spyRouterInstance = jest.fn();
 
 jest.doMock('express', () => ({
   Router: () => ({
-    use: useSpy,
+    use: spyRouterInstance,
     get: jest.fn()
   }),
 }));
@@ -18,8 +18,8 @@ jest.mock('../customer.route', () => jest.fn());
 describe('should test server configuration', () => {
   it('should use router', () => {
     require('../index.ts');
-    expect(useSpy).toHaveBeenCalledWith('/services', serviceRouter);
-    expect(useSpy).toHaveBeenCalledWith('/combos', comboRouter);
-    expect(useSpy).toHaveBeenCalledWith('/customer', customerRouter);
+    expect(spyRouterInstance).toHaveBeenCalledWith('/services', serviceRouter);
+    expect(spyRouterInstance).toHaveBeenCalledWith('/combos', comboRouter);
+    expect(spyRouterInstance).toHaveBeenCalledWith('/customer', customerRouter);
   });
 });
