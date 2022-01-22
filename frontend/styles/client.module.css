@@ -1,0 +1,19 @@
+.searchbar {
+  width: 50%;
+  margin-bottom: 45px;
+}
+.userFormGroup {
+  /* display: block ruby; */
+  display: flex;
+  flex-direction: row;
+}
+.userFormRow {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.userTextField {
+  flex: 2;
+  padding-right: 20%;
+}
