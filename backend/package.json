@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "type": "module",
   "description": "nodejs+expressjs backend",
-  "main": "./src/server.ts",
+  "main": "./src/app.ts",
   "scripts": {
     "test": "jest --watchAll",
     "test:ci": "jest --coverage",
     "build": "tsc",
-    "start": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only ./src/server.ts",
-    "start:prod": "tsc && tspath -f && node dist/src/server.js"
+    "start": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only ./src/app.ts",
+    "start:prod": "tsc && tspath -f && node dist/src/app.js"
   },
   "repository": {
     "type": "git",
