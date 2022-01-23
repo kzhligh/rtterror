@@ -38,7 +38,7 @@ router.get('/:id', (req, res, next) => {
 router.post('/', (req, res, next) => {
   const { body } = req;
   serviceService
-    .createItem(body)
+    .createItems(body)
     .then((data) => {
       res.status(200).send(data);
     })
@@ -51,7 +51,7 @@ router.post('/', (req, res, next) => {
 router.put('/', (req, res, next) => {
   const { body } = req;
   serviceService
-    .updateItem(body)
+    .updateItems(body)
     .then((data) => {
       res.status(200).send(data);
     })

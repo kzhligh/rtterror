@@ -142,6 +142,32 @@ class ComboService extends GeneralService<ICombo, IComboDto> {
       throw error;
     }
   }
+
+  async deleteItemsByServiceId(serviceId: string, t?: any): Promise<void> {
+    let allComboIds = await this.serviceComboModel.findAll({
+      where: {
+        service_id: serviceId
+      }
+    });
+    allComboIds = allComboIds.map((item: Model) => (item.getDataValue('combo_id')));
+    let counter = 0;
+    for (const comboId of allComboIds) {
+      await this.model.destroy({
+        where: {
+          id: comboId
+        },
+        transaction: t
+      });
+      counter++;
+    }
+    console.log(counter + 'combos has been deleted')
+    let leftComboIds = await this.serviceComboModel.findAll({
+      where: {
+        service_id: serviceId
+      }
+    });
+    if (leftComboIds.length > 0) console.error(leftComboIds.length + ' has left undeleted.')
+  }
 }
 
 export default new ComboService('combo', 'service', 'service_combo');

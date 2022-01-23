@@ -28,3 +28,23 @@ export interface IServiceDto {
   hidden?: boolean;
   employee_ids?: string[];
 }
+
+interface IDurationsPrices {
+  id?: string;    //  for updating a series of services
+  duration: number;
+  price: string;
+}
+
+export interface IServicesDto {
+  service_code: string;
+  name: string;
+  description?: string;
+  treatment_type?: string;
+  durations_prices: [IDurationsPrices];
+  price: string;
+  barcode?: string;
+  sms_description?: string;
+  blocked?: boolean;
+  hidden?: boolean;
+  employee_ids?: string[];
+}

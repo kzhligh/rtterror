@@ -38,6 +38,10 @@ class EmployeeService extends GeneralService<IEmployee, IEmployeeDto>{
         }
     }
 
+    /*
+    * this method will create an employee item in the database, including employee personal information, and associated services
+    * @return the newly created employee object with associated services info
+    * */
     async createItem(itemInfo: IEmployeeDto): Promise<IEmployee> {
         const t = await sequelize.transaction();
         try {
@@ -57,15 +61,6 @@ class EmployeeService extends GeneralService<IEmployee, IEmployeeDto>{
             throw error;
         }
     }
-
-    // async addServicesToEmployee(service_ids: string[], employeeId: string): Promise<IEmployee> {
-    //     const t = await sequelize.transaction();
-    //     try {
-    //         let employee = await this.model.findByPk(employeeId, { include: this.serviceModel });
-    //         const serviceList =
-    //     }
-    // }
-
 }
 
 export default new EmployeeService('employee', 'service', 'employee_service');
