@@ -1,24 +1,30 @@
 import { Model } from "sequelize";
 import GeneralService from "src/services/general-service";
+import serviceEmployeeService from './service-employee-service';
 import { IEmployee, IEmployeeDto } from "src/interfaces/IEmployee";
 import sequelize from "src/modules/sequelize";
 
 class EmployeeService extends GeneralService<IEmployee, IEmployeeDto>{
     private readonly serviceModel: any;
-    private readonly employeeServiceModel: any;
+    // private readonly employeeServiceModel: any;
 
     constructor(
         employeeModelName: string,
         serviceModelName: string,
-        employeeServiceModelName: string
+        // employeeServiceModelName: string
     ) {
         super(employeeModelName);
         this.serviceModel = sequelize.model(serviceModelName);
-        this.employeeServiceModel = sequelize.model(employeeServiceModelName);
+        // this.employeeServiceModel = sequelize.model(employeeServiceModelName);
     }
     async getAllItems(): Promise<IEmployee[]> {
         try {
-            const allItems = await this.model.findAll({ include: this.serviceModel });
+            const allItems = await this.model.findAll({
+                where: {
+                    hidden: false
+                },
+                include: this.serviceModel
+            });
             return allItems.map((employee: Model) => {
                 return employee.toJSON() as IEmployee;
             });
@@ -61,6 +67,50 @@ class EmployeeService extends GeneralService<IEmployee, IEmployeeDto>{
             throw error;
         }
     }
+
+    async updateItem(itemInfo: IEmployee): Promise<IEmployee> {
+        const t = await sequelize.transaction();
+        try {
+            const { id, service_ids, ...employeeInfo } = itemInfo;
+            // update employee basic info
+            const updatedEmployee = await this.model.update(
+                { id: id, ...employeeInfo },
+                { transaction: t }
+            );
+            // update service-employee relationship
+            await serviceEmployeeService.deleteItemByEmployeeId(id, t);
+            if (service_ids && service_ids.length > 0) {
+                for (const serviceId of service_ids) {
+                    const serviceItem = this.serviceModel.findByPk(serviceId);
+                    updatedEmployee.addService(serviceItem, { transaction: t });
+                }
+            }
+            await t.commit();
+            return await this.getItemById(id);
+        } catch (error) {
+            console.error('EmployeeService/updateItem()/error: ', error);
+            await t.rollback();
+            throw error;
+        }
+    }
+
+    async hideItemById(id: string, updateFields: any): Promise<IEmployee[]> {
+        const t = await sequelize.transaction();
+        try {
+            await this.model.update(updateFields, {
+                where: {
+                    id: id
+                },
+                transaction: t
+            });
+            await t.commit();
+            return this.getAllItems();
+        } catch (error) {
+            console.error('EmployeeService/updateItemById()/ERROR: ', error);
+            await t.rollback();
+            throw error;
+        }
+    }
 }
 
-export default new EmployeeService('employee', 'service', 'employee_service');
+export default new EmployeeService('employee', 'service');

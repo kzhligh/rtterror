@@ -11,6 +11,17 @@ class ServiceEmployeeService extends GeneralService<IAll, IEmployeeService>{
             transaction: t
         });
     }
+
+    async deleteItemByEmployeeId(employeeId: string, t?: any): Promise<void> {
+        let queryOption: any = {};
+        if (t) queryOption.transaction = t
+        await this.model.destroy({
+            where: {
+                employee_id: employeeId
+            },
+            queryOption
+        });
+    }
 }
 
 export default new ServiceEmployeeService('employee_service');

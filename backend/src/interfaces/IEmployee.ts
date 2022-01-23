@@ -12,6 +12,9 @@ export interface IEmployee extends IAll {
     phone: string;
     email: string;
     title: string;      // therapist or doctor
+    start_date: Date;
+    end_date?: Date;
+    hidden: boolean;
     service_ids?: string[];
 }
 
@@ -25,5 +28,8 @@ export interface IEmployeeDto {
     phone: string;
     email: string;
     title: string;
+    start_date: Date;
+    end_date?: Date;
+    hidden: boolean;
     service_ids?: string[];
 }
