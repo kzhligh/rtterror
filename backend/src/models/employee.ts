@@ -1,4 +1,4 @@
-import { Model, DataTypes } from "sequelize";
+import { Sequelize, Model, DataTypes } from "sequelize";
 import sequelize from "src/modules/sequelize";
 
 export default class EmployeeModel extends Model {}
@@ -51,7 +51,7 @@ EmployeeModel.init({
     start_date: {
         type: DataTypes.DATE,
         allowNull: false,
-        defaultValue: DataTypes.NOW
+        defaultValue: Sequelize.fn('NOW')
     },
     end_date: {
         type: DataTypes.DATE
