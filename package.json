@@ -9,7 +9,7 @@
   },
   "engineStrict": true,
   "dependencies": {
-    "ts-node": "^3.3.0"
+    "ts-node": "^10.4.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.2.1",
