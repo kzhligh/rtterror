@@ -5,7 +5,8 @@
   "main": ".",
   "engines": {
     "npm": "please-use-yarn",
-    "yarn": ">= 1.22.10"
+    "yarn": ">= 1.22.10",
+    "node": "16.x"
   },
   "engineStrict": true,
   "dependencies": {},
