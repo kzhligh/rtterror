@@ -4,7 +4,6 @@
   "description": "TEAM RUNTIME TERROR - SOEN 490",
   "main": ".",
   "engines": {
-    "npm": "please-use-yarn",
     "yarn": ">= 1.22.10",
     "node": "16.x"
   },
