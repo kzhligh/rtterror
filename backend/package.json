@@ -11,6 +11,10 @@
     "start":"ts-node dist/src/server.js",
     "start:prod": "tsc && tspath -f && node dist/src/server.js"
   },
+  "engines": {
+    "node": "16.x",
+    "npm": "7.x"
+  }
   "repository": {
     "type": "git",
     "url": "rtterror"
