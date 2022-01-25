@@ -7,13 +7,8 @@
     "test": "jest --watchAll",
     "test:ci": "jest --coverage",
     "build": "tsc",
-    "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only ./src/server.ts",
-    "start":"ts-node dist/src/server.js",
+    "start": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only ./src/server.ts",
     "start:prod": "tsc && tspath -f && node dist/src/server.js"
-  },
-  "engines": {
-    "node": "16.x",
-    "yarn": "1.x"
   },
   "repository": {
     "type": "git",
