@@ -25,7 +25,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install",
     "start": "ts-node backend/src/server.ts",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=true npm install npm && run build"
   },
   "repository": {
     "type": "git",
