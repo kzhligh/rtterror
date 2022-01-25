@@ -8,7 +8,9 @@
     "node": "16.x"
   },
   "engineStrict": true,
-  "dependencies": {},
+  "dependencies": {
+    "ts-node": "^3.3.0"
+  },
   "devDependencies": {
     "@commitlint/cli": "^13.2.1",
     "@commitlint/config-conventional": "^13.2.0",
