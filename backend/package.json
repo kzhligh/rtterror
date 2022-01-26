@@ -5,8 +5,8 @@
   "description": "nodejs+expressjs backend",
   "main": "./src/app.ts",
   "scripts": {
-    "test": "jest --watchAll",
-    "test:ci": "jest --coverage",
+    "test": "set NODE_ENV=test && jest --watchAll",
+    "test:ci": "set NODE_ENV=test && jest --coverage",
     "build": "tsc",
     "start": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only ./src/app.ts",
     "start:prod": "tsc && tspath -f && node dist/src/app.js"
@@ -39,6 +39,7 @@
     "@types/validator": "^13.7.0",
     "jest": "^27.4.4",
     "nodemon": "^2.0.13",
+    "sequelize-cli": "^6.3.0",
     "supertest": "^6.1.6",
     "ts-jest": "^27.1.1",
     "ts-node-dev": "^1.1.8",
