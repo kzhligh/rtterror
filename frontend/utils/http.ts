@@ -6,15 +6,15 @@ interface RequestMeta extends RequestInit {
 }
 
 export const http = async <T = any>(
-  url: RequestInfo,
+  path: RequestInfo,
   { method, searchParams, ...options }: RequestMeta = {}
 ): Promise<T> => {
   const HOST =
     (typeof window === 'undefined'
       ? process.env.HOST
-      : process.env.CLIENT_HOST) ?? 'localhost';
+      : process.env.NEXT_PUBLIC_CLIENT_HOST) ?? 'http://localhost:5000';
 
-  const endpoint = new URL(`http://${HOST}:5000${url}`);
+  const endpoint = new URL(`${HOST}${path}`);
 
   if (searchParams)
     Object.entries(searchParams).forEach((entries) =>

@@ -6,9 +6,9 @@
   "scripts": {
     "test": "jest --watchAll",
     "test:ci": "jest --coverage",
-    "build": "tsc",
+    "build": "tsc && tspath -f",
     "start": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only ./src/server.ts",
-    "start:prod": "tsc && tspath -f && node dist/src/server.js"
+    "start:prod": "node dist/src/server.js"
   },
   "repository": {
     "type": "git",

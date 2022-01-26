@@ -4,8 +4,7 @@
   "description": "TEAM RUNTIME TERROR - SOEN 490",
   "main": ".",
   "engines": {
-    "yarn": ">= 1.22.10",
-    "node": "16.x"
+    "yarn": ">= 1.22.10"
   },
   "engineStrict": true,
   "dependencies": {},
@@ -23,9 +22,7 @@
     "start:client:ci": "yarn --cwd frontend start",
     "start:server:ci": "yarn --cwd backend start:prod",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky install",
-    "start": "ts-node /backend/src/server.ts",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false yarn add yarn && yarn run"
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
