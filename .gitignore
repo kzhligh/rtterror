@@ -9,3 +9,4 @@ backend/dist/
 **/node_modules/
 cypress/screenshots/
 ./package-lock.json
+.vercel

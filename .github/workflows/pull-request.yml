@@ -175,6 +175,7 @@ jobs:
           cd backend
           yarn install --frozen-lockfile --silent
           touch .env
+          yarn build
 
       - name: Build client application
         run: |
