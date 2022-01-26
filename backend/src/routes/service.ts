@@ -15,8 +15,10 @@ router.get('/', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
-      res.status(400).send(error);
+      console.error(
+        `ERROR - (${req.method})/services${req.path}/error: ${error}`
+      );
+      res.status(400).send(error.message);
     });
 });
 
@@ -30,8 +32,10 @@ router.get('/:id', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
-      res.status(400).send(error);
+      console.error(
+        `ERROR - (${req.method})/services${req.path}/error: ${error}`
+      );
+      res.status(400).send(error.message);
     });
 });
 
@@ -43,8 +47,10 @@ router.post('/', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
-      res.status(400).send(error);
+      console.error(
+        `ERROR - (${req.method})/services${req.path}/error: ${error}`
+      );
+      res.status(400).send(error.message);
     });
 });
 
@@ -56,8 +62,10 @@ router.put('/', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
-      res.status(400).send(error);
+      console.error(
+        `ERROR - (${req.method})/services${req.path}/error: ${error}`
+      );
+      res.status(400).send(error.message);
     });
 });
 
@@ -70,8 +78,10 @@ router.delete('/:id', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
-      res.status(400).send(error);
+      console.error(
+        `ERROR - (${req.method})/services${req.path}/error: ${error}`
+      );
+      res.status(400).send(error.message);
     });
 });
 
@@ -84,8 +94,10 @@ router.put('/block/:id', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
-      res.status(400).send(error);
+      console.error(
+        `ERROR - (${req.method})/services${req.path}/error: ${error}`
+      );
+      res.status(400).send(error.message);
     });
 });
 
@@ -98,8 +110,10 @@ router.put('/unblock/:id', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
-      res.status(400).send(error);
+      console.error(
+        `ERROR - (${req.method})/services${req.path}/error: ${error}`
+      );
+      res.status(400).send(error.message);
     });
 });
 
