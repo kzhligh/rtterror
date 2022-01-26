@@ -10,17 +10,32 @@ jest.mock('../../models/service', () => ({
 }));
 
 jest.mock('../../services/service-service', () => ({
-  getAllValidItems: () =>
-    Promise.resolve({ method: 'getAllValidItems', value: null }),
-  getItemById: (id: number) =>
-    Promise.resolve({ method: 'getItemById', value: id }),
+  getAllValidItems: jest
+    .fn()
+    .mockImplementationOnce(() =>
+      Promise.resolve({ method: 'getAllValidItems', value: null })
+    ),
+  getItemById: jest
+    .fn()
+    .mockImplementationOnce((id: number) =>
+      Promise.resolve({ method: 'getItemById', value: id })
+    )
+    .mockRejectedValueOnce(99),
   createItem: (content: any) =>
     Promise.resolve({ method: 'createItem', value: content }),
   updateItem: (content: any) =>
     Promise.resolve({ method: 'updateItem', value: content }),
-  updateItemById: (id: number, content: any) =>
-    Promise.resolve({ method: 'updateItemById', value: content }),
+  updateItemById: jest
+    .fn()
+    .mockImplementation((id: number, content: any) =>
+      Promise.resolve({ method: 'updateItemById', value: content })
+    )
+    .mockRejectedValueOnce(99),
 }));
+
+const pathOkId = '/0';
+const pathErrorId = '/99';
+const pathService = '/services';
 
 let req: SuperTest<request.Test>;
 let server: Server;
@@ -38,19 +53,25 @@ afterAll(() => {
 });
 
 describe('Service Routes', () => {
-  const pathService = '/services';
   it(`should route get(${pathService}) to getAllValidItems`, async () => {
     const response = await req.get('/services').expect(200);
 
     expect(response.body.method).toEqual('getAllValidItems');
   });
 
-  const pathServiceNonExistentId = '/services/0';
-  it(`should route get(${pathServiceNonExistentId}) to getItemById`, async () => {
-    const response = await req.get(pathServiceNonExistentId).expect(200);
+  it(`should route get(${pathService + pathOkId}) to getItemById`, async () => {
+    const response = await req.get(pathService + pathOkId).expect(200);
 
     expect(response.body.method).toEqual('getItemById');
     expect(response.body.value).toBe('0');
+  });
+
+  it(`should route get(${pathService +
+    pathErrorId}) to fail getItemById`, async () => {
+    const response = await req.get(pathService + pathErrorId).expect(400);
+
+    expect(response.body.method).toBeUndefined();
+    expect(response.body.value).toBeUndefined();
   });
 
   it(`should route post(${pathService}) to createItem`, async () => {
@@ -65,9 +86,21 @@ describe('Service Routes', () => {
     expect(response.body.method).toEqual('updateItem');
   });
 
-  it(`should route delete(${pathServiceNonExistentId}) with json to updateItemById`, async () => {
+  it(`should route delete(${pathService +
+    pathErrorId}) non existent id with json to fail updateItemById`, async () => {
     const response = await req
-      .del(pathServiceNonExistentId)
+      .del(pathService + pathErrorId)
+      .send({ hidden: true })
+      .expect(400);
+
+    expect(response.body.method).toBeUndefined();
+    expect(response.body.value).toBeUndefined();
+  });
+
+  it(`should route delete(${pathService +
+    pathOkId}) with json to updateItemById`, async () => {
+    const response = await req
+      .del(pathService + pathOkId)
       .send({ hidden: true })
       .expect(200);
 
@@ -75,10 +108,11 @@ describe('Service Routes', () => {
     expect(response.body.value.hidden).toBe(true);
   });
 
-  const pathServiceNonExistentIdBlock = '/services/block/0';
-  it(`should route put(${pathServiceNonExistentIdBlock}) to `, async () => {
+  it(`should route put(${pathService +
+    pathOkId +
+    '/block'}) to updateItemById with status=200 and blocked:true`, async () => {
     const response = await req
-      .put(pathServiceNonExistentIdBlock)
+      .put(pathService + pathOkId + '/block')
       .send({ blocked: true })
       .expect(200);
 
@@ -86,10 +120,11 @@ describe('Service Routes', () => {
     expect(response.body.value.blocked).toBe(true);
   });
 
-  const pathServiceNonExistentIdUnblock = '/services/unblock/0';
-  it(`should respond to ${pathServiceNonExistentIdUnblock} put nonexistent with 400`, async () => {
+  it(`should route ${pathService +
+    pathOkId +
+    '/unblock'} to updateItemById with status=200 and blocked:false`, async () => {
     const response = await req
-      .put(pathServiceNonExistentIdUnblock)
+      .put(pathService + pathOkId + '/unblock')
       .send({ blocked: false })
       .expect(200);
 
