@@ -4,8 +4,7 @@
   "description": "TEAM RUNTIME TERROR - SOEN 490",
   "main": ".",
   "engines": {
-    "yarn": ">= 1.22.10",
-    "node": "16.x"
+    "yarn": ">= 1.22.10"
   },
   "engineStrict": true,
   "dependencies": {},
@@ -38,11 +37,7 @@
   },
   "homepage": "https://github.com/kevinlizh1992/rtterror#readme",
   "lint-staged": {
-    "frontend/*.{js, jsx, ts, tsx}": [
-      "yarn prettier --write ."
-    ],
-    "backend/*.{js, jsx, ts, tsx}": [
-      "yarn prettier --write ."
-    ]
+    "frontend/*.{js, jsx, ts, tsx}": ["yarn prettier --write ."],
+    "backend/*.{js, jsx, ts, tsx}": ["yarn prettier --write ."]
   }
 }
