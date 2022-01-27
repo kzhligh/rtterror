@@ -3,6 +3,15 @@ import serviceService from '../services/service-service';
 
 const router = express.Router();
 
+const sendBackErrorMessage = (
+  req: express.Request,
+  res: express.Response,
+  error: Error
+) => {
+  console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
+  res.status(400).send(error.message);
+};
+
 router.use(function (req, res, next) {
   console.log('%s %s %s', req.method, req.url, req.path);
   next();
@@ -15,8 +24,7 @@ router.get('/', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
-      res.status(400).send(error);
+      sendBackErrorMessage(req, res, error);
     });
 });
 
@@ -30,8 +38,7 @@ router.get('/:id', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
-      res.status(400).send(error);
+      sendBackErrorMessage(req, res, error);
     });
 });
 
@@ -43,8 +50,7 @@ router.post('/', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
-      res.status(400).send(error);
+      sendBackErrorMessage(req, res, error);
     });
 });
 
@@ -56,8 +62,7 @@ router.put('/', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
-      res.status(400).send(error);
+      sendBackErrorMessage(req, res, error);
     });
 });
 
@@ -70,8 +75,7 @@ router.delete('/:id', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
-      res.status(400).send(error);
+      sendBackErrorMessage(req, res, error);
     });
 });
 
@@ -84,8 +88,7 @@ router.put('/:id/block', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
-      res.status(400).send(error);
+      sendBackErrorMessage(req, res, error);
     });
 });
 
@@ -98,8 +101,7 @@ router.put('/:id/unblock', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
-      res.status(400).send(error);
+      sendBackErrorMessage(req, res, error);
     });
 });
 
