@@ -13,7 +13,7 @@ const defineConfig = (
   dbPort: string = '3306',
   dbName: string = 'database1',
   dbUsername: string = 'root',
-  dbPassword: string = ''
+  dbPassword: string = 'password'
 ) => ({
   port: parseInt(appPort),
   database: {
