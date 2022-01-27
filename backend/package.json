@@ -6,9 +6,9 @@
   "scripts": {
     "test": "set NODE_ENV=test && jest --watchAll",
     "test:ci": "set NODE_ENV=test && jest --coverage",
-    "build": "tsc",
+    "build": "tsc && tspath -f",
     "start": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only ./src/app.ts",
-    "start:prod": "tsc && tspath -f && node dist/src/app.js"
+    "start:prod": "node dist/src/app.js"
   },
   "repository": {
     "type": "git",

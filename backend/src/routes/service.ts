@@ -75,7 +75,7 @@ router.delete('/:id', (req, res, next) => {
     });
 });
 
-router.put('/block/:id', (req, res, next) => {
+router.put('/:id/block', (req, res, next) => {
   const { params } = req;
   const { id } = params;
   serviceService
@@ -89,7 +89,7 @@ router.put('/block/:id', (req, res, next) => {
     });
 });
 
-router.put('/unblock/:id', (req, res, next) => {
+router.put('/:id/unblock', (req, res, next) => {
   const { params } = req;
   const { id } = params;
   serviceService
