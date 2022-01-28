@@ -4,6 +4,7 @@ import comboService from './combo-service';
 import serviceEmployeeService from './service-employee-service';
 import { IService, IServicesDto, IServiceDto } from '../interfaces/IService';
 import sequelize from "src/modules/sequelize";
+import service from "src/routes/service";
 
 class ServiceService extends GeneralService<IService, IServicesDto> {
   private readonly employeeModel: any;
@@ -218,6 +219,27 @@ class ServiceService extends GeneralService<IService, IServicesDto> {
 
         await t.commit();
       }
+    } catch (error) {
+      await t.rollback();
+      throw error;
+    }
+  }
+
+  async blockUnblockServices(serviceCode: string, blockService: boolean): Promise<IService[]> {
+    console.log('service code: ', serviceCode);
+    const t = await sequelize.transaction();
+    try {
+      const [ numberOfUpdates ] = await this.model.update({ blocked: blockService }, {
+        where: {
+          service_code: serviceCode.trim()
+        },
+        transaction: t
+      });
+      console.log('number of affected rows: ', numberOfUpdates);
+      if (numberOfUpdates === 0) throw new Error(`ERROR - no service of given service_code ${serviceCode} has been found`);
+      const allServices = await this.getAllValidItems();
+      await t.commit();
+      return allServices;
     } catch (error) {
       await t.rollback();
       throw error;

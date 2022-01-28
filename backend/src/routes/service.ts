@@ -79,30 +79,54 @@ router.delete('/:id', (req, res, next) => {
     });
 });
 
-router.put('/:id/block', (req, res, next) => {
+router.put('/:serviceCode/block', (req, res) => {
   const { params } = req;
-  const { id } = params;
-  serviceService
-    .updateItemById(id, { blocked: true })
-    .then((data) => {
-      res.status(200).send(data);
-    })
-    .catch((error) => {
-      sendBackErrorMessage(req, res, error);
-    });
+  const { serviceCode } = params;
+  serviceService.blockUnblockServices(serviceCode, true)
+      .then((updatedServices) => {
+        res.status(200).send(updatedServices);
+      })
+      .catch((error) => {
+        sendBackErrorMessage(req, res, error);
+      });
 });
 
-router.put('/:id/unblock', (req, res, next) => {
+router.put('/:serviceCode/unblock', (req, res) => {
   const { params } = req;
-  const { id } = params;
-  serviceService
-    .updateItemById(id, { blocked: false })
-    .then((data) => {
-      res.status(200).send(data);
-    })
-    .catch((error) => {
-      sendBackErrorMessage(req, res, error);
-    });
+  const { serviceCode } = params;
+  serviceService.blockUnblockServices(serviceCode, false)
+      .then((updatedServices) => {
+        res.status(200).send(updatedServices);
+      })
+      .catch((error) => {
+        sendBackErrorMessage(req, res, error);
+      });
 });
+
+// router.put('/:id/block', (req, res, next) => {
+//   const { params } = req;
+//   const { id } = params;
+//   serviceService
+//     .updateItemById(id, { blocked: true })
+//     .then((data) => {
+//       res.status(200).send(data);
+//     })
+//     .catch((error) => {
+//       sendBackErrorMessage(req, res, error);
+//     });
+// });
+//
+// router.put('/:id/unblock', (req, res, next) => {
+//   const { params } = req;
+//   const { id } = params;
+//   serviceService
+//     .updateItemById(id, { blocked: false })
+//     .then((data) => {
+//       res.status(200).send(data);
+//     })
+//     .catch((error) => {
+//       sendBackErrorMessage(req, res, error);
+//     });
+// });
 
 export default router;
