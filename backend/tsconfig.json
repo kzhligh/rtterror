@@ -1,5 +1,5 @@
 {
-  "include": ["./src/**/*"],
+  "include": ["./src/**/*", "__test__/index.test.js"],
   "exclude": ["./dist", "./node_modules/**"],
   "compilerOptions": {
     "experimentalDecorators": true,

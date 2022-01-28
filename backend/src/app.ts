@@ -5,13 +5,19 @@ import config from './config';
 import syncTables from './models/syncTables'; // this import should always before importing router
 import router from './routes';
 
+const app1 = express();
+app1.disable("x-powered-by");
+
+
 const startServer = async () => {
   try {
-    const app = express();
+    let corsOptions = {
+    };
 
-    app.use(express.json());
-    app.use(cors());
+    app1.use(express.json());
+    app1.use(cors(corsOptions));
 
+    // Sync Sequelize Models
     sequelize
       .authenticate()
       .then(() => {
@@ -25,12 +31,16 @@ const startServer = async () => {
       });
 
     await syncTables(); // syncTables() should always before app.use('/api/v1', router)
-    app.use('/api/v1', router);
+    app1.use('/api/v1', router);
 
-    const PORT = config.port || 5000;
+    await syncTables(); // syncTables() should always before app.use('/api/v1', router)
 
-    app.listen(PORT, () => {
-      console.log('server starts on port: ', PORT);
+    // Set api path
+    app1.use('/api/v1', router);
+
+    // Set port
+    app1.listen(config.port, () => {
+      console.log('server starts on port: ', config.port);
     });
   } catch (error) {
     console.error(error);
@@ -38,3 +48,5 @@ const startServer = async () => {
 };
 
 startServer();
+
+export default app1;
