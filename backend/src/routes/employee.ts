@@ -3,6 +3,15 @@ import employeeService from '../services/employee-service';
 
 const router = express.Router();
 
+const sendBackErrorMessage = (
+    req: express.Request,
+    res: express.Response,
+    error: Error
+) => {
+    console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
+    res.status(400).send(error.message);
+};
+
 router.use(function (req, res, next) {
     console.log('%s %s %s', req.method, req.url, req.path);
     next();
@@ -15,7 +24,7 @@ router.post('/', (req, res) => {
             res.status(200).send(newEmployee);
         })
         .catch((error) => {
-            res.status(400).send(error);
+            sendBackErrorMessage(req, res, error);
         });
 });
 
@@ -25,7 +34,7 @@ router.get('/', (req, res) => {
             res.status(200).send(allEmployees);
         })
         .catch((error) => {
-            res.status(400).send(error);
+            sendBackErrorMessage(req, res, error);
         });
 });
 
@@ -35,7 +44,7 @@ router.get('/:id', (req, res) => {
             res.status(200).send(employee);
         })
         .catch((error) => {
-            res.status(400).send(error);
+            sendBackErrorMessage(req, res, error);
         });
 });
 
@@ -45,7 +54,7 @@ router.put('/', (req, res) => {
             res.status(200).send(updatedService);
         })
         .catch((error) => {
-            res.status(400).send(error);
+            sendBackErrorMessage(req, res, error);
         });
 });
 
@@ -55,7 +64,7 @@ router.delete('/:id', (req, res) => {
             res.status(200).send(updatedEmployees);
         })
         .catch((error) => {
-            res.status(400).send(error);
+            sendBackErrorMessage(req, res, error);
         });
 });
 
