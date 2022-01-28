@@ -73,16 +73,17 @@ class EmployeeService extends GeneralService<IEmployee, IEmployeeDto>{
         try {
             const { id, service_ids, ...employeeInfo } = itemInfo;
             // update employee basic info
-            const updatedEmployee = await this.model.update(
+            const [ updatedEmployee, hasCreated ] = await this.model.upsert(
                 { id: id, ...employeeInfo },
                 { transaction: t }
             );
+            if (hasCreated) throw Error(`ERROR - no such an employee with id ${id} has been found`);
             // update service-employee relationship
             await serviceEmployeeService.deleteItemByEmployeeId(id, t);
             if (service_ids && service_ids.length > 0) {
                 for (const serviceId of service_ids) {
-                    const serviceItem = this.serviceModel.findByPk(serviceId);
-                    updatedEmployee.addService(serviceItem, { transaction: t });
+                    const serviceItem = await this.serviceModel.findByPk(serviceId);
+                    await updatedEmployee.addService(serviceItem, { transaction: t });
                 }
             }
             await t.commit();
