@@ -1,6 +1,6 @@
 # TEAM RUNTIME TERROR - SOEN 490
 
-_badges placeholder_
+![CI](https://github.com/kevinlizh1992/rtterror/actions/workflows/pull-request.yml/badge.svg)
 
 ## Members
 
