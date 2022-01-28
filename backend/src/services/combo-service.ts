@@ -161,7 +161,7 @@ class ComboService extends GeneralService<ICombo, IComboDto> {
       counter++;
     }
     console.log(counter + 'combos has been deleted')
-    let leftComboIds = await this.serviceComboModel.findAll({
+    const leftComboIds = await this.serviceComboModel.findAll({
       where: {
         service_id: serviceId
       }
