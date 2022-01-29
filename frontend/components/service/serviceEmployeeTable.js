@@ -8,8 +8,6 @@ import {
   TableRow,
 } from '@mui/material';
 import Paper from '@mui/material/Paper';
-import { useEffect, useState } from 'react';
-import styled from '../../styles/service.module.css';
 
 const ServiceEmployeeTable = (props) => {
   const { displayEmployeeList, handleEmployeeCheck, employeeCheckList } = props;
@@ -43,7 +41,6 @@ const ServiceEmployeeTable = (props) => {
               <TableCell align="center">
                 <Checkbox
                   key={employee.id}
-                  // aria-label={ename}
                   value={employee}
                   checked={employeeCheckList.includes(employee)}
                   onChange={(event) => {
