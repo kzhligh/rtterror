@@ -82,6 +82,23 @@ class ServiceService extends GeneralService<IService, IServicesDto> {
     }
   }
 
+  async getItemsByServiceCode(serviceCode: string): Promise<IService[]> {
+    try {
+      let services = await this.model.findAll(
+          {
+            where: {
+              service_code: serviceCode
+            },
+            include: this.employeeModel
+          }
+      );
+      return services.map((item: Model) => (item.toJSON() as IService));
+    } catch (error) {
+      console.error('ServiceService/getItemsByServiceCode()/ERROR: ', error);
+      throw error;
+    }
+  }
+
   /*
   * this method will update the services based on given info,
   * it may create new services, or delete(hide) existing service

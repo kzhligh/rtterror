@@ -28,12 +28,12 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.get('/:id', (req, res, next) => {
+router.get('/:serviceCode', (req, res, next) => {
   const { params } = req;
-  const { id } = params;
-  console.log(id);
+  const { serviceCode } = params;
+  console.log(serviceCode);
   serviceService
-    .getItemById(id)
+    .getItemsByServiceCode(serviceCode)
     .then((data) => {
       res.status(200).send(data);
     })
