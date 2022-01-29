@@ -3,7 +3,7 @@ import { IEmployeeService } from '../interfaces/IEmployeeService';
 import IAll from '../interfaces/IAll';
 
 class ServiceEmployeeService extends GeneralService<IAll, IEmployeeService>{
-    async deleteItemByServiceId(serviceId: string, t?: any): Promise<void> {
+    async deleteItemsByServiceId(serviceId: string, t?: any): Promise<void> {
         await this.model.destroy({
             where: {
                 service_id: serviceId

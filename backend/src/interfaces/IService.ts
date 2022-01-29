@@ -41,7 +41,6 @@ export interface IServicesDto {
   description?: string;
   treatment_type?: string;
   durations_prices: [IDurationsPrices];
-  price: string;
   barcode?: string;
   sms_description?: string;
   blocked?: boolean;

@@ -66,11 +66,11 @@ router.put('/', (req, res, next) => {
     });
 });
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:serviceCode', (req, res, next) => {
   const { params } = req;
-  const { id } = params;
+  const { serviceCode } = params;
   serviceService
-    .updateItemById(id, { hidden: true })
+    .hideItemsByServiceCode(serviceCode)
     .then((data) => {
       res.status(200).send(data);
     })
@@ -102,31 +102,5 @@ router.put('/:serviceCode/unblock', (req, res) => {
         sendBackErrorMessage(req, res, error);
       });
 });
-
-// router.put('/:id/block', (req, res, next) => {
-//   const { params } = req;
-//   const { id } = params;
-//   serviceService
-//     .updateItemById(id, { blocked: true })
-//     .then((data) => {
-//       res.status(200).send(data);
-//     })
-//     .catch((error) => {
-//       sendBackErrorMessage(req, res, error);
-//     });
-// });
-//
-// router.put('/:id/unblock', (req, res, next) => {
-//   const { params } = req;
-//   const { id } = params;
-//   serviceService
-//     .updateItemById(id, { blocked: false })
-//     .then((data) => {
-//       res.status(200).send(data);
-//     })
-//     .catch((error) => {
-//       sendBackErrorMessage(req, res, error);
-//     });
-// });
 
 export default router;
