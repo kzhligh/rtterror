@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import request from 'superagent';
 import BuildPath from '../../components/pathBuilder';
 import { useState } from 'react';
+import {http} from "../../utils/http";
 
 export async function getServerSideProps() {
   const employeeList = [
@@ -53,16 +54,20 @@ function ServiceFormPage({ employeeList }) {
     setOpen(false);
   };
   const addHandle = async (data) => {
-    await request
-      .post(BuildPath('services'))
-      .send(data)
-      .set('Accept', 'application/json')
-      .then((res) => {
-        console.log(res.status);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const result = await http('/api/v1/services', {
+      method: 'POST',
+      body: data,
+    });
+    // await request
+    //   .post(BuildPath('services'))
+    //   .send(data)
+    //   .set('Accept', 'application/json')
+    //   .then((res) => {
+    //     console.log(res.status);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
     closeDialog();
   };
   return (

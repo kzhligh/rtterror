@@ -1,128 +1,66 @@
 import ServiceComponent from '../../components/service';
-import BuildPath from '../../components/pathBuilder';
-import request from 'superagent';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import {http} from "../../utils/http";
+import _groupBy from "lodash/groupBy";
+import _cloneDeep from "lodash/cloneDeep";
 
 export async function getServerSideProps(context) {
-  let serviceList = [
-    {
-      "serviceCode":"ACU",
-      "name": "Acupuncture",
-      "description": "A curative and preventive therapy, which can be used on its own or as a complement to conventional medicine ",
-      "treatment_type": "Acupuncture",
-      "duration":1800000,
-      "price": 100,
-      "barcode":"ACU 001",
-      "sms_description": "Acupuncture"
-    }
-,
-    {
-      "serviceCode":"OST",
-      "name": "OSTEOPATHY",
-      "description": "Osteopathy is a therapeutic method of a preventative and curative approach considering all factors surrounding the patient. ",
-      "treatment_type": "OSTEOPATHY",
-      "duration":3600000,
-      "price": 150,
-      "barcode":"OST 001",
-      "sms_description": "OSTEOPATHY"
-    }
-,
-    {
-      "serviceCode":"SWEM",
-      "name": "SWEDISH MASSAGE",
-      "description": "The Swedish massage is a manual physical technique, which aims to relieve the musculature from its tensions and to improve the circulation of blood and nutrients throughout the body while obtaining a state of relaxation. ",
-      "treatment_type": "SWEDISH MASSAGE",
-      "duration":3600000,
-      "price": 120,
-      "barcode":"SWEM 001",
-      "sms_description": "SWEDISH MASSAGE"
-    }
+  let employeeList= await http(`/api/v1/employees`);
 
-,
-    {
-      "serviceCode":"SWEM",
-      "name": "SWEDISH MASSAGE",
-      "description": "The Swedish massage is a manual physical technique, which aims to relieve the musculature from its tensions and to improve the circulation of blood and nutrients throughout the body while obtaining a state of relaxation. ",
-      "treatment_type": "SWEDISH MASSAGE",
-      "duration":3600000,
-      "price": 120,
-      "barcode":"SWEM 001",
-      "sms_description": "SWEDISH MASSAGE"
-    }
-  ];
-  await request
-    .get(BuildPath('services'))
-    .set('Accept', 'application/json')
-    .then((res) => {
-      serviceList = res.body;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
   return {
-    props: { serviceList: serviceList },
+    props: { employeeList: employeeList },
   };
 }
 
-const Service = ({ serviceList }) => {
-  const [serviceListData, setServiceListData] = useState(serviceList);
+const Service = ({ employeeList }) => {
+  const [serviceListData, setServiceListData] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [loading, setLoading] = useState(undefined);
 
   const getServiceList = async () => {
-    await request
-      .get(BuildPath('services'))
-      .set('Accept', 'application/json')
-      .then((res) => {
-        let serList = res.body;
-        serList.sort((item1, item2) => {
-          const date1 = new Date(item1['createdAt']);
-          const date2 = new Date(item2['createdAt']);
-
-          if (date1 > date2) {
-            return -1;
-          } else if (date1 < date2) {
-            return 1;
-          } else {
-            return 0;
-          }
-        });
-        setServiceListData(serList);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // combo too
+    // we have to group
+    let serviceListResponse= await http(`/api/v1/services`);
+    let serviceArray = _groupBy(serviceListResponse, 'service_code')
+    let serviceList = [];
+    let item, durationPriceList, durationPriceItem;
+    for (const serviceCode in serviceArray) {
+      item = _cloneDeep(serviceArray[serviceCode][0]);
+      item.service_code = serviceCode;
+      delete item.duration;
+      delete item.price;
+      durationPriceList = [];
+      for (let insideItem of serviceArray[serviceCode]) {
+        durationPriceItem = {};
+        durationPriceItem.id = insideItem.id;
+        durationPriceItem.duration = (insideItem.duration * 1 / 3600000).toFixed(2);
+        durationPriceItem.price = insideItem.price;
+        durationPriceList.push(durationPriceItem);
+      }
+      item.durations_prices = durationPriceList;
+      serviceList.push(item);
+    }
+    setServiceListData(serviceList);
   };
-
   useEffect(() => {
     setLoading(true);
     getServiceList().then((r) => setLoading(false));
   }, [refresh]);
+  useEffect(() => {
+    setLoading(true);
+    getServiceList().then((r) => setLoading(false));
+  }, []);
 
   const deleteService = (item) => {
-    request
-      .delete(BuildPath('services/' + item.id))
-      .set('Accept', 'application/json')
-      .then((res) => {
-        setRefresh(!refresh);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    http(`/api/v1/services/${item.service_code}`, {
+      method: 'DELETE'
+    }).then((r)=>{ setRefresh(!refresh)});
   };
   const toggleBlocked = (item) => {
-    let path = 'services/' + (item.blocked ? 'unblock/' : 'block/') + item.id;
-
-    request
-      .put(BuildPath(path))
-      .set('Accept', 'application/json')
-      .then((res) => {
-        setRefresh(!refresh);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    let path = '/api/v1/services/' +  item.service_code + (item.blocked ? '/unblock' : '/block') ;
+    http(path, {
+      method: 'PUT'
+    }).then((r)=>{ setRefresh(!refresh)});
   };
   return (
     <div>
