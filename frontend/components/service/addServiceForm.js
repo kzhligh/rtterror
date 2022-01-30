@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -15,7 +14,6 @@ import DurationPrice from './durationPrice';
 import AddIcon from '@mui/icons-material/Add';
 import {v4 as uuidv4} from 'uuid';
 import {InputTextField} from "../form/formComponent";
-
 
 const AddServiceForm = (props) => {
     const initValue = {

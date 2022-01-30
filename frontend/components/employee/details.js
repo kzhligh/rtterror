@@ -1,12 +1,12 @@
 import Box from "@mui/material/Box";
-import {Tab,Grid} from "@mui/material";
+import {Tab, Grid} from "@mui/material";
 import {useState} from "react";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
 import * as React from "react";
 import EmployeeForm from "./employee";
 
 const EmployeeDetailComponent = (props) => {
-    const {employee , editEmployee , serviceList , serviceEmployeeList} = props;
+    const {employee, editEmployee, serviceList, serviceEmployeeList} = props;
     const [tabValue, setTabValue] = useState('1');
     const [employeeValue, setEmployeeValue] = useState(employee);
 

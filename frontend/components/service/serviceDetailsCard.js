@@ -16,10 +16,6 @@ import _cloneDeep from "lodash/cloneDeep";
 import {InputTextField} from "../form/formComponent";
 import {v4 as uuidv4} from 'uuid';
 
-// in the service detail page display only the employee of the service
-// add employee display the employee not in the service
-
-// add selected , add teh chcek employee list to the service employeelist
 const ServiceDetailsCard = (props) => {
     const {item, serviceEmployeeList, employeeList, editHandle} = props;
     const [addEmployeeCheckList, setAddEmployeeCheckList] = useState([]);
@@ -60,10 +56,7 @@ const ServiceDetailsCard = (props) => {
         }
     };
     const handleAddEmployee = () => {
-        //    extract the employ not in the service
-        //    set the display service employee dialog
         setServiceEmployeeDialog(true);
-        // filter the employee that are in employeelist but not in the serviceEmployelist , mean the employee who not yet in the service
         setRemainEmployeeList(
             employeeList.filter(
                 ({id: val1}) =>
@@ -88,8 +81,6 @@ const ServiceDetailsCard = (props) => {
         setDeleteEmployeeCheckList([]);
     };
     const handleSaveService = () => {
-        // add duration
-        // add employee
         let durationTemp = durationPriceList.map(d => (
             Object.assign({}, d, {duration: d.duration * 3600000})));
         let employeeTemp = serviceEmployList.map(emp => emp.id);

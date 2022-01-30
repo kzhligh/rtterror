@@ -2,11 +2,11 @@ import EmployeeDetailComponent from "../../components/employee/details";
 import _groupBy from "lodash/groupBy";
 import _cloneDeep from "lodash/cloneDeep";
 import {http} from "../../utils/http";
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 
 export async function getServerSideProps(context) {
-    let employee = await http(`/api/v1/employees/${context.query.empid}` );
-    let serviceListResponse= await http(`/api/v1/services`);
+    let employee = await http(`/api/v1/employees/${context.query.empid}`);
+    let serviceListResponse = await http(`/api/v1/services`);
     let serviceArray = _groupBy(serviceListResponse, 'service_code')
     let serviceList = [];
     let item, durationPriceList, durationPriceItem;
@@ -30,11 +30,11 @@ export async function getServerSideProps(context) {
     let serviceEmployeeList = serviceList.filter((itemService) => serviceEmployeeCode.includes(itemService.service_code))
     employee.services = serviceEmployeeList;
     return {
-        props: {employee: employee ,serviceList: serviceList},
+        props: {employee: employee, serviceList: serviceList},
     };
 }
 
-const EmployeeDetails = ({employee , serviceList}) => {
+const EmployeeDetails = ({employee, serviceList}) => {
     const router = useRouter();
     const editEmployee = async (empData) => {
         const result = await http('/api/v1/employees', {
@@ -44,7 +44,7 @@ const EmployeeDetails = ({employee , serviceList}) => {
         router.push('/employee');
     }
     return (
-        <EmployeeDetailComponent employee={employee} editEmployee={editEmployee} serviceList={serviceList} />
+        <EmployeeDetailComponent employee={employee} editEmployee={editEmployee} serviceList={serviceList}/>
     );
 }
 export default EmployeeDetails;

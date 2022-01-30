@@ -114,29 +114,29 @@ const CustomDatePicker = (props) => {
 }
 export {CustomDatePicker};
 
-const DropDownList =(props)=>{
+const DropDownList = (props) => {
     return (
         <FormControl
-        sx={{
-            marginX: '10px',
-        }}
-    >
-        <InputLabel>{props.label}</InputLabel>
-        <Select
-            value={props.value}
-            onChange={(e) =>
-                props.onChange({target: {name: props.name, value: e.target.value}})}
             sx={{
-                minWidth: '100px',
+                marginX: '10px',
             }}
         >
-            {props.list.map((val) => (
-                <MenuItem key={val.id} value={val.value}>
-                    {val.value}
-                </MenuItem>
-            ))}
-        </Select>
-    </FormControl>
+            <InputLabel>{props.label}</InputLabel>
+            <Select
+                value={props.value}
+                onChange={(e) =>
+                    props.onChange({target: {name: props.name, value: e.target.value}})}
+                sx={{
+                    minWidth: '100px',
+                }}
+            >
+                {props.list.map((val) => (
+                    <MenuItem key={val.id} value={val.value}>
+                        {val.value}
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>
     );
 }
 export {DropDownList};

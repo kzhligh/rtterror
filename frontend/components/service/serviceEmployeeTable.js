@@ -1,12 +1,4 @@
-import {
-    Checkbox,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-} from '@mui/material';
+import {Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,} from '@mui/material';
 import Paper from '@mui/material/Paper';
 
 const ServiceEmployeeTable = (props) => {

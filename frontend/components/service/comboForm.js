@@ -46,7 +46,6 @@ const ComboItem = (props) => {
                                 data-cy="patientSort"
                                 value={0}
                                 defaultValue=""
-                                // onChange={}
                                 sx={{
                                     minWidth: '100px',
                                 }}
@@ -99,7 +98,6 @@ const EditCombo = (props) => {
                 serviceToAdd.filter((itemService) => itemService.id != item.id)
             );
         }
-        // console.log(serviceCheckList)
         return serviceToAdd.length;
     };
     const SaveClose = () => {
@@ -140,7 +138,7 @@ const EditCombo = (props) => {
                 </DialogTitle>
                 <DialogContent>
                     <Stack spacing={2}>
-                        {!_isEmpty(serviceListAddable)  &&
+                        {!_isEmpty(serviceListAddable) &&
                             serviceListAddable.map((item) => (
                                 <ComboItem
                                     key={item.id}
@@ -187,7 +185,7 @@ const ComboForm = (props) => {
     };
 
     const [editDialog, setEditDialog] = useState(false);
-    const [comboValue, setComboValue] = useState(!_isEmpty(comboDetail)?comboDetail:initValue);
+    const [comboValue, setComboValue] = useState(!_isEmpty(comboDetail) ? comboDetail : initValue);
     const [errorMessage, setErrorMessage] = useState({});
     const [serviceListAddable, setServiceListAddable] = useState([]);
 
@@ -208,7 +206,6 @@ const ComboForm = (props) => {
     }
 
     useEffect(() => {
-        // console.log({208:'useEffect'});
         let name = '';
         let price = 0;
         let duration = 0;
@@ -248,7 +245,7 @@ const ComboForm = (props) => {
         let serviceId = serviceCheckList.map((service) => service.durations_prices[0].id);
         comboValue.service_ids = serviceId;
         comboValue.service_code = comboValue.name;
-        comboValue.total_duration = comboValue.total_duration*3600000;
+        comboValue.total_duration = comboValue.total_duration * 3600000;
         const result = http('/api/v1/combos', {
             method: 'POST',
             body: comboValue,
@@ -261,11 +258,12 @@ const ComboForm = (props) => {
         let serviceId = serviceCheckList.map((service) => service.durations_prices[0].id);
         comboValue.service_ids = serviceId;
         comboValue.service_code = comboValue.name;
-        comboValue.total_duration = comboValue.total_duration*3600000;
-        const result =  http('/api/v1/combos', {
-          method: 'PUT',
-          body: comboValue,
-        }).then(()=>{});
+        comboValue.total_duration = comboValue.total_duration * 3600000;
+        const result = http('/api/v1/combos', {
+            method: 'PUT',
+            body: comboValue,
+        }).then(() => {
+        });
         closeClearValue();
         setRefresh(!refresh);
     };
@@ -274,7 +272,7 @@ const ComboForm = (props) => {
         setErrorMessage(temp);
         return Object.values(temp).every(x => x == "")
     }
-    const extractAddServiceEdit = ()=>{
+    const extractAddServiceEdit = () => {
         let serviceCode = serviceCheckList.map((service) => service.service_code);
         let addableList = serviceListData.filter((item) => !serviceCode.includes(item.service_code) && !item.hasOwnProperty('services'));
         setServiceListAddable(addableList);

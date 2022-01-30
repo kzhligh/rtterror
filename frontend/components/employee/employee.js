@@ -9,16 +9,25 @@ import DialogActions from "@mui/material/DialogActions";
 const EmployeeForm = (props) => {
 
     const titleList = [
-        {id: 0,value:"General Practice"},
-        {id: 1,value:"Acupuncture"},
-        {id: 2,value:"Manager"}
+        {id: 0, value: "General Practice"},
+        {id: 1, value: "Acupuncture"},
+        {id: 2, value: "Manager"}
     ];
     const genderList = [
         {id: '0', value: 'male', title: 'Male'},
         {id: '1', value: 'female', title: 'Female'},
         {id: '2', value: 'na', title: 'N/A'},
     ];
-    const {handleClose, mode, initValues, tabValue , editEmployee , addEmployee , serviceList , serviceEmployeeList } = props;
+    const {
+        handleClose,
+        mode,
+        initValues,
+        tabValue,
+        editEmployee,
+        addEmployee,
+        serviceList,
+        serviceEmployeeList
+    } = props;
     const [employeeValue, setEmployeeValue] = useState(initValues);
     const [errorMessage, setErrorMessage] = useState([]);
 
@@ -26,10 +35,10 @@ const EmployeeForm = (props) => {
     const addNewEmployee = () => {
         if (validate()) {
             let service_ids = [];
-            for( let service of employeeValue.services){
-                let idArray = service.durations_prices.map(durationprice=>durationprice.id)
+            for (let service of employeeValue.services) {
+                let idArray = service.durations_prices.map(durationprice => durationprice.id)
                 console.log(idArray);
-                service_ids = [...service_ids,...idArray];
+                service_ids = [...service_ids, ...idArray];
             }
             employeeValue.service_ids = service_ids;
             addEmployee(employeeValue);
@@ -38,10 +47,10 @@ const EmployeeForm = (props) => {
     };
     const saveEditEmployee = () => {
         let service_ids = [];
-        for( let service of employeeValue.services){
-            let idArray = service.durations_prices.map(durationprice=>durationprice.id)
+        for (let service of employeeValue.services) {
+            let idArray = service.durations_prices.map(durationprice => durationprice.id)
             console.log(idArray);
-            service_ids = [...service_ids,...idArray];
+            service_ids = [...service_ids, ...idArray];
         }
         employeeValue.service_ids = service_ids;
         editEmployee(employeeValue);
@@ -52,14 +61,12 @@ const EmployeeForm = (props) => {
     };
 
 
-
-
     const validate = () => {
         let temp = {}
         temp.first_name = employeeValue.first_name ? "" : "This field is required."
         temp.last_name = employeeValue.last_name ? "" : "This field is required."
         temp.email = (/$^|.+@.+..+/).test(employeeValue.email) ? "" : "Email is not valid."
-        temp.sin = employeeValue.sin.length>=16 ?"":'sin has to have 16 digit'
+        temp.sin = employeeValue.sin.length >= 16 ? "" : 'sin has to have 16 digit'
         temp.phone = (/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/).test(employeeValue.phone) ? "" : "Invalid Phone number."
         setErrorMessage(temp);
         return Object.values(temp).every(x => x == "")
@@ -175,17 +182,17 @@ const EmployeeForm = (props) => {
 
                     <Button onClick={addNewEmployee}>Add New Employee</Button>
                     <Button onClick={handleClose}>Close</Button>
-                </Grid>:tabValue == 1 ?
+                </Grid> : tabValue == 1 ?
                     <Grid
-                    container
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
                     >
 
-                    <Button onClick={saveEditEmployee}>Save</Button>
-                    </Grid>:null
-                }
+                        <Button onClick={saveEditEmployee}>Save</Button>
+                    </Grid> : null
+            }
             </DialogActions>
 
         </div>

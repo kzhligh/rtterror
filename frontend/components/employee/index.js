@@ -1,19 +1,18 @@
 import SearchInput from "../service/search";
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { Divider, Grid, } from "@mui/material";
+import {Divider, Grid,} from "@mui/material";
 import Button from "@mui/material/Button";
-import { useState} from "react";
+import {useState} from "react";
 import styled from '../../styles/employee.module.css';
 import NewEmployeeDialog from "./newEmployeeDialog";
 import {useRouter} from "next/router";
 import {DataGrid} from "@mui/x-data-grid";
 
 
-
 const EmployeeComponent = (props) => {
     const router = useRouter();
-    const {employeeList , addEmployee, deleteEmployee , serviceList} = props;
+    const {employeeList, addEmployee, deleteEmployee, serviceList} = props;
     const [displayEmployeeList, setDisplayEmployeeList] = useState(employeeList);
     const [addOpen, setAddOpen] = useState(false);
     const [rowSelection, setRowSelection] = useState([]);
@@ -21,7 +20,6 @@ const EmployeeComponent = (props) => {
     const closeAddOpen = () => {
         setAddOpen(false);
     };
-
 
 
     const handleSearch = (val) => {
@@ -39,17 +37,16 @@ const EmployeeComponent = (props) => {
         }
     };
     const columns = [
-        { field: 'first_name', headerName: 'First name', width: 250, sortable: false },
-        { field: 'last_name', headerName: 'Last name', width: 300, sortable: false },
-        { field: 'title', headerName: 'Title', width: 250, sortable: false },
-        { field: 'email', headerName: 'Email', width: 300, sortable: false },
+        {field: 'first_name', headerName: 'First name', width: 250, sortable: false},
+        {field: 'last_name', headerName: 'Last name', width: 300, sortable: false},
+        {field: 'title', headerName: 'Title', width: 250, sortable: false},
+        {field: 'email', headerName: 'Email', width: 300, sortable: false},
 
     ];
-    const handleDeleteEmployee = ()=>{
+    const handleDeleteEmployee = () => {
         console.log(rowSelection)
         deleteEmployee(rowSelection[0]);
     }
-
 
 
     return (
@@ -73,7 +70,8 @@ const EmployeeComponent = (props) => {
                     </Button>
                 </Grid>
                 <Grid item xs={3}>
-                    <Button className={styled.addButton} disabled={!(rowSelection.length>0)} variant="outlined" onClick={handleDeleteEmployee}>
+                    <Button className={styled.addButton} disabled={!(rowSelection.length > 0)} variant="outlined"
+                            onClick={handleDeleteEmployee}>
                         Delete Employee
                     </Button>
                 </Grid>
@@ -101,7 +99,8 @@ const EmployeeComponent = (props) => {
                 onSelectionModelChange={(rows) => setRowSelection(rows)}
             />
 
-            <NewEmployeeDialog open={addOpen} handleClose={closeAddOpen} addEmployee={addEmployee} serviceList={serviceList}/>
+            <NewEmployeeDialog open={addOpen} handleClose={closeAddOpen} addEmployee={addEmployee}
+                               serviceList={serviceList}/>
 
         </Box>
     );

@@ -8,7 +8,7 @@ import * as React from "react";
 import EmployeeForm from "./employee";
 
 const NewEmployeeDialog = (props) => {
-    const {open, handleClose , addEmployee , serviceList} = props;
+    const {open, handleClose, addEmployee, serviceList} = props;
 
     const initValues = {
         first_name: '',

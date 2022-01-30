@@ -6,8 +6,8 @@ import _cloneDeep from "lodash/cloneDeep";
 import {http} from "../../utils/http";
 
 export async function getServerSideProps(context) {
-    let employeeList= await http(`/api/v1/employees`);
-    let serviceListResponse= await http(`/api/v1/services`);
+    let employeeList = await http(`/api/v1/employees`);
+    let serviceListResponse = await http(`/api/v1/services`);
     let serviceArray = _groupBy(serviceListResponse, 'service_code')
     let serviceList = [];
     let item, durationPriceList, durationPriceItem;
@@ -28,16 +28,16 @@ export async function getServerSideProps(context) {
         serviceList.push(item);
     }
     return {
-        props: {serviceList: serviceList,employeesList:employeeList},
+        props: {serviceList: serviceList, employeesList: employeeList},
     };
 }
 
-const Employee = ({serviceList,employeesList}) => {
+const Employee = ({serviceList, employeesList}) => {
     const [employeeList, setEmployeeList] = useState(employeesList);
 
 
-    const addEmployee =  async (empData) => {
-        const result = await  http('/api/v1/employees', {
+    const addEmployee = async (empData) => {
+        const result = await http('/api/v1/employees', {
             method: 'POST',
             body: empData,
         });
@@ -54,13 +54,13 @@ const Employee = ({serviceList,employeesList}) => {
         <div>
             <h1></h1>
 
-                <EmployeeComponent
-                    employeeList={employeeList}
-                    serviceList={serviceList}
-                    addEmployee={addEmployee}
-                    deleteEmployee={deleteEmployee}
+            <EmployeeComponent
+                employeeList={employeeList}
+                serviceList={serviceList}
+                addEmployee={addEmployee}
+                deleteEmployee={deleteEmployee}
 
-                />
+            />
         </div>
     );
 }

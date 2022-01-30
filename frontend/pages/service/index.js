@@ -42,7 +42,7 @@ const Service = ({employeeList}) => {
     const getServiceList = async () => {
         let serviceListResponse = await http(`/api/v1/services`);
         let comboList = await http(`/api/v1/combos`);
-        for (let combo in comboList){
+        for (let combo in comboList) {
             comboList[combo].total_duration = (comboList[combo].total_duration * 1 / 3600000).toFixed(2);
         }
         setServiceListData([...groupService(serviceListResponse), ...comboList]);
