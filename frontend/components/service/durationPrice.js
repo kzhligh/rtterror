@@ -18,10 +18,10 @@ const DurationPrice = (props) => {
     const handleOnChange = (type, value) => {
         switch (type) {
             case 'duration':
-                durationPriceList[index].duration = value;
+                durationPriceList[index].duration = value * 1;
                 break;
             case 'price':
-                durationPriceList[index].price = value;
+                durationPriceList[index].price = value * 1;
                 break;
         }
         setReload(!reload);

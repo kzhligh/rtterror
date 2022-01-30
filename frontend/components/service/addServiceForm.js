@@ -13,7 +13,9 @@ import {Grid} from '@mui/material';
 import ServiceEmployeeTable from './serviceEmployeeTable';
 import DurationPrice from './durationPrice';
 import AddIcon from '@mui/icons-material/Add';
+import {v4 as uuidv4} from 'uuid';
 import {InputTextField} from "../form/formComponent";
+
 
 const AddServiceForm = (props) => {
     const initValue = {
@@ -21,30 +23,26 @@ const AddServiceForm = (props) => {
         name: '',
         description: '',
         treatment_type: '',
-        duration: 0,
-        price: 0,
         barcode: '',
-        sms_description: '',
+        sms_description: ''
     };
-    const hourToMs = 60000;
-    const MsToHour = 3600000;
-    const {addHandle, employeeList, open, closeDialog, mode} = props;
+    const mshconvertion = 3600000;
+    const {addHandle, employeeList, open, closeDialog} = props;
     const [employeeCheckList, setEmployeeCheckList] = useState([]);
-    const [durationPriceList, setDurationPriceList] = useState([
-        {price: 30, duration: 0.5},
-    ]);
+    const [durationPriceList, setDurationPriceList] = useState([]);
     const [reload, setReload] = useState(false);
     const [serviceValue, setServiceValue] = useState(initValue);
     const [errorMessage, setErrorMessage] = useState({});
+
     const handleSetServiceValue = (obj) => {
         const {name, value} = obj.target;
         setServiceValue({...serviceValue, [name]: value});
     };
+
     const validate = () => {
         let temp = {}
         temp.name = serviceValue.name ? "" : "This field is required.";
-        temp.service_code = serviceValue.service_code ? "" : "This field is required."
-        temp.durationprice = durationPriceList.length > 0?"" : "This field is required.";
+        temp.durationprice = durationPriceList.length > 0 ? "" : "This field is required.";
         setErrorMessage(temp);
         return Object.values(temp).every(x => x == "")
     }
@@ -52,15 +50,25 @@ const AddServiceForm = (props) => {
     const processAddService = () => {
         if (validate()) {
             //convert the duration to ms
+            let durationTemp = durationPriceList.map(d => (
+                Object.assign({}, d, {duration: d.duration * mshconvertion})));
+            let employeeTemp = employeeCheckList.map(emp => emp.id);
+            serviceValue.service_code = serviceValue.service_code + "-" + uuidv4().substring(0, 4);
+            serviceValue.employee_ids = employeeTemp;
+            serviceValue.durations_prices = durationTemp;
+            console.log(serviceValue)
             addHandle(serviceValue);
+            closeAddDialog();
+
         }
     };
+
     const handleAddEmployeeCheck = (val, employee) => {
         if (val) {
             setEmployeeCheckList([...employeeCheckList, employee]);
         } else {
             setEmployeeCheckList(
-                employeeCheckList.filter((emp) => emp.firstname != employee.firstname)
+                employeeCheckList.filter((emp) => emp.id != employee.id)
             );
         }
     };
@@ -68,8 +76,9 @@ const AddServiceForm = (props) => {
     useEffect(() => {
     }, [employeeCheckList, durationPriceList, reload]);
 
+
     const handleAddDurationPrice = () => {
-        setDurationPriceList([...durationPriceList, {price: 0, duration: 0.5}]);
+        setDurationPriceList([...durationPriceList, {price: 50, duration: 0.5}]);
     };
     const handleRemoveDurationPrice = (index) => {
         setDurationPriceList([
@@ -77,6 +86,13 @@ const AddServiceForm = (props) => {
             ...durationPriceList.slice(index + 1),
         ]);
     };
+    const closeAddDialog = () => {
+        setServiceValue(initValue);
+        setEmployeeCheckList([]);
+        setDurationPriceList([]);
+        closeDialog();
+    }
+
     return (
         <div>
             <Dialog open={open} fullWidth={true} maxWidth="lg" scroll="body">
@@ -105,7 +121,7 @@ const AddServiceForm = (props) => {
                             error={errorMessage.name}
                         />
                         <InputTextField
-                            label='Service code'
+                            label='Service Code'
                             name='service_code'
                             value={serviceValue.service_code}
                             onChange={handleSetServiceValue}
@@ -123,7 +139,8 @@ const AddServiceForm = (props) => {
                                     setReload={setReload}
                                 />
                             ))}
-                            {errorMessage.hasOwnProperty('durationprice')?<p className={styled.redText}>{errorMessage.durationprice}</p>:''}
+                            {errorMessage.hasOwnProperty('durationprice') ?
+                                <p className={styled.redText}>{errorMessage.durationprice}</p> : ''}
                             <Grid
                                 container
                                 direction="column"
@@ -158,7 +175,7 @@ const AddServiceForm = (props) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={processAddService}>Create Service</Button>
-                    <Button onClick={closeDialog}>Close</Button>
+                    <Button onClick={closeAddDialog}>Close</Button>
                 </DialogActions>
             </Dialog>
         </div>
