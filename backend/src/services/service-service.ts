@@ -213,37 +213,6 @@ class ServiceService extends GeneralService<IService, IServicesDto> {
     }
   }
 
-  /*
-  * this method will hide the 'deleted' service and delete all associated combos
-  * @param serviceId the id of the service to be deleted
-  * @return void will throw error if error occurs
-  * */
-  async deleteItemById(id: string): Promise<void> {
-    const t = await sequelize.transaction();
-    try {
-      const numberOfDeletion = await this.model.destroy({
-        where: {
-          id: id,
-        },
-        transaction: t,
-      });
-      if (numberOfDeletion === 0) {
-        throw new Error(`ERROR - no item has been found with the id: ${id}`);
-      } else if (numberOfDeletion > 1) {
-        throw new Error(
-            `ERROR - database error, multiple items have been found with the id: ${id}`
-        );
-      } else {
-        // todo - delete related combos and service-combo relationships
-
-        await t.commit();
-      }
-    } catch (error) {
-      await t.rollback();
-      throw error;
-    }
-  }
-
   async hideItemsByServiceCode(serviceCode: string): Promise<IService[]> {
     console.log('hideItemsByServiceCode(): ', serviceCode);
     const t = await sequelize.transaction();
