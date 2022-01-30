@@ -1,12 +1,11 @@
-import EmployeeComponent from "../../components/employee";
-
-import {useState} from "react";
+import EmployeeDetailComponent from "../../components/employee/details";
 import _groupBy from "lodash/groupBy";
 import _cloneDeep from "lodash/cloneDeep";
 import {http} from "../../utils/http";
+import { useRouter } from 'next/router';
 
 export async function getServerSideProps(context) {
-    let employeeList= await http(`/api/v1/employees`);
+    let employee = await http(`/api/v1/employees/${context.query.empid}` );
     let serviceListResponse= await http(`/api/v1/services`);
     let serviceArray = _groupBy(serviceListResponse, 'service_code')
     let serviceList = [];
@@ -27,41 +26,25 @@ export async function getServerSideProps(context) {
         item.durations_prices = durationPriceList;
         serviceList.push(item);
     }
+    let serviceEmployeeCode = Object.keys(_groupBy(employee.services, 'service_code'));
+    let serviceEmployeeList = serviceList.filter((itemService) => serviceEmployeeCode.includes(itemService.service_code))
+    employee.services = serviceEmployeeList;
     return {
-        props: {serviceList: serviceList,employeesList:employeeList},
+        props: {employee: employee ,serviceList: serviceList},
     };
 }
 
-const Employee = ({serviceList,employeesList}) => {
-    const [employeeList, setEmployeeList] = useState(employeesList);
-
-
-    const addEmployee =  async (empData) => {
-        const result = await  http('/api/v1/employees', {
-            method: 'POST',
+const EmployeeDetails = ({employee , serviceList}) => {
+    const router = useRouter();
+    const editEmployee = async (empData) => {
+        const result = await http('/api/v1/employees', {
+            method: 'PUT',
             body: empData,
         });
-        setEmployeeList([...employeeList, result]);
-    }
-
-    const deleteEmployee = async (id) => {
-        const result = await http(`/api/v1/employees/${id}`, {
-            method: 'DELETE'
-        });
-        setEmployeeList(result);
+        router.push('/employee');
     }
     return (
-        <div>
-            <h1></h1>
-
-                <EmployeeComponent
-                    employeeList={employeeList}
-                    serviceList={serviceList}
-                    addEmployee={addEmployee}
-                    deleteEmployee={deleteEmployee}
-
-                />
-        </div>
+        <EmployeeDetailComponent employee={employee} editEmployee={editEmployee} serviceList={serviceList} />
     );
 }
-export default Employee;
+export default EmployeeDetails;

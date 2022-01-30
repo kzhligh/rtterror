@@ -1,108 +1,108 @@
 import SearchInput from "../service/search";
 import * as React from "react";
 import Box from "@mui/material/Box";
-import {Divider, Grid} from "@mui/material";
+import { Divider, Grid, } from "@mui/material";
 import Button from "@mui/material/Button";
-import {useState} from "react";
+import { useState} from "react";
 import styled from '../../styles/employee.module.css';
-import EmployeeDetailComponent from "./details";
 import NewEmployeeDialog from "./newEmployeeDialog";
 import {useRouter} from "next/router";
+import {DataGrid} from "@mui/x-data-grid";
 
-const HeaderTable =()=>{
-    return (
-        <Grid container item>
-            <Grid item xs={4}>
-                <div className={styled.tableHeader} > Name & Title </div>
-            </Grid>
-            <Grid item xs={4} >
-                <div className={styled.tableHeader} > Phone </div>
-            </Grid>
-            <Grid item xs={4} >
-                <div className={styled.tableHeader} > Email </div>
-            </Grid>
-        </Grid>
-    );
-}
-const TableRow = (props)=>{
-    const {detailPage} = props
 
-    return (
-        <Grid container item onClick={()=>detailPage(1)}>
-            <Grid item xs={4}>
-                <div className={styled.tableRow} > test </div>
-            </Grid>
-            <Grid item xs={4}>
-                <div className={styled.tableRow}> test </div>
-            </Grid>
-            <Grid item xs={4}>
-                <div className={styled.tableRow} > test </div>
-            </Grid>
-        </Grid>
-    );
-}
-const EmployeeComponent =(props)=>{
+
+const EmployeeComponent = (props) => {
     const router = useRouter();
-    const {employeeList } = props;
-    const [addOpen, setAddOpen]= useState(false);
-    // const [detailOpen, setDetailOpen]= useState(false);
-    const closeAddOpen = ()=>{
+    const {employeeList , addEmployee, deleteEmployee , serviceList} = props;
+    const [displayEmployeeList, setDisplayEmployeeList] = useState(employeeList);
+    const [addOpen, setAddOpen] = useState(false);
+    const [rowSelection, setRowSelection] = useState([]);
+
+    const closeAddOpen = () => {
         setAddOpen(false);
     };
-    const detailPage = (id)=>{
-        router.push('/employee/' + id).then((r) => console.log(r));
+
+
+
+    const handleSearch = (val) => {
+        let searchValue = val.toLowerCase().trim()
+        if (searchValue.length > 0) {
+            let temp = employeeList.filter(
+                (emp) =>
+                    emp.first_name.toLowerCase().includes(searchValue) ||
+                    emp.last_name.toLowerCase().includes(searchValue)
+            );
+            console.log(temp)
+            setDisplayEmployeeList(temp);
+        } else {
+            setDisplayEmployeeList(employeeList);
+        }
+    };
+    const columns = [
+        { field: 'first_name', headerName: 'First name', width: 250, sortable: false },
+        { field: 'last_name', headerName: 'Last name', width: 300, sortable: false },
+        { field: 'title', headerName: 'Title', width: 250, sortable: false },
+        { field: 'email', headerName: 'Email', width: 300, sortable: false },
+
+    ];
+    const handleDeleteEmployee = ()=>{
+        console.log(rowSelection)
+        deleteEmployee(rowSelection[0]);
     }
 
-    const handleSearch =()=>{
-        console.log('search');
-    }
 
 
     return (
 
         <Box>
-            <SearchInput handleSearch={handleSearch} />
+            <SearchInput handleSearch={handleSearch}/>
+
             <Grid
                 container
                 direction="row"
                 justifyContent="flex-start"
                 alignItems="center"
             >
-                <Grid item xs={8}>
+                <Grid item xs={6}>
                     <h1>Employee List
                     </h1>
                 </Grid>
-                <Grid item xs={4}>
-                    <Button className={styled.addButton} variant="outlined" onClick={()=>setAddOpen(true)}>
+                <Grid item xs={3}>
+                    <Button className={styled.addButton} variant="outlined" onClick={() => setAddOpen(true)}>
                         New Employee
+                    </Button>
+                </Grid>
+                <Grid item xs={3}>
+                    <Button className={styled.addButton} disabled={!(rowSelection.length>0)} variant="outlined" onClick={handleDeleteEmployee}>
+                        Delete Employee
                     </Button>
                 </Grid>
 
 
             </Grid>
-            <Divider />
+            <Divider/>
+            <DataGrid
+                style={{minHeight: '60%', height: '560px'}}
+                rows={employeeList}
+                columns={columns}
+                pagination
+                pageSize={8}
+                onRowClick={({row}) =>
+                    router.push({
+                        pathname: '/employee/details',
+                        query: {empid: row.id}
+                    }, '/employee')
+                }
+                rowsPerPageOptions={[8]}
+                checkboxSelection
+                hideFooterSelectedRowCount
+                disableColumnMenu
+                selectionModel={rowSelection}
+                onSelectionModelChange={(rows) => setRowSelection(rows)}
+            />
 
-            <Box padding='100px'>
+            <NewEmployeeDialog open={addOpen} handleClose={closeAddOpen} addEmployee={addEmployee} serviceList={serviceList}/>
 
-                <Grid
-                    container spacing={3}
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="center"
-                >
-                    <HeaderTable />
-                    <TableRow detailPage={detailPage}/>
-
-                    <TableRow detailPage={detailPage}/>
-                    <TableRow detailPage={detailPage}/>
-
-                    <TableRow detailPage={detailPage}/>
-
-                </Grid>
-            </Box>
-
-            <NewEmployeeDialog open={addOpen} handleClose={closeAddOpen} />
-            <EmployeeDetailComponent  />
         </Box>
     );
 }

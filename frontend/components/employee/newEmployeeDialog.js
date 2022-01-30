@@ -7,40 +7,42 @@ import Dialog from "@mui/material/Dialog";
 import * as React from "react";
 import EmployeeForm from "./employee";
 
-const NewEmployeeDialog =(props)=>{
-    const {open , handleClose} = props;
+const NewEmployeeDialog = (props) => {
+    const {open, handleClose , addEmployee , serviceList} = props;
 
     const initValues = {
-        id: 0,
-        firstname: '',
-        lastname: '',
+        first_name: '',
+        last_name: '',
         address: '',
+        postal_code: '',
         phone: '',
         email: '',
+        title: 'General Practice',
         gender: 'na',
-        startDate: new Date(),
+        dob: new Date(),
+        sin: '',
+        start_date: new Date(),
         services: []
     };
-    const saveEmployee = (data)=>{
-        console.log(data);
-    }
+
 
     return (
         <Dialog open={open} fullWidth={true} maxWidth="lg" scroll="body">
-        <DialogTitle>
-            New Service
-        </DialogTitle>
-        <DialogContent>
-            <EmployeeForm
-                open={open}
-                handleClose={handleClose}
-                initValues={initValues}
-                mode='add'
-                saveEmployee={saveEmployee}
-            />
-        </DialogContent>
+            <DialogTitle>
+                New Employee
+            </DialogTitle>
+            <DialogContent>
+                <EmployeeForm
+                    open={open}
+                    handleClose={handleClose}
+                    initValues={initValues}
+                    mode='add'
+                    addEmployee={addEmployee}
+                    serviceList={serviceList}
+                />
+            </DialogContent>
 
-    </Dialog>
+        </Dialog>
     );
 };
 export default NewEmployeeDialog

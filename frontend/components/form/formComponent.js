@@ -1,6 +1,6 @@
 import TextField from "@mui/material/TextField";
 import * as React from "react";
-import {Checkbox, FormControl, FormControlLabel, InputAdornment} from "@mui/material";
+import {Checkbox, FormControl, FormControlLabel, InputAdornment, InputLabel, MenuItem, Select} from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import {DatePicker, LocalizationProvider} from "@mui/lab";
@@ -81,7 +81,7 @@ const CustomAutoComplete = (props) => {
         label={props.label}
         name={props.name}
         options={props.value}
-        getOptionLabel={(option) => option.title}
+        getOptionLabel={(option) => `${option.name} - ${option.service_code}`}
         defaultValue={props.defaultValue}
         filterSelectedOptions
         autoHighlight
@@ -98,15 +98,45 @@ const CustomAutoComplete = (props) => {
 export {CustomAutoComplete};
 
 const CustomDatePicker = (props) => {
+    // console.log(props.value)
     return (
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker
-                label={props.label}
-                value={props.value}
-                onChange={newValue => props.onChange({target: {name: props.name, value: new Date(newValue)}})}
-                renderInput={(params) => <TextField {...params} />}
-            />
-        </LocalizationProvider>
+        <DatePicker
+            label={props.label}
+            value={props.value}
+            renderInput={(params) => <TextField {...params} />}
+            onChange={(newValue) =>
+                props.onChange({target: {name: props.name, value: Intl.DateTimeFormat('sv-SE').format(newValue)}})
+
+            }
+        />
+
     );
 }
 export {CustomDatePicker};
+
+const DropDownList =(props)=>{
+    return (
+        <FormControl
+        sx={{
+            marginX: '10px',
+        }}
+    >
+        <InputLabel>{props.label}</InputLabel>
+        <Select
+            value={props.value}
+            onChange={(e) =>
+                props.onChange({target: {name: props.name, value: e.target.value}})}
+            sx={{
+                minWidth: '100px',
+            }}
+        >
+            {props.list.map((val) => (
+                <MenuItem key={val.id} value={val.value}>
+                    {val.value}
+                </MenuItem>
+            ))}
+        </Select>
+    </FormControl>
+    );
+}
+export {DropDownList};

@@ -1,94 +1,65 @@
-import {Checkbox, FormControl, FormControlLabel, Grid} from "@mui/material";
+import {Grid} from "@mui/material";
 import * as React from "react";
 import {useState} from "react";
-import {CustomDatePicker, CustomAutoComplete, InputTextField, CustomCheckBox} from '../form/formComponent';
+import {CustomDatePicker, CustomAutoComplete, InputTextField, DropDownList} from '../form/formComponent';
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 
 
 const EmployeeForm = (props) => {
 
-    const serviceList = [
-        {title: 'The Shawshank Redemption', year: 1994},
-        {title: 'The Godfather', year: 1972},
-        {title: 'The Godfather: Part II', year: 1974},
-        {title: 'The Dark Knight', year: 2008},
-        {title: '12 Angry Men', year: 1957},
-        {title: "Schindler's List", year: 1993},
-        {title: 'Pulp Fiction', year: 1994},
-        {
-            title: 'The Lord of the Rings: The Return of the King',
-            year: 2003,
-        },
-        {title: 'The Good, the Bad and the Ugly', year: 1966},
-        {title: 'Fight Club', year: 1999},
-        {
-            title: 'The Lord of the Rings: The Fellowship of the Ring',
-            year: 2001,
-        },
-        {
-            title: 'Star Wars: Episode V - The Empire Strikes Back',
-            year: 1980,
-        },
-        {title: 'Forrest Gump', year: 1994},
-        {title: 'Inception', year: 2010},
-        {
-            title: 'The Lord of the Rings: The Two Towers',
-            year: 2002,
-        },
-        {title: "One Flew Over the Cuckoo's Nest", year: 1975},
-        {title: 'Goodfellas', year: 1990},
-        {title: 'The Matrix', year: 1999},
-        {title: 'Seven Samurai', year: 1954},
-        {
-            title: 'Star Wars: Episode IV - A New Hope',
-            year: 1977,
-        },
-        {title: 'City of God', year: 2002},
-        {title: 'Se7en', year: 1995},
-        {title: 'The Silence of the Lambs', year: 1991},
-        {title: "It's a Wonderful Life", year: 1946},
-        {title: 'Life Is Beautiful', year: 1997},
-        {title: 'The Usual Suspects', year: 1995},
-        {title: 'Léon: The Professional', year: 1994},
-        {title: 'Spirited Away', year: 2001},
-        {title: 'Saving Private Ryan', year: 1998},
-        {title: 'Once Upon a Time in the West', year: 1968},
-        {title: 'American History X', year: 1998},
-        {title: 'Interstellar', year: 2014},
+    const titleList = [
+        {id: 0,value:"General Practice"},
+        {id: 1,value:"Acupuncture"},
+        {id: 2,value:"Manager"}
     ];
+    const genderList = [
+        {id: '0', value: 'male', title: 'Male'},
+        {id: '1', value: 'female', title: 'Female'},
+        {id: '2', value: 'na', title: 'N/A'},
+    ];
+    const {handleClose, mode, initValues, tabValue , editEmployee , addEmployee , serviceList , serviceEmployeeList } = props;
+    const [employeeValue, setEmployeeValue] = useState(initValues);
+    const [errorMessage, setErrorMessage] = useState([]);
 
 
-    const addHandle =()=>{
-        if(validate()){
-            console.log(employeeValue);
-            if(employeeValue.services){
-                console.log("empty services")
+    const addNewEmployee = () => {
+        if (validate()) {
+            let service_ids = [];
+            for( let service of employeeValue.services){
+                let idArray = service.durations_prices.map(durationprice=>durationprice.id)
+                console.log(idArray);
+                service_ids = [...service_ids,...idArray];
             }
-            saveEmployee(employeeValue);
-            console.log('add employee')
+            employeeValue.service_ids = service_ids;
+            addEmployee(employeeValue);
+            handleClose();
         }
     };
-
+    const saveEditEmployee = () => {
+        let service_ids = [];
+        for( let service of employeeValue.services){
+            let idArray = service.durations_prices.map(durationprice=>durationprice.id)
+            console.log(idArray);
+            service_ids = [...service_ids,...idArray];
+        }
+        employeeValue.service_ids = service_ids;
+        editEmployee(employeeValue);
+    }
     const handleSetEmployeeValue = (obj) => {
         const {name, value} = obj.target;
         setEmployeeValue({...employeeValue, [name]: value});
     };
 
-    const genderList = [
-        {id: '0', name: 'male', title: 'Male'},
-        {id: '1', name: 'female', title: 'Female'},
-        {id: '2', name: 'na', title: 'N/A'},
-    ];
-    const { handleClose , mode, initValues , saveEmployee} = props;
-    const [employeeValue, setEmployeeValue] = useState(initValues);
-    const [errorMessage, setErrorMessage] = useState({});
+
+
 
     const validate = () => {
         let temp = {}
-        temp.firstname = employeeValue.firstname ? "" : "This field is required."
-        temp.lastname = employeeValue.lastname ? "" : "This field is required."
+        temp.first_name = employeeValue.first_name ? "" : "This field is required."
+        temp.last_name = employeeValue.last_name ? "" : "This field is required."
         temp.email = (/$^|.+@.+..+/).test(employeeValue.email) ? "" : "Email is not valid."
+        temp.sin = employeeValue.sin.length>=16 ?"":'sin has to have 16 digit'
         temp.phone = (/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/).test(employeeValue.phone) ? "" : "Invalid Phone number."
         setErrorMessage(temp);
         return Object.values(temp).every(x => x == "")
@@ -100,22 +71,22 @@ const EmployeeForm = (props) => {
                 container
                 direction="column"
                 alignItems="stretch"
-                spacing={3}
+                spacing={1}
             >
                 <Grid item xs={12}>
                     <InputTextField
                         label='First Name'
-                        name='firstname'
-                        value={employeeValue.firstname}
+                        name='first_name'
+                        value={employeeValue.first_name}
                         onChange={handleSetEmployeeValue}
-                        error={errorMessage.firstname}
+                        error={errorMessage.first_name}
                     />
                     <InputTextField
                         label='Last Name'
-                        name='lastname'
-                        value={employeeValue.lastname}
+                        name='last_name'
+                        value={employeeValue.last_name}
                         onChange={handleSetEmployeeValue}
-                        error={errorMessage.lastname}
+                        error={errorMessage.last_name}
                     />
                     <InputTextField
                         label='Address'
@@ -123,6 +94,13 @@ const EmployeeForm = (props) => {
                         value={employeeValue.address}
                         onChange={handleSetEmployeeValue}
                         error={errorMessage.address}
+                    />
+                    <InputTextField
+                        label='Address'
+                        name='postal_code'
+                        value={employeeValue.postal_code}
+                        onChange={handleSetEmployeeValue}
+                        error={errorMessage.postal_code}
                     />
                     <InputTextField
                         label='Phone'
@@ -138,38 +116,56 @@ const EmployeeForm = (props) => {
                         onChange={handleSetEmployeeValue}
                         error={errorMessage.email}
                     />
-                    <FormControl>
-                        {
-                            genderList.map((item,index) => (
-                                <CustomCheckBox
-                                    name="gender"
-                                    label="Gender"
-                                    value={employeeValue.gender}
-                                    onChange={handleSetEmployeeValue}
-                                    item={item}
-                                    key={index}
-                                />
-                                )
-                            )
-                        }
-                    </FormControl>
-
+                    <InputTextField
+                        label='SIN'
+                        name='sin'
+                        value={employeeValue.sin}
+                        onChange={handleSetEmployeeValue}
+                        error={errorMessage.sin}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <DropDownList
+                        name="title"
+                        label="Title"
+                        value={employeeValue.title}
+                        onChange={handleSetEmployeeValue}
+                        list={titleList}
+                    />
+                    <DropDownList
+                        name="gender"
+                        label="Gender"
+                        value={employeeValue.gender}
+                        onChange={handleSetEmployeeValue}
+                        list={genderList}
+                    />
+                </Grid>
+                <Grid item xs={12}>
                     <CustomDatePicker
-                        name="startDate"
+                        name="start_date"
                         label="Start Date"
-                        value={employeeValue.startDate}
+                        value={employeeValue.start_date}
                         onChange={handleSetEmployeeValue}
                     />
+                    <CustomDatePicker
+                        name="dob"
+                        label="Date of Birth"
+                        value={employeeValue.dob}
+                        onChange={handleSetEmployeeValue}
+                    />
+
+                </Grid>
+                <Grid item xs={12}>
                     <CustomAutoComplete
                         name="services"
                         label="Services"
                         value={serviceList}
-                        defaultValue = {[serviceList[13],serviceList[10]]}
+                        defaultValue={employeeValue.services}
                         onChange={handleSetEmployeeValue}
                     />
                 </Grid>
             </Grid>
-            {mode == 'add' && <DialogActions>
+            <DialogActions>{mode == 'add' ?
                 <Grid
                     container
                     direction="row"
@@ -177,10 +173,21 @@ const EmployeeForm = (props) => {
                     alignItems="center"
                 >
 
-                    <Button onClick={addHandle}>Add New Employee</Button>
+                    <Button onClick={addNewEmployee}>Add New Employee</Button>
                     <Button onClick={handleClose}>Close</Button>
-                </Grid>
-            </DialogActions>}
+                </Grid>:tabValue == 1 ?
+                    <Grid
+                    container
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    >
+
+                    <Button onClick={saveEditEmployee}>Save</Button>
+                    </Grid>:null
+                }
+            </DialogActions>
+
         </div>
     );
 }
