@@ -5,11 +5,11 @@ import _groupBy from "lodash/groupBy";
 import _cloneDeep from "lodash/cloneDeep";
 
 export async function getServerSideProps(context) {
-    let employeeList = await http(`/api/v1/employees`);
-    let serviceItemResponse = await http(`/api/v1/services/${context.query.servicecode}`);
-    let serviceArray = _groupBy(serviceItemResponse, 'service_code');
+    const employeeList = await http(`/api/v1/employees`);
+    const serviceItemResponse = await http(`/api/v1/services/${context.query.servicecode}`);
+    const serviceArray = _groupBy(serviceItemResponse, 'service_code');
     let serviceItem, durationPriceList, durationPriceItem;
-    console.log(serviceArray);
+
     for (const serviceCode in serviceArray) {
         serviceItem = _cloneDeep(serviceArray[serviceCode][0]);
         serviceItem.service_code = serviceCode;

@@ -13,7 +13,7 @@ import _orderBy from "lodash/orderBy";
 
 
 const ServiceComponent = (props) => {
-    const {serviceListData, toggleBlocked, deleteService, refresh, setRefresh} = props;
+    const {serviceListData, toggleBlocked, deleteService, refresh, setRefresh , employeeList} = props;
     const [serviceListDisplay, setServiceListDisplay] = useState(serviceListData);
     const [sortServiceList, setSortServiceList] = useState(serviceListData);
     const [select, setSelect] = useState('None');
@@ -105,7 +105,6 @@ const ServiceComponent = (props) => {
     const extractServiceCheckList = (serviceArray) => {
         let serviceCode = serviceArray.map((service) => service.service_code);
         let checkList = serviceListData.filter((item) => serviceCode.includes(item.service_code));
-        console.log(checkList);
         setServiceCheckList(checkList);
     }
 

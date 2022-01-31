@@ -38,26 +38,21 @@ const AddServiceForm = (props) => {
     };
 
     const validate = () => {
-        let temp = {}
-        temp.name = serviceValue.name ? "" : "This field is required.";
-        temp.durationprice = durationPriceList.length > 0 ? "" : "This field is required.";
-        setErrorMessage(temp);
-        return Object.values(temp).every(x => x == "")
+        let error = {}
+        error.name = serviceValue.name ? "" : "This field is required.";
+        error.durationprice = durationPriceList.length > 0 ? "" : "This field is required.";
+        setErrorMessage(error);
+        return Object.values(error).every(x => x == "")
     }
 
     const processAddService = () => {
         if (validate()) {
-            //convert the duration to ms
-            let durationTemp = durationPriceList.map(d => (
-                Object.assign({}, d, {duration: d.duration * mshconvertion})));
-            let employeeTemp = employeeCheckList.map(emp => emp.id);
             serviceValue.service_code = serviceValue.service_code + "-" + uuidv4().substring(0, 4);
-            serviceValue.employee_ids = employeeTemp;
-            serviceValue.durations_prices = durationTemp;
-            console.log(serviceValue)
+            serviceValue.employee_ids = employeeCheckList.map(emp => emp.id);
+            serviceValue.durations_prices = durationPriceList.map(d => (
+                Object.assign({}, d, {duration: d.duration * mshconvertion})));
             addHandle(serviceValue);
             closeAddDialog();
-
         }
     };
 

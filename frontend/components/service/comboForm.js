@@ -268,8 +268,8 @@ const ComboForm = (props) => {
         setRefresh(!refresh);
     };
     const validate = () => {
-        let temp = {}
-        setErrorMessage(temp);
+        let error = {}
+        setErrorMessage(error);
         return Object.values(temp).every(x => x == "")
     }
     const extractAddServiceEdit = () => {

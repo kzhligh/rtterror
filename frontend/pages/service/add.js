@@ -19,7 +19,7 @@ function ServiceFormPage({employeeList}) {
         setOpen(false);
     };
     const addHandle = async (data) => {
-        const result = await http('/api/v1/services', {
+        await http('/api/v1/services', {
             method: 'POST',
             body: data,
         });

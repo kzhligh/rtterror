@@ -23,15 +23,14 @@ const EmployeeComponent = (props) => {
 
 
     const handleSearch = (val) => {
-        let searchValue = val.toLowerCase().trim()
+        const searchValue = val.toLowerCase().trim()
         if (searchValue.length > 0) {
-            let temp = employeeList.filter(
+            const empList = employeeList.filter(
                 (emp) =>
                     emp.first_name.toLowerCase().includes(searchValue) ||
                     emp.last_name.toLowerCase().includes(searchValue)
             );
-            console.log(temp)
-            setDisplayEmployeeList(temp);
+            setDisplayEmployeeList(empList);
         } else {
             setDisplayEmployeeList(employeeList);
         }
@@ -44,10 +43,8 @@ const EmployeeComponent = (props) => {
 
     ];
     const handleDeleteEmployee = () => {
-        console.log(rowSelection)
         deleteEmployee(rowSelection[0]);
     }
-
 
     return (
 
@@ -99,7 +96,7 @@ const EmployeeComponent = (props) => {
                 onSelectionModelChange={(rows) => setRowSelection(rows)}
             />
 
-            <NewEmployeeDialog open={addOpen} handleClose={closeAddOpen} addEmployee={addEmployee}
+            <NewEmployeeDialog open={addOpen} setAddOpen={setAddOpen} addEmployee={addEmployee}
                                serviceList={serviceList}/>
 
         </Box>

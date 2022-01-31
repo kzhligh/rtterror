@@ -6,9 +6,9 @@ import _cloneDeep from "lodash/cloneDeep";
 import {http} from "../../utils/http";
 
 export async function getServerSideProps(context) {
-    let employeeList = await http(`/api/v1/employees`);
-    let serviceListResponse = await http(`/api/v1/services`);
-    let serviceArray = _groupBy(serviceListResponse, 'service_code')
+    const employeeList = await http(`/api/v1/employees`);
+    const serviceListResponse = await http(`/api/v1/services`);
+    const serviceArray = _groupBy(serviceListResponse, 'service_code')
     let serviceList = [];
     let item, durationPriceList, durationPriceItem;
     for (const serviceCode in serviceArray) {

@@ -8,7 +8,7 @@ import * as React from "react";
 import EmployeeForm from "./employee";
 
 const NewEmployeeDialog = (props) => {
-    const {open, handleClose, addEmployee, serviceList} = props;
+    const {open, addEmployee, serviceList , setAddOpen} = props;
 
     const initValues = {
         first_name: '',
@@ -34,7 +34,7 @@ const NewEmployeeDialog = (props) => {
             <DialogContent>
                 <EmployeeForm
                     open={open}
-                    handleClose={handleClose}
+                    setAddOpen={setAddOpen}
                     initValues={initValues}
                     mode='add'
                     addEmployee={addEmployee}

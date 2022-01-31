@@ -5,9 +5,9 @@ import {http} from "../../utils/http";
 import {useRouter} from 'next/router';
 
 export async function getServerSideProps(context) {
-    let employee = await http(`/api/v1/employees/${context.query.empid}`);
-    let serviceListResponse = await http(`/api/v1/services`);
-    let serviceArray = _groupBy(serviceListResponse, 'service_code')
+    const employee = await http(`/api/v1/employees/${context.query.empid}`);
+    const serviceListResponse = await http(`/api/v1/services`);
+    const serviceArray = _groupBy(serviceListResponse, 'service_code')
     let serviceList = [];
     let item, durationPriceList, durationPriceItem;
     for (const serviceCode in serviceArray) {

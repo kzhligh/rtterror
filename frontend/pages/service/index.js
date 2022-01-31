@@ -5,8 +5,7 @@ import _groupBy from "lodash/groupBy";
 import _cloneDeep from "lodash/cloneDeep";
 
 export async function getServerSideProps(context) {
-    let employeeList = await http(`/api/v1/employees`);
-
+    const employeeList = await http(`/api/v1/employees`);
     return {
         props: {employeeList: employeeList},
     };
@@ -17,8 +16,8 @@ const Service = ({employeeList}) => {
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(undefined);
     const groupService = (serviceListResponse) => {
-        let serviceArray = _groupBy(serviceListResponse, 'service_code')
-        let serviceList = [];
+        const serviceArray = _groupBy(serviceListResponse, 'service_code')
+        const serviceList = [];
         let item, durationPriceList, durationPriceItem;
         for (const serviceCode in serviceArray) {
             item = _cloneDeep(serviceArray[serviceCode][0]);
@@ -40,9 +39,9 @@ const Service = ({employeeList}) => {
     }
 
     const getServiceList = async () => {
-        let serviceListResponse = await http(`/api/v1/services`);
-        let comboList = await http(`/api/v1/combos`);
-        for (let combo in comboList) {
+        const serviceListResponse = await http(`/api/v1/services`);
+        const comboList = await http(`/api/v1/combos`);
+        for (const combo in comboList) {
             comboList[combo].total_duration = (comboList[combo].total_duration * 1 / 3600000).toFixed(2);
         }
         setServiceListData([...groupService(serviceListResponse), ...comboList]);
@@ -59,7 +58,6 @@ const Service = ({employeeList}) => {
     }, []);
 
     const deleteService = (item) => {
-        console.log(item.hasOwnProperty('services'));
         if (item.hasOwnProperty('services')) {
             http(`/api/v1/combos/${item.id}`, {
                 method: 'DELETE'
@@ -76,15 +74,15 @@ const Service = ({employeeList}) => {
     };
     const toggleBlocked = (item) => {
         if (item.hasOwnProperty('services')) {
-            let action = item.blocked ? 'unblock' : 'block';
+            const action = item.blocked ? 'unblock' : 'block';
             http(`/api/v1/combos/${item.id}/${action}`, {
                 method: 'PUT'
             }).then((r) => {
                 setRefresh(!refresh)
             });
         } else {
-            let path = '/api/v1/services/' + item.service_code + (item.blocked ? '/unblock' : '/block');
-            let serviceListResponse = http(path, {
+            const path = '/api/v1/services/' + item.service_code + (item.blocked ? '/unblock' : '/block');
+            http(path, {
                 method: 'PUT'
             }).then((r) => {
                 setRefresh(!refresh)

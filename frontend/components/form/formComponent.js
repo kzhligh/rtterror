@@ -2,12 +2,10 @@ import TextField from "@mui/material/TextField";
 import * as React from "react";
 import {Checkbox, FormControl, FormControlLabel, InputAdornment, InputLabel, MenuItem, Select} from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import {DatePicker, LocalizationProvider} from "@mui/lab";
+import {DatePicker} from "@mui/lab";
 import {useEffect} from "react";
 
 const InputTextField = (props) => {
-    // {...(error && {error:true,helperText:error})}
 
     return (
         <TextField
@@ -53,7 +51,6 @@ const CustomCheckBox = (props) => {
     }
     return (
         <>
-            {console.log(item)}
             <FormControlLabel
                 key={key}
                 control={
@@ -98,7 +95,6 @@ const CustomAutoComplete = (props) => {
 export {CustomAutoComplete};
 
 const CustomDatePicker = (props) => {
-    // console.log(props.value)
     return (
         <DatePicker
             label={props.label}

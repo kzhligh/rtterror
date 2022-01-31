@@ -19,7 +19,7 @@ const EmployeeForm = (props) => {
         {id: '2', value: 'na', title: 'N/A'},
     ];
     const {
-        handleClose,
+        setAddOpen,
         mode,
         initValues,
         tabValue,
@@ -29,27 +29,25 @@ const EmployeeForm = (props) => {
         serviceEmployeeList
     } = props;
     const [employeeValue, setEmployeeValue] = useState(initValues);
-    const [errorMessage, setErrorMessage] = useState([]);
+    const [errorMessage, setErrorMessage] = useState({});
 
 
     const addNewEmployee = () => {
         if (validate()) {
             let service_ids = [];
-            for (let service of employeeValue.services) {
-                let idArray = service.durations_prices.map(durationprice => durationprice.id)
-                console.log(idArray);
+            for (const service of employeeValue.services) {
+                const idArray = service.durations_prices.map(durationprice => durationprice.id)
                 service_ids = [...service_ids, ...idArray];
             }
             employeeValue.service_ids = service_ids;
             addEmployee(employeeValue);
-            handleClose();
+            setAddOpen(false);
         }
     };
     const saveEditEmployee = () => {
         let service_ids = [];
-        for (let service of employeeValue.services) {
-            let idArray = service.durations_prices.map(durationprice => durationprice.id)
-            console.log(idArray);
+        for (const service of employeeValue.services) {
+            const idArray = service.durations_prices.map(durationprice => durationprice.id)
             service_ids = [...service_ids, ...idArray];
         }
         employeeValue.service_ids = service_ids;
@@ -62,14 +60,14 @@ const EmployeeForm = (props) => {
 
 
     const validate = () => {
-        let temp = {}
-        temp.first_name = employeeValue.first_name ? "" : "This field is required."
-        temp.last_name = employeeValue.last_name ? "" : "This field is required."
-        temp.email = (/$^|.+@.+..+/).test(employeeValue.email) ? "" : "Email is not valid."
-        temp.sin = employeeValue.sin.length >= 16 ? "" : 'sin has to have 16 digit'
-        temp.phone = (/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/).test(employeeValue.phone) ? "" : "Invalid Phone number."
-        setErrorMessage(temp);
-        return Object.values(temp).every(x => x == "")
+        const error = {};
+        error.first_name = employeeValue.first_name ? "" : "This field is required."
+        error.last_name = employeeValue.last_name ? "" : "This field is required."
+        error.email = (/$^|.+@.+..+/).test(employeeValue.email) ? "" : "Email is not valid."
+        error.sin = employeeValue.sin.length >= 16 ? "" : 'sin has to have 16 digit'
+        error.phone = (/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/).test(employeeValue.phone) ? "" : "Invalid Phone number."
+        setErrorMessage(error);
+        return Object.values(error).every(x => x == "")
     }
 
     return (
