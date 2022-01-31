@@ -31,7 +31,7 @@ const InputTextField = (props) => {
 export {InputTextField};
 
 const CustomCheckBox = (props) => {
-    const {name, label, value, onChange, item, key} = props;
+    const { value, onChange, item, key} = props;
     const convertToTargetObject = (name, value, checked) => {
 
         if (checked) {

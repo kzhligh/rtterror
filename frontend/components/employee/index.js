@@ -17,11 +17,6 @@ const EmployeeComponent = (props) => {
     const [addOpen, setAddOpen] = useState(false);
     const [rowSelection, setRowSelection] = useState([]);
 
-    const closeAddOpen = () => {
-        setAddOpen(false);
-    };
-
-
     const handleSearch = (val) => {
         const searchValue = val.toLowerCase().trim()
         if (searchValue.length > 0) {
@@ -67,7 +62,7 @@ const EmployeeComponent = (props) => {
                     </Button>
                 </Grid>
                 <Grid item xs={3}>
-                    <Button className={styled.addButton} disabled={!(rowSelection.length > 0)} variant="outlined"
+                    <Button className={styled.addButton} disabled={(rowSelection.length <= 0)} variant="outlined"
                             onClick={handleDeleteEmployee}>
                         Delete Employee
                     </Button>

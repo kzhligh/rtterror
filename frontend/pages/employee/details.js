@@ -1,4 +1,4 @@
-import EmployeeDetailComponent from "../../components/employee/details";
+import EmployeeDetailComponent from "../../components/employee/employeedetailcomponent";
 import _groupBy from "lodash/groupBy";
 import _cloneDeep from "lodash/cloneDeep";
 import {http} from "../../utils/http";
@@ -37,7 +37,7 @@ export async function getServerSideProps(context) {
 const EmployeeDetails = ({employee, serviceList}) => {
     const router = useRouter();
     const editEmployee = async (empData) => {
-        const result = await http('/api/v1/employees', {
+        await http('/api/v1/employees', {
             method: 'PUT',
             body: empData,
         });

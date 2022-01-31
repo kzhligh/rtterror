@@ -61,8 +61,7 @@ const Service = ({employeeList}) => {
         if (item.hasOwnProperty('services')) {
             http(`/api/v1/combos/${item.id}`, {
                 method: 'DELETE'
-            }).then((r) => {
-            });
+            }).then();
             setRefresh(!refresh);
         } else {
             http(`/api/v1/services/${item.service_code}`, {

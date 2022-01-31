@@ -5,7 +5,7 @@ import {Close} from '@mui/icons-material';
 import DialogContent from '@mui/material/DialogContent';
 import styled from '../../styles/service.module.css';
 import AddIcon from '@mui/icons-material/Add';
-import {Checkbox, FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, Stack} from '@mui/material';
+import {Checkbox, FormControl, Grid, MenuItem, Select, Stack} from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import * as React from 'react';
@@ -16,7 +16,6 @@ import {InputTextField} from "../form/formComponent";
 import _isEmpty from "lodash/isEmpty"
 import _findIndex from "lodash/findIndex"
 import _pullAt from "lodash/pullAt"
-import {useRouter} from 'next/router';
 
 const ComboItem = (props) => {
     const {item, handleServiceCheck, removeService, isEdit, serviceCheckList, changeDurationOfService} =
@@ -84,7 +83,6 @@ const EditCombo = (props) => {
     const {
         editDialog,
         setEditDialog,
-        handleServiceCheck,
         removeService,
         handleSave, extractAddServiceEdit, serviceListAddable
     } = props;
@@ -163,7 +161,6 @@ const EditCombo = (props) => {
 };
 
 const ComboForm = (props) => {
-    const router = useRouter();
     const {
         openDialog,
         handleCloseComboDialog,
@@ -193,16 +190,16 @@ const ComboForm = (props) => {
     const handleSave = (serviceToAdd) => {
         setServiceCheckList(serviceToAdd.concat(serviceCheckList));
     };
-    const changeDurationOfService = (serviceCode, durationPrice, serviceCheckList) => {
+    const changeDurationOfService = (serviceCode, durationPrice, servCheckList) => {
         let index = _findIndex(serviceCheckList, ['service_code', serviceCode])
-        let services = serviceCheckList[index];
+        let services = servCheckList[index];
         let durationsPriceList = services.durations_prices;
         let durationsPriceIndex = _findIndex(durationsPriceList, ['id', durationPrice.id]);
         _pullAt(durationsPriceList, [durationsPriceIndex]);
         durationsPriceList.splice(0, 0, durationPrice);
         services.durations_prices = durationsPriceList;
-        serviceCheckList.splice(index, 1, services);
-        setServiceCheckList([...serviceCheckList]);
+        servCheckList.splice(index, 1, services);
+        setServiceCheckList([...servCheckList]);
     }
 
     useEffect(() => {
@@ -242,35 +239,35 @@ const ComboForm = (props) => {
     };
 
     const handleCreateCombo = () => {
-        let serviceId = serviceCheckList.map((service) => service.durations_prices[0].id);
-        comboValue.service_ids = serviceId;
-        comboValue.service_code = comboValue.name;
-        comboValue.total_duration = comboValue.total_duration * 3600000;
-        const result = http('/api/v1/combos', {
-            method: 'POST',
-            body: comboValue,
-        }).then(() => {
-        });
-        closeClearValue();
-        setRefresh(!refresh);
+        if(validate()){
+            let serviceId = serviceCheckList.map((service) => service.durations_prices[0].id);
+            comboValue.service_ids = serviceId;
+            comboValue.service_code = comboValue.name;
+            comboValue.total_duration = comboValue.total_duration * 3600000;
+            http('/api/v1/combos', {
+                method: 'POST',
+                body: comboValue,
+            }).then();
+            closeClearValue();
+            setRefresh(!refresh);
+        }
     };
     const handleEditSubmit = () => {
         let serviceId = serviceCheckList.map((service) => service.durations_prices[0].id);
         comboValue.service_ids = serviceId;
         comboValue.service_code = comboValue.name;
         comboValue.total_duration = comboValue.total_duration * 3600000;
-        const result = http('/api/v1/combos', {
+        http('/api/v1/combos', {
             method: 'PUT',
             body: comboValue,
-        }).then(() => {
-        });
+        }).then();
         closeClearValue();
         setRefresh(!refresh);
     };
     const validate = () => {
         let error = {}
         setErrorMessage(error);
-        return Object.values(temp).every(x => x == "")
+        return Object.values(error).every(x => x == "")
     }
     const extractAddServiceEdit = () => {
         let serviceCode = serviceCheckList.map((service) => service.service_code);

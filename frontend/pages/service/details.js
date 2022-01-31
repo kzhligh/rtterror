@@ -37,7 +37,7 @@ function DetailPage({employeeList, serviceItem}) {
     const router = useRouter();
 
     const editHandle = async (data) => {
-        const services = await http('/api/v1/services', {
+         await http('/api/v1/services', {
             method: 'PUT',
             body: data,
         });

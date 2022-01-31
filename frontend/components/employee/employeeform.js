@@ -25,8 +25,7 @@ const EmployeeForm = (props) => {
         tabValue,
         editEmployee,
         addEmployee,
-        serviceList,
-        serviceEmployeeList
+        serviceList
     } = props;
     const [employeeValue, setEmployeeValue] = useState(initValues);
     const [errorMessage, setErrorMessage] = useState({});
@@ -63,9 +62,8 @@ const EmployeeForm = (props) => {
         const error = {};
         error.first_name = employeeValue.first_name ? "" : "This field is required."
         error.last_name = employeeValue.last_name ? "" : "This field is required."
-        error.email = (/$^|.+@.+..+/).test(employeeValue.email) ? "" : "Email is not valid."
+        error.email = (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(employeeValue.email) ? "" : "Email is not valid."
         error.sin = employeeValue.sin.length >= 16 ? "" : 'sin has to have 16 digit'
-        error.phone = (/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/).test(employeeValue.phone) ? "" : "Invalid Phone number."
         setErrorMessage(error);
         return Object.values(error).every(x => x == "")
     }
@@ -170,7 +168,8 @@ const EmployeeForm = (props) => {
                     />
                 </Grid>
             </Grid>
-            <DialogActions>{mode == 'add' ?
+            <DialogActions>
+                {mode == 'add' &&
                 <Grid
                     container
                     direction="row"
@@ -179,8 +178,9 @@ const EmployeeForm = (props) => {
                 >
 
                     <Button onClick={addNewEmployee}>Add New Employee</Button>
-                    <Button onClick={handleClose}>Close</Button>
-                </Grid> : tabValue == 1 ?
+                    <Button onClick={()=>setAddOpen(false)}>Close</Button>
+                </Grid> }
+                {mode != 'add' && tabValue == 1 &&
                     <Grid
                         container
                         direction="row"
@@ -189,7 +189,7 @@ const EmployeeForm = (props) => {
                     >
 
                         <Button onClick={saveEditEmployee}>Save</Button>
-                    </Grid> : null
+                    </Grid>
             }
             </DialogActions>
 

@@ -7,7 +7,6 @@ import Card from '@mui/material/Card';
 import Box from '@mui/material/Box';
 import {useEffect, useState} from 'react';
 import ServiceEmployeeTable from './serviceEmployeeTable';
-import TextField from '@mui/material/TextField';
 import ServiceEmployeeDialog from './serviceEmployeeDialog';
 import DurationPrice from './durationPrice';
 import IconButton from '@mui/material/IconButton';
@@ -27,7 +26,6 @@ const ServiceDetailsCard = (props) => {
     const [durationPriceList, setDurationPriceList] = useState(item.durations_prices);
     const [reload, setReload] = useState(false);
     const [serviceValue, setServiceValue] = useState(_cloneDeep(item));
-    const [errorMessage, setErrorMessage] = useState({});
 
     useEffect(() => {
     }, [durationPriceList, reload]);
@@ -122,7 +120,6 @@ const ServiceDetailsCard = (props) => {
                             name='service_code'
                             value={serviceValue.service_code.split("-")[0]}
                             onChange={handleSetServiceValue}
-                            error={errorMessage.service_code}
                         />
                     </Grid>
                     <Grid
