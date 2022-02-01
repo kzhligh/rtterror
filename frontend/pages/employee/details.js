@@ -3,29 +3,14 @@ import _groupBy from "lodash/groupBy";
 import _cloneDeep from "lodash/cloneDeep";
 import {http} from "../../utils/http";
 import {useRouter} from 'next/router';
+import groupService from "../../utils/groupService";
+
 
 export async function getServerSideProps(context) {
     const employee = await http(`/api/v1/employees/${context.query.empid}`);
     const serviceListResponse = await http(`/api/v1/services`);
     const serviceArray = _groupBy(serviceListResponse, 'service_code')
-    let serviceList = [];
-    let item, durationPriceList, durationPriceItem;
-    for (const serviceCode in serviceArray) {
-        item = _cloneDeep(serviceArray[serviceCode][0]);
-        item.service_code = serviceCode;
-        delete item.duration;
-        delete item.price;
-        durationPriceList = [];
-        for (let insideItem of serviceArray[serviceCode]) {
-            durationPriceItem = {};
-            durationPriceItem.id = insideItem.id;
-            durationPriceItem.duration = (insideItem.duration * 1 / 3600000).toFixed(2);
-            durationPriceItem.price = insideItem.price;
-            durationPriceList.push(durationPriceItem);
-        }
-        item.durations_prices = durationPriceList;
-        serviceList.push(item);
-    }
+    let serviceList = groupService(serviceArray);
     let serviceEmployeeCode = Object.keys(_groupBy(employee.services, 'service_code'));
     let serviceEmployeeList = serviceList.filter((itemService) => serviceEmployeeCode.includes(itemService.service_code))
     employee.services = serviceEmployeeList;
