@@ -29,8 +29,8 @@ export interface IServiceDto {
   employee_ids?: string[];
 }
 
-interface IDurationsPrices {
-  id?: string;    //  for updating a series of services
+export interface IDurationsPrices {
+  id?: string; //  for updating a series of services
   duration: number;
   price: string;
 }
@@ -40,7 +40,7 @@ export interface IServicesDto {
   name: string;
   description?: string;
   treatment_type?: string;
-  durations_prices: [IDurationsPrices];
+  durations_prices: IDurationsPrices[];
   barcode?: string;
   sms_description?: string;
   blocked?: boolean;
