@@ -1,13 +1,9 @@
 import {
   IService,
-  IServiceDto,
   IServicesDto,
   IDurationsPrices,
 } from '../../interfaces/IService';
 import serviceService from '../service-service';
-import sequelize from '../../modules/sequelize';
-import ServiceModel from '../../models/service';
-import { Model } from 'sequelize';
 
 const durations_prices: IDurationsPrices[] = [
   { duration: 50, price: '20' },
