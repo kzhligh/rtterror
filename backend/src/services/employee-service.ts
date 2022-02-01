@@ -1,4 +1,4 @@
-import { Model } from "sequelize";
+import { Model, Op } from "sequelize";
 import GeneralService from "src/services/general-service";
 import serviceEmployeeService from './service-employee-service';
 import { IEmployee, IEmployeeDto } from "src/interfaces/IEmployee";
@@ -108,6 +108,28 @@ class EmployeeService extends GeneralService<IEmployee, IEmployeeDto>{
             return this.getAllItems();
         } catch (error) {
             console.error('EmployeeService/updateItemById()/ERROR: ', error);
+            await t.rollback();
+            throw error;
+        }
+    }
+
+    async hideItemsByIds(ids: string[]): Promise<IEmployee[]> {
+        const t = await sequelize.transaction();
+        try {
+            await this.model.update({ hidden: true }, {
+                where: {
+                    id: {
+                        [Op.or]: ids
+                    }
+                },
+                transaction: t
+            });
+            for (const employeeId of ids) {
+                await serviceEmployeeService.deleteItemByEmployeeId(employeeId, t);
+            }
+            await t.commit();
+            return this.getAllItems();
+        } catch (error) {
             await t.rollback();
             throw error;
         }

@@ -45,6 +45,16 @@ router.put('/', (req, res) => {
         });
 });
 
+router.delete('/multiple', (req, res) => {
+    employeeService.hideItemsByIds(req.body.ids)
+        .then((updatedEmployees) => {
+            res.status(200).send(updatedEmployees);
+        })
+        .catch((error) => {
+            sendBackErrorMessage(req, res, error);
+        });
+});
+
 router.delete('/:id', (req, res) => {
     employeeService.hideItemById(req.params.id, { hidden: true })
         .then((updatedEmployees) => {
