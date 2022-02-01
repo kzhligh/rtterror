@@ -4,6 +4,8 @@ import {useState} from "react";
 import {CustomDatePicker, CustomAutoComplete, InputTextField, DropDownList} from '../form/formComponent';
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
+import {formatPhoneNumber} from "../../utils";
+
 
 
 const EmployeeForm = (props) => {
@@ -62,8 +64,8 @@ const EmployeeForm = (props) => {
         const error = {};
         error.first_name = employeeValue.first_name ? "" : "This field is required."
         error.last_name = employeeValue.last_name ? "" : "This field is required."
-        error.email = (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(employeeValue.email) ? "" : "Email is not valid."
-        error.sin = employeeValue.sin.length >= 16 ? "" : 'sin has to have 16 digit'
+        // error.email = validator.isEmail(employeeValue.email) ? "" : "Email is not valid."
+        error.sin = employeeValue.sin.length >= 9 ? "" : 'sin has to have 16 digit'
         setErrorMessage(error);
         return Object.values(error).every(x => x == "")
     }
@@ -99,7 +101,7 @@ const EmployeeForm = (props) => {
                         error={errorMessage.address}
                     />
                     <InputTextField
-                        label='Address'
+                        label='Postal Code'
                         name='postal_code'
                         value={employeeValue.postal_code}
                         onChange={handleSetEmployeeValue}
@@ -108,7 +110,7 @@ const EmployeeForm = (props) => {
                     <InputTextField
                         label='Phone'
                         name='phone'
-                        value={employeeValue.phone}
+                        value={formatPhoneNumber(employeeValue.phone)}
                         onChange={handleSetEmployeeValue}
                         error={errorMessage.phone}
                     />

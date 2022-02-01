@@ -1,10 +1,8 @@
 import EmployeeDetailComponent from "../../components/employee/employeedetailcomponent";
 import _groupBy from "lodash/groupBy";
-import _cloneDeep from "lodash/cloneDeep";
 import {http} from "../../utils/http";
 import {useRouter} from 'next/router';
 import groupService from "../../utils/groupService";
-
 
 export async function getServerSideProps(context) {
     const employee = await http(`/api/v1/employees/${context.query.empid}`);

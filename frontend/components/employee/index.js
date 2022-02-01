@@ -12,8 +12,7 @@ import {DataGrid} from "@mui/x-data-grid";
 
 const EmployeeComponent = (props) => {
     const router = useRouter();
-    const {employeeList, addEmployee, deleteEmployee, serviceList} = props;
-    const [displayEmployeeList, setDisplayEmployeeList] = useState(employeeList);
+    const {employeeList, addEmployee, deleteEmployee, serviceList , displayEmployeeList , setDisplayEmployeeList} = props;
     const [addOpen, setAddOpen] = useState(false);
     const [rowSelection, setRowSelection] = useState([]);
 
@@ -38,7 +37,7 @@ const EmployeeComponent = (props) => {
 
     ];
     const handleDeleteEmployee = () => {
-        deleteEmployee(rowSelection[0]);
+        deleteEmployee(rowSelection);
     }
 
     return (
@@ -73,7 +72,7 @@ const EmployeeComponent = (props) => {
             <Divider/>
             <DataGrid
                 style={{minHeight: '60%', height: '560px'}}
-                rows={employeeList}
+                rows={displayEmployeeList}
                 columns={columns}
                 pagination
                 pageSize={8}

@@ -1,9 +1,7 @@
 import EmployeeComponent from "../../components/employee";
-import groupService from "../../utils/groupService";
 import {useState} from "react";
-import _groupBy from "lodash/groupBy";
-import _cloneDeep from "lodash/cloneDeep";
 import {http} from "../../utils/http";
+import groupService from "../../utils/groupService";
 
 export async function getServerSideProps(context) {
     const employeeList = await http(`/api/v1/employees`);
@@ -16,6 +14,7 @@ export async function getServerSideProps(context) {
 
 const Employee = ({serviceList, employeesList}) => {
     const [employeeList, setEmployeeList] = useState(employeesList);
+    const [displayEmployeeList, setDisplayEmployeeList] = useState(employeeList);
 
 
     const addEmployee = async (empData) => {
@@ -26,9 +25,10 @@ const Employee = ({serviceList, employeesList}) => {
         setEmployeeList([...employeeList, result]);
     }
 
-    const deleteEmployee = async (id) => {
-        const result = await http(`/api/v1/employees/${id}`, {
-            method: 'DELETE'
+    const deleteEmployee = async (ids) => {
+        const result = await http(`/api/v1/employees/multiple`, {
+            method: 'DELETE',
+            body: {ids:ids}
         });
         setEmployeeList(result);
     }
@@ -41,7 +41,8 @@ const Employee = ({serviceList, employeesList}) => {
                 serviceList={serviceList}
                 addEmployee={addEmployee}
                 deleteEmployee={deleteEmployee}
-
+                displayEmployeeList={displayEmployeeList}
+                setDisplayEmployeeList={setDisplayEmployeeList}
             />
         </div>
     );
