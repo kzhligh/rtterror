@@ -64,7 +64,6 @@ const EmployeeForm = (props) => {
         const error = {};
         error.first_name = employeeValue.first_name ? "" : "This field is required."
         error.last_name = employeeValue.last_name ? "" : "This field is required."
-        // error.email = validator.isEmail(employeeValue.email) ? "" : "Email is not valid."
         error.sin = employeeValue.sin.length >= 9 ? "" : 'sin has to have 16 digit'
         setErrorMessage(error);
         return Object.values(error).every(x => x == "")
