@@ -1,21 +1,29 @@
-import { IService, IServiceDto } from '../../interfaces/IService';
+import {
+  IService,
+  IServicesDto,
+  IDurationsPrices,
+} from '../../interfaces/IService';
 import serviceService from '../service-service';
-import sequelize from '../../modules/sequelize';
-import ServiceModel from '../../models/service';
-import { Model } from 'sequelize';
 
-const mockCustomerDto: IServiceDto = {
+const durations_prices: IDurationsPrices[] = [
+  { duration: 50, price: '20' },
+  { duration: 100, price: '30' },
+];
+
+const mockCustomerDto: IServicesDto = {
   service_code: 'abc',
   name: 'jane',
-  duration: 5,
-  price: '50',
+  durations_prices: durations_prices,
 };
 
 const mockCustomer: IService = {
   id: '1234',
   blocked: false,
   hidden: false,
-  ...mockCustomerDto,
+  service_code: 'xyz',
+  name: 'john',
+  duration: 50,
+  price: '20',
 };
 
 const mockCustomers: Array<typeof mockCustomer> = [mockCustomer, mockCustomer];

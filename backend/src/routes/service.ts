@@ -1,16 +1,8 @@
 import express from 'express';
 import serviceService from '../services/service-service';
+import { sendBackErrorMessage } from "src/routes/errorProcess";
 
 const router = express.Router();
-
-const sendBackErrorMessage = (
-  req: express.Request,
-  res: express.Response,
-  error: Error
-) => {
-  console.error(`ERROR - (${req.method})/services${req.path}/error: ${error}`);
-  res.status(400).send(error.message);
-};
 
 router.use(function (req, res, next) {
   console.log('%s %s %s', req.method, req.url, req.path);
@@ -28,12 +20,12 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.get('/:id', (req, res, next) => {
+router.get('/:serviceCode', (req, res, next) => {
   const { params } = req;
-  const { id } = params;
-  console.log(id);
+  const { serviceCode } = params;
+  console.log(serviceCode);
   serviceService
-    .getItemById(id)
+    .getItemsByServiceCode(serviceCode)
     .then((data) => {
       res.status(200).send(data);
     })
@@ -45,7 +37,7 @@ router.get('/:id', (req, res, next) => {
 router.post('/', (req, res, next) => {
   const { body } = req;
   serviceService
-    .createItem(body)
+    .createItems(body)
     .then((data) => {
       res.status(200).send(data);
     })
@@ -57,7 +49,7 @@ router.post('/', (req, res, next) => {
 router.put('/', (req, res, next) => {
   const { body } = req;
   serviceService
-    .updateItem(body)
+    .updateItems(body)
     .then((data) => {
       res.status(200).send(data);
     })
@@ -66,11 +58,11 @@ router.put('/', (req, res, next) => {
     });
 });
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:serviceCode', (req, res, next) => {
   const { params } = req;
-  const { id } = params;
+  const { serviceCode } = params;
   serviceService
-    .updateItemById(id, { hidden: true })
+    .hideItemsByServiceCode(serviceCode)
     .then((data) => {
       res.status(200).send(data);
     })
@@ -79,30 +71,28 @@ router.delete('/:id', (req, res, next) => {
     });
 });
 
-router.put('/:id/block', (req, res, next) => {
+router.put('/:serviceCode/block', (req, res) => {
   const { params } = req;
-  const { id } = params;
-  serviceService
-    .updateItemById(id, { blocked: true })
-    .then((data) => {
-      res.status(200).send(data);
-    })
-    .catch((error) => {
-      sendBackErrorMessage(req, res, error);
-    });
+  const { serviceCode } = params;
+  serviceService.blockUnblockServices(serviceCode, true)
+      .then((updatedServices) => {
+        res.status(200).send(updatedServices);
+      })
+      .catch((error) => {
+        sendBackErrorMessage(req, res, error);
+      });
 });
 
-router.put('/:id/unblock', (req, res, next) => {
+router.put('/:serviceCode/unblock', (req, res) => {
   const { params } = req;
-  const { id } = params;
-  serviceService
-    .updateItemById(id, { blocked: false })
-    .then((data) => {
-      res.status(200).send(data);
-    })
-    .catch((error) => {
-      sendBackErrorMessage(req, res, error);
-    });
+  const { serviceCode } = params;
+  serviceService.blockUnblockServices(serviceCode, false)
+      .then((updatedServices) => {
+        res.status(200).send(updatedServices);
+      })
+      .catch((error) => {
+        sendBackErrorMessage(req, res, error);
+      });
 });
 
 export default router;

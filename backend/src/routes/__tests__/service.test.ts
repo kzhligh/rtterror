@@ -9,33 +9,61 @@ jest.mock('../../models/service', () => ({
   init: jest.fn(),
 }));
 
+const okServiceCode = 'valid-service-code';
+const pathOkServiceCode = '/' + okServiceCode;
+const errorServiceCode = 'bad-service-code';
+const pathErrorServiceCode = '/' + errorServiceCode;
+const pathService = '/services';
+const getAllValidItemsMethodName = 'getAllValidItems';
+const getItemsByServiceCodeMethodName = 'getItemsByServiceCode';
+const createItemsMethodName = 'createItems';
+const updateItemsMethodName = 'updateItems';
+const hideItemsByServiceCodeMethodName = 'hideItemsByServiceCode';
+const blockUnblockServicesMethodName = 'blockUnblockServices';
 jest.mock('../../services/service-service', () => ({
   getAllValidItems: jest
     .fn()
     .mockImplementationOnce(() =>
-      Promise.resolve({ method: 'getAllValidItems', value: null })
+      Promise.resolve({ method: getAllValidItemsMethodName, value: null })
     ),
-  getItemById: jest
+  getItemsByServiceCode: jest
     .fn()
-    .mockImplementationOnce((id: number) =>
-      Promise.resolve({ method: 'getItemById', value: id })
+    .mockImplementationOnce((serviceCode: string) =>
+      Promise.resolve({
+        method: getItemsByServiceCodeMethodName,
+        value: serviceCode,
+      })
     )
-    .mockRejectedValueOnce(99),
-  createItem: (content: any) =>
-    Promise.resolve({ method: 'createItem', value: content }),
-  updateItem: (content: any) =>
-    Promise.resolve({ method: 'updateItem', value: content }),
-  updateItemById: jest
+    .mockImplementationOnce(() => Promise.reject(errorServiceCode)),
+  createItems: (content: any) =>
+    Promise.resolve({ method: createItemsMethodName, value: content }),
+  updateItems: (content: any) =>
+    Promise.resolve({ method: updateItemsMethodName, value: content }),
+  hideItemsByServiceCode: jest
     .fn()
-    .mockImplementation((id: number, content: any) =>
-      Promise.resolve({ method: 'updateItemById', value: content })
+    .mockImplementationOnce(() => Promise.reject(errorServiceCode))
+    .mockImplementationOnce((serviceCode: string, content: any) =>
+      Promise.resolve({
+        method: hideItemsByServiceCodeMethodName,
+        value: { hidden: true },
+      })
+    ),
+  blockUnblockServices: jest
+    .fn()
+    .mockImplementationOnce((serviceCode: string, content: any) =>
+      Promise.resolve({
+        method: blockUnblockServicesMethodName,
+        value: { blocked: true },
+      })
     )
-    .mockRejectedValueOnce(99),
+    .mockImplementationOnce((serviceCode: string, content: any) =>
+      Promise.resolve({
+        method: blockUnblockServicesMethodName,
+        value: { blocked: false },
+      })
+    )
+    .mockImplementationOnce(() => Promise.reject(errorServiceCode)),
 }));
-
-const pathOkId = '/0';
-const pathErrorId = '/99';
-const pathService = '/services';
 
 let req: SuperTest<request.Test>;
 let server: Server;
@@ -52,44 +80,47 @@ afterAll(() => {
   server.close();
 });
 
-describe('Service Routes', () => {
+describe('Service Routing with RESTful Parameters', () => {
   it(`should route get(${pathService}) to getAllValidItems`, async () => {
     const response = await req.get('/services').expect(200);
 
     expect(response.body.method).toEqual('getAllValidItems');
   });
 
-  it(`should route get(${pathService + pathOkId}) to getItemById`, async () => {
-    const response = await req.get(pathService + pathOkId).expect(200);
+  it(`should route get(${pathService +
+    pathOkServiceCode}) to ${getItemsByServiceCodeMethodName}`, async () => {
+    const response = await req.get(pathService + pathOkServiceCode).expect(200);
 
-    expect(response.body.method).toEqual('getItemById');
-    expect(response.body.value).toBe('0');
+    expect(response.body.method).toEqual(getItemsByServiceCodeMethodName);
+    expect(response.body.value).toBe(okServiceCode);
   });
 
   it(`should route get(${pathService +
-    pathErrorId}) to fail getItemById`, async () => {
-    const response = await req.get(pathService + pathErrorId).expect(400);
+    pathErrorServiceCode}) to fail ${getItemsByServiceCodeMethodName}`, async () => {
+    const response = await req
+      .get(pathService + pathErrorServiceCode)
+      .expect(400);
 
     expect(response.body.method).toBeUndefined();
     expect(response.body.value).toBeUndefined();
   });
 
-  it(`should route post(${pathService}) to createItem`, async () => {
+  it(`should route post(${pathService}) to ${createItemsMethodName}`, async () => {
     const response = await req.post(pathService).expect(200);
 
-    expect(response.body.method).toEqual('createItem');
+    expect(response.body.method).toEqual(createItemsMethodName);
   });
 
-  it(`should route put(${pathService}) to updateItem`, async () => {
+  it(`should route put(${pathService}) to ${updateItemsMethodName}`, async () => {
     const response = await req.put(pathService).expect(200);
 
-    expect(response.body.method).toEqual('updateItem');
+    expect(response.body.method).toEqual(updateItemsMethodName);
   });
 
   it(`should route delete(${pathService +
-    pathErrorId}) non existent id with json to fail updateItemById`, async () => {
+    pathErrorServiceCode}) non existent id with json to fail ${hideItemsByServiceCodeMethodName}`, async () => {
     const response = await req
-      .del(pathService + pathErrorId)
+      .del(pathService + pathErrorServiceCode)
       .send({ hidden: true })
       .expect(400);
 
@@ -98,37 +129,49 @@ describe('Service Routes', () => {
   });
 
   it(`should route delete(${pathService +
-    pathOkId}) with json to updateItemById`, async () => {
+    pathOkServiceCode}) with json to ${hideItemsByServiceCodeMethodName}`, async () => {
     const response = await req
-      .del(pathService + pathOkId)
+      .del(pathService + pathOkServiceCode)
       .send({ hidden: true })
       .expect(200);
 
-    expect(response.body.method).toEqual('updateItemById');
+    expect(response.body.method).toEqual(hideItemsByServiceCodeMethodName);
     expect(response.body.value.hidden).toBe(true);
   });
 
   it(`should route put(${pathService +
-    pathOkId +
-    '/block'}) to updateItemById with status=200 and blocked:true`, async () => {
+    pathOkServiceCode +
+    '/block'}) to ${blockUnblockServicesMethodName} with status=200 and blocked:true`, async () => {
     const response = await req
-      .put(pathService + pathOkId + '/block')
+      .put(pathService + pathOkServiceCode + '/block')
       .send({ blocked: true })
       .expect(200);
 
-    expect(response.body.method).toEqual('updateItemById');
+    expect(response.body.method).toEqual(blockUnblockServicesMethodName);
     expect(response.body.value.blocked).toBe(true);
   });
 
-  it(`should route ${pathService +
-    pathOkId +
-    '/unblock'} to updateItemById with status=200 and blocked:false`, async () => {
+  it(`should route put${pathService +
+    pathOkServiceCode +
+    '/unblock'} to ${blockUnblockServicesMethodName} with status=200 and blocked:false`, async () => {
     const response = await req
-      .put(pathService + pathOkId + '/unblock')
+      .put(pathService + pathOkServiceCode + '/unblock')
       .send({ blocked: false })
       .expect(200);
 
-    expect(response.body.method).toEqual('updateItemById');
+    expect(response.body.method).toEqual(blockUnblockServicesMethodName);
     expect(response.body.value.blocked).toBe(false);
+  });
+
+  it(`should route put${pathService +
+    pathErrorServiceCode +
+    '/unblock'} to ${blockUnblockServicesMethodName} with status=400`, async () => {
+    const response = await req
+      .put(pathService + pathErrorServiceCode + '/unblock')
+      .send({ blocked: false })
+      .expect(400);
+
+    expect(response.body.method).toBeUndefined;
+    expect(response.body.value).toBeUndefined;
   });
 });

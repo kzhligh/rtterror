@@ -51,6 +51,20 @@ class ServiceComboService extends GeneralService<IAll, IServiceCombo> {
     }
   }
 
+  /*
+  * this method will delete items by service id
+  * @param t an object of sequelize transaction to combine with other database operations
+  * */
+  async deleteItemsByServiceId(serviceId: string, t: any): Promise<void> {
+    const deletion = await this.model.destroy({
+      where: {
+        service_id: serviceId
+      },
+      transaction: t
+    });
+    console.log(`${deletion} rows of service-combo relationship have been deleted`);
+  }
+
   async addItemsByComboIdAndServiceIds(
     comboId: string,
     serviceIds: string[],
