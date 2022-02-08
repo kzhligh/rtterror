@@ -1,190 +1,177 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Close } from '@mui/icons-material';
+import {Close} from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton';
 import styled from '../../styles/service.module.css';
-import { useEffect, useState } from 'react';
-import { Grid } from '@mui/material';
+import {useEffect, useState} from 'react';
+import {Grid} from '@mui/material';
 import ServiceEmployeeTable from './serviceEmployeeTable';
 import DurationPrice from './durationPrice';
 import AddIcon from '@mui/icons-material/Add';
+import {v4 as uuidv4} from 'uuid';
+import {InputTextField} from "../form/formComponent";
 
 const AddServiceForm = (props) => {
-  const hourToMs = 60000;
-  const MsToHour = 3600000;
-  const { addHandle, employeeList, open, closeDialog } = props;
-  const [employeeCheckList, setEmployeeCheckList] = useState([]);
-  const [name, setName] = useState('');
-  const [barcode, setBarcode] = useState('');
-  const [description, setDescription] = useState('');
-  const [duration, setDuration] = useState(0);
-  const [price, setPrice] = useState(0);
-  const [durationPriceList, setDurationPriceList] = useState([
-    { price: 0, duration: 0.5 },
-  ]);
-  const [reload, setReload] = useState(false);
+    const initValue = {
+        service_code: '',
+        name: '',
+        description: '',
+        treatment_type: '',
+        barcode: '',
+        sms_description: ''
+    };
+    const mshconvertion = 3600000;
+    const {addHandle, employeeList, open, closeDialog} = props;
+    const [employeeCheckList, setEmployeeCheckList] = useState([]);
+    const [durationPriceList, setDurationPriceList] = useState([]);
+    const [reload, setReload] = useState(false);
+    const [serviceValue, setServiceValue] = useState(initValue);
+    const [errorMessage, setErrorMessage] = useState({});
 
-  const processAddService = () => {
-    if (validationInput()) {
-      let data = {
-        service_code: barcode,
-        name: 'service ' + barcode,
-        description: description,
-        treatment_type: 'type 1',
-        duration: 3600000,
-        price: 120,
-        barcode: barcode,
-        sms_description: 'sms description 1',
-      };
-      addHandle(data);
+    const handleSetServiceValue = (obj) => {
+        const {name, value} = obj.target;
+        setServiceValue({...serviceValue, [name]: value});
+    };
+
+    const validate = () => {
+        let error = {}
+        error.name = serviceValue.name ? "" : "This field is required.";
+        error.durationprice = durationPriceList.length > 0 ? "" : "This field is required.";
+        setErrorMessage(error);
+        return Object.values(error).every(x => x == "")
     }
-  };
-  const handleAddEmployeeCheck = (val, employee) => {
-    if (val) {
-      setEmployeeCheckList([...employeeCheckList, employee]);
-    } else {
-      setEmployeeCheckList(
-        employeeCheckList.filter((emp) => emp.firstname != employee.firstname)
-      );
+
+    const processAddService = () => {
+        if (validate()) {
+            serviceValue.service_code = serviceValue.service_code + "-" + uuidv4().substring(0, 4);
+            serviceValue.employee_ids = employeeCheckList.map(emp => emp.id);
+            serviceValue.durations_prices = durationPriceList.map(d => (
+                Object.assign({}, d, {duration: d.duration * mshconvertion})));
+            addHandle(serviceValue);
+            closeAddDialog();
+        }
+    };
+
+    const handleAddEmployeeCheck = (val, employee) => {
+        if (val) {
+            setEmployeeCheckList([...employeeCheckList, employee]);
+        } else {
+            setEmployeeCheckList(
+                employeeCheckList.filter((emp) => emp.id != employee.id)
+            );
+        }
+    };
+
+    useEffect(() => {
+    }, [employeeCheckList, durationPriceList, reload]);
+
+
+    const handleAddDurationPrice = () => {
+        setDurationPriceList([...durationPriceList, {price: 50, duration: 0.5}]);
+    };
+    const handleRemoveDurationPrice = (index) => {
+        setDurationPriceList([
+            ...durationPriceList.slice(0, index),
+            ...durationPriceList.slice(index + 1),
+        ]);
+    };
+    const closeAddDialog = () => {
+        setServiceValue(initValue);
+        setEmployeeCheckList([]);
+        setDurationPriceList([]);
+        closeDialog();
     }
-  };
 
-  useEffect(() => {}, [employeeCheckList, durationPriceList, reload]);
+    return (
+        <div>
+            <Dialog open={open} fullWidth={true} maxWidth="lg" scroll="body">
+                <DialogTitle>
+                    New Service
+                    <IconButton
+                        aria-label="close"
+                        onClick={closeDialog}
+                        size="medium"
+                        sx={{
+                            position: 'absolute',
+                            right: 10,
+                            top: 10,
+                        }}
+                    >
+                        <Close/>
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent>
+                    <Grid container direction="column" alignItems="stretch">
+                        <InputTextField
+                            label='Name'
+                            name='name'
+                            value={serviceValue.name}
+                            onChange={handleSetServiceValue}
+                            error={errorMessage.name}
+                        />
+                        <InputTextField
+                            label='Service Code'
+                            name='service_code'
+                            value={serviceValue.service_code}
+                            onChange={handleSetServiceValue}
+                            error={errorMessage.service_code}
+                        />
+                        <Grid item xs={12}>
+                            {durationPriceList.map((element, index) => (
+                                <DurationPrice
+                                    key={index}
+                                    index={index}
+                                    item={element}
+                                    durationPriceList={durationPriceList}
+                                    handleRemoveDurationPrice={handleRemoveDurationPrice}
+                                    reload={reload}
+                                    setReload={setReload}
+                                />
+                            ))}
+                            {errorMessage.hasOwnProperty('durationprice') ?
+                                <p className={styled.redText}>{errorMessage.durationprice}</p> : ''}
+                            <Grid
+                                container
+                                direction="column"
+                                justifyContent="center"
+                                alignItems="center"
+                            >
+                                <Grid item={3}>
+                                    <IconButton onClick={handleAddDurationPrice}>
+                                        <AddIcon/>
+                                    </IconButton>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <InputTextField
+                                label='Description'
+                                name='description'
+                                value={serviceValue.description}
+                                onChange={handleSetServiceValue}
+                                rows={4}
+                            />
 
-  const handleSetValue = (e) => {
-    let label = e.target.id;
-    let value = e.target.value;
-    switch (label) {
-      case 'name':
-        setName(value);
-        break;
-      case 'code':
-        setBarcode(value);
-        break;
-      case 'description':
-        setDescription(value);
-        break;
-    }
-  };
-
-  const validationInput = () => {
-    if (name == '' || barcode == '') {
-      return false;
-    }
-    return true;
-  };
-  const handleAddDurationPrice = () => {
-    setDurationPriceList([...durationPriceList, { price: 0, duration: 0.5 }]);
-  };
-  const handleRemoveDurationPrice = (index) => {
-    setDurationPriceList([
-      ...durationPriceList.slice(0, index),
-      ...durationPriceList.slice(index + 1),
-    ]);
-  };
-  return (
-    <div>
-      <Dialog open={open} fullWidth={true} maxWidth="lg" scroll="body">
-        <DialogTitle>
-          New Service
-          <IconButton
-            aria-label="close"
-            onClick={closeDialog}
-            size="medium"
-            sx={{
-              position: 'absolute',
-              right: 10,
-              top: 10,
-            }}
-          >
-            <Close />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent>
-          <Grid container direction="column" alignItems="stretch">
-            <Grid item xs={12}>
-              <TextField
-                margin="normal"
-                fullWidth
-                required
-                id="name"
-                label="name"
-                value={name}
-                onChange={(event) => handleSetValue(event)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                margin="normal"
-                fullWidth
-                required
-                id="code"
-                label="Service code"
-                value={barcode}
-                onChange={(event) => handleSetValue(event)}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              {durationPriceList.map((element, index) => (
-                <DurationPrice
-                  key={index}
-                  index={index}
-                  item={element}
-                  durationPriceList={durationPriceList}
-                  handleRemoveDurationPrice={handleRemoveDurationPrice}
-                  reload={reload}
-                  setReload={setReload}
-                />
-              ))}
-
-              <Grid
-                container
-                direction="column"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Grid item={3}>
-                  <IconButton onClick={handleAddDurationPrice}>
-                    <AddIcon />
-                  </IconButton>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                margin="normal"
-                fullWidth
-                id="description"
-                label="Description"
-                multiline
-                rows={4}
-                value={description}
-                onChange={(event) => handleSetValue(event)}
-              />
-            </Grid>
-          </Grid>
-
-          {/*<div className="bg-success p-2 text-dark bg-opacity-10"  >New Service for 1H has been successfully added! </div>*/}
-
-          <div className={styled.separateVDiv}></div>
-          <h1>Add Employee </h1>
-          <ServiceEmployeeTable
-            displayEmployeeList={employeeList}
-            handleEmployeeCheck={handleAddEmployeeCheck}
-            employeeCheckList={employeeCheckList}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={processAddService}>Create Service</Button>
-          <Button onClick={closeDialog}>Close</Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
+                        </Grid>
+                    </Grid>
+                    <div className={styled.separateVDiv}></div>
+                    <h1>Add Employee </h1>
+                    <ServiceEmployeeTable
+                        displayEmployeeList={employeeList}
+                        handleEmployeeCheck={handleAddEmployeeCheck}
+                        employeeCheckList={employeeCheckList}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={processAddService}>Create Service</Button>
+                    <Button onClick={closeAddDialog}>Close</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    );
 };
 export default AddServiceForm;

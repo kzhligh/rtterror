@@ -1,71 +1,72 @@
 .cardWrapper {
-  margin: 10px;
-  padding: 10px;
-  width: 85%;
+    margin: 10px;
+    padding: 10px;
+    width: 85%;
 }
 
 .flexAlignContainer {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .flexContainer {
-  display: flex;
+    display: flex;
 }
 
 .buttonContainer {
-  width: 120px;
-  height: 50px;
+    width: 120px;
+    height: 50px;
 }
 
 .addButton {
-  width: 150px;
-  height: 50px;
+    width: 150px;
+    height: 50px;
 }
 
 .separateVDiv {
-  height: 30px;
+    height: 30px;
 }
 
 .separateHDiv {
-  width: 30px;
+    width: 30px;
 }
 
 .dateContainer {
-  position: absolute;
-  bottom: 8px;
-  right: 16px;
-  font-size: 18px;
+    position: absolute;
+    bottom: 8px;
+    right: 16px;
+    font-size: 18px;
 }
+
 .topDateContainer {
-  position: absolute;
-  top: 10px;
-  right: 16px;
-  font-size: 18px;
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    font-size: 18px;
 }
 
 .employeeRowDiv {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .buttonLink {
-  border-radius: 8px;
-  cursor: pointer;
-  border-color: aqua;
-  width: 120px;
-  height: 50px;
+    border-radius: 8px;
+    cursor: pointer;
+    border-color: aqua;
+    width: 120px;
+    height: 50px;
 }
 
 .addRightButton {
-  width: 150px;
-  height: 50px;
-  margin-left: auto;
-  /*position: absolute;*/
-  /*bottom: 10px;*/
-  /*right: 16px;*/
+    width: 150px;
+    height: 50px;
+    margin-left: auto;
+    /*position: absolute;*/
+    /*bottom: 10px;*/
+    /*right: 16px;*/
 }
 
 /*.flexVerticalDisplay {*/
@@ -79,11 +80,15 @@
 /*}*/
 
 .flexSpaceBetween {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 
 .flexServiceCombo {
-  display: flex;
-  align-items: flex-start;
+    display: flex;
+    align-items: flex-start;
+}
+
+.redText {
+    color: red;
 }
