@@ -70,12 +70,7 @@ export default class GeneralService<T extends IAll, TDto> {
       ...updateFields,
       id: id,
     };
-    try {
-      return this.updateItem(updateInfo);
-    } catch (error) {
-      console.error('GeneralService/updateItemById()/ERROR: ', error);
-      throw error;
-    }
+    return this.updateItem(updateInfo);
   }
 
   async deleteItemById(id: string): Promise<void> {

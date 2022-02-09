@@ -17,7 +17,7 @@ const config: Config.InitialOptions = {
   },
   preset: 'ts-jest',
   testPathIgnorePatterns: ['dist/'],
-  testRegex: '/__tests__/.*|(\\.|/)(spec|test).ts$',
+  testRegex: '/__tests__/.*|(\\.|/)(spec).ts$',
   verbose: true,
 };
 

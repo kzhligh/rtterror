@@ -4,8 +4,8 @@
   "description": "nodejs+expressjs backend",
   "main": "./src/app.ts",
   "scripts": {
-    "test": "set NODE_ENV=test && jest --watchAll",
-    "test:ci": "set NODE_ENV=test && jest --coverage",
+    "test": "jest --watchAll",
+    "test:ci": "jest --coverage",
     "build": "tsc && tspath -f",
     "start": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only ./src/app.ts",
     "start:prod": "node dist/src/app.js"
@@ -19,20 +19,19 @@
   "dependencies": {
     "@babel/core": "^7.16.0",
     "@babel/preset-env": "^7.16.4",
-    "@types/cors": "^2.8.12",
-    "@types/jest": "^27.0.3",
     "babel-jest": "^27.3.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "mysql2": "^2.3.0",
     "reflect-metadata": "^0.1.13",
-    "sequelize": "^6.7.0",
-    "typedi": "^0.10.0"
+    "sequelize": "^6.7.0"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.16.0",
+    "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
+    "@types/jest": "^27.4.0",
     "@types/node": "^16.11.12",
     "@types/supertest": "^2.0.11",
     "@types/validator": "^13.7.0",
