@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styled from '../../styles/service.module.css';
+import cssStyled from '../../styles/service.module.css';
 import {
     Button,
     Card,
@@ -12,13 +12,25 @@ import {
     DialogTitle,
     DialogContent,
     Grid,
+    Chip,
     Stack,
     Typography
 } from '@mui/material';
+import { RadioButtonUncheckedRounded, CheckCircleOutlineRounded } from '@mui/icons-material';
+import { capitalize } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ComboForm from './comboForm';
-import { Box } from '@mui/system';
+
+import { styled } from "@mui/material/styles";
+
+const CardHeaderReducedPadding;
+
+const CardContentNoPadding = styled(CardContent)(`
+  &:first-child {
+    padding-top: 0;
+  }
+`);
 
 const ConfirmDeleteDialog = (props) => {
     const { open, setOpen, item, step, setStep, deleteService } = props;
@@ -57,7 +69,7 @@ const ConfirmDeleteDialog = (props) => {
                     alignItems="center"
                 >
                     <Button
-                        className={styled.buttonContainer}
+                        className={cssStyled.buttonContainer}
                         variant="contained"
                         onClick={handleConfirm}
                         color="error"
@@ -66,12 +78,13 @@ const ConfirmDeleteDialog = (props) => {
 
                     </Button>
                     <Button onClick={handleClose}
-                        className={styled.buttonContainer}>Cancel</Button>
+                        className={cssStyled.buttonContainer}>Cancel</Button>
                 </Grid>
             </DialogContent>
         </Dialog>
     );
 };
+
 
 const ServiceCardRow = (props) => {
     const router = useRouter();
@@ -117,57 +130,59 @@ const ServiceCardRow = (props) => {
         return new Date(item['createdAt']).toDateString();
     };
     return (
-        <div className={styled.flexServiceCombo}>
+        <div className={cssStyled.flexServiceCombo}>
             <Card
-                className={styled.cardWrapper}
+                className={cssStyled.cardWrapper}
                 style={{ backgroundColor: isBlock() ? 'gray' : 'white' }}
             >
                 <CardHeader
                     action={
-                        <Box>
-                            {!isCombo() ? (
-                                <Checkbox
-                                    key={serviceItem.id}
-                                    value={serviceItem}
-                                    checked={serviceCheckList ? serviceCheckList.includes(serviceItem) : false}
-                                    onChange={(event) => {
-                                        handleServiceCheck(event.target.checked, serviceItem);
-                                    }}
-                                />
-                            ) : null}
-                        </Box>
+                        <>{!isCombo() ? (
+                            <Checkbox
+                                key={serviceItem.id}
+                                value={serviceItem}
+                                checked={serviceCheckList ? serviceCheckList.includes(serviceItem) : false}
+                                onChange={(event) => {
+                                    handleServiceCheck(event.target.checked, serviceItem);
+                                }}
+
+                                icon={<RadioButtonUncheckedRounded />}
+                                checkedIcon={<CheckCircleOutlineRounded />}
+                            />
+                        ) : null}</>
                     }
-                    style={{ textTransform: 'capitalize' }}
-                    title={serviceItem.name}
-                    subheader=""
+                    title={<><Chip label={isCombo() ? "Combo" : "Service"} variant="outlined" /> {capitalize(serviceItem.name)}</>}
+                    subheader={<><Chip label="Service Code" size="small" /> {serviceItem.service_code}</>}
                 />
                 <Collapse in={!isBlock()}>
                     <CardActionArea>
-                        <CardContent onClick={!isBlock() ? () => { detailsPage(); } : undefined}>
-                            <Grid>
-                                <Typography sx={{ fontSize: 24 }} color="text.secondary">
-                                    {isCombo() ? `Duration: ${serviceItem.total_duration}` : `Duration:  ${serviceItem.durations_prices.map((dur) => dur.duration).join(" - ")}  H`}
-                                </Typography>
-                                <Typography sx={{ fontSize: 24 }} color="text.secondary">
-                                    Description : {serviceItem.description}
-                                </Typography>
-                                <Typography sx={{ fontSize: 24 }} color="text.secondary">
-                                    {isCombo() ? 'Combo' : ''}
-                                </Typography>
-                            </Grid>
-                            <div className={styled.separateVDiv} />
-                            <div className={styled.dateContainer}>
-                                <Typography sx={{ fontSize: 20 }}>
+                        <CardContentNoPadding onClick={() => detailsPage()} sx={{ fontSize: 12 }}>
+                            <Stack direction="row" spacing={1} justifyContent="flex-start" alignItems="center">
+                                <Chip label="Options" size="small" />
+                                {isCombo() ?
+                                    <Typography variant="body2">{serviceItem.total_duration} hrs</Typography>
+                                    : <>
+                                        {serviceItem.durations_prices.map(
+                                            (dur) => <Chip label={`${dur.duration} HRS / ${dur.price} CAD`} size="small" variant="outlined" />)}
+                                    </>
+                                }
+                            </Stack>
+                            <Stack direction="row" spacing={3} justifyContent="flex-start" alignItems="center">
+                                <Chip label="Description" size="small" /><Typography variant="body2">{serviceItem.description}</Typography>
+                            </Stack>
+                            <div className={cssStyled.separateVDiv} />
+                            <div className={cssStyled.dateContainer}>
+                                <Typography sx={{ fontSize: 12 }}>
                                     Created On : {getCreateDate(serviceItem)}
                                 </Typography>
                             </div>
-                        </CardContent>
+                        </CardContentNoPadding>
                     </CardActionArea>
                 </Collapse>
             </Card>
-            <Stack alignItems={"center"} spacing={1}>
+            <Stack alignItems="center" alignContent="flex-end" spacing={1}>
                 <Button
-                    className={styled.buttonContainer}
+                    className={cssStyled.buttonContainer}
                     variant={isBlock() ? 'contained' : 'outlined'}
                     onClick={() => toggleBlocked(serviceItem)}
                     color='warning'
@@ -175,7 +190,7 @@ const ServiceCardRow = (props) => {
                     {isBlock() ? 'unblock' : 'block'}
                 </Button>
                 <Button
-                    className={styled.buttonContainer}
+                    className={cssStyled.buttonContainer}
                     variant="outlined"
                     color="error"
                     onClick={() => setOpen(true)}
