@@ -1,21 +1,24 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import styled from '../../styles/service.module.css';
 import {
+    Button,
+    Card,
+    CardHeader,
+    CardContent,
     CardActionArea,
     Checkbox,
+    Collapse,
     Dialog,
     DialogTitle,
     DialogContent,
     Grid,
     Stack,
+    Typography
 } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ComboForm from './comboForm';
+import { Box } from '@mui/system';
 
 const ConfirmDeleteDialog = (props) => {
     const { open, setOpen, item, step, setStep, deleteService } = props;
@@ -73,7 +76,7 @@ const ConfirmDeleteDialog = (props) => {
 const ServiceCardRow = (props) => {
     const router = useRouter();
     const {
-        item,
+        item: serviceItem,
         toggleBlocked,
         deleteService,
         serviceCheckList,
@@ -88,20 +91,20 @@ const ServiceCardRow = (props) => {
         setRefresh
     } = props;
     const [editComboDialog, setEditComboDialog] = useState(false);
-    const isBlock = () => item.blocked;
-    const isCombo = () => item.hasOwnProperty('services');
+    const isBlock = () => serviceItem.blocked;
+    const isCombo = () => serviceItem.hasOwnProperty('services');
     const [open, setOpen] = useState(false);
     const [step, setStep] = useState(0);
     const detailsPage = () => {
         if (isCombo()) {
             setType('edit');
             setEditComboDialog(true);
-            setComboDetail(item);
-            extractServiceCheckList(item.services);
+            setComboDetail(serviceItem);
+            extractServiceCheckList(serviceItem.services);
         } else {
             router.push({
                 pathname: '/service/details',
-                query: { servicecode: item.service_code }
+                query: { servicecode: serviceItem.service_code }
             }, '/service/details');
         }
     };
@@ -117,60 +120,64 @@ const ServiceCardRow = (props) => {
         <div className={styled.flexServiceCombo}>
             <Card
                 className={styled.cardWrapper}
-                onClick={
-                    !isBlock()
-                        ? () => {
-                            detailsPage();
-                        }
-                        : undefined
-                }
                 style={{ backgroundColor: isBlock() ? 'gray' : 'white' }}
             >
-                <CardContent>
-                    <Typography sx={{ fontSize: 24 }} color="text.secondary">
-                        Service Name: {item.name}
-                    </Typography>
-                    <Typography sx={{ fontSize: 24 }} color="text.secondary">
-                        {isCombo() ? `Duration: ${item.total_duration}` : `Duration:  ${item.durations_prices.map((dur) => dur.duration).join(" - ")}  H`}
-                    </Typography>
-                    <Typography sx={{ fontSize: 24 }} color="text.secondary">
-                        Description : {item.description}
-                    </Typography>
-                    <Typography sx={{ fontSize: 24 }} color="text.secondary">
-                        {isCombo() ? 'Combo' : ''}
-                    </Typography>
-                </CardContent>
-                <div className={styled.separateVDiv} />
-                <CardActionArea>
-                    <div className={styled.dateContainer}>
-                        <Typography sx={{ fontSize: 20 }}>
-                            Created On : {getCreateDate(item)}
-                        </Typography>
-                    </div>
-                </CardActionArea>
-            </Card>
-            {!isCombo() ? (
-                <Checkbox
-                    key={item.id}
-                    value={item}
-                    checked={serviceCheckList ? serviceCheckList.includes(item) : false}
-                    onChange={(event) => {
-                        handleServiceCheck(event.target.checked, item);
-                    }}
+                <CardHeader
+                    action={
+                        <Box>
+                            {!isCombo() ? (
+                                <Checkbox
+                                    key={serviceItem.id}
+                                    value={serviceItem}
+                                    checked={serviceCheckList ? serviceCheckList.includes(serviceItem) : false}
+                                    onChange={(event) => {
+                                        handleServiceCheck(event.target.checked, serviceItem);
+                                    }}
+                                />
+                            ) : null}
+                        </Box>
+                    }
+                    style={{ textTransform: 'capitalize' }}
+                    title={serviceItem.name}
+                    subheader=""
                 />
-            ) : null}
-            <Stack spacing={2}>
+                <Collapse in={!isBlock()}>
+                    <CardActionArea>
+                        <CardContent onClick={!isBlock() ? () => { detailsPage(); } : undefined}>
+                            <Grid>
+                                <Typography sx={{ fontSize: 24 }} color="text.secondary">
+                                    {isCombo() ? `Duration: ${serviceItem.total_duration}` : `Duration:  ${serviceItem.durations_prices.map((dur) => dur.duration).join(" - ")}  H`}
+                                </Typography>
+                                <Typography sx={{ fontSize: 24 }} color="text.secondary">
+                                    Description : {serviceItem.description}
+                                </Typography>
+                                <Typography sx={{ fontSize: 24 }} color="text.secondary">
+                                    {isCombo() ? 'Combo' : ''}
+                                </Typography>
+                            </Grid>
+                            <div className={styled.separateVDiv} />
+                            <div className={styled.dateContainer}>
+                                <Typography sx={{ fontSize: 20 }}>
+                                    Created On : {getCreateDate(serviceItem)}
+                                </Typography>
+                            </div>
+                        </CardContent>
+                    </CardActionArea>
+                </Collapse>
+            </Card>
+            <Stack alignItems={"center"} spacing={1}>
                 <Button
                     className={styled.buttonContainer}
                     variant={isBlock() ? 'contained' : 'outlined'}
-                    onClick={() => toggleBlocked(item)}
-                    style={{ backgroundColor: isBlock() ? 'gray' : 'white' }}
+                    onClick={() => toggleBlocked(serviceItem)}
+                    color='warning'
                 >
-                    {isBlock() ? 'unblocked' : 'blocked'}
+                    {isBlock() ? 'unblock' : 'block'}
                 </Button>
                 <Button
                     className={styled.buttonContainer}
                     variant="outlined"
+                    color="error"
                     onClick={() => setOpen(true)}
                 >
                     Delete
@@ -179,26 +186,28 @@ const ServiceCardRow = (props) => {
             <ConfirmDeleteDialog
                 open={open}
                 setOpen={setOpen}
-                item={item}
+                item={serviceItem}
                 step={step}
                 setStep={setStep}
                 deleteService={deleteService}
             />
-            {isCombo() && editComboDialog ? (
-                <ComboForm
-                    openDialog={editComboDialog}
-                    handleCloseComboDialog={handleCloseEditDialog}
-                    serviceCheckList={serviceCheckList}
-                    handleServiceCheck={handleServiceCheck}
-                    type="edit"
-                    setServiceCheckList={setServiceCheckList}
-                    comboDetail={comboDetail}
-                    serviceListData={serviceListData}
-                    setRefresh={setRefresh}
-                    refresh={refresh}
-                ></ComboForm>
-            ) : null}
-        </div>
+            {
+                isCombo() && editComboDialog ? (
+                    <ComboForm
+                        openDialog={editComboDialog}
+                        handleCloseComboDialog={handleCloseEditDialog}
+                        serviceCheckList={serviceCheckList}
+                        handleServiceCheck={handleServiceCheck}
+                        type="edit"
+                        setServiceCheckList={setServiceCheckList}
+                        comboDetail={comboDetail}
+                        serviceListData={serviceListData}
+                        setRefresh={setRefresh}
+                        refresh={refresh}
+                    ></ComboForm>
+                ) : null
+            }
+        </div >
     );
 };
 export default ServiceCardRow;
