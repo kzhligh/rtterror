@@ -110,7 +110,7 @@ describe('Patient', () => {
     });
   });
 
-  it.skip('Validate appointment history', function () {});
+  it.skip('Validate appointment history');
 
   it('Show a warning on duplicate customer full name entry', function () {
     const [client] = this.clients;

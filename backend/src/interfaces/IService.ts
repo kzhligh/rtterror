@@ -12,6 +12,7 @@ export interface IService extends IAll {
   sms_description?: string;
   blocked: boolean;
   hidden: boolean;
+  employee_ids?: string[];
 }
 
 export interface IServiceDto {
@@ -25,4 +26,24 @@ export interface IServiceDto {
   sms_description?: string;
   blocked?: boolean;
   hidden?: boolean;
+  employee_ids?: string[];
+}
+
+export interface IDurationsPrices {
+  id?: string; //  for updating a series of services
+  duration: number;
+  price: string;
+}
+
+export interface IServicesDto {
+  service_code: string;
+  name: string;
+  description?: string;
+  treatment_type?: string;
+  durations_prices: IDurationsPrices[];
+  barcode?: string;
+  sms_description?: string;
+  blocked?: boolean;
+  hidden?: boolean;
+  employee_ids?: string[];
 }

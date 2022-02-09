@@ -18,8 +18,10 @@ ServiceComboModel.init(
 ServiceModel.belongsToMany(ComboModel, {
   through: ServiceComboModel,
   foreignKey: 'service_id',
+  onDelete: 'cascade',
 });
 ComboModel.belongsToMany(ServiceModel, {
   through: ServiceComboModel,
   foreignKey: 'combo_id',
+  onDelete: 'cascade',
 });
