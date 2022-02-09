@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {List, ListItem, ListItemIcon} from '@mui/material';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
+import { List, ListItem, ListItemIcon } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Link from 'next/link';
 import {
     AccessTime,
@@ -55,37 +55,37 @@ const MenuList = () => {
     const menuItems = [
         {
             text: 'Appointment',
-            icon: <AccessTime/>,
+            icon: <AccessTime />,
             path: '/appointment',
         },
         {
             text: 'Patient',
-            icon: <AccountCircle/>,
+            icon: <AccountCircle />,
             path: '/patient',
         },
         {
             text: 'Service',
-            icon: <AddBox/>,
+            icon: <AddBox />,
             path: '/service',
         },
         {
             text: 'Employee',
-            icon: <Work/>,
+            icon: <Work />,
             path: '/employee',
         },
         {
             text: 'Schedule',
-            icon: <Event/>,
+            icon: <Event />,
             path: '/schedule',
         },
         {
             text: 'Product',
-            icon: <Healing/>,
+            icon: <Healing />,
             path: '/product',
         },
         {
             text: 'Invoice',
-            icon: <Receipt/>,
+            icon: <Receipt />,
             path: '/invoice',
         },
     ];
@@ -93,12 +93,12 @@ const MenuList = () => {
         <ThemeProvider theme={theme}>
             <List>
                 {menuItems.map((item) => (
-                    <ListItem button key={item.text}>
-                        <ListItemIcon>{item.icon}</ListItemIcon>
-                        <Link href={item.path}>
+                    <Link key={item.text} href={item.path}>
+                        <ListItem button>
+                            <ListItemIcon>{item.icon}</ListItemIcon>
                             <a>{item.text}</a>
-                        </Link>
-                    </ListItem>
+                        </ListItem>
+                    </Link>
                 ))}
             </List>
         </ThemeProvider>
