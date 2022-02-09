@@ -8,32 +8,35 @@ import {
     CardActionArea,
     Checkbox,
     Dialog,
+    DialogTitle,
     DialogContent,
     Grid,
     Stack,
 } from '@mui/material';
-import {useRouter} from 'next/router';
-import {useState} from 'react';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import ComboForm from './comboForm';
-import Box from '@mui/material/Box';
 
-const ConfirmDelete = (props) => {
-    const {open, setOpen, item, step, setStep, deleteService} = props;
+const ConfirmDeleteDialog = (props) => {
+    const { open, setOpen, item, step, setStep, deleteService } = props;
     const handleClose = () => {
-        setOpen(false);
         setStep(0);
+        setOpen(false);
     };
     const handleConfirm = () => {
-        if (step == 0 && !item.hasOwnProperty('services')) {
+        if (step === 0 && !item.hasOwnProperty('services')) {
             setStep(1);
         } else {
-            // delete
             deleteService(item);
             handleClose();
         }
     };
     return (
-        <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="lg">
+        <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="sm" p={5}>
+
+            <DialogTitle id="alert-dialog-title">
+                Delete Service {item.name}?
+            </DialogTitle>
             <DialogContent>
                 <Grid
                     container
@@ -41,30 +44,28 @@ const ConfirmDelete = (props) => {
                     justifyContent="center"
                     alignItems="center"
                 >
-                    <Box padding="160px 200px">
-                        <Typography variant="h4">
-                            {step == 0
-                                ? `Delete ${item.name}`
-                                : `Attention: All Combos with ${item.name} will be deleted . Are you sure you want to continue`}
-                        </Typography>
-                    </Box>
+                    <Typography>Attention: All Combos that include {item.name} will be deleted. Are you sure you want to continue?</Typography>
+
+                </Grid>
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="flex-end"
+                    alignItems="center"
+                >
+                    <Button
+                        className={styled.buttonContainer}
+                        variant="contained"
+                        onClick={handleConfirm}
+                        color="error"
+                    >
+                        {step === 0 ? "Yes" : "Delete"}
+
+                    </Button>
+                    <Button onClick={handleClose}
+                        className={styled.buttonContainer}>Cancel</Button>
                 </Grid>
             </DialogContent>
-            <Grid
-                container
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-            >
-                <Button
-                    className={styled.buttonContainer}
-                    variant="outlined"
-                    onClick={handleConfirm}
-                >
-                    Confirm
-                </Button>
-                <Button onClick={handleClose}>Cancel</Button>
-            </Grid>
         </Dialog>
     );
 };
@@ -100,8 +101,8 @@ const ServiceCardRow = (props) => {
         } else {
             router.push({
                 pathname: '/service/details',
-                query: {servicecode: item.service_code}
-            }, '/service/details')
+                query: { servicecode: item.service_code }
+            }, '/service/details');
         }
     };
     const handleCloseEditDialog = () => {
@@ -123,26 +124,26 @@ const ServiceCardRow = (props) => {
                         }
                         : undefined
                 }
-                style={{backgroundColor: isBlock() ? 'gray' : 'white'}}
+                style={{ backgroundColor: isBlock() ? 'gray' : 'white' }}
             >
                 <CardContent>
-                    <Typography sx={{fontSize: 24}} color="text.secondary">
+                    <Typography sx={{ fontSize: 24 }} color="text.secondary">
                         Service Name: {item.name}
                     </Typography>
-                    <Typography sx={{fontSize: 24}} color="text.secondary">
+                    <Typography sx={{ fontSize: 24 }} color="text.secondary">
                         {isCombo() ? `Duration: ${item.total_duration}` : `Duration:  ${item.durations_prices.map((dur) => dur.duration).join(" - ")}  H`}
                     </Typography>
-                    <Typography sx={{fontSize: 24}} color="text.secondary">
+                    <Typography sx={{ fontSize: 24 }} color="text.secondary">
                         Description : {item.description}
                     </Typography>
-                    <Typography sx={{fontSize: 24}} color="text.secondary">
+                    <Typography sx={{ fontSize: 24 }} color="text.secondary">
                         {isCombo() ? 'Combo' : ''}
                     </Typography>
                 </CardContent>
-                <div className={styled.separateVDiv}/>
+                <div className={styled.separateVDiv} />
                 <CardActionArea>
                     <div className={styled.dateContainer}>
-                        <Typography sx={{fontSize: 20}}>
+                        <Typography sx={{ fontSize: 20 }}>
                             Created On : {getCreateDate(item)}
                         </Typography>
                     </div>
@@ -163,7 +164,7 @@ const ServiceCardRow = (props) => {
                     className={styled.buttonContainer}
                     variant={isBlock() ? 'contained' : 'outlined'}
                     onClick={() => toggleBlocked(item)}
-                    style={{backgroundColor: isBlock() ? 'gray' : 'white'}}
+                    style={{ backgroundColor: isBlock() ? 'gray' : 'white' }}
                 >
                     {isBlock() ? 'unblocked' : 'blocked'}
                 </Button>
@@ -175,7 +176,7 @@ const ServiceCardRow = (props) => {
                     Delete
                 </Button>
             </Stack>
-            <ConfirmDelete
+            <ConfirmDeleteDialog
                 open={open}
                 setOpen={setOpen}
                 item={item}
