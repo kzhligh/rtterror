@@ -1,16 +1,13 @@
-import 'reflect-metadata';
-
 import express from 'express';
 import type { Request, Response } from 'express';
 import type core from 'express-serve-static-core';
-import { Container, Service } from 'typedi';
 
 import { CustomerService } from 'src/services/customer.service';
-import { Frozen } from 'src/utils/decorators';
+import { Frozen, Injectable, ServiceLocator } from 'src/utils/decorators';
 import { Customer } from 'src/models/customer.model';
 
 @Frozen()
-@Service()
+@Injectable()
 class CustomerController {
   constructor(private customerService: CustomerService) {}
 
@@ -157,4 +154,6 @@ class CustomerController {
   }
 }
 
-export const customerRouter = Container.get(CustomerController).getRoutes();
+export const customerRouter = ServiceLocator.getInstance()
+  .resolve<CustomerController>(CustomerController)
+  .getRoutes();

@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import Container from 'typedi';
+import { ServiceLocator } from 'src/utils/decorators';
 import config from '../config';
 
 const sequelize: Sequelize = new Sequelize({
@@ -15,6 +15,6 @@ const sequelize: Sequelize = new Sequelize({
   },
 });
 
-Container.set(Sequelize, sequelize);
+ServiceLocator.getInstance().set(Sequelize, sequelize);
 
 export default sequelize;
