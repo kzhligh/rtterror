@@ -24,8 +24,6 @@ import ComboForm from './comboForm';
 
 import { styled } from "@mui/material/styles";
 
-const CardHeaderReducedPadding;
-
 const CardContentNoPadding = styled(CardContent)(`
   &:first-child {
     padding-top: 0;
@@ -104,12 +102,12 @@ const ServiceCardRow = (props) => {
         setRefresh
     } = props;
     const [editComboDialog, setEditComboDialog] = useState(false);
-    const isBlock = () => serviceItem.blocked;
-    const isCombo = () => serviceItem.hasOwnProperty('services');
-    const [open, setOpen] = useState(false);
-    const [step, setStep] = useState(0);
+    const isBlocked = () => serviceItem.blocked;
+    const isACombo = () => serviceItem.hasOwnProperty('services');
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [deleteStep, setDeleteStep] = useState(0);
     const detailsPage = () => {
-        if (isCombo()) {
+        if (isACombo()) {
             setType('edit');
             setEditComboDialog(true);
             setComboDetail(serviceItem);
@@ -133,11 +131,14 @@ const ServiceCardRow = (props) => {
         <div className={cssStyled.flexServiceCombo}>
             <Card
                 className={cssStyled.cardWrapper}
-                style={{ backgroundColor: isBlock() ? 'gray' : 'white' }}
+                style={{ backgroundColor: isBlocked() ? 'gray' : 'white' }} sx={{
+                    boxShadow: 3,
+                    borderRadius: 2,
+                }}
             >
                 <CardHeader
                     action={
-                        <>{!isCombo() ? (
+                        <>{!isACombo() ? (
                             <Checkbox
                                 key={serviceItem.id}
                                 value={serviceItem}
@@ -151,15 +152,15 @@ const ServiceCardRow = (props) => {
                             />
                         ) : null}</>
                     }
-                    title={<><Chip label={isCombo() ? "Combo" : "Service"} variant="outlined" /> {capitalize(serviceItem.name)}</>}
+                    title={<><Chip label={isACombo() ? "Combo" : "Service"} variant="outlined" /> {capitalize(serviceItem.name)}</>}
                     subheader={<><Chip label="Service Code" size="small" /> {serviceItem.service_code}</>}
                 />
-                <Collapse in={!isBlock()}>
+                <Collapse in={!isBlocked()}>
                     <CardActionArea>
                         <CardContentNoPadding onClick={() => detailsPage()} sx={{ fontSize: 12 }}>
-                            <Stack direction="row" spacing={1} justifyContent="flex-start" alignItems="center">
+                            <Stack direction="row" spacing={1} justifyContent="flex-start" alignItems="center" mb={.5}>
                                 <Chip label="Options" size="small" />
-                                {isCombo() ?
+                                {isACombo() ?
                                     <Typography variant="body2">{serviceItem.total_duration} hrs</Typography>
                                     : <>
                                         {serviceItem.durations_prices.map(
@@ -183,31 +184,31 @@ const ServiceCardRow = (props) => {
             <Stack alignItems="center" alignContent="flex-end" spacing={1}>
                 <Button
                     className={cssStyled.buttonContainer}
-                    variant={isBlock() ? 'contained' : 'outlined'}
+                    variant={isBlocked() ? 'contained' : 'outlined'}
                     onClick={() => toggleBlocked(serviceItem)}
                     color='warning'
                 >
-                    {isBlock() ? 'unblock' : 'block'}
+                    {isBlocked() ? 'unblock' : 'block'}
                 </Button>
                 <Button
                     className={cssStyled.buttonContainer}
                     variant="outlined"
                     color="error"
-                    onClick={() => setOpen(true)}
+                    onClick={() => setDeleteDialogOpen(true)}
                 >
                     Delete
                 </Button>
             </Stack>
             <ConfirmDeleteDialog
-                open={open}
-                setOpen={setOpen}
+                open={deleteDialogOpen}
+                setOpen={setDeleteDialogOpen}
                 item={serviceItem}
-                step={step}
-                setStep={setStep}
+                step={deleteStep}
+                setStep={setDeleteStep}
                 deleteService={deleteService}
             />
             {
-                isCombo() && editComboDialog ? (
+                isACombo() && editComboDialog ? (
                     <ComboForm
                         openDialog={editComboDialog}
                         handleCloseComboDialog={handleCloseEditDialog}
