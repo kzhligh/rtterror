@@ -1,29 +1,27 @@
 .cardWrapper {
   margin: 10px;
   padding: 10px;
-  min-width: 70%;
+  min-width: 65%;
   max-width: 75%;
 }
 
 .flexAlignContainer {
   display: flex;
-  justify-content: space-around;
-  align-items: center;
+  justify-content: space-between;
+  align-items: left;
+  max-width: 75%;
 }
 
 .flexContainer {
   display: flex;
+  max-width: 75%;
 }
 
 .buttonContainer {
-  width: 6em;
+  min-width: 6em;
+  max-width: 12em;
   height: 3em;
   margin: 0 0.5em;
-}
-
-.addButton {
-  width: 150px;
-  height: 50px;
 }
 
 .separateVDiv {
