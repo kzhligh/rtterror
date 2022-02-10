@@ -43,7 +43,7 @@ const ServiceComponent = (props) => {
         }
         return serviceCheckList.length;
     };
-    useEffect(() => { }, [orderBy]);
+    // useEffect(() => { }, [orderBy]);
 
     const compareDateFunction = (item1, item2) => {
         const date1 = new Date(item1['createdAt']);

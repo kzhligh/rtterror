@@ -44,7 +44,7 @@ const theme = createTheme({
                     color: 'white',
                     background: '#888888',
                     fontSize: 14,
-                    height: 32,
+                    height: 36,
                     '&.Mui-selected': {
                         fontWeight: 'bold',
                         color: 'black',

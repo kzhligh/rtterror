@@ -1,9 +1,8 @@
-import PrimarySearchAppBar from './appbar';
 import MenuList from './menu';
 import styled from '../../styles/layout.module.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Calendar from './calendar';
-import { Divider } from '@mui/material';
+import { Divider, Grid, Box } from '@mui/material';
 import * as React from 'react';
 
 const globalTheme = createTheme({
@@ -15,17 +14,17 @@ const globalTheme = createTheme({
 const Layout = ({ children }) => {
     return (
         <ThemeProvider theme={globalTheme}>
-            <div className={styled.bodyWrapper}>
-                <div className={styled.sideBar}>
+            <Grid direction="row" className={styled.bodyWrapper}>
+                <Box style={{ minHeight: "100%" }}>
                     <Calendar />
                     <Divider />
                     <MenuList />
-                </div>
-                <div className={styled.content}>
+                </Box>
+                <Box style={{ minWidth: "75%", maxWidth: "85%" }}>
                     {/* <PrimarySearchAppBar /> */}
                     <div className={styled.contentWrapper}>{children}</div>
-                </div>
-            </div>
+                </Box>
+            </Grid>
         </ThemeProvider>
     );
 };
