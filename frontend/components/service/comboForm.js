@@ -1,24 +1,26 @@
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
-import {Close} from '@mui/icons-material';
+import { Close } from '@mui/icons-material';
 import DialogContent from '@mui/material/DialogContent';
 import styled from '../../styles/service.module.css';
 import AddIcon from '@mui/icons-material/Add';
-import {Checkbox, FormControl, Grid, MenuItem, Select, Stack} from '@mui/material';
+import { Checkbox, FormControl, Grid, MenuItem, Select, Stack } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import * as React from 'react';
 import Card from '@mui/material/Card';
-import {useEffect, useState} from 'react';
-import {http} from "../../utils/http";
-import {InputTextField} from "../form/formComponent";
-import _isEmpty from "lodash/isEmpty"
-import _findIndex from "lodash/findIndex"
-import _pullAt from "lodash/pullAt"
+import { useEffect, useState } from 'react';
+import { http } from "../../utils/http";
+import { InputTextField } from "../form/formComponent";
+import _isEmpty from "lodash/isEmpty";
+import _findIndex from "lodash/findIndex";
+import _pullAt from "lodash/pullAt";
+
+const apiPath = '/api/v1';
 
 const ComboItem = (props) => {
-    const {item, handleServiceCheck, removeService, isEdit, serviceCheckList, changeDurationOfService} =
+    const { item, handleServiceCheck, removeService, isEdit, serviceCheckList, changeDurationOfService } =
         props;
 
     return (
@@ -51,7 +53,7 @@ const ComboItem = (props) => {
                             >
                                 {!_isEmpty(item.durations_prices) ? item.durations_prices.map((durationPrice, index) => (
                                     <MenuItem value={index} key={index}
-                                              onClick={() => changeDurationOfService(item.service_code, durationPrice, serviceCheckList)}>
+                                        onClick={() => changeDurationOfService(item.service_code, durationPrice, serviceCheckList)}>
                                         H {durationPrice.duration} - ${durationPrice.price}
                                     </MenuItem>
                                 )) : null}
@@ -70,7 +72,7 @@ const ComboItem = (props) => {
                             />
                         ) : (
                             <IconButton onClick={() => removeService(item)}>
-                                <Close/>
+                                <Close />
                             </IconButton>
                         )}
                     </div>
@@ -115,7 +117,7 @@ const EditCombo = (props) => {
         >
             <Grid item={3}>
                 <IconButton onClick={extractAddServiceEdit}>
-                    <AddIcon/>
+                    <AddIcon />
                 </IconButton>
             </Grid>
             <Dialog open={editDialog} fullWidth={true} scroll="body">
@@ -131,7 +133,7 @@ const EditCombo = (props) => {
                             top: 10,
                         }}
                     >
-                        <Close/>
+                        <Close />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent>
@@ -191,7 +193,7 @@ const ComboForm = (props) => {
         setServiceCheckList(serviceToAdd.concat(serviceCheckList));
     };
     const changeDurationOfService = (serviceCode, durationPrice, servCheckList) => {
-        let index = _findIndex(serviceCheckList, ['service_code', serviceCode])
+        let index = _findIndex(serviceCheckList, ['service_code', serviceCode]);
         let services = servCheckList[index];
         let durationsPriceList = services.durations_prices;
         let durationsPriceIndex = _findIndex(durationsPriceList, ['id', durationPrice.id]);
@@ -200,7 +202,7 @@ const ComboForm = (props) => {
         services.durations_prices = durationsPriceList;
         servCheckList.splice(index, 1, services);
         setServiceCheckList([...servCheckList]);
-    }
+    };
 
     useEffect(() => {
         let name = '';
@@ -216,7 +218,7 @@ const ComboForm = (props) => {
         } else {
             name = name.slice(0, -2);
         }
-        setComboValue({...comboValue, name: name, total_price: price, total_duration: duration})
+        setComboValue({ ...comboValue, name: name, total_price: price, total_duration: duration });
     }, [serviceCheckList]);
 
 
@@ -227,8 +229,8 @@ const ComboForm = (props) => {
     };
 
     const handleSetValue = (obj) => {
-        const {name, value} = obj.target;
-        setComboValue({...comboValue, [name]: value});
+        const { name, value } = obj.target;
+        setComboValue({ ...comboValue, [name]: value });
     };
     const removeService = (item) => {
         handleServiceCheck(false, item);
@@ -239,12 +241,12 @@ const ComboForm = (props) => {
     };
 
     const handleCreateCombo = () => {
-        if(validate()){
+        if (validate()) {
             let serviceId = serviceCheckList.map((service) => service.durations_prices[0].id);
             comboValue.service_ids = serviceId;
             comboValue.service_code = comboValue.name;
             comboValue.total_duration = comboValue.total_duration * 3600000;
-            http('/api/v1/combos', {
+            http(`${apiPath}/combos`, {
                 method: 'POST',
                 body: comboValue,
             }).then();
@@ -257,7 +259,7 @@ const ComboForm = (props) => {
         comboValue.service_ids = serviceId;
         comboValue.service_code = comboValue.name;
         comboValue.total_duration = comboValue.total_duration * 3600000;
-        http('/api/v1/combos', {
+        http(`${apiPath}/combos`, {
             method: 'PUT',
             body: comboValue,
         }).then();
@@ -265,16 +267,16 @@ const ComboForm = (props) => {
         setRefresh(!refresh);
     };
     const validate = () => {
-        let error = {}
+        let error = {};
         setErrorMessage(error);
-        return Object.values(error).every(x => x == "")
-    }
+        return Object.values(error).every(x => x == "");
+    };
     const extractAddServiceEdit = () => {
         let serviceCode = serviceCheckList.map((service) => service.service_code);
         let addableList = serviceListData.filter((item) => !serviceCode.includes(item.service_code) && !item.hasOwnProperty('services'));
         setServiceListAddable(addableList);
-        setEditDialog(true)
-    }
+        setEditDialog(true);
+    };
 
     return (
         <div>
@@ -291,7 +293,7 @@ const ComboForm = (props) => {
                             top: 10,
                         }}
                     >
-                        <Close/>
+                        <Close />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent>

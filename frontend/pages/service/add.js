@@ -1,16 +1,18 @@
 import AddServiceForm from '../../components/service/addServiceForm';
-import {useRouter} from 'next/router';
-import {useState} from 'react';
-import {http} from "../../utils/http";
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { http } from "../../utils/http";
+
+const apiPath = '/api/v1';
 
 export async function getServerSideProps() {
-    let employeeList = await http(`/api/v1/employees`);
+    let employeeList = await http(`${apiPath}/employees`);
     return {
-        props: {employeeList: employeeList},
+        props: { employeeList: employeeList },
     };
 }
 
-function ServiceFormPage({employeeList}) {
+function ServiceFormPage({ employeeList }) {
     const router = useRouter();
     const [open, setOpen] = useState(true);
 
@@ -19,21 +21,19 @@ function ServiceFormPage({employeeList}) {
         setOpen(false);
     };
     const addHandle = async (data) => {
-        await http('/api/v1/services', {
+        await http(`${apiPath}/services`, {
             method: 'POST',
             body: data,
         });
         closeDialog();
     };
     return (
-        <>
-            <AddServiceForm
-                addHandle={addHandle}
-                employeeList={employeeList}
-                closeDialog={closeDialog}
-                open={open}
-            />
-        </>
+        <AddServiceForm
+            addHandle={addHandle}
+            employeeList={employeeList}
+            closeDialog={closeDialog}
+            open={open}
+        />
     );
 }
 
