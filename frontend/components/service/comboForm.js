@@ -26,7 +26,7 @@ const ComboItem = (props) => {
                             key={serviceItem.id}
                             value={serviceItem}
                             checked={
-                                serviceCheckList ? serviceCheckList.includes(serviceItem) : false
+                                serviceCheckList.includes(serviceItem)
                             }
                             onChange={(event) => {
                                 handleServiceCheck(event.target.checked, serviceItem);

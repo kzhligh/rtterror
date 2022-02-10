@@ -142,7 +142,7 @@ const ServiceCardRow = (props) => {
                             <Checkbox
                                 key={serviceItem.id}
                                 value={serviceItem}
-                                checked={serviceCheckList ? serviceCheckList.includes(serviceItem) : false}
+                                checked={serviceCheckList.includes(serviceItem)}
                                 onChange={(event) => {
                                     handleServiceCheck(event.target.checked, serviceItem);
                                 }}
