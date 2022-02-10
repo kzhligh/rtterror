@@ -1,22 +1,23 @@
-import {Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,} from '@mui/material';
+import { Checkbox, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import Paper from '@mui/material/Paper';
 
 const ServiceEmployeeTable = (props) => {
-    const {displayEmployeeList, handleEmployeeCheck, employeeCheckList} = props;
+    const { displayEmployeeList, handleEmployeeCheck, employeeCheckList } = props;
 
     return (
-        <TableContainer component={Paper}>
-            <Table sx={{minWidth: 650}} aria-label="simple table">
+        <TableContainer component={Paper} elevation={0} sx={{ border: 1, marginTop: '15px', borderColor: '#A7A7A7' }}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <caption><Typography>Employee table</Typography></caption>
                 <TableHead>
                     <TableRow>
                         <TableCell align="center">
-                            <h2>First name</h2>
+                            First name
                         </TableCell>
                         <TableCell align="center">
-                            <h2>Last name</h2>
+                            Last name
                         </TableCell>
                         <TableCell align="center">
-                            <h2>Primary</h2>
+                            Primary
                         </TableCell>
                         <TableCell align="center"></TableCell>
                     </TableRow>
@@ -25,12 +26,12 @@ const ServiceEmployeeTable = (props) => {
                     {displayEmployeeList.map((employee) => (
                         <TableRow
                             key={employee.id}
-                            sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                             <TableCell align="center">{employee.first_name}</TableCell>
                             <TableCell align="center">{employee.last_name}</TableCell>
                             <TableCell align="center">{employee.title}</TableCell>
-                            <TableCell align="center">
+                            <TableCell align="right" size="small">
                                 <Checkbox
                                     key={employee.id}
                                     // aria-label={ename}

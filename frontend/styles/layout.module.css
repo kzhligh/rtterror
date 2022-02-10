@@ -1,24 +1,31 @@
 .bodyWrapper {
-    display: flex;
-    width: 100vw;
-    height: 100vh;
+  display: flex;
+
+  height: 100vh;
+  margin: 0;
+  padding: 0;
 }
 
 .sideBar {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-    background: #c5c5c5;
+  background: #c5c5c5;
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  position: float; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 100; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
 }
 
 .content {
-    width: 100%;
-    flex: 1;
+  width: 100%;
+  flex: 1;
 }
 
 .contentWrapper {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    padding-left: 10px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding-left: 10px;
 }

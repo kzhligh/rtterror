@@ -1,13 +1,12 @@
 import * as React from 'react';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
-import {TextField} from '@mui/material';
-import {useState} from 'react';
-import {Close} from '@mui/icons-material';
+import { Box, InputBase, IconButton } from '@mui/material';
+import { useState } from 'react';
+import { Close } from '@mui/icons-material';
+
 
 export default function SearchInput(props) {
-    const {handleSearch} = props;
+    const { handleSearch } = props;
     const [searchInput, setSearchInput] = useState('');
     const searchHandler = (val) => {
         setSearchInput(val);
@@ -15,27 +14,29 @@ export default function SearchInput(props) {
     };
 
     return (
-        <Paper
+        <Box
             component="form"
-            sx={{p: '2px 4px', display: 'flex', alignItems: 'center', width: 400}}
+            border={2}
+            borderColor="primary.main"
+            sx={{ borderColor: '#A7A7A7', border: 1.5, borderRadius: 1, display: 'flex', alignItems: 'center', maxWidth: '65%' }}
         >
-            <IconButton sx={{p: '10px'}} aria-label="search" disabled={true}>
-                <SearchIcon/>
+            <IconButton sx={{ p: '10px' }} aria-label="search" disabled={true}>
+                <SearchIcon />
             </IconButton>
-            <TextField
+            <InputBase
+                sx={{ ml: 1, flex: 1 }}
                 id="filled-search"
-                label="Search"
-                fullWidth
+                placeholder="Search Service"
                 value={searchInput}
                 onChange={(event) => searchHandler(event.target.value)}
             />
             <IconButton
-                sx={{p: '10px'}}
+                sx={{ p: '10px' }}
                 aria-label="search"
                 onClick={() => searchHandler('')}
             >
-                <Close/>
+                <Close />
             </IconButton>
-        </Paper>
+        </Box>
     );
 }

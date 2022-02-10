@@ -1,23 +1,25 @@
 import ServiceComponent from '../../components/service';
-import {useEffect, useState} from 'react';
-import {http} from "../../utils/http";
+import { useEffect, useState } from 'react';
+import { http } from "../../utils/http";
 import groupService from "../../utils/groupService";
 
-export async function getServerSideProps(context) {
-    const employeeList = await http(`/api/v1/employees`);
+const apiPath = '/api/v1';
+
+export async function getServerSideProps(_context) {
+    const employeeList = await http(`${apiPath}/employees`);
     return {
-        props: {employeeList: employeeList},
+        props: { employeeList: employeeList },
     };
 }
 
-const Service = ({employeeList}) => {
+const Service = ({ employeeList }) => {
     const [serviceListData, setServiceListData] = useState([]);
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(undefined);
 
     const getServiceList = async () => {
-        const serviceListResponse = await http(`/api/v1/services`);
-        const comboList = await http(`/api/v1/combos`);
+        const serviceListResponse = await http(`${apiPath}/services`);
+        const comboList = await http(`${apiPath}/combos`);
         for (const combo in comboList) {
             comboList[combo].total_duration = (comboList[combo].total_duration * 1 / 3600000).toFixed(2);
         }
@@ -27,41 +29,41 @@ const Service = ({employeeList}) => {
     };
     useEffect(() => {
         setLoading(true);
-        getServiceList().then((r) => setLoading(false));
+        getServiceList().then((_r) => setLoading(false));
     }, [refresh]);
     useEffect(() => {
         setLoading(true);
-        getServiceList().then((r) => setLoading(false));
+        getServiceList().then((_r) => setLoading(false));
     }, []);
 
     const deleteService = (item) => {
         if (item.hasOwnProperty('services')) {
-            http(`/api/v1/combos/${item.id}`, {
+            http(`${apiPath}/combos/${item.id}`, {
                 method: 'DELETE'
             }).then();
             setRefresh(!refresh);
         } else {
-            http(`/api/v1/services/${item.service_code}`, {
+            http(`${apiPath}/services/${item.service_code}`, {
                 method: 'DELETE'
-            }).then((r) => {
-                setRefresh(!refresh)
+            }).then((_r) => {
+                setRefresh(!refresh);
             });
         }
     };
     const toggleBlocked = (item) => {
         if (item.hasOwnProperty('services')) {
-            const action = item.blocked ? 'unblock' : 'block';
-            http(`/api/v1/combos/${item.id}/${action}`, {
-                method: 'PUT'
-            }).then((r) => {
-                setRefresh(!refresh)
+            http(
+                `${apiPath}/combos/${item.id}/${item.blocked ? 'unblock' : 'block'}`,
+                { method: 'PUT' }
+            ).then((_r) => {
+                setRefresh(!refresh);
             });
         } else {
-            const path = '/api/v1/services/' + item.service_code + (item.blocked ? '/unblock' : '/block');
-            http(path, {
-                method: 'PUT'
-            }).then((r) => {
-                setRefresh(!refresh)
+            http(
+                `${apiPath}/services/${item.service_code}/${item.blocked ? 'unblock' : 'block'}`,
+                { method: 'PUT' }
+            ).then((_r) => {
+                setRefresh(!refresh);
             });
         }
     };

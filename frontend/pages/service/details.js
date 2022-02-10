@@ -1,12 +1,14 @@
 import ServiceDetailsCard from '../../components/service/serviceDetailsCard';
-import {useRouter} from 'next/router';
-import {http} from "../../utils/http";
+import { useRouter } from 'next/router';
+import { http } from "../../utils/http";
 import _groupBy from "lodash/groupBy";
 import _cloneDeep from "lodash/cloneDeep";
 
+const apiPath = '/api/v1';
+
 export async function getServerSideProps(context) {
-    const employeeList = await http(`/api/v1/employees`);
-    const serviceItemResponse = await http(`/api/v1/services/${context.query.servicecode}`);
+    const employeeList = await http(`${apiPath}/employees`);
+    const serviceItemResponse = await http(`${apiPath}/services/${context.query.servicecode}`);
     const serviceArray = _groupBy(serviceItemResponse, 'service_code');
     let serviceItem, durationPriceList, durationPriceItem;
 
@@ -29,15 +31,15 @@ export async function getServerSideProps(context) {
     }
 
     return {
-        props: {employeeList: employeeList, serviceItem: serviceItem},
+        props: { employeeList: employeeList, serviceItem: serviceItem },
     };
 }
 
-function DetailPage({employeeList, serviceItem}) {
+function DetailPage({ employeeList, serviceItem }) {
     const router = useRouter();
 
     const editHandle = async (data) => {
-         await http('/api/v1/services', {
+        await http(`${apiPath}/services`, {
             method: 'PUT',
             body: data,
         });

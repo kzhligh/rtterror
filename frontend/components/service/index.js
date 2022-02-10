@@ -1,26 +1,23 @@
 import * as React from 'react';
-import ServiceCardRow from './serviceCardRow';
-import Button from '@mui/material/Button';
-import styled from '../../styles/service.module.css';
-import Select from '@mui/material/Select';
-import {useEffect, useState} from 'react';
-import MenuItem from '@mui/material/MenuItem';
-import SearchInput from './search';
-import Box from '@mui/material/Box';
+import { useEffect, useState } from 'react';
+import { Button, Select, MenuItem, InputLabel, Typography, Box, Divider, FormControl } from '@mui/material';
 import Link from 'next/link';
+import cssStyled from '../../styles/service.module.css';
+import SearchInput from './search';
+import ServiceCardRow from './serviceCardRow';
 import ComboForm from './comboForm';
 import _orderBy from "lodash/orderBy";
 
 
 const ServiceComponent = (props) => {
-    const {serviceListData, toggleBlocked, deleteService, refresh, setRefresh} = props;
+    const { serviceListData, toggleBlocked, deleteService, refresh, setRefresh } = props;
     const [serviceListDisplay, setServiceListDisplay] = useState(serviceListData);
     const [sortServiceList, setSortServiceList] = useState(serviceListData);
-    const [select, setSelect] = useState('None');
+    const [orderBy, setSelect] = useState('');
     const [search, setSearch] = useState(false);
     const [serviceCheckList, setServiceCheckList] = useState([]);
 
-    const sortedList = ['None', 'name', 'description', 'code'];
+    const sortedList = ['name', 'description', 'code'];
     const [comboDialog, setComboDialog] = useState(false);
     const [type, setType] = useState('');
     const [comboDetail, setComboDetail] = useState({});
@@ -46,8 +43,7 @@ const ServiceComponent = (props) => {
         }
         return serviceCheckList.length;
     };
-    useEffect(() => {
-    }, [select]);
+    // useEffect(() => { }, [orderBy]);
 
     const compareDateFunction = (item1, item2) => {
         const date1 = new Date(item1['createdAt']);
@@ -67,24 +63,24 @@ const ServiceComponent = (props) => {
         setSelect(val);
         switch (val) {
             case 'code':
-                sortResult = _orderBy(serviceListDisplay, 'service_code')
+                sortResult = _orderBy(serviceListDisplay, 'service_code');
                 setServiceListDisplay(sortResult);
                 break;
             case 'name':
-                sortResult = _orderBy(serviceListDisplay, 'name')
+                sortResult = _orderBy(serviceListDisplay, 'name');
                 setServiceListDisplay(sortResult);
                 break;
             case 'description':
-                sortResult = _orderBy(serviceListDisplay, 'description')
+                sortResult = _orderBy(serviceListDisplay, 'description');
                 setServiceListDisplay(sortResult);
                 break;
             default:
-                sortResult = _orderBy(serviceListDisplay, 'createdAt')
+                sortResult = _orderBy(serviceListDisplay, 'createdAt');
                 setServiceListDisplay(sortResult);
         }
     };
     const handleSearch = (val) => {
-        let searchList = select != 'id' ? sortServiceList : serviceListData;
+        let searchList = orderBy != 'id' ? sortServiceList : serviceListData;
         let searchValue = val.toLowerCase();
         let serviceResultList;
         if (val.trim().length > 0) {
@@ -106,44 +102,43 @@ const ServiceComponent = (props) => {
         let serviceCode = serviceArray.map((service) => service.service_code);
         let checkList = serviceListData.filter((item) => serviceCode.includes(item.service_code));
         setServiceCheckList(checkList);
-    }
+    };
 
     return (
-        <Box>
-            <SearchInput handleSearch={handleSearch}/>
-            <div className={styled.separateVDiv}></div>
-            <Button className={styled.addButton} variant="outlined">
+        <>
+            <SearchInput handleSearch={handleSearch} />
+            <Box className={cssStyled.flexAlignContainer}>
+                <Typography variant="h6">Select a service</Typography>
                 <Link href={'/service/add'}>
-                    <a>New Service</a>
+                    <Button className={cssStyled.buttonContainer} variant="outlined" color="success">
+                        New Service
+                    </Button>
                 </Link>
-            </Button>
-            <Button
-                className={styled.addButton}
-                variant="outlined"
-                onClick={handleCreateCombo}
-                disabled={serviceCheckList.length == 0}
-            >
-                Create Combo
-            </Button>
-            <div className={styled.flexAlignContainer}>
-                <h1>Select a service</h1>
-                <div className={styled.flexContainer}>
-                    <p>Order By</p>
-                    <div className={styled.separateHDiv}></div>
+                <Button className={cssStyled.buttonContainer} variant="outlined" color='secondary'
+                    onClick={handleCreateCombo}
+                    disabled={serviceCheckList.length === 0}
+                >
+                    Create Combo
+                </Button>
+                <FormControl size='small' sx={{ minWidth: 120 }}>
+                    <InputLabel id="order-by-label"><Typography variant="button">Order By</Typography></InputLabel>
                     <Select
-                        onChange={(event) => handleSelectOrderBy(event.target.value)}
-                        value={select}
+                        labelId="order-by-label"
+                        id="select-order-by"
+                        value={orderBy}
+                        label="Order By"
+                        onChange={(event) => { handleSelectOrderBy(event.target.value); }}
                     >
+                        <MenuItem value="">none</MenuItem>
                         {sortedList.map((name) => (
                             <MenuItem key={name} value={name}>
                                 {name}
                             </MenuItem>
                         ))}
                     </Select>
-                </div>
-            </div>
-
-            <div>
+                </FormControl>
+            </Box>
+            <>
                 {serviceListDisplay.map((item) => (
                     <ServiceCardRow
                         key={item.id}
@@ -163,7 +158,7 @@ const ServiceComponent = (props) => {
                         refresh={refresh}
                     />
                 ))}
-            </div>
+            </>
             {type == 'add' && (
                 <ComboForm
                     openDialog={comboDialog}
@@ -177,7 +172,7 @@ const ServiceComponent = (props) => {
                     refresh={refresh}
                 ></ComboForm>
             )}
-        </Box>
+        </>
     );
 };
 

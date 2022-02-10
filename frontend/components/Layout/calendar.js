@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -35,9 +35,6 @@ const theme = createTheme({
                 root: {
                     fontWeight: 'bold',
                     color: 'rgba(255,255,255,1)',
-                    caption: {
-                        color: 'rgba(255,255,255,1)',
-                    },
                 },
             },
         },
@@ -47,6 +44,7 @@ const theme = createTheme({
                     color: 'white',
                     background: '#888888',
                     fontSize: 14,
+                    height: 36,
                     '&.Mui-selected': {
                         fontWeight: 'bold',
                         color: 'black',

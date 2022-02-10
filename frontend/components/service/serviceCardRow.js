@@ -1,39 +1,55 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import styled from '../../styles/service.module.css';
+import cssStyled from '../../styles/service.module.css';
 import {
+    Button,
+    Card,
+    CardHeader,
+    CardContent,
     CardActionArea,
     Checkbox,
+    Collapse,
     Dialog,
+    DialogTitle,
     DialogContent,
     Grid,
+    Chip,
     Stack,
+    Typography
 } from '@mui/material';
-import {useRouter} from 'next/router';
-import {useState} from 'react';
+import { RadioButtonUncheckedRounded, CheckCircleOutlineRounded } from '@mui/icons-material';
+import { capitalize } from '@material-ui/core';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import ComboForm from './comboForm';
-import Box from '@mui/material/Box';
 
-const ConfirmDelete = (props) => {
-    const {open, setOpen, item, step, setStep, deleteService} = props;
+import { styled } from "@mui/material/styles";
+
+const CardContentNoPadding = styled(CardContent)(`
+  &:first-child {
+    padding-top: 0;
+  }
+`);
+
+const ConfirmDeleteDialog = (props) => {
+    const { open, setOpen, item, step, setStep, deleteService } = props;
     const handleClose = () => {
-        setOpen(false);
         setStep(0);
+        setOpen(false);
     };
     const handleConfirm = () => {
-        if (step == 0 && !item.hasOwnProperty('services')) {
+        if (step === 0 && !item.hasOwnProperty('services')) {
             setStep(1);
         } else {
-            // delete
             deleteService(item);
             handleClose();
         }
     };
     return (
-        <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="lg">
+        <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="sm" p={5}>
+
+            <DialogTitle id="alert-dialog-title">
+                Delete Service {item.name}?
+            </DialogTitle>
             <DialogContent>
                 <Grid
                     container
@@ -41,38 +57,37 @@ const ConfirmDelete = (props) => {
                     justifyContent="center"
                     alignItems="center"
                 >
-                    <Box padding="160px 200px">
-                        <Typography variant="h4">
-                            {step == 0
-                                ? `Delete ${item.name}`
-                                : `Attention: All Combos with ${item.name} will be deleted . Are you sure you want to continue`}
-                        </Typography>
-                    </Box>
+                    <Typography>Attention: All Combos that include {item.name} will be deleted. Are you sure you want to continue?</Typography>
+
+                </Grid>
+                <Grid
+                    container
+                    direction="row"
+                    justifyContent="flex-end"
+                    alignItems="center"
+                >
+                    <Button
+                        className={cssStyled.buttonContainer}
+                        variant="contained"
+                        onClick={handleConfirm}
+                        color="error"
+                    >
+                        {step === 0 ? "Yes" : "Delete"}
+
+                    </Button>
+                    <Button onClick={handleClose}
+                        className={cssStyled.buttonContainer}>Cancel</Button>
                 </Grid>
             </DialogContent>
-            <Grid
-                container
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-            >
-                <Button
-                    className={styled.buttonContainer}
-                    variant="outlined"
-                    onClick={handleConfirm}
-                >
-                    Confirm
-                </Button>
-                <Button onClick={handleClose}>Cancel</Button>
-            </Grid>
         </Dialog>
     );
 };
 
+
 const ServiceCardRow = (props) => {
     const router = useRouter();
     const {
-        item,
+        item: serviceItem,
         toggleBlocked,
         deleteService,
         serviceCheckList,
@@ -87,21 +102,21 @@ const ServiceCardRow = (props) => {
         setRefresh
     } = props;
     const [editComboDialog, setEditComboDialog] = useState(false);
-    const isBlock = () => item.blocked;
-    const isCombo = () => item.hasOwnProperty('services');
-    const [open, setOpen] = useState(false);
-    const [step, setStep] = useState(0);
+    const isBlocked = () => serviceItem.blocked;
+    const isACombo = () => serviceItem.hasOwnProperty('services');
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [deleteStep, setDeleteStep] = useState(0);
     const detailsPage = () => {
-        if (isCombo()) {
+        if (isACombo()) {
             setType('edit');
             setEditComboDialog(true);
-            setComboDetail(item);
-            extractServiceCheckList(item.services);
+            setComboDetail(serviceItem);
+            extractServiceCheckList(serviceItem.services);
         } else {
             router.push({
                 pathname: '/service/details',
-                query: {servicecode: item.service_code}
-            }, '/service/details')
+                query: { servicecode: serviceItem.service_code }
+            }, '/service/details');
         }
     };
     const handleCloseEditDialog = () => {
@@ -113,91 +128,102 @@ const ServiceCardRow = (props) => {
         return new Date(item['createdAt']).toDateString();
     };
     return (
-        <div className={styled.flexServiceCombo}>
+        <div className={cssStyled.flexServiceCombo}>
             <Card
-                className={styled.cardWrapper}
-                onClick={
-                    !isBlock()
-                        ? () => {
-                            detailsPage();
-                        }
-                        : undefined
-                }
-                style={{backgroundColor: isBlock() ? 'gray' : 'white'}}
+                className={cssStyled.cardWrapper}
+                style={{ backgroundColor: isBlocked() ? 'gray' : 'white' }} sx={{
+                    boxShadow: 3,
+                    borderRadius: 2,
+                }}
             >
-                <CardContent>
-                    <Typography sx={{fontSize: 24}} color="text.secondary">
-                        Service Name: {item.name}
-                    </Typography>
-                    <Typography sx={{fontSize: 24}} color="text.secondary">
-                        {isCombo() ? `Duration: ${item.total_duration}` : `Duration:  ${item.durations_prices.map((dur) => dur.duration).join(" - ")}  H`}
-                    </Typography>
-                    <Typography sx={{fontSize: 24}} color="text.secondary">
-                        Description : {item.description}
-                    </Typography>
-                    <Typography sx={{fontSize: 24}} color="text.secondary">
-                        {isCombo() ? 'Combo' : ''}
-                    </Typography>
-                </CardContent>
-                <div className={styled.separateVDiv}/>
-                <CardActionArea>
-                    <div className={styled.dateContainer}>
-                        <Typography sx={{fontSize: 20}}>
-                            Created On : {getCreateDate(item)}
-                        </Typography>
-                    </div>
-                </CardActionArea>
-            </Card>
-            {!isCombo() ? (
-                <Checkbox
-                    key={item.id}
-                    value={item}
-                    checked={serviceCheckList ? serviceCheckList.includes(item) : false}
-                    onChange={(event) => {
-                        handleServiceCheck(event.target.checked, item);
-                    }}
+                <CardHeader
+                    action={
+                        <>{!isACombo() ? (
+                            <Checkbox
+                                key={serviceItem.id}
+                                value={serviceItem}
+                                checked={serviceCheckList.includes(serviceItem)}
+                                onChange={(event) => {
+                                    handleServiceCheck(event.target.checked, serviceItem);
+                                }}
+
+                                icon={<RadioButtonUncheckedRounded />}
+                                checkedIcon={<CheckCircleOutlineRounded />}
+                            />
+                        ) : null}</>
+                    }
+                    title={<><Chip label={isACombo() ? "Combo" : "Service"} variant="outlined" /> {capitalize(serviceItem.name)}</>}
+                    subheader={<><Chip label="Service Code" size="small" /> {serviceItem.service_code.split('-', 1)[0]}</>}
                 />
-            ) : null}
-            <Stack spacing={2}>
+                <Collapse in={!isBlocked()}>
+                    <CardActionArea>
+                        <CardContentNoPadding onClick={() => detailsPage()} sx={{ fontSize: 12 }}>
+                            <Stack direction="row" spacing={1} justifyContent="flex-start" alignItems="center" mb={.5}>
+                                <Chip label="Options" size="small" />
+                                {isACombo() ?
+                                    <Typography variant="body2">{serviceItem.total_duration} hrs</Typography>
+                                    : <>
+                                        {serviceItem.durations_prices.map(
+                                            (dur) => <Chip label={`${dur.duration} HRS / ${dur.price} CAD`} size="small" variant="outlined" />)}
+                                    </>
+                                }
+                            </Stack>
+                            <Stack direction="row" spacing={3} justifyContent="flex-start" alignItems="center">
+                                <Chip label="Description" size="small" /><Typography variant="body2">{serviceItem.description}</Typography>
+                            </Stack>
+                            <div className={cssStyled.separateVDiv} />
+                            <div className={cssStyled.dateContainer}>
+                                <Typography sx={{ fontSize: 12 }}>
+                                    Created On : {getCreateDate(serviceItem)}
+                                </Typography>
+                            </div>
+                        </CardContentNoPadding>
+                    </CardActionArea>
+                </Collapse>
+            </Card>
+            <Stack alignItems="center" alignContent="flex-end" spacing={1}>
                 <Button
-                    className={styled.buttonContainer}
-                    variant={isBlock() ? 'contained' : 'outlined'}
-                    onClick={() => toggleBlocked(item)}
-                    style={{backgroundColor: isBlock() ? 'gray' : 'white'}}
+                    className={cssStyled.buttonContainer}
+                    variant={isBlocked() ? 'contained' : 'outlined'}
+                    onClick={() => toggleBlocked(serviceItem)}
+                    color='warning'
                 >
-                    {isBlock() ? 'unblocked' : 'blocked'}
+                    {isBlocked() ? 'unblock' : 'block'}
                 </Button>
                 <Button
-                    className={styled.buttonContainer}
+                    className={cssStyled.buttonContainer}
                     variant="outlined"
-                    onClick={() => setOpen(true)}
+                    color="error"
+                    onClick={() => setDeleteDialogOpen(true)}
                 >
                     Delete
                 </Button>
             </Stack>
-            <ConfirmDelete
-                open={open}
-                setOpen={setOpen}
-                item={item}
-                step={step}
-                setStep={setStep}
+            <ConfirmDeleteDialog
+                open={deleteDialogOpen}
+                setOpen={setDeleteDialogOpen}
+                item={serviceItem}
+                step={deleteStep}
+                setStep={setDeleteStep}
                 deleteService={deleteService}
             />
-            {isCombo() && editComboDialog ? (
-                <ComboForm
-                    openDialog={editComboDialog}
-                    handleCloseComboDialog={handleCloseEditDialog}
-                    serviceCheckList={serviceCheckList}
-                    handleServiceCheck={handleServiceCheck}
-                    type="edit"
-                    setServiceCheckList={setServiceCheckList}
-                    comboDetail={comboDetail}
-                    serviceListData={serviceListData}
-                    setRefresh={setRefresh}
-                    refresh={refresh}
-                ></ComboForm>
-            ) : null}
-        </div>
+            {
+                isACombo() && editComboDialog ? (
+                    <ComboForm
+                        openDialog={editComboDialog}
+                        handleCloseComboDialog={handleCloseEditDialog}
+                        serviceCheckList={serviceCheckList}
+                        handleServiceCheck={handleServiceCheck}
+                        type="edit"
+                        setServiceCheckList={setServiceCheckList}
+                        comboDetail={comboDetail}
+                        serviceListData={serviceListData}
+                        setRefresh={setRefresh}
+                        refresh={refresh}
+                    ></ComboForm>
+                ) : null
+            }
+        </div >
     );
 };
 export default ServiceCardRow;
