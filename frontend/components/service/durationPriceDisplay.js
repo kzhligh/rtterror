@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import DurationPriceItem from './durationPrice';
+import DurationPriceItem from './durationPriceItem';
 import { Button, Grid, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 

@@ -8,7 +8,7 @@ const ClassicSlider = styled(Slider)(({ theme }) => ({
     color: "#707070",
 }));
 
-const DurationPrice = (props) => {
+const DurationPriceItem = (props) => {
     const {
         index,
         item,
@@ -86,4 +86,4 @@ const DurationPrice = (props) => {
         </Card>
     );
 };
-export default DurationPrice;
+export default DurationPriceItem;
