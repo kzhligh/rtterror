@@ -15,7 +15,7 @@ const ServiceDetailsCard = (props) => {
     const { item, serviceEmployeeList, employeeList, editHandle } = props;
     const [addEmployeeCheckList, setAddEmployeeCheckList] = useState([]);
     const [deleteEmployeeCheckList, setDeleteEmployeeCheckList] = useState([]);
-    const [serviceEmployeeDialog, setServiceEmployeeDialog] = useState(false);
+    const [openEmployeeDialog, setOpenEmployeeDialog] = useState(false);
     const [remainEmployeeList, setRemainEmployeeList] = useState([]);
     const [serviceEmployList, setServiceEmployList] = useState(serviceEmployeeList);
     const [durationPriceList, setDurationPriceList] = useState(item.durations_prices);
@@ -48,7 +48,7 @@ const ServiceDetailsCard = (props) => {
         }
     };
     const handleAddEmployee = () => {
-        setServiceEmployeeDialog(true);
+        setOpenEmployeeDialog(true);
         setRemainEmployeeList(
             employeeList.filter(
                 ({ id: val1 }) =>
@@ -59,7 +59,7 @@ const ServiceDetailsCard = (props) => {
 
     const handleAddSelected = () => {
         setServiceEmployList([...serviceEmployList, ...addEmployeeCheckList]);
-        setServiceEmployeeDialog(false);
+        setOpenEmployeeDialog(false);
         setAddEmployeeCheckList([]);
     };
 
@@ -105,6 +105,7 @@ const ServiceDetailsCard = (props) => {
                             <Button
                                 className={cssStyled.buttonContainer}
                                 variant="outlined"
+                                color="inherit"
                                 href='/service'
                                 sx={{ color: 'text.secondary', borderColor: 'text.secondary' }}
                             >
@@ -129,7 +130,6 @@ const ServiceDetailsCard = (props) => {
                             rows={4}
                         />
                         <Grid item>
-                            <Typography>Employee table</Typography>
                             <ServiceEmployeeTable
                                 displayEmployeeList={serviceEmployList}
                                 handleEmployeeCheck={handleDeleteEmployeeCheck}
@@ -142,20 +142,21 @@ const ServiceDetailsCard = (props) => {
                             >
                                 <Grid item xs={6}>
                                     <Button
-                                        className={cssStyled.buttonContainer}
                                         variant="outlined"
                                         onClick={handleAddEmployee}
+                                        fullWidth
                                     >
-                                        Add Employee
+                                        Assign Employee
                                     </Button>
                                 </Grid>
                                 <Grid item xs={6}>
                                     <Button
-                                        className={cssStyled.buttonContainer}
                                         variant="outlined"
+                                        color="error"
                                         onClick={() => handleDeleteEmployee()}
+                                        fullWidth
                                     >
-                                        Delete Employee
+                                        Unassign Employee
                                     </Button>
                                 </Grid>
                             </Grid>
@@ -166,8 +167,8 @@ const ServiceDetailsCard = (props) => {
                     </Grid>
                 </Grid>
                 <ServiceEmployeeDialog
-                    serviceEmployeeDialog={serviceEmployeeDialog}
-                    setServiceEmployeeDialog={setServiceEmployeeDialog}
+                    serviceEmployeeDialog={openEmployeeDialog}
+                    setServiceEmployeeDialog={setOpenEmployeeDialog}
                     handleAddSelected={handleAddSelected}
                     displayEmployeeList={remainEmployeeList}
                     handleEmployeeCheck={handleAddEmployeeCheck}
