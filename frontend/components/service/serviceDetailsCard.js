@@ -2,27 +2,14 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Grid, Button, Card, CardHeader, CardContent, Typography } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
 import { capitalize } from '@material-ui/core';
 import _cloneDeep from "lodash/cloneDeep";
 import ServiceEmployeeTable from './serviceEmployeeTable';
 import ServiceEmployeeDialog from './serviceEmployeeDialog';
-import DurationPriceItem from './durationPrice';
+import DurationPriceDisplay from './durationPriceDisplay';
 import { InputTextField } from "../form/formComponent";
 import cssStyled from '../../styles/service.module.css';
-import { styled } from '@mui/material/styles';
 
-const ClassicButton = styled(Button)(({ theme }) => ({
-    border: '1px solid',
-    borderColor: "#BBBBBB",
-    backgroundColor: "#EFEFEF",
-    color: "#707070",
-
-    '&:hover': {
-        color: "#707070",
-        backgroundColor: "white",
-    },
-}));
 
 const ServiceDetailsCard = (props) => {
     const { item, serviceEmployeeList, employeeList, editHandle } = props;
@@ -34,7 +21,6 @@ const ServiceDetailsCard = (props) => {
     const [durationPriceList, setDurationPriceList] = useState(item.durations_prices);
     const [reload, setReload] = useState(false);
     const [serviceValue, setServiceValue] = useState(_cloneDeep(item));
-    const [isEditingDurationPrice, setIsEditingDurationPrice] = useState(false);
 
     useEffect(() => { }, [durationPriceList, reload]);
 
@@ -95,15 +81,6 @@ const ServiceDetailsCard = (props) => {
         editHandle(serviceValue);
     };
 
-    const handleAddDurationPrice = () => {
-        setDurationPriceList([...durationPriceList, { price: 50, duration: 0.5 }]);
-    };
-    const handleRemoveDurationPrice = (index) => {
-        setDurationPriceList([
-            ...durationPriceList.slice(0, index),
-            ...durationPriceList.slice(index + 1),
-        ]);
-    };
     const handleSetServiceValue = (obj) => {
         const { name, value } = obj.target;
         setServiceValue({ ...serviceValue, [name]: value });
@@ -185,55 +162,8 @@ const ServiceDetailsCard = (props) => {
                         </Grid>
                     </Grid>
                     <Grid item xs={4} style={{ minHeight: '100%' }}>
-                        {isEditingDurationPrice ?
-                            <>
-                                <ClassicButton onClick={handleAddDurationPrice} variant="contained" fullWidth>
-                                    <Typography variant="button">Add A New Option</Typography>
-                                </ClassicButton>
-                                {durationPriceList.map((element, index) => (
-                                    <DurationPriceItem
-                                        key={index}
-                                        index={index}
-                                        item={element}
-                                        amILast={durationPriceList.length === 1}
-                                        handleRemoveDurationPrice={handleRemoveDurationPrice}
-                                        reload={reload}
-                                        setReload={setReload}
-                                    />
-                                ))}
-                            </>
-                            :
-                            <>
-                                <ClassicButton onClick={() => { setIsEditingDurationPrice(true); }} variant="contained" fullWidth>
-                                    <Typography variant="button">Modify Options</Typography>
-                                </ClassicButton>
-                                <DataGrid
-                                    columns={[
-                                        { field: 'duration', headerName: 'Duration (hrs)', type: 'number', flex: 1 },
-                                        { field: 'price', headerName: 'Price (CAD)', type: 'number', flex: 1 }]}
-                                    rows={
-                                        durationPriceList.map((element, index) => ({ id: index + 1, duration: element.duration, price: element.price }))
-                                    }
-                                />
-                            </>
-                        }
-                        <Grid
-                            container
-                            direction="column"
-                            justifyContent="center"
-                            alignItems="center"
-                        >
-                        </Grid>
+                        <DurationPriceDisplay durationPriceList={durationPriceList} setDurationPriceList={setDurationPriceList} reload={reload} setReload={setReload} />
                     </Grid>
-
-                </Grid>
-                <Grid
-                    container
-                    rowSpacing={1}
-                    columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                >
-
-
                 </Grid>
                 <ServiceEmployeeDialog
                     serviceEmployeeDialog={serviceEmployeeDialog}

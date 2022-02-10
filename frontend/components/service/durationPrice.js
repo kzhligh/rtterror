@@ -41,7 +41,7 @@ const DurationPrice = (props) => {
                 <Grid container spacing={4} alignItems="center">
                     <Grid item xs={6}>
                         <ClassicSlider
-                            onChange={(event, value) => handleOnChange('duration', value)}
+                            onChange={(_event, value) => handleOnChange('duration', value)}
                             aria-label="Always visible"
                             value={item.duration}
                             min={0}
@@ -57,7 +57,7 @@ const DurationPrice = (props) => {
                             id={`hrs-for-${index}`}
                             value={item.duration}
                             size="small"
-                            onChange={(event, value) => handleOnChange('duration', value)}
+                            onChange={(_event, value) => handleOnChange('duration', value)}
                             inputProps={{
                                 min: 0,
                                 max: 2,
