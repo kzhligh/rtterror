@@ -164,7 +164,7 @@ const ServiceCardRow = (props) => {
                                     <Typography variant="body2">{serviceItem.total_duration} hrs</Typography>
                                     : <>
                                         {serviceItem.durations_prices.map(
-                                            (dur) => <Chip label={`${dur.duration} HRS / ${dur.price} CAD`} size="small" variant="outlined" />)}
+                                            (durPricePair, index) => <Chip key={index} label={`${durPricePair.duration} HRS / ${durPricePair.price} CAD`} size="small" variant="outlined" />)}
                                     </>
                                 }
                             </Stack>
