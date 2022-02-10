@@ -1,18 +1,12 @@
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import IconButton from '@mui/material/IconButton';
-import { Close } from '@mui/icons-material';
-import DialogContent from '@mui/material/DialogContent';
-import styled from '../../styles/service.module.css';
-import AddIcon from '@mui/icons-material/Add';
-import { Checkbox, FormControl, Grid, MenuItem, Select, Stack } from '@mui/material';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
 import * as React from 'react';
-import Card from '@mui/material/Card';
 import { useEffect, useState } from 'react';
+import { Chip, Dialog, DialogTitle, DialogContent, DialogActions, Checkbox, RadioGroup, Radio, FormControl, FormLabel, FormControlLabel, Grid, Stack, Button, Card, CardHeader, IconButton } from '@mui/material';
+import { Close } from '@mui/icons-material';
+import AddIcon from '@mui/icons-material/Add';
+import styled from '../../styles/service.module.css';
 import { http } from "../../utils/http";
 import { InputTextField } from "../form/formComponent";
+import { capitalize } from '@material-ui/core';
 import _isEmpty from "lodash/isEmpty";
 import _findIndex from "lodash/findIndex";
 import _pullAt from "lodash/pullAt";
@@ -20,64 +14,52 @@ import _pullAt from "lodash/pullAt";
 const apiPath = '/api/v1';
 
 const ComboItem = (props) => {
-    const { item, handleServiceCheck, removeService, isEdit, serviceCheckList, changeDurationOfService } =
+    const { item: serviceItem, handleServiceCheck, removeService, isEdit, serviceCheckList, changeDurationOfService } =
         props;
 
     return (
         <Card>
-            <div className={styled.flexAlignContainer}>
-                <div>
-                    <Grid container>
-                        <Grid item xs={8}>
-                            <h4>{item.name}</h4>
-                        </Grid>
-                        <Grid item xs={8}>
-                            <h4>{item.service_code}</h4>
-                        </Grid>
-                    </Grid>
-                </div>
-                <div>
-                    <div className={styled.flexAlignContainer}>
-                        <FormControl
-                            sx={{
-                                marginX: '10px',
+            <CardHeader
+                action={
+                    <>{isEdit ? (
+                        <Checkbox
+                            key={serviceItem.id}
+                            value={serviceItem}
+                            checked={
+                                serviceCheckList ? serviceCheckList.includes(serviceItem) : false
+                            }
+                            onChange={(event) => {
+                                handleServiceCheck(event.target.checked, serviceItem);
                             }}
-                        >
-                            <Select
-                                data-cy="patientSort"
-                                value={0}
-                                defaultValue=""
-                                sx={{
-                                    minWidth: '100px',
-                                }}
-                            >
-                                {!_isEmpty(item.durations_prices) ? item.durations_prices.map((durationPrice, index) => (
-                                    <MenuItem value={index} key={index}
-                                        onClick={() => changeDurationOfService(item.service_code, durationPrice, serviceCheckList)}>
-                                        H {durationPrice.duration} - ${durationPrice.price}
-                                    </MenuItem>
-                                )) : null}
-                            </Select>
-                        </FormControl>
-                        {isEdit ? (
-                            <Checkbox
-                                key={item.id}
-                                value={item}
-                                checked={
-                                    serviceCheckList ? serviceCheckList.includes(item) : false
-                                }
-                                onChange={(event) => {
-                                    handleServiceCheck(event.target.checked, item);
-                                }}
-                            />
-                        ) : (
-                            <IconButton onClick={() => removeService(item)}>
-                                <Close />
-                            </IconButton>
-                        )}
-                    </div>
-                </div>
-            </div>
+                        />
+                    ) : (
+                        <IconButton onClick={() => removeService(serviceItem)}>
+                            <Close />
+                        </IconButton>
+                    )}</>
+                }
+                title={<>{capitalize(serviceItem.name)}</>}
+                subheader={<><Chip label="Service Code" size="small" /> {serviceItem.service_code.split('-', 1)[0]}</>}
+            />
+            <FormControl
+                sx={{
+                    marginX: '10px',
+                }}
+            >
+                <FormLabel id="demo-row-radio-buttons-group-label">Options</FormLabel>
+                <RadioGroup
+                    row
+                    data-cy="patientSort"
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="row-radio-buttons-group"
+                >
+                    {!_isEmpty(serviceItem.durations_prices) ? serviceItem.durations_prices.map((option, index) => (
+                        <FormControlLabel value={index} key={index} control={<Radio />}
+                            onClick={() => changeDurationOfService(serviceItem.service_code, option, serviceCheckList)}
+                            label={`${option.duration} HRS / ${option.price} CAD`} />
+                    )) : null}
+                </RadioGroup>
+            </FormControl>
         </Card>
     );
 };
@@ -234,7 +216,7 @@ const ComboForm = (props) => {
     };
     const removeService = (item) => {
         handleServiceCheck(false, item);
-        if (serviceCheckList.length == 1) {
+        if (serviceCheckList.length === 1) {
             // the update of component is kind of late
             closeClearValue();
         }
@@ -355,12 +337,10 @@ const ComboForm = (props) => {
                     </Stack>
                 </DialogContent>
                 <DialogActions>
-                    <div className={styled.flexSpaceBetween}>
-                        <Button onClick={isEdit() ? handleEditSubmit : handleCreateCombo}>
-                            Submit
-                        </Button>
-                        <Button onClick={closeClearValue}>Cancel</Button>
-                    </div>
+                    <Button onClick={isEdit() ? handleEditSubmit : handleCreateCombo} variant="contained">
+                        Submit
+                    </Button>
+                    <Button onClick={closeClearValue} color="inherit">Cancel</Button>
                 </DialogActions>
             </Dialog>
         </div>
