@@ -1,11 +1,10 @@
 import { Customer } from 'src/models/customer.model';
-import { Frozen } from 'src/utils/decorators';
-import { Service } from 'typedi';
+import { Frozen, Injectable } from 'src/utils/decorators';
 import { Op, Order, Sequelize, Transaction } from 'sequelize';
 import { Appointment } from 'src/models/appointment.model';
 
 @Frozen()
-@Service()
+@Injectable()
 export class CustomerService {
   constructor(private sqlService: Sequelize) {}
 
