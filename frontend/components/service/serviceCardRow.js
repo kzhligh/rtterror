@@ -153,7 +153,7 @@ const ServiceCardRow = (props) => {
                         ) : null}</>
                     }
                     title={<><Chip label={isACombo() ? "Combo" : "Service"} variant="outlined" /> {capitalize(serviceItem.name)}</>}
-                    subheader={<><Chip label="Service Code" size="small" /> {serviceItem.service_code}</>}
+                    subheader={<><Chip label="Service Code" size="small" /> {serviceItem.service_code.split('-', 1)[0]}</>}
                 />
                 <Collapse in={!isBlocked()}>
                     <CardActionArea>
