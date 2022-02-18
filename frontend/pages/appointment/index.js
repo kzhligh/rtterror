@@ -4,7 +4,8 @@ import 'tui-calendar/dist/tui-calendar.css';
 // If you use the default popups, use this.
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
-import { Box, Grid, Typography } from '@material-ui/core';
+import { v4 as uuidv4 } from 'uuid';
+import { Typography } from '@material-ui/core';
 
 const TuiCalendarWrapper = dynamic(() => import('../../components/appointment/TuiCalendarWrapper'), { ssr: false });
 const TuiCalendar = forwardRef((props, ref) => (
@@ -75,7 +76,7 @@ function Appointment() {
     console.log(scheduleData);
 
     const schedule = {
-      id: String(Math.random()),
+      id: String(uuidv4),
       title: scheduleData.title,
       isAllDay: scheduleData.isAllDay,
       start: scheduleData.start,
