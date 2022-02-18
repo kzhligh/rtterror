@@ -10,6 +10,7 @@ const TuiCalendarWrapper = dynamic(() => import('../../components/appointment/Tu
 const TuiCalendar = forwardRef((props, ref) => (
   <TuiCalendarWrapper {...props} forwardedRef={ref} />
 ));
+TuiCalendar.displayName = 'TuiCalendar';
 
 const start = new Date();
 const end = new Date(new Date().setMinutes(start.getMinutes() + 30));

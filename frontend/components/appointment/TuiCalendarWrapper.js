@@ -1,6 +1,8 @@
 import React from "react";
 import Calendar from "@toast-ui/react-calendar";
 
-export default (props) => (
+const TuiCalendarWrapper = (props) => (
     <Calendar {...props} ref={props.forwardedRef} />
 );
+
+export default TuiCalendarWrapper;
