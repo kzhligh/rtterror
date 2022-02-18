@@ -19,8 +19,8 @@ const theme = createTheme({
                 root: {
                     display: 'flex',
                     flexDirection: 'column',
-                    justifyContent: 'center',
                     alignItems: 'center',
+                    flex: '1 1 auto',
 
                     background: '#c5c5c5',
                 },
