@@ -18,7 +18,6 @@ export const Customer = sequelize.define(
     },
     email: {
       type: DataTypes.STRING,
-      unique: true,
     },
     dob: {
       type: DataTypes.DATEONLY,
@@ -40,6 +39,12 @@ export const Customer = sequelize.define(
     },
   },
   {
+    indexes: [
+      {
+        unique: true,
+        fields: ['email'],
+      },
+    ],
     timestamps: false,
     freezeTableName: true,
   }
