@@ -1,22 +1,48 @@
+# Install dep
+FROM node:16-alpine AS deps
 
-FROM node:14-alpine as builder
+RUN apk add --no-cache libc6-compat
 
-WORKDIR /usr/src
+WORKDIR /app
 
-COPY . /usr/src
+COPY package.json yarn.lock .env.local ./
 
-RUN yarn install --frozen-lockfile --silent
+RUN yarn install --frozen-lockfile
+
+# Image build
+FROM node:16-alpine AS builder
+
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+ENV NEXT_TELEMETRY_DISABLED 1
+
 RUN yarn build
 
-FROM node:14-alpine as production
+# Container run
+FROM node:16-alpine AS runner
 
-COPY --from=builder /usr/src/.next /usr/src/.next 
-COPY --from=builder /usr/src/.vercel /usr/src/.vercel 
-COPY --from=builder /usr/src/package.json /usr/src/package.json 
-COPY --from=builder /usr/src/yarn.lock /usr/src/yarn.lock
-COPY --from=builder /usr/src /usr/src
-COPY --from=builder usr/src/node_modules usr/src/node_modules
+WORKDIR /app
+
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/.env.local ./
+COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
 
 EXPOSE 3000
 
-CMD ["yarn", "start"] 
+ENV PORT 3000
+
+CMD ["node", "server.js"]
