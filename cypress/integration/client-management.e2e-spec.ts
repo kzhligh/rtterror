@@ -16,7 +16,7 @@ function formatPhoneNumber(phoneNumber: string) {
     : phoneNumber;
 }
 
-describe('Patient', () => {
+describe('Client', () => {
   const currentDate = new Date();
   const monthAbbrev = new Intl.DateTimeFormat('en-US', { month: 'long' })
     .format(currentDate)
@@ -26,35 +26,35 @@ describe('Patient', () => {
     cy.fixture<Client>('clients').as('clients');
   });
 
-  it('Navigate to Patient page', function () {
-    cy.visit('/patient');
-    cy.url().should('include', '/patient');
+  it('Navigate to Client page', function () {
+    cy.visit('/client');
+    cy.url().should('include', '/client');
   });
 
   it('Create new clients', function () {
     this.clients.forEach((client: Client) => {
-      cy.get('[data-cy=patientCreate]').click();
-      cy.get('[data-cy=patientFirstName] input')
+      cy.get('[data-cy=clientCreate]').click();
+      cy.get('[data-cy=clientFirstName] input')
         .type(client.firstName)
         .should('have.value', client.firstName);
 
-      cy.get('[data-cy=patientLastName] input')
+      cy.get('[data-cy=clientLastName] input')
         .type(client.lastName)
         .should('have.value', client.lastName);
 
-      cy.get('[data-cy=patientNumber] input')
+      cy.get('[data-cy=clientNumber] input')
         .type(client.phone)
         .should('have.value', formatPhoneNumber(client.phone));
 
-      cy.get('[data-cy=patientEmail] input')
+      cy.get('[data-cy=clientEmail] input')
         .type(client.email)
         .should('have.value', client.email);
 
-      cy.get('[data-cy=patientAddress] input')
+      cy.get('[data-cy=clientAddress] input')
         .type(client.address)
         .should('have.value', client.address);
 
-      cy.get(`[data-cy=patientGender${client.gender}] input`)
+      cy.get(`[data-cy=clientGender${client.gender}] input`)
         .check()
         .should('have.value', client.gender);
 
@@ -63,12 +63,12 @@ describe('Patient', () => {
         .eq(1)
         .click();
 
-      cy.get('[data-cy=patientNotification]')
+      cy.get('[data-cy=clientNotification]')
         .parent()
         .click()
         .get('[data-cy=typeEmail]')
         .click();
-      cy.get('[data-cy=patientNotification] input').should(
+      cy.get('[data-cy=clientNotification] input').should(
         'have.value',
         'email'
       );
@@ -77,7 +77,7 @@ describe('Patient', () => {
         method: 'POST',
         url: `${Cypress.env('API_BASE_URL')}/api/v1/customer`,
       }).as('createCustomer');
-      cy.get('[data-cy=patientSubmit]').click();
+      cy.get('[data-cy=clientSubmit]').click();
       cy.wait('@createCustomer').its('response.statusCode').should('eq', 201);
     });
   });
@@ -87,7 +87,7 @@ describe('Patient', () => {
       method: 'GET',
       url: `${Cypress.env('API_BASE_URL')}/api/v1/customer?sortBy=firstName`,
     }).as('sortByFirstName');
-    cy.get('[data-cy=patientSort]')
+    cy.get('[data-cy=clientSort]')
       .parent()
       .click()
       .get('[data-cy=sortFirstName]')
@@ -116,28 +116,28 @@ describe('Patient', () => {
     const [client] = this.clients;
     const { firstName, lastName } = client;
 
-    cy.get('[data-cy=patientCreate]').click();
-    cy.get('[data-cy=patientFirstName] input')
+    cy.get('[data-cy=clientCreate]').click();
+    cy.get('[data-cy=clientFirstName] input')
       .type(client.firstName)
       .should('have.value', client.firstName);
 
-    cy.get('[data-cy=patientLastName] input')
+    cy.get('[data-cy=clientLastName] input')
       .type(client.lastName)
       .should('have.value', client.lastName);
 
-    cy.get('[data-cy=patientNumber] input')
+    cy.get('[data-cy=clientNumber] input')
       .type(client.phone)
       .should('have.value', formatPhoneNumber(client.phone));
 
-    cy.get('[data-cy=patientEmail] input')
+    cy.get('[data-cy=clientEmail] input')
       .type('random@email.com')
       .should('have.value', 'random@email.com');
 
-    cy.get('[data-cy=patientAddress] input')
+    cy.get('[data-cy=clientAddress] input')
       .type(client.address)
       .should('have.value', client.address);
 
-    cy.get(`[data-cy=patientGender${client.gender}] input`)
+    cy.get(`[data-cy=clientGender${client.gender}] input`)
       .check()
       .should('have.value', client.gender);
 
@@ -146,12 +146,12 @@ describe('Patient', () => {
       .eq(1)
       .click();
 
-    cy.get('[data-cy=patientNotification]')
+    cy.get('[data-cy=clientNotification]')
       .parent()
       .click()
       .get('[data-cy=typeEmail]')
       .click();
-    cy.get('[data-cy=patientNotification] input').should('have.value', 'email');
+    cy.get('[data-cy=clientNotification] input').should('have.value', 'email');
 
     cy.intercept({
       method: 'POST',
@@ -163,7 +163,7 @@ describe('Patient', () => {
         'API_BASE_URL'
       )}/api/v1/customer/duplicate?firstName=${firstName}&lastName=${lastName}`,
     }).as('duplicateCustomerCheck');
-    cy.get('[data-cy=patientSubmit]').click();
+    cy.get('[data-cy=clientSubmit]').click();
     cy.wait('@duplicateCustomerCheck')
       .its('response.statusCode')
       .should('eq', 200);
@@ -178,8 +178,8 @@ describe('Patient', () => {
     cy.intercept({
       url: `${Cypress.env('API_BASE_URL')}/api/v1/customer`,
     }).as('fetchCustomers');
-    cy.visit('/patient');
-    cy.url().should('include', '/patient');
+    cy.visit('/client');
+    cy.url().should('include', '/client');
     cy.wait('@fetchCustomers').its('response.statusCode').should('eq', 200);
 
     this.clients.forEach((client: Client, index: number) => {
@@ -198,9 +198,9 @@ describe('Patient', () => {
     cy.intercept({
       method: 'DELETE',
       url: `${Cypress.env('API_BASE_URL')}/api/v1/customer`,
-    }).as('deletePatientRecords');
-    cy.get('button[data-cy="patientDelete"]').should('be.enabled').click();
-    cy.wait('@deletePatientRecords')
+    }).as('deleteClientRecords');
+    cy.get('button[data-cy="clientDelete"]').should('be.enabled').click();
+    cy.wait('@deleteClientRecords')
       .its('response.statusCode')
       .should('eq', 200);
   });

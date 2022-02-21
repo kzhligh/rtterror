@@ -76,7 +76,7 @@ const ComboItem = (props) => {
         <FormLabel id="demo-row-radio-buttons-group-label">Options</FormLabel>
         <RadioGroup
           row
-          data-cy="patientSort"
+          data-cy="clientSort"
           aria-labelledby="demo-row-radio-buttons-group-label"
           name="row-radio-buttons-group"
         >
