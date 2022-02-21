@@ -1,4 +1,4 @@
-import { DataTypes } from 'sequelize';
+import { BIGINT, DataTypes, INTEGER } from 'sequelize';
 import sequelize from 'src/modules/sequelize';
 import { Appointment } from './appointment.model';
 
@@ -36,6 +36,15 @@ export const Customer = sequelize.define(
     },
     confirmationType: {
       type: DataTypes.ENUM<string>('SMS', 'email'),
+    },
+    balance: {
+      type: DataTypes.FLOAT,
+    },
+    discount: {
+      type: DataTypes.INTEGER,
+    },
+    notes: {
+      type: DataTypes.STRING,
     },
   },
   {
