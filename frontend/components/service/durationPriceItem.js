@@ -45,14 +45,14 @@ const DurationPriceItem = (props) => {
                             aria-label="Always visible"
                             value={item.duration}
                             min={0}
-                            max={2}
-                            step={0.5}
+                            max={120}
+                            step={15}
                             marks
                             valueLabelDisplay="on"
                         />
                     </Grid>
                     <Grid item xs={3}>
-                        <InputLabel htmlFor={`hrs-for-${index}`}>hours</InputLabel>
+                        <InputLabel htmlFor={`hrs-for-${index}`}>min</InputLabel>
                         <Input
                             id={`hrs-for-${index}`}
                             value={item.duration}
