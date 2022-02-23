@@ -126,6 +126,7 @@ const EmployeeForm = (props) => {
                         value={employeeValue.sin}
                         onChange={handleSetEmployeeValue}
                         error={errorMessage.sin}
+                        type="password"
                     />
                 </Grid>
                 <Grid item xs={12}>
