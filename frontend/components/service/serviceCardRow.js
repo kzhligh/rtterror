@@ -31,18 +31,20 @@ const CardContentNoPadding = styled(CardContent)(`
 `);
 
 const ConfirmDeleteDialog = (props) => {
-    const { open, setOpen, item, step, setStep, deleteService } = props;
+    const { open, setOpen, item, deleteService } = props;
     const handleClose = () => {
-        setStep(0);
+
         setOpen(false);
     };
     const handleConfirm = () => {
-        if (step === 0 && !item.hasOwnProperty('services')) {
-            setStep(1);
-        } else {
-            deleteService(item);
-            handleClose();
-        }
+        deleteService(item);
+        handleClose();
+        // if (step === 0 && !item.hasOwnProperty('services')) {
+        //     setStep(1);
+        // } else {
+        //     deleteService(item);
+        //     handleClose();
+        // }
     };
     return (
         <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="sm" p={5}>
@@ -57,7 +59,7 @@ const ConfirmDeleteDialog = (props) => {
                     justifyContent="center"
                     alignItems="center"
                 >
-                    <Typography>Attention: All Combos that include {item.name} will be deleted. Are you sure you want to continue?</Typography>
+                    <Typography>Are you sure to Delete Service / Combo  " {item.name} "?</Typography>
 
                 </Grid>
                 <Grid
@@ -72,7 +74,7 @@ const ConfirmDeleteDialog = (props) => {
                         onClick={handleConfirm}
                         color="error"
                     >
-                        {step === 0 ? "Yes" : "Delete"}
+                       Delete
 
                     </Button>
                     <Button onClick={handleClose}
@@ -203,8 +205,6 @@ const ServiceCardRow = (props) => {
                 open={deleteDialogOpen}
                 setOpen={setDeleteDialogOpen}
                 item={serviceItem}
-                step={deleteStep}
-                setStep={setDeleteStep}
                 deleteService={deleteService}
             />
             {
