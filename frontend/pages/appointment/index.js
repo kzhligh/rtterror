@@ -116,6 +116,19 @@ function Appointment() {
     );
   }, []);
 
+  const onClickDayname = useCallback((e) => {
+    const calendar = cal.current.calendarInst;
+    if (calendar.getViewName() === 'week') {
+      const date = new Date(e.date);
+      date.setDate(date.getDate() + 1);
+      calendar.setDate(date);
+      calendar.changeView('day', true);
+    } else if (calendar.getViewName() === 'day') {
+      calendar.changeView('week', true);
+    };
+    calendar.render();
+  });
+
   return (
     <>
       <Typography variant="h6">Appointment</Typography>
@@ -131,6 +144,7 @@ function Appointment() {
         onBeforeCreateSchedule={onBeforeCreateSchedule}
         onBeforeDeleteSchedule={onBeforeDeleteSchedule}
         onBeforeUpdateSchedule={onBeforeUpdateSchedule}
+        onClickDayname={onClickDayname}
       />
       <EditAppointmentDialog openEditDialog={openEditDialog} setOpenEditDialog={setOpenEditDialog} onSubmit={onBeforeUpdateSchedule} target={schedules[clickTarget.scheduleId]} />
     </>

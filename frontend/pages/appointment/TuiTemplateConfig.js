@@ -90,7 +90,7 @@ export default {
         return (model.label).toString().toLocaleUpperCase();
     },
     weekDayname: function (model) {
-        return '<span class="tui-full-calendar-dayname-date">' + model.date + '</span>&nbsp;&nbsp;<span class="tui-full-calendar-dayname-name">' + model.dayName + '</span>';
+        return '<span style="cursor: cell;"><span class="tui-full-calendar-dayname-date">' + model.date + '</span>&nbsp;&nbsp;<span class="tui-full-calendar-dayname-name">' + model.dayName + '</span></span>';
     },
     weekGridFooterExceed: function (hiddenSchedules) {
         return '+' + hiddenSchedules;
