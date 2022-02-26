@@ -13,6 +13,8 @@ const TuiCalendar = forwardRef((props, ref) => (
 ));
 TuiCalendar.displayName = 'TuiCalendar';
 
+import templates from './TuiTemplateConfig';
+
 const start = new Date();
 const end = new Date(new Date().setMinutes(start.getMinutes() + 30));
 const schedules = {
@@ -113,46 +115,6 @@ function Appointment() {
       changes
     );
   }, []);
-
-  function _getFormattedTime(time) {
-    const date = new Date(time);
-    const h = date.getHours();
-    const m = date.getMinutes();
-
-    return `${h}:${m}`;
-  }
-
-  function _getTimeTemplate(schedule, isAllDay) {
-    var html = [];
-
-    if (!isAllDay) {
-      html.push("<strong>" + _getFormattedTime(schedule.start) + "</strong> ");
-    }
-    if (schedule.isPrivate) {
-      html.push('<span class="calendar-font-icon ic-lock-b"></span>');
-      html.push(" Private");
-    } else {
-      if (schedule.isReadOnly) {
-        html.push('<span class="calendar-font-icon ic-readonly-b"></span>');
-      } else if (schedule.recurrenceRule) {
-        html.push('<span class="calendar-font-icon ic-repeat-b"></span>');
-      } else if (schedule.attendees.length) {
-        html.push('<span class="calendar-font-icon ic-user-b"></span>');
-      } else if (schedule.location) {
-        html.push('<span class="calendar-font-icon ic-location-b"></span>');
-      }
-      html.push(" " + schedule.title);
-    }
-
-    return html.join("");
-  }
-
-  const templates = {
-    time: function (schedule) {
-      console.log(schedule);
-      return _getTimeTemplate(schedule, false);
-    }
-  };
 
   return (
     <>
