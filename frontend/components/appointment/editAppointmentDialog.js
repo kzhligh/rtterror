@@ -6,12 +6,12 @@ const editAppointmentDialog = (props) => {
 
     return <Dialog open={openEditDialog} fullWidth={true} scroll="body">
         <DialogTitle>
-            {target.title}
+            {target?.title}
         </DialogTitle>
         <DialogContent>
         </DialogContent>
         <DialogActions>
-            <Button onClick={() => onSubmit} variant="contained">
+            <Button onClick={onSubmit} variant="contained">
                 Submit
             </Button>
             <Button onClick={() => setOpenEditDialog(false)} color="inherit">Cancel</Button>

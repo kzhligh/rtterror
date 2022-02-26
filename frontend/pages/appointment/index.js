@@ -66,19 +66,18 @@ function Appointment() {
   const [clickTarget, setClickTarget] = useState({ employeeId: 0, scheduleId: 0 });
 
   const onClickSchedule = useCallback((e) => {
+    console.log('onClickSchedule');
     const { calendarId: employeeId, id: scheduleId } = e.schedule;
     setClickTarget({ employeeId: employeeId, scheduleId: scheduleId });
     console.log(employeeId, scheduleId);
-    const el = cal.current.calendarInst.getElement(scheduleId, employeeId);
-    console.log(cal.current.calendarInst);
-    console.log(el);
-    console.log(e, el.getBoundingClientRect());
+    // TODO: edit existing appointment
 
     setOpenEditDialog(true);
     console.log(openEditDialog);
   }, []);
 
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
+    console.log('onBeforeCreateSchedule');
     console.log(scheduleData);
 
     const schedule = {
@@ -94,17 +93,23 @@ function Appointment() {
     };
 
     cal.current.calendarInst.createSchedules([schedule]);
+    // TODO: create schedule
+
   }, []);
 
   const onBeforeDeleteSchedule = useCallback((res) => {
+    console.log('onBeforeDeleteSchedule');
     console.log(res);
 
     const { id, calendarId } = res.schedule;
 
     cal.current.calendarInst.deleteSchedule(id, calendarId);
+
+    // TODO: delete schedule
   }, []);
 
   const onBeforeUpdateSchedule = useCallback((e) => {
+    console.log('onBeforeUpdateSchedule');
     console.log(e);
 
     const { schedule, changes } = e;
@@ -114,6 +119,8 @@ function Appointment() {
       schedule.calendarId,
       changes
     );
+
+    // TODO: after drag and drop
   }, []);
 
   const onClickDayname = useCallback((e) => {
@@ -134,8 +141,9 @@ function Appointment() {
       <Typography variant="h6">Appointment</Typography>
       <TuiCalendar
         ref={cal}
-        view="day"
-        useCreationPopup={true}
+        view="week"
+        taskView={false}
+        useCreationPopup={false}
         useDetailPopup={true}
         template={templates}
         calendars={calendars}
