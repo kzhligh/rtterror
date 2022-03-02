@@ -1,4 +1,4 @@
-import MenuList from './menu';
+import MainMenu from './menu';
 import styled from '../../styles/layout.module.css';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Calendar from './calendar';
@@ -21,7 +21,7 @@ const Layout = ({ children }) => {
                 }}>
                     <Calendar />
                     <Divider />
-                    <MenuList />
+                    <MainMenu />
                 </Grid>
                 <Grid item style={{ minWidth: "75%", maxWidth: "85%" }}>
                     {/* <PrimarySearchAppBar /> */}
