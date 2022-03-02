@@ -4,7 +4,7 @@ import 'tui-calendar/dist/tui-calendar.css';
 // If you use the default popups, use this.
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
-import { Typography } from '@material-ui/core';
+import { Typography, MenuList, MenuItem } from '@mui/material';
 
 import EditAppointmentDialog from '../../components/appointment/editAppointmentDialog';
 const TuiCalendarWrapper = dynamic(() => import('../../components/appointment/TuiCalendarWrapper'), { ssr: false });
@@ -129,16 +129,22 @@ function Appointment() {
       const date = new Date(e.date);
       date.setDate(date.getDate() + 1);
       calendar.setDate(date);
-      calendar.changeView('day', true);
+      changeCalendarView('day');
     } else if (calendar.getViewName() === 'day') {
-      calendar.changeView('week', true);
+      changeCalendarView('week');
     };
-    calendar.render();
   });
+
+  const changeCalendarView = (viewName) => { const calendar = cal.current.calendarInst; calendar.changeView(viewName, true); calendar.render(); };
 
   return (
     <>
       <Typography variant="h6">Appointment</Typography>
+      <MenuList flexDirection='row' sx={{ display: 'flex' }}>
+        <MenuItem onClick={() => { changeCalendarView('day'); }}>Today</MenuItem>
+        <MenuItem onClick={() => { changeCalendarView('week'); }}>Week</MenuItem>
+        <MenuItem onClick={() => { changeCalendarView('month'); }}>Month</MenuItem>
+      </MenuList>
       <TuiCalendar
         ref={cal}
         view="week"
