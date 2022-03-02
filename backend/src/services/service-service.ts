@@ -224,19 +224,19 @@ class ServiceService extends GeneralService<IService, IServicesDto> {
         },
         transaction: t
       });
-      const services = await this.getItemsByServiceCode(serviceCode);
+      // const services = await this.getItemsByServiceCode(serviceCode);
 
       // delete related combos and service-combo relationship items
-      for (const service of services) {
-        console.log('for service with id: ', service.id);
-        console.log('process combos and service-combo relationship items')
-        await serviceComboService.deleteItemsByServiceId(service.id, t);
-        await comboService.deleteItemsByServiceId(service.id, t);
-        console.log('process service-employee relationship items')
-        await serviceEmployeeService.deleteItemsByServiceId(service.id, t);
-      }
+      // for (const service of services) {
+      //   console.log('for service with id: ', service.id);
+      //   console.log('process combos and service-combo relationship items')
+      //   await serviceComboService.deleteItemsByServiceId(service.id, t);
+      //   await comboService.deleteItemsByServiceId(service.id, t);
+      //   console.log('process service-employee relationship items')
+      //   await serviceEmployeeService.deleteItemsByServiceId(service.id, t);
+      // }
       await t.commit();
-      console.log('services with returning true: ', services);
+      // console.log('services with returning true: ', services);
       return await this.getItemsByServiceCode(serviceCode);
     } catch (error) {
       await t.rollback();
