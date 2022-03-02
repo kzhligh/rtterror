@@ -1,7 +1,6 @@
 import { Model } from 'sequelize';
 import GeneralService from './general-service';
 import comboService from './combo-service';
-import serviceComboService from './service-combo-service'
 import serviceEmployeeService from './service-employee-service';
 import { IService, IServicesDto, IServiceDto } from '../interfaces/IService';
 import sequelize from "src/modules/sequelize";
@@ -41,7 +40,6 @@ class ServiceService extends GeneralService<IService, IServicesDto> {
   * @return newServices a series of services created based on the given itemInfo
   * */
   async createItems(itemInfo: IServicesDto): Promise<IService[]> {
-    console.log('createItem()/itemInfo: ', itemInfo);
     const t = await sequelize.transaction();
     try {
       const { employee_ids, durations_prices, ...serviceInfo } = itemInfo;
@@ -50,7 +48,6 @@ class ServiceService extends GeneralService<IService, IServicesDto> {
         if (durationsPrice.id) delete durationsPrice.id;
         const newService = await this.model.create({ ...serviceInfo, ...durationsPrice}, { transaction: t });
         if (employee_ids) {
-          console.log('createItem()/employee_ids: ', employee_ids);
           for (const employeeId of employee_ids) {
             const employeeItem = await this.employeeModel.findByPk(employeeId);
             await newService.addEmployee(employeeItem, { transaction: t });
@@ -153,7 +150,6 @@ class ServiceService extends GeneralService<IService, IServicesDto> {
         for (const service of allServices) {
           const serviceId = service.getDataValue('id');
           if (!updateIds.includes(serviceId)) {
-            console.log('hide the service of id: ', serviceId);
             // hide the service
             await this.model.update({ hidden: true }, {
               where: {
@@ -167,7 +163,6 @@ class ServiceService extends GeneralService<IService, IServicesDto> {
             await serviceEmployeeService.deleteItemsByServiceId(serviceId, t);
           }
           else {
-            console.log('update the service of id: ', serviceId)
             // the service exists ==> update the service
             // update basic info
             const durationPrice = durations_prices.filter((dp) => {
@@ -214,7 +209,6 @@ class ServiceService extends GeneralService<IService, IServicesDto> {
   }
 
   async hideItemsByServiceCode(serviceCode: string): Promise<IService[]> {
-    console.log('hideItemsByServiceCode(): ', serviceCode);
     const t = await sequelize.transaction();
     try {
       // hide the services
@@ -224,19 +218,7 @@ class ServiceService extends GeneralService<IService, IServicesDto> {
         },
         transaction: t
       });
-      // const services = await this.getItemsByServiceCode(serviceCode);
-
-      // delete related combos and service-combo relationship items
-      // for (const service of services) {
-      //   console.log('for service with id: ', service.id);
-      //   console.log('process combos and service-combo relationship items')
-      //   await serviceComboService.deleteItemsByServiceId(service.id, t);
-      //   await comboService.deleteItemsByServiceId(service.id, t);
-      //   console.log('process service-employee relationship items')
-      //   await serviceEmployeeService.deleteItemsByServiceId(service.id, t);
-      // }
       await t.commit();
-      // console.log('services with returning true: ', services);
       return await this.getItemsByServiceCode(serviceCode);
     } catch (error) {
       await t.rollback();
@@ -245,7 +227,6 @@ class ServiceService extends GeneralService<IService, IServicesDto> {
   }
 
   async blockUnblockServices(serviceCode: string, blockService: boolean): Promise<IService[]> {
-    console.log('service code: ', serviceCode);
     const t = await sequelize.transaction();
     try {
       const [ numberOfUpdates ] = await this.model.update({ blocked: blockService }, {
@@ -254,11 +235,9 @@ class ServiceService extends GeneralService<IService, IServicesDto> {
         },
         transaction: t
       });
-      console.log('number of affected rows: ', numberOfUpdates);
       if (numberOfUpdates === 0) throw new Error(`ERROR - no service of given service_code ${serviceCode} has been found`);
       await t.commit();
-      const allServices = await this.getAllValidItems();
-      return allServices;
+      return await this.getAllValidItems();
     } catch (error) {
       await t.rollback();
       throw error;
