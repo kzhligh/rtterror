@@ -1,66 +1,50 @@
 import IAll from "src/interfaces/IAll";
 
 export interface IAppointmentJson extends IAll {
-    id: string;
-    rmq_id: string;
-    employee_id: string;
-    client_id: string;
-    pro_rmq_id: string;
-    service_id: string;
-    datetime: Date;
-    repeat: boolean;
-    cycle_start?: Date;
-    cycle_end?: Date;
-    status: string;
-    feedback?: string;
-    notes?: string;
-    payments: string;
-    refunds: string;
+  id: string;
+  rmq_id?: string;
+  client_id: string;
+  pro_rmq_id: string;
+  datetime: Date;
+  repeat: boolean;
+  cycle_start?: Date;
+  cycle_end?: Date;
+  status: string;
+  feedback?: string;
+  notes?: string;
+  payments: string;
+  refunds: string;
 }
 
 interface status {
-    name: string;
-    by: string;
-    at: Date;
-}
-
-interface transaction {
-    amount: string;
-    method: string;
-    at: Date;
+  name: string;
+  by: string;
+  at: Date;
 }
 
 export interface IAppointmentObj extends IAll {
-    id: string;
-    rmq_id: string;
-    employee_id: string;
-    client_id: string;
-    pro_rmq_id: string;
-    service_id: string;
-    datetime: Date;
-    repeat: boolean;
-    cycle_start?: Date;
-    cycle_end?: Date;
-    status: [status];
-    feedback?: string;
-    notes?: string;
-    payments?: [transaction];
-    refunds?: [transaction];
+  id: string;
+  rmq_id: string;
+  client_id: string;
+  pro_rmq_id: string;
+  datetime: Date;
+  repeat: boolean;
+  cycle_start?: Date;
+  cycle_end?: Date;
+  status: [status];
+  feedback?: string;
+  notes?: string;
 }
 
 export interface IAppointmentDto {
-    rmq_id: string;
-    employee_id: string;
-    client_id: string;
-    pro_rmq_id: string;
-    service_id: string;
-    datetime: Date;
-    repeat: boolean;
-    cycle_start?: Date;
-    cycle_end?: Date;
-    status: [status];
-    feedback?: string;
-    notes?: string;
-    payments?: [transaction];
-    refunds?: [transaction];
+  rmq_id: string;
+  client_id: string;
+  pro_rmq_id: string;
+  datetime: Date;
+  repeat: boolean;
+  cycle_start?: Date;
+  cycle_end?: Date;
+  status: [status];
+  feedback?: string;
+  notes?: string;
 }
