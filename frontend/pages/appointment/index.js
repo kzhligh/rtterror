@@ -4,7 +4,7 @@ import 'tui-calendar/dist/tui-calendar.css';
 // If you use the default popups, use this.
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
-import { Typography, MenuList, MenuItem } from '@mui/material';
+import { Typography, MenuList, MenuItem, Autocomplete, TextField } from '@mui/material';
 
 import EditAppointmentDialog from '../../components/appointment/editAppointmentDialog';
 const TuiCalendarWrapper = dynamic(() => import('../../components/appointment/TuiCalendarWrapper'), { ssr: false });
@@ -123,27 +123,47 @@ function Appointment() {
     // TODO: after drag and drop
   }, []);
 
+  const changeCalendarView = (viewName) => {
+    const calendar = cal.current.calendarInst;
+    calendar.changeView(viewName, true);
+    calendar.render();
+  };
+
   const onClickDayname = useCallback((e) => {
     const calendar = cal.current.calendarInst;
-    if (calendar.getViewName() === 'week') {
+    if (calendar.getViewName() === 'day') {
+      calendar.changeView('week', true);
+    } else if (calendar.getViewName() === 'week' || calendar.getViewName() === 'month') {
       const date = new Date(e.date);
       date.setDate(date.getDate() + 1);
       calendar.setDate(date);
-      changeCalendarView('day');
-    } else if (calendar.getViewName() === 'day') {
-      changeCalendarView('week');
-    };
+      calendar.changeView('day', true);
+    } else {
+      return;
+    }
+    calendar.render();
   });
-
-  const changeCalendarView = (viewName) => { const calendar = cal.current.calendarInst; calendar.changeView(viewName, true); calendar.render(); };
 
   return (
     <>
       <Typography variant="h6">Appointment</Typography>
-      <MenuList flexDirection='row' sx={{ display: 'flex' }}>
-        <MenuItem onClick={() => { changeCalendarView('day'); }}>Today</MenuItem>
+      <MenuList sx={{ display: 'flex', flexDirection: 'row', maxHeight: 64 }}>
+        <MenuItem onClick={() => { cal.current.calendarInst.today(); changeCalendarView('day'); }}>Today</MenuItem>
         <MenuItem onClick={() => { changeCalendarView('week'); }}>Week</MenuItem>
         <MenuItem onClick={() => { changeCalendarView('month'); }}>Month</MenuItem>
+        <MenuItem disabled />
+        <Autocomplete
+          disablePortal
+          clearOnEscape
+          openOnFocus
+          options={[
+            { label: 'Employee XYZ', id: 1994 },
+            { label: 'Therapist IOT', id: 1972 },
+            { label: 'Junior Physician STAR', id: 1974 }
+          ]}
+          sx={{ width: 300 }}
+          renderInput={(params) => <TextField {...params} label="Employee" size="small" />}
+        />
       </MenuList>
       <TuiCalendar
         ref={cal}
