@@ -9,13 +9,15 @@ import { Typography, MenuList, MenuItem, Autocomplete, TextField } from '@mui/ma
 
 import EditAppointmentDialog from '../../components/appointment/editAppointmentDialog';
 import DropConfirmationDialog from '../../components/appointment/dropConfirmationDialog';
+
+import theme from '../../components/appointment/TuiThemeConfig';
+import template from '../../components/appointment/TuiTemplateConfig';
+
 const TuiCalendarWrapper = dynamic(() => import('../../components/appointment/TuiCalendarWrapper'), { ssr: false });
 const TuiCalendar = forwardRef((props, ref) => (
   <TuiCalendarWrapper {...props} forwardedRef={ref} />
 ));
 TuiCalendar.displayName = 'TuiCalendar';
-
-import templates from '../../components/appointment/TuiTemplateConfig';
 
 const start = new Date();
 const end = new Date(new Date().setMinutes(start.getMinutes() + 30));
@@ -162,7 +164,8 @@ function Appointment() {
         taskView={false}
         useCreationPopup={false}
         useDetailPopup={false}
-        template={templates}
+        theme={theme}
+        template={template}
         calendars={calendars}
         schedules={schedules}
         onClickSchedule={onClickSchedule}

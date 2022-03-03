@@ -31,7 +31,7 @@ function _getTimeTemplate(schedule, isAllDay) {
     return html.join("");
 }
 
-export default {
+const templateConfig = {
     milestone: function (schedule) {
         return '<span class="calendar-font-icon ic-milestone-b"></span> <span style="background-color: ' + schedule.bgColor + '">' + schedule.title + '</span>';
     },
@@ -250,4 +250,6 @@ export default {
     popupDelete: function () {
         return 'Delete';
     }
-}; 
+};
+
+export default templateConfig;
