@@ -17,29 +17,6 @@ import templates from './TuiTemplateConfig';
 
 const start = new Date();
 const end = new Date(new Date().setMinutes(start.getMinutes() + 30));
-const schedules = {
-  '1': {
-    calendarId: '1',
-    category: 'time',
-    isVisible: true,
-    title: 'Study',
-    id: '1',
-    body: `${start}`,
-    start,
-    end,
-    more: {}
-  },
-  '2': {
-    calendarId: '2',
-    category: 'time',
-    isVisible: true,
-    title: 'Meeting',
-    id: '2',
-    body: 'Description',
-    start: new Date(new Date().setHours(start.getHours() + 1)),
-    end: new Date(new Date().setHours(start.getHours() + 2)),
-  },
-};
 
 const calendars = [
   {
@@ -64,6 +41,7 @@ function Appointment() {
   const cal = useRef(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [clickTarget, setClickTarget] = useState({ employeeId: 0, scheduleId: 0 });
+  const [schedules, setSchedules] = useState([]);
 
   const onClickSchedule = useCallback((e) => {
     console.log('onClickSchedule');
@@ -95,6 +73,7 @@ function Appointment() {
     cal.current.calendarInst.createSchedules([schedule]);
     // TODO: create schedule
 
+    setOpenEditDialog(true);
   }, []);
 
   const onBeforeDeleteSchedule = useCallback((res) => {
@@ -170,17 +149,17 @@ function Appointment() {
         view="week"
         taskView={false}
         useCreationPopup={false}
-        useDetailPopup={true}
+        useDetailPopup={false}
         template={templates}
         calendars={calendars}
-        schedules={Object.values(schedules)}
+        schedules={schedules}
         onClickSchedule={onClickSchedule}
         onBeforeCreateSchedule={onBeforeCreateSchedule}
         onBeforeDeleteSchedule={onBeforeDeleteSchedule}
         onBeforeUpdateSchedule={onBeforeUpdateSchedule}
         onClickDayname={onClickDayname}
       />
-      <EditAppointmentDialog openEditDialog={openEditDialog} setOpenEditDialog={setOpenEditDialog} onSubmit={onBeforeUpdateSchedule} target={schedules[clickTarget.scheduleId]} />
+      <EditAppointmentDialog openEditDialog={openEditDialog} setOpenEditDialog={setOpenEditDialog} onSubmit={onBeforeUpdateSchedule} target={schedules.find(el => el.id === clickTarget.scheduleId)} />
     </>
   );
 }
