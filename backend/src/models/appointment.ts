@@ -51,6 +51,11 @@ AppointmentModel.init({
   notes: {
     type: DataTypes.STRING,
     allowNull: true
+  },
+  hidden: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
   }
 }, {
   sequelize,

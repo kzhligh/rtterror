@@ -14,6 +14,8 @@ export interface IAppointmentJson extends IAll {
   notes?: string;
   payments: string;
   refunds: string;
+  employee_ids?: string[];     // for updating
+  service_ids?: string[];      //for updating
 }
 
 interface status {
@@ -39,6 +41,8 @@ export interface IAppointmentObj extends IAll {
 export interface IAppointmentDto {
   rmq_id: string;
   client_id: string;
+  employee_ids: string[];
+  service_ids: string[];
   pro_rmq_id: string;
   datetime: Date;
   repeat: boolean;
