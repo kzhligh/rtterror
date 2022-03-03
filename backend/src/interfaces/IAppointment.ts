@@ -12,8 +12,6 @@ export interface IAppointmentJson extends IAll {
   status: string;
   feedback?: string;
   notes?: string;
-  payments: string;
-  refunds: string;
   employee_ids?: string[];     // for updating
   service_ids?: string[];      //for updating
 }
