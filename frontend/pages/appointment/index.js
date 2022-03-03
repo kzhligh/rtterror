@@ -7,6 +7,7 @@ import 'tui-time-picker/dist/tui-time-picker.css';
 import { Typography, MenuList, MenuItem, Autocomplete, TextField } from '@mui/material';
 
 import EditAppointmentDialog from '../../components/appointment/editAppointmentDialog';
+import DropConfirmationDialog from '../../components/appointment/dropConfirmationDialog';
 const TuiCalendarWrapper = dynamic(() => import('../../components/appointment/TuiCalendarWrapper'), { ssr: false });
 const TuiCalendar = forwardRef((props, ref) => (
   <TuiCalendarWrapper {...props} forwardedRef={ref} />
@@ -40,7 +41,11 @@ const calendars = [
 function Appointment() {
   const cal = useRef(null);
   const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openDropDialog, setOpenDropDialog] = useState(false);
+
   const [clickTarget, setClickTarget] = useState({ employeeId: 0, scheduleId: 0 });
+  const [updateEvent, setUpdateEvent] = useState(null);
+
   const [schedules, setSchedules] = useState([]);
 
   const onClickSchedule = useCallback((e) => {
@@ -48,6 +53,7 @@ function Appointment() {
     const { calendarId: employeeId, id: scheduleId } = e.schedule;
     setClickTarget({ employeeId: employeeId, scheduleId: scheduleId });
     console.log(employeeId, scheduleId);
+
     // TODO: edit existing appointment
 
     setOpenEditDialog(true);
@@ -91,16 +97,25 @@ function Appointment() {
     console.log('onBeforeUpdateSchedule');
     console.log(e);
 
-    const { schedule, changes } = e;
-
-    cal.current.calendarInst.updateSchedule(
-      schedule.id,
-      schedule.calendarId,
-      changes
-    );
-
-    // TODO: after drag and drop
+    setUpdateEvent(e);
+    setOpenDropDialog(true);
   }, []);
+
+  const handleConfirmUpdateSchedule = (ok) => {
+    setOpenDropDialog(false);
+
+    if (ok && updateEvent) {
+      const { schedule, changes } = updateEvent;
+
+      cal.current.calendarInst.updateSchedule(
+        schedule.id,
+        schedule.calendarId,
+        changes
+      );
+    }
+
+    setUpdateEvent(null);
+  };
 
   const changeCalendarView = (viewName) => {
     const calendar = cal.current.calendarInst;
@@ -160,6 +175,7 @@ function Appointment() {
         onClickDayname={onClickDayname}
       />
       <EditAppointmentDialog openEditDialog={openEditDialog} setOpenEditDialog={setOpenEditDialog} onSubmit={onBeforeUpdateSchedule} target={schedules.find(el => el.id === clickTarget.scheduleId)} />
+      <DropConfirmationDialog open={openDropDialog} onClose={handleConfirmUpdateSchedule} changes={updateEvent?.changes} />
     </>
   );
 }
