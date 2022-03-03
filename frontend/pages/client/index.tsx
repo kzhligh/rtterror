@@ -21,11 +21,12 @@ import {
   GridValueFormatterParams,
 } from '@mui/x-data-grid';
 import { http } from 'utils/http';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AddCustomerDialog } from 'components/client/AddCustomerDialog';
 import { useRouter } from 'next/router';
 import { formatPhoneNumber } from 'utils';
 import { GetServerSidePropsResult } from 'next';
+import { useCustomerSearchObservable } from 'hooks/useCustomerSearch';
 
 interface ClientProps {
   customers: Array<any>;
@@ -63,6 +64,13 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(undefined);
 
+  const [handleSearch] = useCustomerSearchObservable(
+    null,
+    setLoading,
+    setError,
+    setSearchResults
+  );
+
   const handleDelete = async () => {
     setError(null);
     setLoading(true);
@@ -77,25 +85,6 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
     } finally {
       setLoading(false);
       setRowSelection([]);
-    }
-  };
-
-  const handleSearch = async (e) => {
-    setError(null);
-    setLoading(true);
-    try {
-      if (e.target.value) {
-        const searchResult = await http(`/api/v1/customer/search`, {
-          searchParams: { query: e.target.value },
-        });
-        setSearchResults(searchResult);
-      } else {
-        setSearchResults(undefined);
-      }
-    } catch (error) {
-      setError(error);
-    } finally {
-      setLoading(false);
     }
   };
 
