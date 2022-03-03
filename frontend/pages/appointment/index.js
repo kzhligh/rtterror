@@ -1,5 +1,6 @@
 import React, { useRef, useCallback, forwardRef, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { randomBytes } from 'crypto';
 import 'tui-calendar/dist/tui-calendar.css';
 // If you use the default popups, use this.
 import 'tui-date-picker/dist/tui-date-picker.css';
@@ -14,7 +15,7 @@ const TuiCalendar = forwardRef((props, ref) => (
 ));
 TuiCalendar.displayName = 'TuiCalendar';
 
-import templates from './TuiTemplateConfig';
+import templates from '../../components/appointment/TuiTemplateConfig';
 
 const start = new Date();
 const end = new Date(new Date().setMinutes(start.getMinutes() + 30));
@@ -57,15 +58,14 @@ function Appointment() {
     // TODO: edit existing appointment
 
     setOpenEditDialog(true);
-    console.log(openEditDialog);
-  }, []);
+  }, [openEditDialog]);
 
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
     console.log('onBeforeCreateSchedule');
     console.log(scheduleData);
 
     const schedule = {
-      id: String(Math.random()),
+      id: String(randomBytes(8)),
       title: scheduleData.title,
       isAllDay: scheduleData.isAllDay,
       start: scheduleData.start,
@@ -94,9 +94,6 @@ function Appointment() {
   }, []);
 
   const onBeforeUpdateSchedule = useCallback((e) => {
-    console.log('onBeforeUpdateSchedule');
-    console.log(e);
-
     setUpdateEvent(e);
     setOpenDropDialog(true);
   }, []);
@@ -136,7 +133,7 @@ function Appointment() {
       return;
     }
     calendar.render();
-  });
+  }, []);
 
   return (
     <>

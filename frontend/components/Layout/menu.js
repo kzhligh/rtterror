@@ -60,7 +60,7 @@ const Menu = () => {
                 flex: '1 1 auto',
             }}>
                 {menuItems.map((item) => (
-                    <Link key={item.text} href={item.path}>
+                    <Link key={item.text} href={item.path} passHref>
                         <MenuItem sx={{
                             alignItems: 'center',
                             paddingLeft: '25%',
