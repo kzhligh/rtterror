@@ -37,8 +37,8 @@ function Appointment() {
       title: 'TOAST UI Calendar Study',
       category: 'time',
       dueDateClass: '',
-      start: new Date(new Date().setHours(3)),
-      end: new Date(new Date().setHours(today.getHours() + 2)),
+      start: new Date(new Date().setHours(13)),
+      end: new Date(new Date().setHours(14)),
     },
     {
       id: '2',
@@ -46,8 +46,8 @@ function Appointment() {
       title: 'Practice',
       category: 'time',
       dueDateClass: '',
-      start: new Date(new Date().setHours(2)),
-      end: new Date(new Date().setHours(today.getHours() + 1)),
+      start: new Date(new Date().setHours(12)),
+      end: new Date(new Date().setHours(15)),
       isReadOnly: true
     },
     {
@@ -56,8 +56,8 @@ function Appointment() {
       title: 'FE Workshop',
       category: 'time',
       dueDateClass: '',
-      start: new Date(new Date().setHours(4)),
-      end: new Date(new Date().setHours(today.getHours() + 4)),
+      start: new Date(new Date().setHours(14)),
+      end: new Date(new Date().setHours(16)),
       isReadOnly: true
     },
     {
@@ -237,6 +237,8 @@ function Appointment() {
         ref={cal}
         view="week"
         taskView={false}
+        scheduleView={['time']}
+        week={{ hourStart: 8, hourEnd: 22 }}
         useCreationPopup={false}
         useDetailPopup={false}
         theme={theme}
