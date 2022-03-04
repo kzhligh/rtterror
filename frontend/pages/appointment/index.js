@@ -6,6 +6,7 @@ import 'tui-calendar/dist/tui-calendar.css';
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
 import { Typography, MenuList, MenuItem, Autocomplete, TextField } from '@mui/material';
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
 import EditAppointmentDialog from '../../components/appointment/editAppointmentDialog';
 import DropConfirmationDialog from '../../components/appointment/dropConfirmationDialog';
@@ -200,6 +201,16 @@ function Appointment() {
 
   };
 
+  const handleClickPrevButton = () => {
+    const calendar = cal.current.calendarInst;
+    calendar.prev();
+  };
+
+  const handleClickNextButton = () => {
+    const calendar = cal.current.calendarInst;
+    calendar.next();
+  };
+
   return (
     <>
       <Typography variant="h6">Appointment</Typography>
@@ -207,6 +218,8 @@ function Appointment() {
         <MenuItem onClick={() => { cal.current.calendarInst.today(); changeCalendarView('day'); }}>Today</MenuItem>
         <MenuItem onClick={() => { changeCalendarView('week'); }}>Week</MenuItem>
         <MenuItem onClick={() => { changeCalendarView('month'); }}>Month</MenuItem>
+        <MenuItem onClick={handleClickPrevButton}><ChevronLeft /></MenuItem>
+        <MenuItem onClick={handleClickNextButton}><ChevronRight /></MenuItem>
         <MenuItem disabled />
         <Autocomplete
           id="employee-calendar-filter"
