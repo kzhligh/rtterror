@@ -19,27 +19,7 @@ const TuiCalendar = forwardRef((props, ref) => (
 ));
 TuiCalendar.displayName = 'TuiCalendar';
 
-const start = new Date();
-const end = new Date(new Date().setMinutes(start.getMinutes() + 30));
-
-const calendars = [
-  {
-    id: '1',
-    name: 'Employee X',
-    color: '#ffffff',
-    bgColor: '#9e5fff',
-    dragBgColor: '#9e5fff',
-    borderColor: '#9e5fff',
-  },
-  {
-    id: '2',
-    name: 'Employee Y',
-    color: '#ffffff',
-    bgColor: '#00a9ff',
-    dragBgColor: '#00a9ff',
-    borderColor: '#00a9ff',
-  },
-];
+const today = new Date();
 
 function Appointment() {
   const cal = useRef(null);
@@ -49,7 +29,74 @@ function Appointment() {
   const [clickTarget, setClickTarget] = useState({ employeeId: 0, scheduleId: 0 });
   const [updateEvent, setUpdateEvent] = useState(null);
 
-  const [schedules, setSchedules] = useState([]);
+  const [schedules, setSchedules] = useState([
+    {
+      id: '1',
+      calendarId: '3',
+      title: 'TOAST UI Calendar Study',
+      category: 'time',
+      dueDateClass: '',
+      start: new Date(new Date().setHours(3)),
+      end: new Date(new Date().setHours(today.getHours() + 2)),
+    },
+    {
+      id: '2',
+      calendarId: '1',
+      title: 'Practice',
+      category: 'time',
+      dueDateClass: '',
+      start: new Date(new Date().setHours(2)),
+      end: new Date(new Date().setHours(today.getHours() + 1)),
+      isReadOnly: true
+    },
+    {
+      id: '3',
+      calendarId: '2',
+      title: 'FE Workshop',
+      category: 'time',
+      dueDateClass: '',
+      start: new Date(new Date().setHours(4)),
+      end: new Date(new Date().setHours(today.getHours() + 4)),
+      isReadOnly: true
+    },
+    {
+      id: '4',
+      calendarId: '3',
+      title: 'Report',
+      category: 'time',
+      dueDateClass: '',
+      start: new Date(new Date().setDate(today.getDay() - 1)),
+      end: new Date(new Date().setDate(today.getDay() - 1)),
+    }]);
+  const [employees, setEmployees] = useState([
+    {
+      id: '1',
+      name: 'Employee X',
+      color: '#ffffff',
+      bgColor: 'red',
+      dragBgColor: '#9e5fff',
+      borderColor: '#9e5fff',
+      visible: true,
+    },
+    {
+      id: '2',
+      name: 'Employee Y',
+      color: '#ffffff',
+      bgColor: 'green',
+      dragBgColor: '#00a9ff',
+      borderColor: '#00a9ff',
+      visible: true,
+    },
+    {
+      id: '3',
+      name: 'Employee Z',
+      color: '#ffffff',
+      bgColor: 'blue',
+      dragBgColor: '#00a9ff',
+      borderColor: '#00a9ff',
+      visible: true,
+    },
+  ]);
 
   const onClickSchedule = useCallback((e) => {
     console.log('onClickSchedule');
@@ -137,6 +184,22 @@ function Appointment() {
     calendar.render();
   }, []);
 
+  const handleFilterEmployee = (event, selectedEmployee, reason) => {
+    const calendar = cal.current.calendarInst;
+    if (reason === "selectOption") {
+      employees.forEach((emp) => {
+        calendar.toggleSchedules(emp.id, true, false);
+      });
+      calendar.toggleSchedules(selectedEmployee.id, false, false);
+    } else if (reason === "clear") {
+      employees.forEach((emp) => {
+        calendar.toggleSchedules(emp.id, false, false);
+      });
+    }
+    calendar.render();
+
+  };
+
   return (
     <>
       <Typography variant="h6">Appointment</Typography>
@@ -146,14 +209,13 @@ function Appointment() {
         <MenuItem onClick={() => { changeCalendarView('month'); }}>Month</MenuItem>
         <MenuItem disabled />
         <Autocomplete
+          id="employee-calendar-filter"
           disablePortal
           clearOnEscape
           openOnFocus
-          options={[
-            { label: 'Employee XYZ', id: 1994 },
-            { label: 'Therapist IOT', id: 1972 },
-            { label: 'Junior Physician STAR', id: 1974 }
-          ]}
+          options={employees}
+          getOptionLabel={(option) => option.name}
+          onChange={handleFilterEmployee}
           sx={{ width: 300 }}
           renderInput={(params) => <TextField {...params} label="Employee" size="small" />}
         />
@@ -166,7 +228,7 @@ function Appointment() {
         useDetailPopup={false}
         theme={theme}
         template={template}
-        calendars={calendars}
+        calendars={employees}
         schedules={schedules}
         onClickSchedule={onClickSchedule}
         onBeforeCreateSchedule={onBeforeCreateSchedule}
