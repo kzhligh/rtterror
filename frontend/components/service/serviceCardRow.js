@@ -17,7 +17,7 @@ import {
     Typography
 } from '@mui/material';
 import { RadioButtonUncheckedRounded, CheckCircleOutlineRounded } from '@mui/icons-material';
-import { capitalize } from '@material-ui/core';
+import { capitalize } from '@mui/utils';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ComboForm from './comboForm';

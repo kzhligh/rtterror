@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Grid, Button, Card, CardHeader, CardContent, Typography } from '@mui/material';
-import { capitalize } from '@material-ui/core';
+import { capitalize } from '@mui/utils';
 import _cloneDeep from "lodash/cloneDeep";
 import ServiceEmployeeTable from './serviceEmployeeTable';
 import ServiceEmployeeDialog from './serviceEmployeeDialog';
