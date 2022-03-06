@@ -1,11 +1,24 @@
-import React, { useRef, useCallback, forwardRef, useEffect, useState } from 'react';
+import React, {
+  useRef,
+  useCallback,
+  forwardRef,
+  useEffect,
+  useState,
+} from 'react';
 import dynamic from 'next/dynamic';
 import { randomBytes } from 'crypto';
 import 'tui-calendar/dist/tui-calendar.css';
 // If you use the default popups, use this.
 import 'tui-date-picker/dist/tui-date-picker.css';
 import 'tui-time-picker/dist/tui-time-picker.css';
-import { Typography, MenuList, MenuItem, Autocomplete, TextField } from '@mui/material';
+import {
+  Typography,
+  MenuList,
+  MenuItem,
+  Autocomplete,
+  TextField,
+  Button,
+} from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
 import EditAppointmentDialog from '../../components/appointment/editAppointmentDialog';
@@ -13,8 +26,12 @@ import DropConfirmationDialog from '../../components/appointment/dropConfirmatio
 
 import theme from '../../components/appointment/TuiThemeConfig';
 import template from '../../components/appointment/TuiTemplateConfig';
+import { AddAppointmentDialog } from 'components/appointment/addAppointmentDialog';
 
-const TuiCalendarWrapper = dynamic(() => import('../../components/appointment/TuiCalendarWrapper'), { ssr: false });
+const TuiCalendarWrapper = dynamic(
+  () => import('../../components/appointment/TuiCalendarWrapper'),
+  { ssr: false }
+);
 const TuiCalendar = forwardRef((props, ref) => (
   <TuiCalendarWrapper {...props} forwardedRef={ref} />
 ));
@@ -24,10 +41,14 @@ const today = new Date();
 
 function Appointment() {
   const cal = useRef(null);
+  const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openDropDialog, setOpenDropDialog] = useState(false);
 
-  const [clickTarget, setClickTarget] = useState({ employeeId: 0, scheduleId: 0 });
+  const [clickTarget, setClickTarget] = useState({
+    employeeId: 0,
+    scheduleId: 0,
+  });
   const [updateEvent, setUpdateEvent] = useState(null);
 
   const [schedules, setSchedules] = useState([
@@ -48,7 +69,7 @@ function Appointment() {
       dueDateClass: '',
       start: new Date(new Date().setHours(12)),
       end: new Date(new Date().setHours(15)),
-      isReadOnly: true
+      isReadOnly: true,
     },
     {
       id: '3',
@@ -58,7 +79,7 @@ function Appointment() {
       dueDateClass: '',
       start: new Date(new Date().setHours(14)),
       end: new Date(new Date().setHours(16)),
-      isReadOnly: true
+      isReadOnly: true,
     },
     {
       id: '4',
@@ -68,7 +89,8 @@ function Appointment() {
       dueDateClass: '',
       start: new Date(new Date().setDate(today.getDay() - 1)),
       end: new Date(new Date().setDate(today.getDay() - 1)),
-    }]);
+    },
+  ]);
   const [employees, setEmployees] = useState([
     {
       id: '1',
@@ -99,16 +121,19 @@ function Appointment() {
     },
   ]);
 
-  const onClickSchedule = useCallback((e) => {
-    console.log('onClickSchedule');
-    const { calendarId: employeeId, id: scheduleId } = e.schedule;
-    setClickTarget({ employeeId: employeeId, scheduleId: scheduleId });
-    console.log(employeeId, scheduleId);
+  const onClickSchedule = useCallback(
+    (e) => {
+      console.log('onClickSchedule');
+      const { calendarId: employeeId, id: scheduleId } = e.schedule;
+      setClickTarget({ employeeId: employeeId, scheduleId: scheduleId });
+      console.log(employeeId, scheduleId);
 
-    // TODO: edit existing appointment
+      // TODO: edit existing appointment
 
-    setOpenEditDialog(true);
-  }, [openEditDialog]);
+      setOpenEditDialog(true);
+    },
+    [openEditDialog]
+  );
 
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
     console.log('onBeforeCreateSchedule');
@@ -120,10 +145,10 @@ function Appointment() {
       isAllDay: scheduleData.isAllDay,
       start: scheduleData.start,
       end: scheduleData.end,
-      category: scheduleData.isAllDay ? "allday" : "time",
-      dueDateClass: "",
+      category: scheduleData.isAllDay ? 'allday' : 'time',
+      dueDateClass: '',
       location: scheduleData.location,
-      state: scheduleData.state
+      state: scheduleData.state,
     };
 
     cal.current.calendarInst.createSchedules([schedule]);
@@ -174,7 +199,10 @@ function Appointment() {
     const calendar = cal.current.calendarInst;
     if (calendar.getViewName() === 'day') {
       calendar.changeView('week', true);
-    } else if (calendar.getViewName() === 'week' || calendar.getViewName() === 'month') {
+    } else if (
+      calendar.getViewName() === 'week' ||
+      calendar.getViewName() === 'month'
+    ) {
       const date = new Date(e.date);
       date.setDate(date.getDate() + 1);
       calendar.setDate(date);
@@ -187,18 +215,17 @@ function Appointment() {
 
   const handleFilterEmployee = (event, selectedEmployee, reason) => {
     const calendar = cal.current.calendarInst;
-    if (reason === "selectOption") {
+    if (reason === 'selectOption') {
       employees.forEach((emp) => {
         calendar.toggleSchedules(emp.id, true, false);
       });
       calendar.toggleSchedules(selectedEmployee.id, false, false);
-    } else if (reason === "clear") {
+    } else if (reason === 'clear') {
       employees.forEach((emp) => {
         calendar.toggleSchedules(emp.id, false, false);
       });
     }
     calendar.render();
-
   };
 
   const handleClickPrevButton = () => {
@@ -215,11 +242,34 @@ function Appointment() {
     <>
       <Typography variant="h6">Appointment</Typography>
       <MenuList sx={{ display: 'flex', flexDirection: 'row', maxHeight: 64 }}>
-        <MenuItem onClick={() => { cal.current.calendarInst.today(); changeCalendarView('day'); }}>Today</MenuItem>
-        <MenuItem onClick={() => { changeCalendarView('week'); }}>Week</MenuItem>
-        <MenuItem onClick={() => { changeCalendarView('month'); }}>Month</MenuItem>
-        <MenuItem onClick={handleClickPrevButton}><ChevronLeft /></MenuItem>
-        <MenuItem onClick={handleClickNextButton}><ChevronRight /></MenuItem>
+        <MenuItem
+          onClick={() => {
+            cal.current.calendarInst.today();
+            changeCalendarView('day');
+          }}
+        >
+          Today
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            changeCalendarView('week');
+          }}
+        >
+          Week
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            changeCalendarView('month');
+          }}
+        >
+          Month
+        </MenuItem>
+        <MenuItem onClick={handleClickPrevButton}>
+          <ChevronLeft />
+        </MenuItem>
+        <MenuItem onClick={handleClickNextButton}>
+          <ChevronRight />
+        </MenuItem>
         <MenuItem disabled />
         <Autocomplete
           id="employee-calendar-filter"
@@ -230,8 +280,20 @@ function Appointment() {
           getOptionLabel={(option) => option.name}
           onChange={handleFilterEmployee}
           sx={{ width: 300 }}
-          renderInput={(params) => <TextField {...params} label="Employee" size="small" />}
+          renderInput={(params) => (
+            <TextField {...params} label="Employee" size="small" />
+          )}
         />
+        <MenuItem>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              setOpenCreateDialog(true);
+            }}
+          >
+            Add new
+          </Button>
+        </MenuItem>
       </MenuList>
       <TuiCalendar
         ref={cal}
@@ -251,8 +313,18 @@ function Appointment() {
         onBeforeUpdateSchedule={onBeforeUpdateSchedule}
         onClickDayname={onClickDayname}
       />
-      <EditAppointmentDialog openEditDialog={openEditDialog} setOpenEditDialog={setOpenEditDialog} onSubmit={onBeforeUpdateSchedule} target={schedules.find(el => el.id === clickTarget.scheduleId)} />
-      <DropConfirmationDialog open={openDropDialog} onClose={handleConfirmUpdateSchedule} changes={updateEvent?.changes} />
+      <EditAppointmentDialog
+        openEditDialog={openEditDialog}
+        setOpenEditDialog={setOpenEditDialog}
+        onSubmit={onBeforeUpdateSchedule}
+        target={schedules.find((el) => el.id === clickTarget.scheduleId)}
+      />
+      <DropConfirmationDialog
+        open={openDropDialog}
+        onClose={handleConfirmUpdateSchedule}
+        changes={updateEvent?.changes}
+      />
+      <AddAppointmentDialog isOpen={openCreateDialog} />
     </>
   );
 }
