@@ -1,18 +1,15 @@
 import React, { useRef, useCallback, forwardRef, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { randomBytes } from 'crypto';
-import 'tui-calendar/dist/tui-calendar.css';
-// If you use the default popups, use this.
-import 'tui-date-picker/dist/tui-date-picker.css';
-import 'tui-time-picker/dist/tui-time-picker.css';
 import { Typography, MenuList, MenuItem, Autocomplete, TextField } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
 import EditAppointmentDialog from '../../components/appointment/editAppointmentDialog';
 import DropConfirmationDialog from '../../components/appointment/dropConfirmationDialog';
 
-import theme from '../../components/appointment/TuiThemeConfig';
-import template from '../../components/appointment/TuiTemplateConfig';
+import 'tui-calendar/dist/tui-calendar.css';
+import theme from '../../components/appointment/themeConfig';
+import template from '../../components/appointment/templateConfig';
 
 const TuiCalendarWrapper = dynamic(() => import('../../components/appointment/TuiCalendarWrapper'), { ssr: false });
 const TuiCalendar = forwardRef((props, ref) => (
@@ -100,20 +97,13 @@ function Appointment() {
   ]);
 
   const onClickSchedule = useCallback((e) => {
-    console.log('onClickSchedule');
     const { calendarId: employeeId, id: scheduleId } = e.schedule;
     setClickTarget({ employeeId: employeeId, scheduleId: scheduleId });
-    console.log(employeeId, scheduleId);
-
-    // TODO: edit existing appointment
 
     setOpenEditDialog(true);
   }, [openEditDialog]);
 
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
-    console.log('onBeforeCreateSchedule');
-    console.log(scheduleData);
-
     const schedule = {
       id: String(randomBytes(8)),
       title: scheduleData.title,
@@ -245,11 +235,11 @@ function Appointment() {
         template={template}
         calendars={employees}
         schedules={schedules}
+        onClickDayname={onClickDayname}
         onClickSchedule={onClickSchedule}
         onBeforeCreateSchedule={onBeforeCreateSchedule}
         onBeforeDeleteSchedule={onBeforeDeleteSchedule}
         onBeforeUpdateSchedule={onBeforeUpdateSchedule}
-        onClickDayname={onClickDayname}
       />
       <EditAppointmentDialog openEditDialog={openEditDialog} setOpenEditDialog={setOpenEditDialog} onSubmit={onBeforeUpdateSchedule} target={schedules.find(el => el.id === clickTarget.scheduleId)} />
       <DropConfirmationDialog open={openDropDialog} onClose={handleConfirmUpdateSchedule} changes={updateEvent?.changes} />
