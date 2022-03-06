@@ -53,6 +53,8 @@ const columns: GridColumns = [
   { field: 'email', headerName: 'Email', width: 330, sortable: false },
 ];
 
+import { AddAppointmentDialog } from 'components/appointment/AddAppointmentDialog';
+
 export default function Client({ customers: initialCustomers }: ClientProps) {
   const router = useRouter();
 
@@ -240,6 +242,8 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
         maxWidth="md"
         fullWidth
       />
+
+      <AddAppointmentDialog isOpen={true} />
     </Box>
   );
 }

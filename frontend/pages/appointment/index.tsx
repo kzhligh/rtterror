@@ -26,7 +26,7 @@ import DropConfirmationDialog from '../../components/appointment/dropConfirmatio
 
 import theme from '../../components/appointment/TuiThemeConfig';
 import template from '../../components/appointment/TuiTemplateConfig';
-import { AddAppointmentDialog } from 'components/appointment/addAppointmentDialog';
+import { AddAppointmentDialog } from '../../components/appointment/addAppointmentDialog';
 
 const TuiCalendarWrapper = dynamic(
   () => import('../../components/appointment/TuiCalendarWrapper'),
@@ -324,7 +324,6 @@ function Appointment() {
         onClose={handleConfirmUpdateSchedule}
         changes={updateEvent?.changes}
       />
-      <AddAppointmentDialog isOpen={openCreateDialog} />
     </>
   );
 }
