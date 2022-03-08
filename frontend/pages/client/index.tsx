@@ -231,31 +231,6 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
           ),
         }}
       />
-
-      <AddCustomerDialog
-        open={addCustomerDialogIsOpen}
-        onClose={() => setAddCustomerDialogIsOpen(false)}
-        onCustomerAdded={(newCustomer) => {
-          setCustomers((customers) => [newCustomer, ...customers]);
-          setAddCustomerDialogIsOpen(false);
-        }}
-        maxWidth="md"
-        fullWidth
-      />
-      <Button
-        variant="outlined"
-        onClick={() => {
-          setClose(true);
-        }}
-      >
-        Add new
-      </Button>
-      <AddAppointmentDialog
-        isOpen={close}
-        onClose={() => {
-          setClose(false);
-        }}
-      />
     </Box>
   );
 }

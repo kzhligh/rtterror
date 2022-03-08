@@ -34,7 +34,7 @@ export const ConfirmDeleteAlert = ({
       <DialogTitle id="alert-dialog-title">Warning</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          r u sure u wanna delete dis?
+          Would you like to delete this appointment?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -44,7 +44,7 @@ export const ConfirmDeleteAlert = ({
           No
         </Button>
         <Button onClick={onConfirm} autoFocus>
-          Yea
+          Yes
         </Button>
       </DialogActions>
     </Dialog>
