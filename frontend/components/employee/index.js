@@ -44,7 +44,6 @@ const EmployeeComponent = (props) => {
         {field: 'first_name', headerName: 'Full name', width: 250, sortable: false, valueGetter: getFullName},
         {field: 'start_date', headerName: 'Start Date', width: 250, sortable: false , valueGetter: getStartDate},
         {field: 'phone', headerName: 'Phone', width: 300, sortable: false , valueGetter: getPhoneNumber},
-
     ];
     const handleDeleteEmployee = () => {
         deleteEmployee(rowSelection);

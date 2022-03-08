@@ -59,7 +59,7 @@ const ConfirmDeleteDialog = (props) => {
                     justifyContent="center"
                     alignItems="center"
                 >
-                    <Typography>Are you sure to Delete Service / Combo  " {item.name} "?</Typography>
+                    <Typography>Are you sure to Delete Service / Combo   {item.name} ?</Typography>
 
                 </Grid>
                 <Grid

@@ -186,24 +186,6 @@ const ComboForm = (props) => {
         setServiceCheckList([...servCheckList]);
     };
 
-    useEffect(() => {
-        let name = '';
-        let price = 0;
-        let duration = 0;
-        for (let serviceItem of serviceCheckList) {
-            name += serviceItem.name + ' + ';
-            price += serviceItem.durations_prices[0].price * 1;
-            duration += serviceItem.durations_prices[0].duration * 1;
-        }
-        if (!_isEmpty(comboValue.name) && _isEmpty(comboDetail)) {
-            name = comboValue.name;
-        } else {
-            name = name.slice(0, -2);
-        }
-        setComboValue({ ...comboValue, name: name, total_price: price, total_duration: duration });
-    }, [serviceCheckList]);
-
-
     const closeClearValue = () => {
         setComboValue(initValue);
         handleCloseComboDialog();
@@ -227,7 +209,7 @@ const ComboForm = (props) => {
             let serviceId = serviceCheckList.map((service) => service.durations_prices[0].id);
             comboValue.service_ids = serviceId;
             comboValue.service_code = comboValue.name;
-            comboValue.total_duration = comboValue.total_duration * 3600000;
+            comboValue.total_duration = comboValue.total_duration * 600000;
             http(`${apiPath}/combos`, {
                 method: 'POST',
                 body: comboValue,
@@ -240,7 +222,7 @@ const ComboForm = (props) => {
         let serviceId = serviceCheckList.map((service) => service.durations_prices[0].id);
         comboValue.service_ids = serviceId;
         comboValue.service_code = comboValue.name;
-        comboValue.total_duration = comboValue.total_duration * 3600000;
+        comboValue.total_duration = comboValue.total_duration * 600000;
         http(`${apiPath}/combos`, {
             method: 'PUT',
             body: comboValue,
@@ -314,7 +296,7 @@ const ComboForm = (props) => {
                         ) : null}
 
                         <div className={styled.flexAlignContainer}>
-                            <label>Total Duration (H): </label>
+                            <label>Total Duration (MIN): </label>
                             <InputTextField
                                 label='Total Duration'
                                 name='total_duration'
