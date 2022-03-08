@@ -13,7 +13,6 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { Search } from '@mui/icons-material';
-import styles from 'styles/client.module.css';
 import {
   GridOverlay,
   DataGrid,
@@ -65,6 +64,7 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
   const [rowSelection, setRowSelection] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(undefined);
+  const [close, setClose] = useState(false);
 
   const [handleSearch] = useCustomerSearchObservable(
     null,
@@ -115,7 +115,7 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
       <h1>Client</h1>
       <TextField
         onChange={handleSearch}
-        className={styles.searchbar}
+        style={{ marginBottom: '45px', width: '50%' }}
         placeholder="Search a client by name..."
         label="Search"
         variant="outlined"
@@ -242,8 +242,20 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
         maxWidth="md"
         fullWidth
       />
-
-      <AddAppointmentDialog isOpen={true} />
+      <Button
+        variant="outlined"
+        onClick={() => {
+          setClose(true);
+        }}
+      >
+        Add new
+      </Button>
+      <AddAppointmentDialog
+        isOpen={close}
+        onClose={() => {
+          setClose(false);
+        }}
+      />
     </Box>
   );
 }
