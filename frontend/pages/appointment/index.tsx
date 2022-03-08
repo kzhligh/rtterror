@@ -21,12 +21,12 @@ import {
 } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
-import EditAppointmentDialog from '../../components/appointment/editAppointmentDialog';
+import AppointmentStatusDialog from '../../components/appointment/AppointmentStatusDialog';
 import DropConfirmationDialog from '../../components/appointment/dropConfirmationDialog';
 
 import theme from '../../components/appointment/TuiThemeConfig';
 import template from '../../components/appointment/TuiTemplateConfig';
-import { AddAppointmentDialog } from '../../components/appointment/addAppointmentDialog';
+import { AddAppointmentDialog } from 'components/appointment/AddAppointmentDialog';
 
 const TuiCalendarWrapper = dynamic(
   () => import('../../components/appointment/TuiCalendarWrapper'),
@@ -42,7 +42,7 @@ const today = new Date();
 function Appointment() {
   const cal = useRef(null);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
-  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openStatusDialog, setopenStatusDialog] = useState(false);
   const [openDropDialog, setOpenDropDialog] = useState(false);
 
   const [clickTarget, setClickTarget] = useState({
@@ -130,9 +130,9 @@ function Appointment() {
 
       // TODO: edit existing appointment
 
-      setOpenEditDialog(true);
+      setopenStatusDialog(true);
     },
-    [openEditDialog]
+    [openStatusDialog]
   );
 
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
@@ -154,7 +154,7 @@ function Appointment() {
     cal.current.calendarInst.createSchedules([schedule]);
     // TODO: create schedule
 
-    setOpenEditDialog(true);
+    setopenStatusDialog(true);
   }, []);
 
   const onBeforeDeleteSchedule = useCallback((res) => {
@@ -313,11 +313,21 @@ function Appointment() {
         onBeforeUpdateSchedule={onBeforeUpdateSchedule}
         onClickDayname={onClickDayname}
       />
-      <EditAppointmentDialog
-        openEditDialog={openEditDialog}
-        setOpenEditDialog={setOpenEditDialog}
+      <AppointmentStatusDialog
         onSubmit={onBeforeUpdateSchedule}
-        target={schedules.find((el) => el.id === clickTarget.scheduleId)}
+        target={schedules.find(
+          (el) => parseInt(el.id) === clickTarget.scheduleId
+        )}
+        isOpen={openStatusDialog}
+        onClose={() => {
+          setopenStatusDialog(false);
+        }}
+      />
+      <AddAppointmentDialog
+        isOpen={openCreateDialog}
+        onClose={() => {
+          setOpenCreateDialog(false);
+        }}
       />
       <DropConfirmationDialog
         open={openDropDialog}

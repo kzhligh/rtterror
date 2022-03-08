@@ -15,6 +15,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DateTimePicker } from '@mui/lab';
 import { useState } from 'react';
 import { Accordion, AccordionDetails } from '@material-ui/core';
+import moment from 'moment';
 
 const blankAppointment = {
   plan: { serviceName: 'TestService' },
@@ -51,7 +52,9 @@ export const AddAppointmentDialog = ({ isOpen, onClose }) => {
           style={{ width: '100%' }}
           onSubmit={(e) => {
             e.preventDefault();
+            setAppointment((state) => ({ ...state, status: 'Pending' }));
             console.log(appointmentForm);
+            onClose(e, 'backdropClick');
           }}
         >
           <InputLabel>Services</InputLabel>
@@ -96,24 +99,43 @@ export const AddAppointmentDialog = ({ isOpen, onClose }) => {
             ))}
           </Select>
 
-          <InputLabel>Choose a time</InputLabel>
+          <InputLabel>Choose a starting time</InputLabel>
           <DateTimePicker
             label={appointmentForm.date ?? 'Date'}
             value={appointmentForm.date}
             renderInput={(params) => (
               <TextField
                 {...params}
-                inputProps={{ placeholder: 'YYYY-MM-DD' }}
+                inputProps={{ placeholder: 'YYYY-MM-DD-HH:MM' }}
                 disabled
               />
             )}
             onChange={(date: Date) =>
               setAppointment((state) => ({
                 ...state,
-                date: Intl.DateTimeFormat('sv-SE').format(date),
+                date: date.toLocaleDateString(),
               }))
             }
           />
+          <InputLabel>Set Duration</InputLabel>
+          <Select
+            id="duration"
+            value={appointmentForm.duration}
+            style={{ width: '100%' }}
+            onChange={(e) => {
+              setAppointment((state) => ({
+                ...state,
+                duration: e.target.value,
+              }));
+            }}
+          >
+            <MenuItem value={10}>15 minutes</MenuItem>
+            <MenuItem value={30}>30 minutes</MenuItem>
+            <MenuItem value={45}>45 minutes</MenuItem>
+            <MenuItem value={60}>60 minutes</MenuItem>
+            <MenuItem value={75}>75 minutes</MenuItem>
+            <MenuItem value={90}>90 minutes</MenuItem>
+          </Select>
           <Accordion
             expanded={expanded === 'existing'}
             onClick={() => {
@@ -182,9 +204,11 @@ export const AddAppointmentDialog = ({ isOpen, onClose }) => {
               }}
               variant="outlined"
             >
-              close
+              Cancel
             </Button>
-            <Button variant="outlined">ok</Button>
+            <Button variant="outlined" type="submit">
+              Confirm
+            </Button>
           </div>
         </form>
       </DialogContent>
