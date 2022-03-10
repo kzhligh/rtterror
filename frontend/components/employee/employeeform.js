@@ -109,21 +109,6 @@ const EmployeeForm = (props) => {
                         onChange={handleSetEmployeeValue}
                         error={errorMessage.postal_code}
                     />
-
-                    {/*<TextField*/}
-                    {/*    fullWidth*/}
-                    {/*    margin="normal"*/}
-                    {/*    required*/}
-                    {/*    label="Phone Number"*/}
-                    {/*    data-cy="clientNumber"*/}
-                    {/*    value={formatPhoneNumber(formInputs.phone)}*/}
-                    {/*    onChange={(e) =>*/}
-                    {/*        setFormInputs((state) => ({*/}
-                    {/*            ...state,*/}
-                    {/*            phone: e.target.value.replace(/\D/g, '').substring(0, 10),*/}
-                    {/*        }))*/}
-                    {/*    }*/}
-                    {/*/>*/}
                     <InputTextField
                         label='Phone'
                         name='phone'
