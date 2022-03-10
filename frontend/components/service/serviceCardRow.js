@@ -38,12 +38,6 @@ const ConfirmDeleteDialog = (props) => {
     const handleConfirm = () => {
         deleteService(item);
         handleClose();
-        // if (step === 0 && !item.hasOwnProperty('services')) {
-        //     setStep(1);
-        // } else {
-        //     deleteService(item);
-        //     handleClose();
-        // }
     };
     return (
         <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="sm" p={5}>
@@ -106,7 +100,6 @@ const ServiceCardRow = (props) => {
     const isBlocked = () => serviceItem.blocked;
     const isACombo = () => serviceItem.hasOwnProperty('services');
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const [deleteStep, setDeleteStep] = useState(0);
     const detailsPage = () => {
         if (isACombo()) {
             setType('edit');
