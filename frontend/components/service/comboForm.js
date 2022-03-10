@@ -24,7 +24,6 @@ import AddIcon from '@mui/icons-material/Add';
 import styled from '../../styles/service.module.css';
 import { http } from '../../utils/http';
 import { InputTextField } from '../form/formComponent';
-import { capitalize } from '@mui/utils';
 import _isEmpty from 'lodash/isEmpty';
 import _findIndex from 'lodash/findIndex';
 import _pullAt from 'lodash/pullAt';
@@ -60,7 +59,7 @@ const ComboItem = (props) => {
             )}
           </>
         }
-        title={<>{capitalize(serviceItem.name)}</>}
+        title={<>{serviceItem.name}</>}
         subheader={
           <>
             <Chip label="Service Code" size="small" />{' '}

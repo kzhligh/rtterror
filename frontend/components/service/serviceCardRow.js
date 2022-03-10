@@ -17,7 +17,6 @@ import {
     Typography
 } from '@mui/material';
 import { RadioButtonUncheckedRounded, CheckCircleOutlineRounded } from '@mui/icons-material';
-import { capitalize } from '@mui/utils';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ComboForm from './comboForm';
@@ -152,7 +151,7 @@ const ServiceCardRow = (props) => {
                             />
                         ) : null}</>
                     }
-                    title={<><Chip label={isACombo() ? "Combo" : "Service"} variant="outlined" /> {capitalize(serviceItem.name)}</>}
+                    title={<><Chip label={isACombo() ? "Combo" : "Service"} variant="outlined" /> {serviceItem.name}</>}
                     subheader={<><Chip label="Service Code" size="small" /> {serviceItem.service_code.split('-', 1)[0]}</>}
                 />
                 <Collapse in={!isBlocked()}>
