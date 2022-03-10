@@ -92,7 +92,7 @@ const ComboItem = (props) => {
                                         serviceCheckList
                                     )
                                 }
-                                label={`${option.duration} HRS / ${option.price} CAD`}
+                                label={`${option.duration} MIN / ${option.price} CAD`}
                             />
                         ))
                         : null}
