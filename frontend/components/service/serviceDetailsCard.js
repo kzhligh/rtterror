@@ -21,8 +21,6 @@ const ServiceDetailsCard = (props) => {
     const [reload, setReload] = useState(false);
     const [serviceValue, setServiceValue] = useState(_cloneDeep(item));
 
-    // useEffect(() => { }, [durationPriceList, reload]);
-
     const handleAddEmployeeCheck = (val, employee) => {
         if (val) {
             setAddEmployeeCheckList([...addEmployeeCheckList, employee]);
@@ -75,7 +73,7 @@ const ServiceDetailsCard = (props) => {
         serviceValue.service_code = serviceValue.service_code + "-" + uuidv4().substring(0, 8);
         serviceValue.employee_ids = serviceEmployList.map(emp => emp.id);
         serviceValue.durations_prices = durationPriceList.map(d => (
-            Object.assign({}, d, { duration: d.duration * 3600000 })));
+            Object.assign({}, d, { duration: d.duration * 60000 })));
         delete serviceValue.employees;
         editHandle(serviceValue);
     };
