@@ -1,4 +1,4 @@
-import {Grid} from "@mui/material";
+import {Grid, TextField} from "@mui/material";
 import * as React from "react";
 import {useState} from "react";
 import {CustomDatePicker, CustomAutoComplete, InputTextField, DropDownList} from '../form/formComponent';
@@ -55,7 +55,10 @@ const EmployeeForm = (props) => {
         editEmployee(employeeValue);
     }
     const handleSetEmployeeValue = (obj) => {
-        const {name, value} = obj.target;
+        let {name, value} = obj.target;
+        if(name == 'phone'){
+            value = value.replace(/\D/g, '').substring(0, 10)
+        }
         setEmployeeValue({...employeeValue, [name]: value});
     };
 
@@ -106,6 +109,21 @@ const EmployeeForm = (props) => {
                         onChange={handleSetEmployeeValue}
                         error={errorMessage.postal_code}
                     />
+
+                    {/*<TextField*/}
+                    {/*    fullWidth*/}
+                    {/*    margin="normal"*/}
+                    {/*    required*/}
+                    {/*    label="Phone Number"*/}
+                    {/*    data-cy="clientNumber"*/}
+                    {/*    value={formatPhoneNumber(formInputs.phone)}*/}
+                    {/*    onChange={(e) =>*/}
+                    {/*        setFormInputs((state) => ({*/}
+                    {/*            ...state,*/}
+                    {/*            phone: e.target.value.replace(/\D/g, '').substring(0, 10),*/}
+                    {/*        }))*/}
+                    {/*    }*/}
+                    {/*/>*/}
                     <InputTextField
                         label='Phone'
                         name='phone'

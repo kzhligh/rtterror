@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Card, Slider, Input, InputLabel, Grid, Box } from '@mui/material';
-import { Close } from '@mui/icons-material';
+import {Card, Slider, Input, InputLabel, Grid, Box} from '@mui/material';
+import {Close} from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton';
-import { styled } from '@mui/material';
+import {styled} from '@mui/material';
 
-const ClassicSlider = styled(Slider)(({ theme }) => ({
+const ClassicSlider = styled(Slider)(({theme}) => ({
     color: "#707070",
 }));
 
@@ -29,13 +29,13 @@ const DurationPriceItem = (props) => {
         setReload(!reload);
     };
     return (
-        <Card sx={{ borderRadius: 0, boxShadow: 0 }}>
+        <Card sx={{borderRadius: 0, boxShadow: 0}}>
             <IconButton
                 aria-label="close"
                 onClick={() => handleRemoveDurationPrice(index)}
                 size="small"
             >
-                {amILast || <Close />}
+                {amILast || <Close/>}
             </IconButton>
             <Box padding="0 50px">
                 <Grid container spacing={4} alignItems="center">
@@ -45,7 +45,7 @@ const DurationPriceItem = (props) => {
                             aria-label="Always visible"
                             value={item.duration}
                             min={0}
-                            max={120}
+                            max={300}
                             step={15}
                             marks
                             valueLabelDisplay="on"

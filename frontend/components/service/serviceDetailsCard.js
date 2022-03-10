@@ -21,8 +21,6 @@ const ServiceDetailsCard = (props) => {
     const [reload, setReload] = useState(false);
     const [serviceValue, setServiceValue] = useState(_cloneDeep(item));
 
-    // useEffect(() => { }, [durationPriceList, reload]);
-
     const handleAddEmployeeCheck = (val, employee) => {
         if (val) {
             setAddEmployeeCheckList([...addEmployeeCheckList, employee]);
