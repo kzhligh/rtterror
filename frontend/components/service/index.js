@@ -110,7 +110,7 @@ const ServiceComponent = (props) => {
             <SearchInput handleSearch={handleSearch} />
             <Box className={cssStyled.flexAlignContainer}>
                 <Typography variant="h6">Select a service</Typography>
-                <Link href={'/service/add'}>
+                <Link href={'/service/add'} passHref>
                     <Button className={cssStyled.buttonContainer} variant="outlined" color="success">
                         New Service
                     </Button>
