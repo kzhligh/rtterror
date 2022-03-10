@@ -24,7 +24,6 @@ import AddIcon from '@mui/icons-material/Add';
 import styled from '../../styles/service.module.css';
 import { http } from '../../utils/http';
 import { InputTextField } from '../form/formComponent';
-import { capitalize } from '@material-ui/core';
 import _isEmpty from 'lodash/isEmpty';
 import _findIndex from 'lodash/findIndex';
 import _pullAt from 'lodash/pullAt';
@@ -60,7 +59,7 @@ const ComboItem = (props) => {
             )}
           </>
         }
-        title={<>{capitalize(serviceItem.name)}</>}
+        title={<>{serviceItem.name}</>}
         subheader={
           <>
             <Chip label="Service Code" size="small" />{' '}
@@ -82,20 +81,20 @@ const ComboItem = (props) => {
         >
           {!_isEmpty(serviceItem.durations_prices)
             ? serviceItem.durations_prices.map((option, index) => (
-                <FormControlLabel
-                  value={index}
-                  key={index}
-                  control={<Radio />}
-                  onClick={() =>
-                    changeDurationOfService(
-                      serviceItem.service_code,
-                      option,
-                      serviceCheckList
-                    )
-                  }
-                  label={`${option.duration} HRS / ${option.price} CAD`}
-                />
-              ))
+              <FormControlLabel
+                value={index}
+                key={index}
+                control={<Radio />}
+                onClick={() =>
+                  changeDurationOfService(
+                    serviceItem.service_code,
+                    option,
+                    serviceCheckList
+                  )
+                }
+                label={`${option.duration} HRS / ${option.price} CAD`}
+              />
+            ))
             : null}
         </RadioGroup>
       </FormControl>

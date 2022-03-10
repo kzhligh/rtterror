@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Grid, Button, Card, CardHeader, CardContent, Typography } from '@mui/material';
-import { capitalize } from '@material-ui/core';
 import _cloneDeep from "lodash/cloneDeep";
 import ServiceEmployeeTable from './serviceEmployeeTable';
 import ServiceEmployeeDialog from './serviceEmployeeDialog';
@@ -88,7 +87,7 @@ const ServiceDetailsCard = (props) => {
 
     return (
         <Card>
-            <CardHeader title={capitalize(serviceValue.name)} />
+            <CardHeader title={serviceValue.name} />
             <CardContent>
                 <Grid container spacing={1} >
                     <Grid container direction="row" justifyContent="space-between" alignItems="center"                        >
