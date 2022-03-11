@@ -59,8 +59,8 @@ const EditAppointmentDialog = ({ isOpen, onClose }) => {
           <InputLabel style={{ marginTop: '5%' }}>Services</InputLabel>
 
           <AppointmentDropdown
-            therapists={appointmentForm.therapist}
-            services={appointmentForm.plan}
+            therapists={therapists}
+            services={services}
             setAppointment={setAppointment}
           />
 

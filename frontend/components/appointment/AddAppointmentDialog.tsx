@@ -64,8 +64,8 @@ export const AddAppointmentDialog = ({ isOpen, onClose }) => {
           <InputLabel>Services</InputLabel>
 
           <AppointmentDropdown
-            therapists={appointmentForm.therapist}
-            services={appointmentForm.plan}
+            therapists={therapists}
+            services={services}
             setAppointment={setAppointment}
           />
 
