@@ -10,11 +10,12 @@ import {
   Select,
   TextField,
   Typography,
+  Accordion,
+  AccordionDetails,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DateTimePicker } from '@mui/lab';
 import { useState } from 'react';
-import { Accordion, AccordionDetails } from '@material-ui/core';
 import { AppointmentDropdown } from './AppointmentDropdown';
 
 const blankAppointment = {

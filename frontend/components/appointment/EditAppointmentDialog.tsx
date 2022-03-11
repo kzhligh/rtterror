@@ -4,13 +4,9 @@ import {
   DialogTitle,
   DialogContent,
   InputLabel,
-  MenuItem,
-  Select,
-  Typography,
   Button,
   DialogProps,
 } from '@mui/material';
-import moment from 'moment';
 import { AppointmentHeader } from './AppointmentHeader';
 import { AppointmentDropdown } from './AppointmentDropdown';
 const blankAppointment = {

@@ -6,14 +6,12 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  Typography,
   Button,
   IconButton,
   DialogProps,
   TextField,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import moment from 'moment';
 import EditAppointmentDialog from './EditAppointmentDialog';
 import { ConfirmDeleteAlert } from './ConfirmDeleteAlert';
 import { AppointmentHeader } from './AppointmentHeader';

@@ -1,5 +1,4 @@
 import { Select, MenuItem, InputLabel } from '@mui/material';
-import { useState } from 'react';
 
 export const AppointmentDropdown = ({
   therapists,

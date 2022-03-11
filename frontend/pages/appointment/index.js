@@ -14,9 +14,11 @@ import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import AppointmentStatusDialog from '../../components/appointment/AppointmentStatusDialog';
 import DropConfirmationDialog from '../../components/appointment/dropConfirmationDialog';
 
-import theme from '../../components/appointment/TuiThemeConfig';
-import template from '../../components/appointment/TuiTemplateConfig';
+import theme from '../../components/appointment/themeConfig';
+import template from '../../components/appointment/templateConfig';
 import { AddAppointmentDialog } from 'components/appointment/AddAppointmentDialog';
+
+import 'tui-calendar/dist/tui-calendar.css';
 
 const TuiCalendarWrapper = dynamic(
   () => import('../../components/appointment/TuiCalendarWrapper'),
