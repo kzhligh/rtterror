@@ -15,7 +15,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DateTimePicker } from '@mui/lab';
 import { useState } from 'react';
 import { Accordion, AccordionDetails } from '@material-ui/core';
-import moment from 'moment';
 
 const blankAppointment = {
   plan: { serviceName: 'TestService' },

@@ -17,8 +17,8 @@ interface ConfirmRescheduleAlertProps extends DialogProps {
 
 export const ConfirmRescheduleAlert = ({
   open,
-  handleClose = () => {},
-  onConfirm = (_event: React.MouseEvent<any, MouseEvent>) => {},
+  handleClose,
+  onConfirm,
   ...props
 }: ConfirmRescheduleAlertProps) => {
   return (

@@ -5,8 +5,6 @@ import {
   ListItemIcon,
   ListItemText,
   Paper,
-  List,
-  ListItem,
 } from '@mui/material';
 import Link from 'next/link';
 import {
@@ -18,7 +16,6 @@ import {
   Receipt,
   Work,
 } from '@mui/icons-material';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 
 const Menu = () => {
   const menuItems = [

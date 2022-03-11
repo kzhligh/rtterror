@@ -40,8 +40,6 @@ const AppointmentStatusDialog = ({ isOpen, onClose, onSubmit, target }) => {
   const [appointmentForm, setAppointment] = useState(blankAppointment);
   const [editDialog, setEdit] = useState(false);
   const [deleteDialog, setDelete] = useState(false);
-  const therapists = [{ name: 'John' }, { name: 'Boyega' }, { name: 'Malcom' }];
-  const services = [{ serviceName: 'muiIsSlow' }];
 
   return (
     <Dialog fullWidth open={isOpen}>

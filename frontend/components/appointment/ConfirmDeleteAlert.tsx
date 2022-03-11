@@ -17,8 +17,8 @@ interface ConfirmDeleteAlertProps extends DialogProps {
 
 export const ConfirmDeleteAlert = ({
   open,
-  handleClose = () => {},
-  onConfirm = (_event: React.MouseEvent<any, MouseEvent>) => {},
+  handleClose,
+  onConfirm,
   ...props
 }: ConfirmDeleteAlertProps) => {
   return (

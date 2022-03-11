@@ -21,11 +21,11 @@ import {
 } from '@mui/x-data-grid';
 import { http } from 'utils/http';
 import React, { useState, useEffect } from 'react';
-import { AddCustomerDialog } from 'components/client/AddCustomerDialog';
 import { useRouter } from 'next/router';
 import { formatPhoneNumber } from 'utils';
 import { GetServerSidePropsResult } from 'next';
 import { useCustomerSearchObservable } from 'hooks/useCustomerSearch';
+import { AddCustomerDialog } from 'components/client/AddCustomerDialog';
 
 interface ClientProps {
   customers: Array<any>;
@@ -52,8 +52,6 @@ const columns: GridColumns = [
   { field: 'email', headerName: 'Email', width: 330, sortable: false },
 ];
 
-import { AddAppointmentDialog } from 'components/appointment/AddAppointmentDialog';
-
 export default function Client({ customers: initialCustomers }: ClientProps) {
   const router = useRouter();
 
@@ -64,7 +62,6 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
   const [rowSelection, setRowSelection] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(undefined);
-  const [close, setClose] = useState(false);
 
   const [handleSearch] = useCustomerSearchObservable(
     null,
@@ -230,6 +227,16 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
             </GridOverlay>
           ),
         }}
+      />
+      <AddCustomerDialog
+        open={addCustomerDialogIsOpen}
+        onClose={() => setAddCustomerDialogIsOpen(false)}
+        onCustomerAdded={(newCustomer) => {
+          setCustomers((customers) => [newCustomer, ...customers]);
+          setAddCustomerDialogIsOpen(false);
+        }}
+        maxWidth="md"
+        fullWidth
       />
     </Box>
   );
