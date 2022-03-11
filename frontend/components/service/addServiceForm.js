@@ -17,7 +17,7 @@ const AddServiceForm = (props) => {
         barcode: '',
         sms_description: ''
     };
-    const mshconvertion = 3600000;
+    const mshconvertion = 600000;
     const { addHandle, employeeList, open, closeDialog } = props;
     const [employeeCheckList, setEmployeeCheckList] = useState([]);
     const [durationPriceList, setDurationPriceList] = useState([{ price: 50, duration: 0.5 }]);

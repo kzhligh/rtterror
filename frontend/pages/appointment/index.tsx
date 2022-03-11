@@ -7,10 +7,6 @@ import React, {
 } from 'react';
 import dynamic from 'next/dynamic';
 import { randomBytes } from 'crypto';
-import 'tui-calendar/dist/tui-calendar.css';
-// If you use the default popups, use this.
-import 'tui-date-picker/dist/tui-date-picker.css';
-import 'tui-time-picker/dist/tui-time-picker.css';
 import {
   Typography,
   MenuList,
@@ -123,12 +119,8 @@ function Appointment() {
 
   const onClickSchedule = useCallback(
     (e) => {
-      console.log('onClickSchedule');
       const { calendarId: employeeId, id: scheduleId } = e.schedule;
       setClickTarget({ employeeId: employeeId, scheduleId: scheduleId });
-      console.log(employeeId, scheduleId);
-
-      // TODO: edit existing appointment
 
       setopenStatusDialog(true);
     },
@@ -136,9 +128,6 @@ function Appointment() {
   );
 
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
-    console.log('onBeforeCreateSchedule');
-    console.log(scheduleData);
-
     const schedule = {
       id: String(randomBytes(8)),
       title: scheduleData.title,
@@ -307,11 +296,11 @@ function Appointment() {
         template={template}
         calendars={employees}
         schedules={schedules}
+        onClickDayname={onClickDayname}
         onClickSchedule={onClickSchedule}
         onBeforeCreateSchedule={onBeforeCreateSchedule}
         onBeforeDeleteSchedule={onBeforeDeleteSchedule}
         onBeforeUpdateSchedule={onBeforeUpdateSchedule}
-        onClickDayname={onClickDayname}
       />
       <AppointmentStatusDialog
         onSubmit={onBeforeUpdateSchedule}

@@ -143,55 +143,6 @@ const templateConfig = {
     collapseBtnTitle: function () {
         return '<span class="tui-full-calendar-icon tui-full-calendar-ic-arrow-solid-top"></span>';
     },
-    // timezoneDisplayLabel: function (timezoneOffset, displayLabel) {
-    //     var gmt, hour, minutes;
-
-    //     if (!displayLabel) {
-    //         gmt = timezoneOffset < 0 ? '-' : '+';
-    //         hour = Math.abs(parseInt(timezoneOffset / 60, 10));
-    //         minutes = Math.abs(timezoneOffset % 60);
-    //         displayLabel = gmt + getPadStart(hour) + ':' + getPadStart(minutes);
-    //     }
-
-    //     return displayLabel;
-    // },
-    // timegridDisplayPrimayTime: function (time) {
-    //     // will be deprecated. use 'timegridDisplayPrimaryTime'
-    //     var meridiem = 'am';
-    //     var hour = time.hour;
-
-    //     if (time.hour > 12) {
-    //         meridiem = 'pm';
-    //         hour = time.hour - 12;
-    //     }
-
-    //     return hour + ' ' + meridiem;
-    // },
-    // timegridDisplayPrimaryTime: function (time) {
-    //     var meridiem = 'am';
-    //     var hour = time.hour;
-
-    //     if (time.hour > 12) {
-    //         meridiem = 'pm';
-    //         hour = time.hour - 12;
-    //     }
-
-    //     return hour + ' ' + meridiem;
-    // },
-    // timegridDisplayTime: function (time) {
-    //     return getPadStart(time.hour) + ':' + getPadStart(time.hour);
-    // },
-    // timegridCurrentTime: function (timezone) {
-    //     var templates = [];
-
-    //     if (timezone.dateDifference) {
-    //         templates.push('[' + timezone.dateDifferenceSign + timezone.dateDifference + ']<br>');
-    //     }
-
-    //     templates.push(moment(timezone.hourmarker).format('HH:mm a'));
-
-    //     return templates.join('');
-    // },
     popupIsAllDay: function () {
         return 'All Day';
     },

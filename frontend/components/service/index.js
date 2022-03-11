@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { Button, Select, MenuItem, InputLabel, Typography, Box, Divider, FormControl } from '@mui/material';
+import {Button, Select, MenuItem, InputLabel, Typography, Box, Divider, FormControl, Grid} from '@mui/material';
 import Link from 'next/link';
 import cssStyled from '../../styles/service.module.css';
 import SearchInput from './search';
@@ -10,8 +10,9 @@ import _orderBy from "lodash/orderBy";
 
 
 const ServiceComponent = (props) => {
-    const { serviceListData, toggleBlocked, deleteService, refresh, setRefresh } = props;
+    const { serviceListData, toggleBlocked, deleteService, refresh, setRefresh , comboList} = props;
     const [serviceListDisplay, setServiceListDisplay] = useState(serviceListData);
+    const [comboListDisplay, setComboListDisplay] = useState(comboList);
     const [sortServiceList, setSortServiceList] = useState(serviceListData);
     const [orderBy, setSelect] = useState('');
     const [search, setSearch] = useState(false);
@@ -139,25 +140,54 @@ const ServiceComponent = (props) => {
                 </FormControl>
             </Box>
             <>
-                {serviceListDisplay.map((item) => (
-                    <ServiceCardRow
-                        key={item.id}
-                        item={item}
-                        toggleBlocked={toggleBlocked}
-                        deleteService={deleteService}
-                        serviceCheckList={serviceCheckList}
-                        handleServiceCheck={handleServiceCheck}
-                        type={type}
-                        setType={setType}
-                        extractServiceCheckList={extractServiceCheckList}
-                        setServiceCheckList={setServiceCheckList}
-                        setComboDetail={setComboDetail}
-                        comboDetail={comboDetail}
-                        serviceListData={serviceListData}
-                        setRefresh={setRefresh}
-                        refresh={refresh}
-                    />
-                ))}
+                <Grid  container
+                       direction="row"
+                       justifyContent="space-evenly"
+                       alignItems="flex-start">
+                    <Grid item xs={6}>
+                        {serviceListDisplay.map((item) => (
+                            <ServiceCardRow
+                                key={item.id}
+                                item={item}
+                                toggleBlocked={toggleBlocked}
+                                deleteService={deleteService}
+                                serviceCheckList={serviceCheckList}
+                                handleServiceCheck={handleServiceCheck}
+                                type={type}
+                                setType={setType}
+                                extractServiceCheckList={extractServiceCheckList}
+                                setServiceCheckList={setServiceCheckList}
+                                setComboDetail={setComboDetail}
+                                comboDetail={comboDetail}
+                                serviceListData={serviceListData}
+                                setRefresh={setRefresh}
+                                refresh={refresh}
+                            />
+                        ))}
+                    </Grid>
+                    <Grid item xs={6}>
+                        {comboListDisplay.map((item) => (
+                            <ServiceCardRow
+                                key={item.id}
+                                item={item}
+                                toggleBlocked={toggleBlocked}
+                                deleteService={deleteService}
+                                serviceCheckList={serviceCheckList}
+                                handleServiceCheck={handleServiceCheck}
+                                type={type}
+                                setType={setType}
+                                extractServiceCheckList={extractServiceCheckList}
+                                setServiceCheckList={setServiceCheckList}
+                                setComboDetail={setComboDetail}
+                                comboDetail={comboDetail}
+                                serviceListData={serviceListData}
+                                setRefresh={setRefresh}
+                                refresh={refresh}
+                            />
+                        ))}
+                    </Grid>
+                </Grid>
+
             </>
             {type == 'add' && (
                 <ComboForm
