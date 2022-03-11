@@ -16,6 +16,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import moment from 'moment';
 import EditAppointmentDialog from './EditAppointmentDialog';
 import { ConfirmDeleteAlert } from './ConfirmDeleteAlert';
+import { AppointmentHeader } from './AppointmentHeader';
 const blankAppointment = {
   client: {
     firstName: 'Jamal',
@@ -36,7 +37,7 @@ const blankAppointment = {
 interface Props extends DialogProps {
   onClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
 }
-const AppointmentStatusDialog = ({ isOpen, onClose, onSubmit, target }) => {
+const AppointmentStatusDialog = ({ isOpen, onClose }) => {
   const [appointmentForm, setAppointment] = useState(blankAppointment);
   const [editDialog, setEdit] = useState(false);
   const [deleteDialog, setDelete] = useState(false);
@@ -80,31 +81,7 @@ const AppointmentStatusDialog = ({ isOpen, onClose, onSubmit, target }) => {
       </DialogTitle>
 
       <DialogContent style={{ width: '100%' }}>
-        <div style={{ display: 'inline-flex', width: '100%' }}>
-          <div style={{ width: '50%' }}>
-            <Typography>
-              {`${appointmentForm.client.firstName} ${appointmentForm.client.lastName}`}
-            </Typography>
-            <Typography style={{ marginTop: '10%' }}>
-              {moment(appointmentForm.date).format('dddd, MMMM Do YYYY')}
-            </Typography>
-            <Typography>
-              {moment(appointmentForm.date).format(' h:mm a')}
-              {' - '}
-              {moment(appointmentForm.date)
-                .add(appointmentForm.duration, 'minutes')
-                .format(' h:mm a')}
-            </Typography>
-            <Typography>{appointmentForm.duration} minutes</Typography>
-            <Typography>{appointmentForm.plan.serviceName}</Typography>
-          </div>
-          <div>
-            <Typography>
-              Primary Phone: {appointmentForm.client.phoneNumber}{' '}
-            </Typography>
-            <Typography>Email: {appointmentForm.client.email}</Typography>
-          </div>
-        </div>
+        <AppointmentHeader appointmentForm={appointmentForm} />
 
         <InputLabel style={{ marginTop: '5%' }}>Status</InputLabel>
 

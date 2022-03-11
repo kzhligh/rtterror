@@ -15,6 +15,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DateTimePicker } from '@mui/lab';
 import { useState } from 'react';
 import { Accordion, AccordionDetails } from '@material-ui/core';
+import { AppointmentDropdown } from './AppointmentDropdown';
 
 const blankAppointment = {
   plan: { serviceName: 'TestService' },
@@ -32,8 +33,12 @@ interface Props extends DialogProps {
 }
 
 export const AddAppointmentDialog = ({ isOpen, onClose }) => {
-  const therapists = [{ name: 'John' }, { name: 'Boyega' }, { name: 'Malcom' }];
-  const services = [{ serviceName: 'muiIsSlow' }];
+  const therapists = [
+    { name: 'mark' },
+    { name: 'Walhberg' },
+    { name: 'Johnathan' },
+  ];
+  const services = [{ serviceName: 'massage' }];
   const existingClients = [
     { name: 'Bean' },
     { name: 'Ben' },
@@ -58,45 +63,11 @@ export const AddAppointmentDialog = ({ isOpen, onClose }) => {
         >
           <InputLabel>Services</InputLabel>
 
-          <Select
-            id="services"
-            defaultValue="Choose a therapist"
-            style={{ width: '100%' }}
-            value={appointmentForm.plan.serviceName}
-            onChange={(e) => {
-              setAppointment((state) => ({
-                ...state,
-                plan: { serviceName: e.target.value as string },
-              }));
-            }}
-          >
-            {services.map((service) => (
-              <MenuItem key={service.serviceName} value={service.serviceName}>
-                {service.serviceName}
-              </MenuItem>
-            ))}
-          </Select>
-
-          <InputLabel>Therapists</InputLabel>
-
-          <Select
-            id="therapists"
-            defaultValue="Choose a therapist"
-            value={appointmentForm.therapist.name}
-            style={{ width: '100%' }}
-            onChange={(e) => {
-              setAppointment((state) => ({
-                ...state,
-                therapist: { name: e.target.value as string },
-              }));
-            }}
-          >
-            {therapists.map((therapist) => (
-              <MenuItem key={therapist.name} value={therapist.name}>
-                {therapist.name}
-              </MenuItem>
-            ))}
-          </Select>
+          <AppointmentDropdown
+            therapists={appointmentForm.therapist}
+            services={appointmentForm.plan}
+            setAppointment={setAppointment}
+          />
 
           <InputLabel>Choose a starting time</InputLabel>
           <DateTimePicker
