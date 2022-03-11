@@ -5,8 +5,8 @@ export default class EmployeeModel extends Model {}
 
 EmployeeModel.init({
     id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     first_name: {
