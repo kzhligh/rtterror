@@ -30,19 +30,19 @@ class ComboService extends GeneralService<ICombo, IComboDto> {
     }
   }
 
-  async getItemById(id: string): Promise<ICombo> {
+  async getItemById(id: string): Promise<ICombo | null> {
     try {
       const comboItem = await this.model.findByPk(id, {
         include: this.serviceModel,
       });
-      return comboItem.toJSON() as ICombo;
+      return comboItem?.toJSON() ?? (null as ICombo | null);
     } catch (error) {
       console.error('ComboService/getItemById()/ERROR: ', error);
       throw error;
     }
   }
 
-  async createItem(itemInfo: IComboDto): Promise<ICombo> {
+  async createItem(itemInfo: IComboDto): Promise<ICombo | null> {
     const t = await sequelize.transaction();
     try {
       const { service_ids, ...comboInfo } = itemInfo;
@@ -60,7 +60,7 @@ class ComboService extends GeneralService<ICombo, IComboDto> {
     }
   }
 
-  async updateItem(comboObj: ICombo): Promise<ICombo> {
+  async updateItem(comboObj: ICombo): Promise<ICombo | null> {
     const t = await sequelize.transaction();
     try {
       const { id, service_ids, ...comboInfo } = comboObj;
@@ -107,7 +107,7 @@ class ComboService extends GeneralService<ICombo, IComboDto> {
     }
   }
 
-  async updateItemById(id: string, updateFields: any): Promise<ICombo> {
+  async updateItemById(id: string, updateFields: any): Promise<ICombo | null> {
     const t = await sequelize.transaction();
     try {
       await this.model.update(updateFields, {
@@ -146,27 +146,30 @@ class ComboService extends GeneralService<ICombo, IComboDto> {
   async deleteItemsByServiceId(serviceId: string, t?: any): Promise<void> {
     let allComboIds = await this.serviceComboModel.findAll({
       where: {
-        service_id: serviceId
-      }
+        service_id: serviceId,
+      },
     });
-    allComboIds = allComboIds.map((item: Model) => (item.getDataValue('combo_id')));
+    allComboIds = allComboIds.map((item: Model) =>
+      item.getDataValue('combo_id')
+    );
     let counter = 0;
     for (const comboId of allComboIds) {
       await this.model.destroy({
         where: {
-          id: comboId
+          id: comboId,
         },
-        transaction: t
+        transaction: t,
       });
       counter++;
     }
-    console.log(counter + 'combos has been deleted')
+    console.log(counter + 'combos has been deleted');
     const leftComboIds = await this.serviceComboModel.findAll({
       where: {
-        service_id: serviceId
-      }
+        service_id: serviceId,
+      },
     });
-    if (leftComboIds.length > 0) console.error(leftComboIds.length + ' has left undeleted.')
+    if (leftComboIds.length > 0)
+      console.error(leftComboIds.length + ' has left undeleted.');
   }
 }
 

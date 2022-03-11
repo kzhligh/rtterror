@@ -1,4 +1,4 @@
-import { DataTypes } from 'sequelize';
+import { BIGINT, DataTypes, INTEGER } from 'sequelize';
 import sequelize from 'src/modules/sequelize';
 import { Appointment } from './appointment.model';
 
@@ -18,7 +18,6 @@ export const Customer = sequelize.define(
     },
     email: {
       type: DataTypes.STRING,
-      unique: true,
     },
     dob: {
       type: DataTypes.DATEONLY,
@@ -38,8 +37,23 @@ export const Customer = sequelize.define(
     confirmationType: {
       type: DataTypes.ENUM<string>('SMS', 'email'),
     },
+    balance: {
+      type: DataTypes.FLOAT,
+    },
+    discount: {
+      type: DataTypes.INTEGER,
+    },
+    notes: {
+      type: DataTypes.STRING,
+    },
   },
   {
+    indexes: [
+      {
+        unique: true,
+        fields: ['email'],
+      },
+    ],
     timestamps: false,
     freezeTableName: true,
   }

@@ -2,7 +2,6 @@ import ServiceComponent from '../../components/service';
 import { useEffect, useState } from 'react';
 import { http } from "../../utils/http";
 import groupService from "../../utils/groupService";
-
 const apiPath = '/api/v1';
 
 export async function getServerSideProps(_context) {
@@ -14,6 +13,7 @@ export async function getServerSideProps(_context) {
 
 const Service = ({ employeeList }) => {
     const [serviceListData, setServiceListData] = useState([]);
+    const [comboListData, setComboListData] = useState([]);
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(undefined);
 
@@ -21,11 +21,13 @@ const Service = ({ employeeList }) => {
         const serviceListResponse = await http(`${apiPath}/services`);
         const comboList = await http(`${apiPath}/combos`);
         for (const combo in comboList) {
-            comboList[combo].total_duration = (comboList[combo].total_duration * 1 / 3600000).toFixed(2);
+            comboList[combo].total_duration = (comboList[combo].total_duration * 1 / 600000).toFixed(2);
         }
-        setServiceListData([...groupService(serviceListResponse), ...comboList]);
-
-
+        var serviceList = groupService(serviceListResponse);
+        serviceList.sort((a, b) => (+a.blocked < +b.blocked ? -1 : 1));
+        comboList.sort((a, b) => (+a.blocked < +b.blocked ? -1 : 1));
+        setServiceListData(serviceList);
+        setComboListData(comboList);
     };
     useEffect(() => {
         setLoading(true);
@@ -72,6 +74,7 @@ const Service = ({ employeeList }) => {
             <h1>Service</h1>
             {!loading && (
                 <ServiceComponent
+                    comboList={comboListData}
                     serviceListData={serviceListData}
                     toggleBlocked={toggleBlocked}
                     deleteService={deleteService}
