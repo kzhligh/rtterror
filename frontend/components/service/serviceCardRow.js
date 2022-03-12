@@ -24,26 +24,25 @@ import ComboForm from './comboForm';
 import { styled } from "@mui/material/styles";
 
 const CardContentNoPadding = styled(CardContent)(`
-  &:first-child {
+  &:first-of-type {
     padding-top: 0;
   }
 `);
 
 const ConfirmDeleteDialog = (props) => {
     const { open, setOpen, item, deleteService } = props;
-    const handleClose = () => {
-
-        setOpen(false);
-    };
+    const handleClose = () => { setOpen(false); };
     const handleConfirm = () => {
         deleteService(item);
         handleClose();
     };
+    const isACombo = () => item.hasOwnProperty('services');
+
     return (
         <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="sm" p={5}>
 
             <DialogTitle id="alert-dialog-title">
-                Delete Service {item.name}?
+                Delete {isACombo() ? "Combo" : "Service"} {item.name}?
             </DialogTitle>
             <DialogContent>
                 <Grid
@@ -52,7 +51,7 @@ const ConfirmDeleteDialog = (props) => {
                     justifyContent="center"
                     alignItems="center"
                 >
-                    <Typography>Are you sure to Delete Service / Combo   {item.name} ?</Typography>
+                    <Typography variant="body2">This action cannot be undone. </Typography>
 
                 </Grid>
                 <Grid
@@ -67,7 +66,7 @@ const ConfirmDeleteDialog = (props) => {
                         onClick={handleConfirm}
                         color="error"
                     >
-                       Delete
+                        Delete
 
                     </Button>
                     <Button onClick={handleClose}
@@ -212,7 +211,7 @@ const ServiceCardRow = (props) => {
                         serviceListData={serviceListData}
                         setRefresh={setRefresh}
                         refresh={refresh}
-                    ></ComboForm>
+                    />
                 ) : null
             }
         </div >
