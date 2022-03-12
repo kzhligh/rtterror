@@ -28,8 +28,8 @@ const DurationPriceItem = (props) => {
         }
         setReload(!reload);
     };
-    const maxDuration = 300;
-    const durationStep = 15;
+    const MAX_DURATION = 300;
+    const DURATION_STEP = 15;
     const marks = Array(5).fill().map((_, i) => ({ value: (i + 1) * 60 }));
     return (
         <Card sx={{ borderRadius: 0, boxShadow: 0 }}>
@@ -48,8 +48,8 @@ const DurationPriceItem = (props) => {
                             aria-label="Always visible"
                             value={item.duration}
                             min={0}
-                            max={maxDuration}
-                            step={durationStep}
+                            max={MAX_DURATION}
+                            step={DURATION_STEP}
                             marks={marks}
                             valueLabelDisplay="on"
                         />
@@ -63,8 +63,8 @@ const DurationPriceItem = (props) => {
                             onChange={(event) => handleOnChange('duration', event.target.value)}
                             inputProps={{
                                 min: 0,
-                                max: maxDuration,
-                                step: durationStep,
+                                max: MAX_DURATION,
+                                step: DURATION_STEP,
                                 type: 'number',
                                 'aria-labelledby': 'input-slider',
                             }}

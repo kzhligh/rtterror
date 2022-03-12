@@ -1,29 +1,29 @@
 import * as React from 'react';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import {
-  Button,
-  Card,
-  CardHeader,
-  Checkbox,
-  Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Grid,
-  IconButton,
-  Radio,
-  RadioGroup,
-  Stack,
+    Button,
+    Card,
+    CardHeader,
+    Checkbox,
+    Chip,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    Grid,
+    IconButton,
+    Radio,
+    RadioGroup,
+    Stack,
 } from '@mui/material';
-import {Close} from '@mui/icons-material';
+import { Close } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import styled from '../../styles/service.module.css';
-import {http} from '../../utils/http';
-import {InputTextField} from '../form/formComponent';
+import { http } from '../../utils/http';
+import { InputTextField } from '../form/formComponent';
 import _isEmpty from 'lodash/isEmpty';
 import _findIndex from 'lodash/findIndex';
 import _pullAt from 'lodash/pullAt';
@@ -54,7 +54,7 @@ const ComboItem = (props) => {
                             />
                         ) : (
                             <IconButton onClick={() => removeService(serviceItem)}>
-                                <Close/>
+                                <Close />
                             </IconButton>
                         )}
                     </>
@@ -62,7 +62,7 @@ const ComboItem = (props) => {
                 title={<>{serviceItem.name}</>}
                 subheader={
                     <>
-                        <Chip label="Service Code" size="small"/>{' '}
+                        <Chip label="Service Code" size="small" />{' '}
                         {serviceItem.service_code.split('-', 1)[0]}
                     </>
                 }
@@ -84,7 +84,7 @@ const ComboItem = (props) => {
                             <FormControlLabel
                                 value={index}
                                 key={index}
-                                control={<Radio/>}
+                                control={<Radio />}
                                 onClick={() =>
                                     changeDurationOfService(
                                         serviceItem.service_code,
@@ -139,7 +139,7 @@ const EditCombo = (props) => {
         >
             <Grid item={3}>
                 <IconButton onClick={extractAddServiceEdit}>
-                    <AddIcon/>
+                    <AddIcon />
                 </IconButton>
             </Grid>
             <Dialog open={editDialog} fullWidth={true} scroll="body">
@@ -155,7 +155,7 @@ const EditCombo = (props) => {
                             top: 10,
                         }}
                     >
-                        <Close/>
+                        <Close />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent>
@@ -242,8 +242,8 @@ const ComboForm = (props) => {
     };
 
     const handleSetValue = (obj) => {
-        const {name, value} = obj.target;
-        setComboValue({...comboValue, [name]: value});
+        const { name, value } = obj.target;
+        setComboValue({ ...comboValue, [name]: value });
     };
     const removeService = (item) => {
         handleServiceCheck(false, item);
@@ -253,6 +253,7 @@ const ComboForm = (props) => {
         }
     };
 
+    const MS_H_CONVERSION_RATE = 600000;
     const handleCreateCombo = () => {
         if (validate()) {
             let serviceId = serviceCheckList.map(
@@ -260,7 +261,7 @@ const ComboForm = (props) => {
             );
             comboValue.service_ids = serviceId;
             comboValue.service_code = comboValue.name;
-            comboValue.total_duration = comboValue.total_duration * 600000;
+            comboValue.total_duration = comboValue.total_duration * MS_H_CONVERSION_RATE;
             http(`/api/v1/combos`, {
                 method: 'POST',
                 body: comboValue,
@@ -275,7 +276,7 @@ const ComboForm = (props) => {
         );
         comboValue.service_ids = serviceId;
         comboValue.service_code = comboValue.name;
-        comboValue.total_duration = comboValue.total_duration * 600000;
+        comboValue.total_duration = comboValue.total_duration * MS_H_CONVERSION_RATE;
         http(`/api/v1/combos`, {
             method: 'PUT',
             body: comboValue,
@@ -314,7 +315,7 @@ const ComboForm = (props) => {
                             top: 10,
                         }}
                     >
-                        <Close/>
+                        <Close />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent>
