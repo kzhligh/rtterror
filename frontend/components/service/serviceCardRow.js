@@ -17,7 +17,6 @@ import {
     Typography
 } from '@mui/material';
 import { RadioButtonUncheckedRounded, CheckCircleOutlineRounded } from '@mui/icons-material';
-import { capitalize } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ComboForm from './comboForm';
@@ -31,18 +30,14 @@ const CardContentNoPadding = styled(CardContent)(`
 `);
 
 const ConfirmDeleteDialog = (props) => {
-    const { open, setOpen, item, step, setStep, deleteService } = props;
+    const { open, setOpen, item, deleteService } = props;
     const handleClose = () => {
-        setStep(0);
+
         setOpen(false);
     };
     const handleConfirm = () => {
-        if (step === 0 && !item.hasOwnProperty('services')) {
-            setStep(1);
-        } else {
-            deleteService(item);
-            handleClose();
-        }
+        deleteService(item);
+        handleClose();
     };
     return (
         <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth="sm" p={5}>
@@ -57,7 +52,7 @@ const ConfirmDeleteDialog = (props) => {
                     justifyContent="center"
                     alignItems="center"
                 >
-                    <Typography>Attention: All Combos that include {item.name} will be deleted. Are you sure you want to continue?</Typography>
+                    <Typography>Are you sure to Delete Service / Combo   {item.name} ?</Typography>
 
                 </Grid>
                 <Grid
@@ -72,7 +67,7 @@ const ConfirmDeleteDialog = (props) => {
                         onClick={handleConfirm}
                         color="error"
                     >
-                        {step === 0 ? "Yes" : "Delete"}
+                       Delete
 
                     </Button>
                     <Button onClick={handleClose}
@@ -105,7 +100,6 @@ const ServiceCardRow = (props) => {
     const isBlocked = () => serviceItem.blocked;
     const isACombo = () => serviceItem.hasOwnProperty('services');
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const [deleteStep, setDeleteStep] = useState(0);
     const detailsPage = () => {
         if (isACombo()) {
             setType('edit');
@@ -152,7 +146,7 @@ const ServiceCardRow = (props) => {
                             />
                         ) : null}</>
                     }
-                    title={<><Chip label={isACombo() ? "Combo" : "Service"} variant="outlined" /> {capitalize(serviceItem.name)}</>}
+                    title={<><Chip label={isACombo() ? "Combo" : "Service"} variant="outlined" /> {serviceItem.name}</>}
                     subheader={<><Chip label="Service Code" size="small" /> {serviceItem.service_code.split('-', 1)[0]}</>}
                 />
                 <Collapse in={!isBlocked()}>
@@ -161,10 +155,10 @@ const ServiceCardRow = (props) => {
                             <Stack direction="row" spacing={1} justifyContent="flex-start" alignItems="center" mb={.5}>
                                 <Chip label="Options" size="small" />
                                 {isACombo() ?
-                                    <Typography variant="body2">{serviceItem.total_duration} hrs</Typography>
+                                    <Typography variant="body2">{serviceItem.total_duration} min</Typography>
                                     : <>
                                         {serviceItem.durations_prices.map(
-                                            (durPricePair, index) => <Chip key={index} label={`${durPricePair.duration} HRS / ${durPricePair.price} CAD`} size="small" variant="outlined" />)}
+                                            (durPricePair, index) => <Chip key={index} label={`${durPricePair.duration} MIN / ${durPricePair.price} CAD`} size="small" variant="outlined" />)}
                                     </>
                                 }
                             </Stack>
@@ -203,8 +197,6 @@ const ServiceCardRow = (props) => {
                 open={deleteDialogOpen}
                 setOpen={setDeleteDialogOpen}
                 item={serviceItem}
-                step={deleteStep}
-                setStep={setDeleteStep}
                 deleteService={deleteService}
             />
             {

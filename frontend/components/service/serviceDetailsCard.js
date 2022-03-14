@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Grid, Button, Card, CardHeader, CardContent, Typography } from '@mui/material';
-import { capitalize } from '@material-ui/core';
 import _cloneDeep from "lodash/cloneDeep";
 import ServiceEmployeeTable from './serviceEmployeeTable';
 import ServiceEmployeeDialog from './serviceEmployeeDialog';
@@ -21,8 +20,6 @@ const ServiceDetailsCard = (props) => {
     const [durationPriceList, setDurationPriceList] = useState(item.durations_prices);
     const [reload, setReload] = useState(false);
     const [serviceValue, setServiceValue] = useState(_cloneDeep(item));
-
-    // useEffect(() => { }, [durationPriceList, reload]);
 
     const handleAddEmployeeCheck = (val, employee) => {
         if (val) {
@@ -76,7 +73,7 @@ const ServiceDetailsCard = (props) => {
         serviceValue.service_code = serviceValue.service_code + "-" + uuidv4().substring(0, 8);
         serviceValue.employee_ids = serviceEmployList.map(emp => emp.id);
         serviceValue.durations_prices = durationPriceList.map(d => (
-            Object.assign({}, d, { duration: d.duration * 3600000 })));
+            Object.assign({}, d, { duration: d.duration * 60000 })));
         delete serviceValue.employees;
         editHandle(serviceValue);
     };
@@ -88,7 +85,7 @@ const ServiceDetailsCard = (props) => {
 
     return (
         <Card>
-            <CardHeader title={capitalize(serviceValue.name)} />
+            <CardHeader title={serviceValue.name} />
             <CardContent>
                 <Grid container spacing={1} >
                     <Grid container direction="row" justifyContent="space-between" alignItems="center"                        >

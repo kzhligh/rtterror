@@ -8,6 +8,7 @@ import styled from '../../styles/employee.module.css';
 import NewEmployeeDialog from "./newEmployeeDialog";
 import {useRouter} from "next/router";
 import {DataGrid} from "@mui/x-data-grid";
+import {formatPhoneNumber} from "../../utils";
 
 
 const EmployeeComponent = (props) => {
@@ -29,12 +30,20 @@ const EmployeeComponent = (props) => {
             setDisplayEmployeeList(employeeList);
         }
     };
+    const getStartDate = (params)=> {
+        return  Intl.DateTimeFormat('sv-SE').format(new Date(params.row.start_date));
+    }
+    const getFullName = (params) => {
+        return `${params.row.first_name || ''} ${params.row.last_name || ''}`;
+    }
+    const getPhoneNumber = (params) =>{
+        return formatPhoneNumber(params.row.phone)
+    }
     const columns = [
-        {field: 'first_name', headerName: 'First name', width: 250, sortable: false},
-        {field: 'last_name', headerName: 'Last name', width: 300, sortable: false},
-        {field: 'title', headerName: 'Title', width: 250, sortable: false},
-        {field: 'email', headerName: 'Email', width: 300, sortable: false},
-
+        {field: 'id', headerName: 'ID', width: 250, sortable: false},
+        {field: 'first_name', headerName: 'Full name', width: 250, sortable: false, valueGetter: getFullName},
+        {field: 'start_date', headerName: 'Start Date', width: 250, sortable: false , valueGetter: getStartDate},
+        {field: 'phone', headerName: 'Phone', width: 300, sortable: false , valueGetter: getPhoneNumber},
     ];
     const handleDeleteEmployee = () => {
         deleteEmployee(rowSelection);

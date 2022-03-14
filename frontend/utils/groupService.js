@@ -14,7 +14,7 @@ const groupService = (serviceListResponse) => {
         for (let insideItem of serviceArray[serviceCode]) {
             durationPriceItem = {};
             durationPriceItem.id = insideItem.id;
-            durationPriceItem.duration = (insideItem.duration * 1 / 3600000).toFixed(2);
+            durationPriceItem.duration = (insideItem.duration * 1 / 60000).toFixed(2);
             durationPriceItem.price = insideItem.price;
             durationPriceList.push(durationPriceItem);
         }

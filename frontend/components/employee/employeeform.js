@@ -1,4 +1,4 @@
-import {Grid} from "@mui/material";
+import {Grid, TextField} from "@mui/material";
 import * as React from "react";
 import {useState} from "react";
 import {CustomDatePicker, CustomAutoComplete, InputTextField, DropDownList} from '../form/formComponent';
@@ -55,7 +55,10 @@ const EmployeeForm = (props) => {
         editEmployee(employeeValue);
     }
     const handleSetEmployeeValue = (obj) => {
-        const {name, value} = obj.target;
+        let {name, value} = obj.target;
+        if(name == 'phone'){
+            value = value.replace(/\D/g, '').substring(0, 10)
+        }
         setEmployeeValue({...employeeValue, [name]: value});
     };
 
@@ -126,6 +129,7 @@ const EmployeeForm = (props) => {
                         value={employeeValue.sin}
                         onChange={handleSetEmployeeValue}
                         error={errorMessage.sin}
+                        type="password"
                     />
                 </Grid>
                 <Grid item xs={12}>
