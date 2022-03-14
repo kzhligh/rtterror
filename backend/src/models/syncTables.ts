@@ -5,6 +5,7 @@ import ComboModel from './combo';
 import ServiceComboModel from './service-combo';
 import EmployeeModel from "src/models/employee";
 import EmployeeServiceModel from "src/models/employee-service";
+import {Schedule} from "./schedule.model";
 
 const syncTables = async () => {
   try {
@@ -17,6 +18,7 @@ const syncTables = async () => {
     await EmployeeServiceModel.sync({ alter: true });
     await Customer.sync({ alter: true });
     await Appointment.sync({ alter: true });
+    await Schedule.sync({ alter: true });
   } catch (error) {
     throw error;
   }
