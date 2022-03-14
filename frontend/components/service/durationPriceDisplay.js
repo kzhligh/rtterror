@@ -70,7 +70,7 @@ const DurationPriceDisplay = (props) => {
         </Grid>
         <DataGrid
             columns={[
-                { field: 'duration', headerName: 'Duration (hrs)', type: 'number', flex: 1 },
+                { field: 'duration', headerName: 'Duration (min)', type: 'number', flex: 1 },
                 { field: 'price', headerName: 'Price (CAD)', type: 'number', flex: 1 }]}
             rows={
                 durationPriceList.map((element, index) => ({ id: index + 1, duration: element.duration, price: element.price }))

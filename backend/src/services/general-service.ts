@@ -9,7 +9,7 @@ export default class GeneralService<T extends IAll, TDto> {
     this.model = sequelize.model(modelName);
   }
 
-  async createItem(itemInfo: TDto): Promise<T> {
+  async createItem(itemInfo: TDto): Promise<T | null> {
     const t = await sequelize.transaction();
     try {
       const newItem = await this.model.create(itemInfo);
@@ -36,16 +36,16 @@ export default class GeneralService<T extends IAll, TDto> {
     }
   }
 
-  async getItemById(id: string): Promise<T> {
+  async getItemById(id: string): Promise<T | null> {
     try {
-      return (await this.model.findByPk(id)).toJSON() as T;
+      return ((await this.model.findByPk(id))?.toJSON() ?? null) as T | null;
     } catch (error) {
       console.error('GeneralService/getItemById()/ERROR: ', error);
       throw error;
     }
   }
 
-  async updateItem(updateInfo: T): Promise<T> {
+  async updateItem(updateInfo: T): Promise<T | null> {
     const t = await sequelize.transaction();
     try {
       const [updatedItem, created] = await this.model.upsert(updateInfo, {
@@ -65,7 +65,7 @@ export default class GeneralService<T extends IAll, TDto> {
     }
   }
 
-  async updateItemById(id: string, updateFields: any): Promise<T> {
+  async updateItemById(id: string, updateFields: any): Promise<T | null> {
     const updateInfo = {
       ...updateFields,
       id: id,

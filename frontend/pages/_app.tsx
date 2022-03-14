@@ -1,19 +1,19 @@
 import '../styles/globals.css';
 import Layout from '../components/Layout';
-import {LocalizationProvider} from '@mui/lab';
+import { LocalizationProvider } from '@mui/lab';
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import Script from 'next/script';
 
-function MyApp({Component, pageProps}) {
-    return (
-        <LocalizationProvider dateAdapter={DateAdapter}>
-            <Layout>
-                <Component {...pageProps} />
-                <Script
-                    id="hotjar-script"
-                    strategy="afterInteractive"
-                    dangerouslySetInnerHTML={{
-                        __html: `
+function MyApp({ Component, pageProps }) {
+  return (
+    <LocalizationProvider dateAdapter={DateAdapter}>
+      <Layout>
+        <Component {...pageProps} />
+        <Script
+          id="hotjar-script"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
                 (function(h,o,t,j,a,r){
                     h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
                     h._hjSettings={hjid:2752004,hjsv:6};
@@ -23,11 +23,11 @@ function MyApp({Component, pageProps}) {
                     a.appendChild(r);
                 })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
             `,
-                    }}
-                />
-            </Layout>
-        </LocalizationProvider>
-    );
+          }}
+        />
+      </Layout>
+    </LocalizationProvider>
+  );
 }
 
 export default MyApp;
