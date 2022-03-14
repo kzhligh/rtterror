@@ -2,7 +2,7 @@ import TextField from "@mui/material/TextField";
 import * as React from "react";
 import {Checkbox, FormControl, FormControlLabel, InputAdornment, InputLabel, MenuItem, Select} from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
-import {DatePicker} from "@mui/lab";
+import {DatePicker, TimePicker} from "@mui/lab";
 import {useEffect} from "react";
 
 const InputTextField = (props) => {
@@ -101,7 +101,7 @@ const CustomDatePicker = (props) => {
             value={props.value}
             renderInput={(params) => <TextField {...params} />}
             onChange={(newValue) =>
-                props.onChange({target: {name: props.name, value: Intl.DateTimeFormat('sv-SE').format(newValue)}})
+                props.onChange({target: {name: props.name, value: newValue}})
 
             }
         />
@@ -109,7 +109,21 @@ const CustomDatePicker = (props) => {
     );
 }
 export {CustomDatePicker};
+const CustomTimePicker = (props) => {
+    return (
+        <TimePicker
+            label={props.label}
+            value={props.value}
+            ampm={false}
+            renderInput={(params) => <TextField {...params} />}
+            onChange={(newValue) =>
+                props.onChange({target: {name: props.name, value: newValue}})
 
+            }
+        />
+    );
+}
+export {CustomTimePicker};
 const DropDownList = (props) => {
     return (
         <FormControl

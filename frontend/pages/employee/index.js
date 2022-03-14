@@ -1,7 +1,8 @@
 import EmployeeComponent from "../../components/employee";
-import {useState} from "react";
+import React, {useState} from "react";
 import {http} from "../../utils/http";
 import groupService from "../../utils/groupService";
+import {Typography} from "@mui/material";
 
 export async function getServerSideProps(context) {
     const employeeList = await http(`/api/v1/employees`);
@@ -34,7 +35,7 @@ const Employee = ({serviceList, employeesList}) => {
     }
     return (
         <div>
-            <h1></h1>
+            <Typography variant="h6"></Typography>
 
             <EmployeeComponent
                 employeeList={employeeList}
