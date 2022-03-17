@@ -24,7 +24,7 @@ const EmployeeDetails = ({employee, serviceList}) => {
             method: 'PUT',
             body: empData,
         });
-        router.push('/employee');
+        await router.push('/employee');
     }
     return (
         <EmployeeDetailComponent employee={employee} editEmployee={editEmployee} serviceList={serviceList}/>

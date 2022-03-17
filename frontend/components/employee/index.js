@@ -3,7 +3,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import {Divider, Grid,} from "@mui/material";
 import Button from "@mui/material/Button";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import styled from '../../styles/employee.module.css';
 import NewEmployeeDialog from "./newEmployeeDialog";
 import {useRouter} from "next/router";
@@ -13,21 +13,27 @@ import {formatPhoneNumber} from "../../utils";
 
 const EmployeeComponent = (props) => {
     const router = useRouter();
-    const {employeeList, addEmployee, deleteEmployee, serviceList , displayEmployeeList , setDisplayEmployeeList} = props;
+    const {employeeList, addEmployee, deleteEmployee, serviceList } = props;
     const [addOpen, setAddOpen] = useState(false);
+    const [displayEmployeeList, setDisplayEmployeeList] = useState(employeeList);
     const [rowSelection, setRowSelection] = useState([]);
+    const [employees,setEmployees]=useState(employeeList);
+    useEffect(()=>{
+        setEmployees(employeeList)
+        setDisplayEmployeeList(employeeList);
+    },[employeeList])
 
     const handleSearch = (val) => {
         const searchValue = val.toLowerCase().trim()
         if (searchValue.length > 0) {
-            const empList = employeeList.filter(
+            const empList = employees.filter(
                 (emp) =>
                     emp.first_name.toLowerCase().includes(searchValue) ||
                     emp.last_name.toLowerCase().includes(searchValue)
             );
             setDisplayEmployeeList(empList);
         } else {
-            setDisplayEmployeeList(employeeList);
+            setDisplayEmployeeList(employees);
         }
     };
     const getStartDate = (params)=> {
