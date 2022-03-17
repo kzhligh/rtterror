@@ -44,20 +44,6 @@ const ServiceComponent = (props) => {
         }
         return serviceCheckList.length;
     };
-    // useEffect(() => { }, [orderBy]);
-
-    const compareDateFunction = (item1, item2) => {
-        const date1 = new Date(item1['createdAt']);
-        const date2 = new Date(item2['createdAt']);
-
-        if (date1 > date2) {
-            return -1;
-        } else if (date1 < date2) {
-            return 1;
-        } else {
-            return 0;
-        }
-    };
 
     const handleSelectOrderBy = (val) => {
         let sortResult;
@@ -88,7 +74,7 @@ const ServiceComponent = (props) => {
             setSearch(true);
             serviceResultList = searchList.filter(
                 (item) =>
-                    item.barcode.toLowerCase().includes(searchValue) ||
+                    item.service_code.toLowerCase().includes(searchValue) ||
                     item.name.toLowerCase().includes(searchValue) ||
                     item.description.toLowerCase().includes(searchValue)
             );
@@ -117,7 +103,7 @@ const ServiceComponent = (props) => {
                 </Link>
                 <Button className={cssStyled.buttonContainer} variant="outlined" color='secondary'
                     onClick={handleCreateCombo}
-                    disabled={serviceCheckList.length === 0}
+                    disabled={serviceCheckList.length < 2}
                 >
                     Create Combo
                 </Button>

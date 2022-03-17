@@ -209,6 +209,8 @@ const ComboForm = (props) => {
     const [comboValue, setComboValue] = useState(
         !_isEmpty(comboDetail) ? comboDetail : initValue
     );
+    const [autoPopulate,setAutoPopulate] = useState(false);
+    const [comboPlacholderValue, setComboPlacholderValue] = useState();
     const [errorMessage, setErrorMessage] = useState({});
     const [serviceListAddable, setServiceListAddable] = useState([]);
 
@@ -233,7 +235,31 @@ const ComboForm = (props) => {
         services.durations_prices = durationsPriceList;
         servCheckList.splice(index, 1, services);
         setServiceCheckList([...servCheckList]);
+        setAutoPopulate(true);
     };
+
+    // detect the change is from adding new service, change duration or not, if it is calculate the prepopulated
+    // changing the duration does not
+    useEffect(() =>{
+        let name = '';
+        let price = 0;
+        let duration = 0;
+        for (let serviceItem of serviceCheckList) {
+            // console.log(serviceItem)
+            name += serviceItem.service_code.split("-")[0] + ' + ';
+            price += serviceItem.durations_prices[0].price * 1;
+            duration += serviceItem.durations_prices[0].duration * 1;
+            console.log({serviceItem:serviceItem})
+        }
+        console.log({price:price, duration:duration})
+        //if type is add
+        let value = {...comboValue};
+        value.name=name.slice(0, -2);
+        value.total_price=price;
+        value.total_duration=duration
+
+        setComboValue(value);
+    }, [serviceCheckList]);
 
     const closeClearValue = () => {
         setComboValue(initValue);
@@ -368,7 +394,7 @@ const ComboForm = (props) => {
                             <label>Total Price ($): </label>
                             <InputTextField
                                 label="Total Price"
-                                name="total_duration"
+                                name="total_price"
                                 value={comboValue.total_price}
                                 onChange={handleSetValue}
                                 error={errorMessage.total_price}
