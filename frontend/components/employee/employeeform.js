@@ -1,11 +1,11 @@
-import {Grid, TextField} from "@mui/material";
+import {Box, Grid, IconButton, InputAdornment, InputBase, TextField} from "@mui/material";
 import * as React from "react";
 import {useState} from "react";
 import {CustomDatePicker, CustomAutoComplete, InputTextField, DropDownList} from '../form/formComponent';
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import {formatPhoneNumber} from "../../utils";
-import {useRouter} from "next/router";
+import {Visibility, VisibilityOff} from "@mui/icons-material";
 
 
 
@@ -32,6 +32,10 @@ const EmployeeForm = (props) => {
     } = props;
     const [employeeValue, setEmployeeValue] = useState(initValues);
     const [errorMessage, setErrorMessage] = useState({});
+    const [sinToggle,setSinToggle]=useState(false);
+    const toggleSinDisplay = ()=>{
+        setSinToggle(!sinToggle);
+    }
 
     const addNewEmployee = () => {
         if (validate()) {
@@ -67,7 +71,7 @@ const EmployeeForm = (props) => {
         const error = {};
         error.first_name = employeeValue.first_name ? "" : "This field is required."
         error.last_name = employeeValue.last_name ? "" : "This field is required."
-        error.sin = employeeValue.sin.length >= 9 ? "" : 'sin has to have 16 digit'
+        error.sin = employeeValue.sin.length != 9 ? "" : 'sin has to have 9 digits'
         setErrorMessage(error);
         return Object.values(error).every(x => x == "")
     }
@@ -123,13 +127,27 @@ const EmployeeForm = (props) => {
                         onChange={handleSetEmployeeValue}
                         error={errorMessage.email}
                     />
-                    <InputTextField
+                    <TextField
+                        margin="normal"
+                        fullWidth
+                        variant="outlined"
                         label='SIN'
                         name='sin'
                         value={employeeValue.sin}
                         onChange={handleSetEmployeeValue}
-                        error={errorMessage.sin}
-                        type="password"
+                        {...(errorMessage.sin && {error: true, helperText: errorMessage.sin})}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment>
+                                    <IconButton
+                                        onClick={() => toggleSinDisplay()}
+                                    >
+                                        {sinToggle?<Visibility />:<VisibilityOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            )
+                        }}
+                        {...(sinToggle?{type:"password"}:"")}
                     />
                 </Grid>
                 <Grid item xs={12}>
