@@ -78,6 +78,8 @@ const ComboItem = (props) => {
                     data-cy="clientSort"
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="row-radio-buttons-group"
+                    value={0}
+                    // onChange={changeDurationOfService}
                 >
                     {!_isEmpty(serviceItem.durations_prices)
                         ? serviceItem.durations_prices.map((option, index) => (
@@ -223,7 +225,9 @@ const ComboForm = (props) => {
         durationPrice,
         servCheckList
     ) => {
+        console.log({serviceCode: serviceCode,durationPrice: durationPrice,servCheckList: serviceCheckList})
         let index = _findIndex(serviceCheckList, ['service_code', serviceCode]);
+        console.log(index);
         let services = servCheckList[index];
         let durationsPriceList = services.durations_prices;
         let durationsPriceIndex = _findIndex(durationsPriceList, [
@@ -249,16 +253,17 @@ const ComboForm = (props) => {
             name += serviceItem.service_code.split("-")[0] + ' + ';
             price += serviceItem.durations_prices[0].price * 1;
             duration += serviceItem.durations_prices[0].duration * 1;
-            console.log({serviceItem:serviceItem})
+            // console.log({serviceItem:serviceItem})
         }
-        console.log({price:price, duration:duration})
+        // console.log({price:price, duration:duration})
         //if type is add
         let value = {...comboValue};
         value.name=name.slice(0, -2);
         value.total_price=price;
         value.total_duration=duration
-
-        setComboValue(value);
+        if(autoPopulate){
+            setComboValue(value);
+        }
     }, [serviceCheckList]);
 
     const closeClearValue = () => {
