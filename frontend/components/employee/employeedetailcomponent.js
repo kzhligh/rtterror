@@ -6,7 +6,7 @@ import * as React from "react";
 import EmployeeForm from "./employeeform";
 
 const EmployeeDetailComponent = (props) => {
-    const {employee, editEmployee, serviceList, serviceEmployeeList} = props;
+    const {employee, editEmployee, serviceList, serviceEmployeeList , validateEmployeeId} = props;
     const [tabValue, setTabValue] = useState('1');
     const [employeeValue] = useState(employee);
 
@@ -39,6 +39,7 @@ const EmployeeDetailComponent = (props) => {
                                         tabValue={tabValue}
                                         serviceList={serviceList}
                                         serviceEmployeeList={serviceEmployeeList}
+                                        validateEmployeeId={validateEmployeeId}
                                     />
                                 </div>
                             </TabPanel>

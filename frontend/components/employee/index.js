@@ -54,7 +54,9 @@ const EmployeeComponent = (props) => {
     const handleDeleteEmployee = () => {
         deleteEmployee(rowSelection);
     }
-
+    const validateEmployeeId = (id)=>{
+        return employeeList.some(emp => emp.id == id);
+    }
     return (
 
         <Box>
@@ -105,8 +107,13 @@ const EmployeeComponent = (props) => {
                 onSelectionModelChange={(rows) => setRowSelection(rows)}
             />
 
-            <NewEmployeeDialog open={addOpen} setAddOpen={setAddOpen} addEmployee={addEmployee}
-                               serviceList={serviceList}/>
+            <NewEmployeeDialog
+                open={addOpen}
+                setAddOpen={setAddOpen}
+                addEmployee={addEmployee}
+                serviceList={serviceList}
+                validateEmployeeId={validateEmployeeId}
+            />
 
         </Box>
     );

@@ -5,12 +5,16 @@ import * as React from "react";
 import EmployeeForm from "./employeeform";
 
 const NewEmployeeDialog = (props) => {
-    const {open, addEmployee, serviceList , setAddOpen} = props;
+    const {open, addEmployee, serviceList , setAddOpen , validateEmployeeId} = props;
 
     const initValues = {
+        id: '',
         first_name: '',
         last_name: '',
+        unit:'',
         address: '',
+        city:'',
+        province: '',
         postal_code: '',
         phone: '',
         email: '',
@@ -21,7 +25,6 @@ const NewEmployeeDialog = (props) => {
         start_date: new Date(),
         services: []
     };
-
 
     return (
         <Dialog open={open} fullWidth={true} maxWidth="lg" scroll="body">
@@ -36,6 +39,7 @@ const NewEmployeeDialog = (props) => {
                     mode='add'
                     addEmployee={addEmployee}
                     serviceList={serviceList}
+                    validateEmployeeId={validateEmployeeId}
                 />
             </DialogContent>
 

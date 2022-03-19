@@ -5,6 +5,7 @@ import {useRouter} from 'next/router';
 import groupService from "../../utils/groupService";
 
 export async function getServerSideProps(context) {
+    const employeeList = await http(`/api/v1/employees`);
     const employee = await http(`/api/v1/employees/${context.query.empid}`);
     const serviceListResponse = await http(`/api/v1/services`);
     const serviceList = groupService(serviceListResponse);
@@ -12,11 +13,11 @@ export async function getServerSideProps(context) {
     let serviceEmployeeList = serviceList.filter((itemService) => serviceEmployeeCode.includes(itemService.service_code))
     employee.services = serviceEmployeeList;
     return {
-        props: {employee: employee, serviceList: serviceList},
+        props: {employee: employee, serviceList: serviceList , employeeList:employeeList},
     };
 }
 
-const EmployeeDetails = ({employee, serviceList}) => {
+const EmployeeDetails = ({employee, serviceList, employeeList}) => {
     const router = useRouter();
     const editEmployee = async (empData) => {
         await http('/api/v1/employees', {
@@ -25,9 +26,16 @@ const EmployeeDetails = ({employee, serviceList}) => {
         });
         await router.push('/employee');
     }
-    console.log(serviceList);
+    const validateEmployeeId = (id)=>{
+        return employeeList.some(emp => emp.id == id);
+    }
     return (
-        <EmployeeDetailComponent employee={employee} editEmployee={editEmployee} serviceList={serviceList}/>
+        <EmployeeDetailComponent
+            employee={employee}
+            editEmployee={editEmployee}
+            serviceList={serviceList}
+            validateEmployeeId={validateEmployeeId}
+        />
     );
 }
 export default EmployeeDetails;
