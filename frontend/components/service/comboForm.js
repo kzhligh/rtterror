@@ -79,7 +79,6 @@ const ComboItem = (props) => {
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="row-radio-buttons-group"
                     value={0}
-                    // onChange={changeDurationOfService}
                 >
                     {!_isEmpty(serviceItem.durations_prices)
                         ? serviceItem.durations_prices.map((option, index) => (
@@ -242,21 +241,15 @@ const ComboForm = (props) => {
         setAutoPopulate(true);
     };
 
-    // detect the change is from adding new service, change duration or not, if it is calculate the prepopulated
-    // changing the duration does not
     useEffect(() =>{
         let name = '';
         let price = 0;
         let duration = 0;
         for (let serviceItem of serviceCheckList) {
-            // console.log(serviceItem)
             name += serviceItem.service_code.split("-")[0] + ' + ';
             price += serviceItem.durations_prices[0].price * 1;
             duration += serviceItem.durations_prices[0].duration * 1;
-            // console.log({serviceItem:serviceItem})
         }
-        // console.log({price:price, duration:duration})
-        //if type is add
         let value = {...comboValue};
         value.name=name.slice(0, -2);
         value.total_price=price;
@@ -279,7 +272,6 @@ const ComboForm = (props) => {
     const removeService = (item) => {
         handleServiceCheck(false, item);
         if (serviceCheckList.length === 1) {
-            // the update of component is kind of late
             closeClearValue();
         }
     };
