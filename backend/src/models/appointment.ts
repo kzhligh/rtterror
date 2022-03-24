@@ -20,12 +20,17 @@ AppointmentModel.init({
   },
   pro_rmq_id: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: true
   },
   datetime: {
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: DataTypes.NOW
+  },
+  duration: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 60
   },
   repeat: {
     type: DataTypes.BOOLEAN,
