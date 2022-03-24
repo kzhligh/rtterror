@@ -4,8 +4,9 @@ export interface IAppointmentJson extends IAll {
   id: string;
   rmq_id?: string;
   client_id: string;
-  pro_rmq_id: string;
+  pro_rmq_id?: string;
   datetime: Date;
+  duration: number;
   repeat: boolean;
   cycle_start?: Date;
   cycle_end?: Date;
@@ -26,8 +27,9 @@ export interface IAppointmentObj extends IAll {
   id: string;
   rmq_id: string;
   client_id: string;
-  pro_rmq_id: string;
+  pro_rmq_id?: string;
   datetime: Date;
+  duration: number;
   repeat: boolean;
   cycle_start?: Date;
   cycle_end?: Date;
@@ -41,8 +43,9 @@ export interface IAppointmentDto {
   client_id: string;
   employee_ids: string[];
   service_ids: string[];
-  pro_rmq_id: string;
+  pro_rmq_id?: string;
   datetime: Date;
+  duration: number;
   repeat: boolean;
   cycle_start?: Date;
   cycle_end?: Date;
