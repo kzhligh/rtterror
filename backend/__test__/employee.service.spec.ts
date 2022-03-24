@@ -164,12 +164,9 @@ describe('Employee Service', () => {
   it('should be able to hide multiple items by ID', async () => {
     const mockIds = ['mockId'];
     const transaction = new Transaction(sequelize, {});
-    const mockEmployeeEntity = new MockEmployeeModel(mockEmployee);
 
     jest.spyOn(sequelize, 'transaction').mockResolvedValueOnce(transaction);
-    jest
-      .spyOn(EmployeeModel, 'update')
-      .mockResolvedValueOnce([1, [mockEmployeeEntity]]);
+    jest.spyOn(EmployeeModel, 'update').mockResolvedValueOnce([1]);
     jest.spyOn(employeeService, 'getAllItems').mockResolvedValueOnce([]);
     jest.spyOn(serviceEmployeeService, 'deleteItemByEmployeeId');
 
