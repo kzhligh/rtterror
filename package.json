@@ -21,6 +21,8 @@
   "scripts": {
     "start:client:ci": "yarn --cwd frontend start",
     "start:server:ci": "yarn --cwd backend start:prod",
+    "deploy:client": "./scripts/client-deploy.sh",
+    "deploy:server": "./scripts/server-deploy.sh",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install"
   },
@@ -35,7 +37,11 @@
   },
   "homepage": "https://github.com/kevinlizh1992/rtterror#readme",
   "lint-staged": {
-    "frontend/*.{js, jsx, ts, tsx}": ["yarn prettier --write ."],
-    "backend/*.{js, jsx, ts, tsx}": ["yarn prettier --write ."]
+    "frontend/*.{js, jsx, ts, tsx}": [
+      "yarn prettier --write ."
+    ],
+    "backend/*.{js, jsx, ts, tsx}": [
+      "yarn prettier --write ."
+    ]
   }
 }
