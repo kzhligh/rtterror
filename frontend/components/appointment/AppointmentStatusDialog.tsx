@@ -5,8 +5,6 @@ import {
   DialogTitle,
   DialogContent,
   InputLabel,
-  MenuItem,
-  Select,
   Button,
   IconButton,
   DialogProps,
@@ -15,7 +13,14 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import EditAppointmentDialog from './EditAppointmentDialog';
 import { ConfirmDeleteAlert } from './ConfirmDeleteAlert';
-import { AppointmentHeader } from './AppointmentHeader';
+
+import {
+  AppointmentHeader,
+  AppointmentServiceList,
+  AppointmentStatus,
+  AppointmentTime,
+} from './summary';
+
 const blankForm = {
   client: {
     firstName: 'Jamal',
@@ -23,8 +28,8 @@ const blankForm = {
     phoneNumber: '(123)456-7890',
     email: 'jamalG@coldmail.com',
   },
-  plan: { serviceName: 'TestService' },
-  therapist: { name: 'TestTherapist' },
+  services: [{ name: 'TestService' }],
+  therapists: [{ name: 'TestTherapist' }],
   branchLocation: 'TestLocation',
   duration: 60,
   notes: 'empty',
@@ -52,8 +57,8 @@ const AppointmentStatusDialog = ({ isOpen, onClose, target }) => {
           phoneNumber: '(123)456-7890',
           email: 'jamalG@coldmail.com',
         },
-        plan: { serviceName: 'TestService' },
-        therapist: { name: 'TestTherapist' },
+        services: target.raw.services,
+        therapists: target.attendees,
         branchLocation: target.location,
         duration: target.raw.duration,
         notes: target.raw.notes,
@@ -109,38 +114,34 @@ const AppointmentStatusDialog = ({ isOpen, onClose, target }) => {
       </DialogTitle>
 
       <DialogContent style={{ width: '100%' }}>
-        <AppointmentHeader appointmentForm={form} />
+        <Grid container>
+          <AppointmentHeader appointmentForm={form} />
+          <Grid container direction='row'>
+            <Grid container direction='column' xs={6}>
+              <AppointmentTime date={form.date} duration={form.duration} />
+              <AppointmentStatus status={form.status} setForm={setForm} />
 
-        <InputLabel style={{ marginTop: '5%' }}>Status</InputLabel>
-
-        <Select
-          id='status'
-          value={form.status}
-          style={{ width: '100%' }}
-          onChange={(e) => {
-            setForm((state) => ({
-              ...state,
-              status: e.target.value,
-            }));
-          }}
-        >
-          <MenuItem value='Pending'>Pending</MenuItem>
-          <MenuItem value='Checked In'>Checked In</MenuItem>
-          <MenuItem value='No Show'>No Show</MenuItem>
-        </Select>
-        <InputLabel style={{ marginTop: '5%' }}>Notes:</InputLabel>
-        <TextField
-          margin='normal'
-          style={{ width: '100%' }}
-          value={form.notes}
-          onChange={(e) =>
-            setForm((state) => ({
-              ...state,
-              notes: e.target.value,
-            }))
-          }
-        />
-
+              <InputLabel style={{ marginTop: '5%' }}>Notes:</InputLabel>
+              <TextField
+                multiline
+                margin='normal'
+                value={form.notes}
+                onChange={(e) =>
+                  setForm((state) => ({
+                    ...state,
+                    notes: e.target.value,
+                  }))
+                }
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <AppointmentServiceList
+                services={form.services}
+                therapists={form.therapists}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
         <div
           style={{
             display: 'flex',

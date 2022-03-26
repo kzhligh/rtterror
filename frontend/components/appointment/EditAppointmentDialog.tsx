@@ -7,7 +7,7 @@ import {
   Button,
   DialogProps,
 } from '@mui/material';
-import { AppointmentHeader } from './AppointmentHeader';
+import { AppointmentHeader } from './summary/AppointmentHeader';
 import { AppointmentDropdown } from './AppointmentDropdown';
 const blankAppointment = {
   client: {
@@ -71,11 +71,11 @@ const EditAppointmentDialog = ({ isOpen, onClose }) => {
               onClick={(e) => {
                 onClose(e, 'backdropClick');
               }}
-              variant="outlined"
+              variant='outlined'
             >
               Cancel
             </Button>
-            <Button variant="outlined" type="submit">
+            <Button variant='outlined' type='submit'>
               Confirm
             </Button>
           </div>

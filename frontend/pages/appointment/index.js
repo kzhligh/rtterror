@@ -66,6 +66,7 @@ function Appointment({ initAppointments, employeeList }) {
         feedback: appm.feedback || '',
         notes: appm.notes || 'default notes',
         status: JSON.parse(appm.status) || {},
+        services: appm.services
       }
     }))
   );
