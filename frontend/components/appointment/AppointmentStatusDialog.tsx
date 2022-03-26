@@ -21,7 +21,29 @@ import {
   AppointmentTime,
 } from './summary';
 
-const blankForm = {
+interface Props extends DialogProps {
+  onClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
+}
+
+export interface IAppointmentForm {
+  client: {
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    email: string;
+  };
+  services: Object[];
+  therapistNames: string[];
+  therapists: Object[];
+  branchLocation: string;
+  duration: string | number;
+  notes: string;
+  feedback: string;
+  status: Object;
+  date: Date;
+}
+
+const blankForm: IAppointmentForm = {
   client: {
     firstName: 'Jamal',
     lastName: 'Green',
@@ -29,19 +51,16 @@ const blankForm = {
     email: 'jamalG@coldmail.com',
   },
   services: [{ name: 'TestService' }],
+  therapistNames: ['Therapist Name'],
   therapists: [{ name: 'TestTherapist' }],
   branchLocation: 'TestLocation',
   duration: 60,
   notes: 'empty',
   feedback: 'N/A',
   status: 'Pending',
-  cancellationTime: '',
   date: new Date(),
 };
 
-interface Props extends DialogProps {
-  onClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
-}
 const AppointmentStatusDialog = ({ isOpen, onClose, target }) => {
   const [form, setForm] = useState(blankForm);
   const [editDialog, setEdit] = useState(false);
@@ -58,13 +77,13 @@ const AppointmentStatusDialog = ({ isOpen, onClose, target }) => {
           email: 'jamalG@coldmail.com',
         },
         services: target.raw.services,
-        therapists: target.attendees,
+        therapistNames: target.attendees,
+        therapists: target.raw.therapists,
         branchLocation: target.location,
         duration: target.raw.duration,
         notes: target.raw.notes,
         feedback: target.raw.feedback,
         status: target.raw.status,
-        cancellationTime: '',
         date: target.start,
       });
   }, [target]);
@@ -138,6 +157,7 @@ const AppointmentStatusDialog = ({ isOpen, onClose, target }) => {
               <AppointmentServiceList
                 services={form.services}
                 therapists={form.therapists}
+                therapistNames={form.therapistNames}
               />
             </Grid>
           </Grid>
