@@ -48,10 +48,7 @@ function Appointment({ initAppointments, employeeList }) {
   const [openStatusDialog, setOpenStatusDialog] = useState(false);
   const [openDropDialog, setOpenDropDialog] = useState(false);
 
-  const [clickTarget, setClickTarget] = useState({
-    employeeId: 0,
-    scheduleId: 0,
-  });
+  const [clickTarget, setClickTarget] = useState(null);
   const [updateEvent, setUpdateEvent] = useState(null);
 
   const [schedules, setSchedules] = useState(
@@ -84,8 +81,10 @@ function Appointment({ initAppointments, employeeList }) {
 
   const onClickSchedule = useCallback(
     (e) => {
-      const { calendarId: employeeId, id: scheduleId } = e.schedule;
-      setClickTarget({ employeeId: employeeId, scheduleId: scheduleId });
+      const { id: scheduleId } = e.schedule;
+      setClickTarget(schedules.find(
+        (el) => el.id === scheduleId
+      ));
 
       setOpenStatusDialog(true);
     },
@@ -269,9 +268,7 @@ function Appointment({ initAppointments, employeeList }) {
       />
       <AppointmentStatusDialog
         onSubmit={onBeforeUpdateSchedule}
-        target={schedules.find(
-          (el) => parseInt(el.id) === clickTarget.scheduleId
-        )}
+        target={clickTarget}
         isOpen={openStatusDialog}
         onClose={() => {
           setOpenStatusDialog(false);
