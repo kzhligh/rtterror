@@ -8,7 +8,7 @@ export const AppointmentHeader = ({ appointmentForm }) => {
           {`${appointmentForm.client.firstName} ${appointmentForm.client.lastName}`}
         </Typography>
       </Grid>
-      <Grid item direction='column' xs={4}>
+      <Grid item xs={4}>
         <Typography variant='subtitle2'>
           {appointmentForm.client.phoneNumber}
         </Typography>

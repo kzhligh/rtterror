@@ -65,7 +65,7 @@ function Appointment({ initAppointments, employeeList }) {
         duration: appm.duration,
         feedback: appm.feedback || '',
         notes: appm.notes || 'default notes',
-        status: JSON.parse(appm.status) || {},
+        status: JSON.parse(appm.status) || [],
         services: appm.services,
         therapists: appm.employees
       }

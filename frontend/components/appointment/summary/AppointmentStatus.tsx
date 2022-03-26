@@ -1,22 +1,31 @@
-import { InputLabel, Select, MenuItem } from '@mui/material';
+import { InputLabel } from '@mui/material';
+import {
+  Timeline,
+  TimelineItem,
+  TimelineOppositeContent,
+  TimelineSeparator,
+  TimelineDot,
+  TimelineConnector,
+  TimelineContent,
+} from '@mui/lab';
 
-export const AppointmentStatus = ({ status, setForm }) => (
+export const AppointmentStatus = ({ statuses, setForm }) => (
   <>
     <InputLabel style={{ marginTop: '5%' }}>Status</InputLabel>
-    <Select
-      id='status'
-      value={status}
-      style={{ width: '100%' }}
-      onChange={(e) => {
-        setForm((state) => ({
-          ...state,
-          status: [...status, e.target.value],
-        }));
-      }}
-    >
-      <MenuItem value='Pending'>Pending</MenuItem>
-      <MenuItem value='Checked In'>Checked In</MenuItem>
-      <MenuItem value='No Show'>No Show</MenuItem>
-    </Select>
+    <Timeline position='left'>
+      {console.log(statuses)}{' '}
+      {statuses.map(() => (
+        <TimelineItem>
+          <TimelineOppositeContent color='text.secondary'>
+            09:30 am
+          </TimelineOppositeContent>
+          <TimelineSeparator>
+            <TimelineConnector />
+            <TimelineDot />
+          </TimelineSeparator>
+          <TimelineContent>Eat</TimelineContent>
+        </TimelineItem>
+      ))}
+    </Timeline>
   </>
 );

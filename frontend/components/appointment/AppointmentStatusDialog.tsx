@@ -136,9 +136,9 @@ const AppointmentStatusDialog = ({ isOpen, onClose, target }) => {
         <Grid container>
           <AppointmentHeader appointmentForm={form} />
           <Grid container direction='row'>
-            <Grid container direction='column' xs={6}>
+            <Grid item xs={6}>
               <AppointmentTime date={form.date} duration={form.duration} />
-              <AppointmentStatus status={form.status} setForm={setForm} />
+              <AppointmentStatus statuses={form.status} setForm={setForm} />
 
               <InputLabel style={{ marginTop: '5%' }}>Notes:</InputLabel>
               <TextField
