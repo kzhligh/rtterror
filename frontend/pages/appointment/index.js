@@ -45,7 +45,7 @@ function Appointment({ initAppointments, employeeList }) {
 
   const cal = useRef(null);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
-  const [openStatusDialog, setopenStatusDialog] = useState(false);
+  const [openStatusDialog, setOpenStatusDialog] = useState(false);
   const [openDropDialog, setOpenDropDialog] = useState(false);
 
   const [clickTarget, setClickTarget] = useState({
@@ -87,7 +87,7 @@ function Appointment({ initAppointments, employeeList }) {
       const { calendarId: employeeId, id: scheduleId } = e.schedule;
       setClickTarget({ employeeId: employeeId, scheduleId: scheduleId });
 
-      setopenStatusDialog(true);
+      setOpenStatusDialog(true);
     },
     [openStatusDialog]
   );
@@ -108,7 +108,7 @@ function Appointment({ initAppointments, employeeList }) {
     cal.current.calendarInst.createSchedules([schedule]);
     // TODO: create schedule
 
-    setopenStatusDialog(true);
+    setOpenStatusDialog(true);
   }, []);
 
   const onBeforeDeleteSchedule = useCallback((res) => {
@@ -245,7 +245,7 @@ function Appointment({ initAppointments, employeeList }) {
               setOpenCreateDialog(true);
             }}
           >
-            Add new
+            New appointment
           </Button>
         </MenuItem>
       </MenuList>
@@ -274,7 +274,7 @@ function Appointment({ initAppointments, employeeList }) {
         )}
         isOpen={openStatusDialog}
         onClose={() => {
-          setopenStatusDialog(false);
+          setOpenStatusDialog(false);
         }}
       />
       <AddAppointmentDialog
