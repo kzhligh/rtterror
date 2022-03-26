@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -15,7 +15,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import EditAppointmentDialog from './EditAppointmentDialog';
 import { ConfirmDeleteAlert } from './ConfirmDeleteAlert';
 import { AppointmentHeader } from './AppointmentHeader';
-const blankAppointment = {
+const blankForm = {
   client: {
     firstName: 'Jamal',
     lastName: 'Green',
@@ -25,20 +25,43 @@ const blankAppointment = {
   plan: { serviceName: 'TestService' },
   therapist: { name: 'TestTherapist' },
   branchLocation: 'TestLocation',
-  duration: 90,
-  notes: 'N/A',
-  feedback: 'N/',
+  duration: 60,
+  notes: 'empty',
+  feedback: 'N/A',
   status: 'Pending',
   cancellationTime: '',
-  date: '2022-03-07',
+  date: new Date(),
 };
+
 interface Props extends DialogProps {
   onClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
 }
-const AppointmentStatusDialog = ({ isOpen, onClose }) => {
-  const [appointmentForm, setAppointment] = useState(blankAppointment);
+const AppointmentStatusDialog = ({ isOpen, onClose, target }) => {
+  const [form, setForm] = useState(blankForm);
   const [editDialog, setEdit] = useState(false);
   const [deleteDialog, setDelete] = useState(false);
+
+  useEffect(() => {
+    if (!target) setForm(blankForm);
+    else
+      setForm({
+        client: {
+          firstName: target.raw.customer,
+          lastName: 'Green',
+          phoneNumber: '(123)456-7890',
+          email: 'jamalG@coldmail.com',
+        },
+        plan: { serviceName: 'TestService' },
+        therapist: { name: 'TestTherapist' },
+        branchLocation: target.location,
+        duration: target.raw.duration,
+        notes: target.raw.notes,
+        feedback: target.raw.feedback,
+        status: target.raw.status,
+        cancellationTime: '',
+        date: target.start,
+      });
+  }, [target]);
 
   return (
     <Dialog fullWidth open={isOpen}>
@@ -48,13 +71,13 @@ const AppointmentStatusDialog = ({ isOpen, onClose }) => {
             onClick={() => {
               setEdit(true);
             }}
-            variant="outlined"
+            variant='outlined'
           >
             Edit
           </Button>
-          <Button variant="outlined">Reschedule</Button>
+          <Button variant='outlined'>Reschedule</Button>
           <Button
-            variant="outlined"
+            variant='outlined'
             onClick={() => {
               setDelete(true);
             }}
@@ -63,7 +86,7 @@ const AppointmentStatusDialog = ({ isOpen, onClose }) => {
           </Button>
         </div>
         <IconButton
-          aria-label="close"
+          aria-label='close'
           onClick={(e) => {
             onClose(e, 'backdropClick');
           }}
@@ -79,32 +102,32 @@ const AppointmentStatusDialog = ({ isOpen, onClose }) => {
       </DialogTitle>
 
       <DialogContent style={{ width: '100%' }}>
-        <AppointmentHeader appointmentForm={appointmentForm} />
+        <AppointmentHeader appointmentForm={form} />
 
         <InputLabel style={{ marginTop: '5%' }}>Status</InputLabel>
 
         <Select
-          id="status"
-          value={appointmentForm.status}
+          id='status'
+          value={form.status}
           style={{ width: '100%' }}
           onChange={(e) => {
-            setAppointment((state) => ({
+            setForm((state) => ({
               ...state,
               status: e.target.value,
             }));
           }}
         >
-          <MenuItem value="Pending">Pending</MenuItem>
-          <MenuItem value="Checked In">Checked In</MenuItem>
-          <MenuItem value="No Show">No Show</MenuItem>
+          <MenuItem value='Pending'>Pending</MenuItem>
+          <MenuItem value='Checked In'>Checked In</MenuItem>
+          <MenuItem value='No Show'>No Show</MenuItem>
         </Select>
         <InputLabel style={{ marginTop: '5%' }}>Notes:</InputLabel>
         <TextField
-          margin="normal"
+          margin='normal'
           style={{ width: '100%' }}
-          value={appointmentForm.notes}
+          value={form.notes}
           onChange={(e) =>
-            setAppointment((state) => ({
+            setForm((state) => ({
               ...state,
               notes: e.target.value,
             }))

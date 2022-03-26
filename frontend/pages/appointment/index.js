@@ -62,7 +62,10 @@ function Appointment({ initAppointments, employeeList }) {
       attendees: appm.employees.map((emp) => [emp.first_name, emp.last_name].join(' ')),
       raw: {
         customer: appm.client_id,
-        notes: appm.notes || '',
+        duration: appm.duration,
+        feedback: appm.feedback || '',
+        notes: appm.notes || 'default notes',
+        status: JSON.parse(appm.status) || {},
       }
     }))
   );
