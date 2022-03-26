@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
+  Grid,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -66,25 +67,31 @@ const AppointmentStatusDialog = ({ isOpen, onClose, target }) => {
   return (
     <Dialog fullWidth open={isOpen}>
       <DialogTitle>
-        <div style={{ textAlign: 'center' }}>
+        <Grid container justifyContent='space-evenly'>
           <Button
+            variant='contained'
+            color='info'
+            size='small'
             onClick={() => {
               setEdit(true);
             }}
-            variant='outlined'
           >
             Edit
           </Button>
-          <Button variant='outlined'>Reschedule</Button>
+          <Button variant='contained' size='small' disabled>
+            Reschedule
+          </Button>
           <Button
-            variant='outlined'
+            variant='contained'
+            color='error'
+            size='small'
             onClick={() => {
               setDelete(true);
             }}
           >
             Delete
           </Button>
-        </div>
+        </Grid>
         <IconButton
           aria-label='close'
           onClick={(e) => {
