@@ -1,5 +1,6 @@
 import React, { useRef, useCallback, forwardRef, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { http } from 'utils/http';
 import { randomBytes } from 'crypto';
 import {
   Typography,
@@ -10,6 +11,7 @@ import {
   Button,
 } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import ColorHash from 'color-hash';
 
 import AppointmentStatusDialog from '../../components/appointment/AppointmentStatusDialog';
 import DropConfirmationDialog from '../../components/appointment/dropConfirmationDialog';
@@ -20,18 +22,27 @@ import { AddAppointmentDialog } from 'components/appointment/AddAppointmentDialo
 
 import 'tui-calendar/dist/tui-calendar.css';
 
-const TuiCalendarWrapper = dynamic(
-  () => import('../../components/appointment/TuiCalendarWrapper'),
-  { ssr: false }
-);
+const colorHash = new ColorHash();
+const TuiCalendarWrapper = dynamic(() => import('../../components/appointment/TuiCalendarWrapper'), { ssr: false });
 const TuiCalendar = forwardRef((props, ref) => (
   <TuiCalendarWrapper {...props} forwardedRef={ref} />
 ));
 TuiCalendar.displayName = 'TuiCalendar';
 
-const today = new Date();
+export async function getServerSideProps() {
+  const initAppointments = await http(`/api/v1/appointments`);
+  const employeeList = await http(`/api/v1/employees`);
+  const customerList = await http(`/api/v1/customer`);
+  return {
+    props: {
+      initAppointments,
+      employeeList
+    },
+  };
+}
 
-function Appointment() {
+function Appointment({ initAppointments, employeeList }) {
+
   const cal = useRef(null);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [openStatusDialog, setopenStatusDialog] = useState(false);
@@ -43,75 +54,33 @@ function Appointment() {
   });
   const [updateEvent, setUpdateEvent] = useState(null);
 
-  const [schedules, setSchedules] = useState([
-    {
-      id: '1',
-      calendarId: '3',
-      title: 'TOAST UI Calendar Study',
+  const [schedules, setSchedules] = useState(
+    initAppointments.map((appm) => ({
+      id: appm.id,
+      calendarId: appm.employees?.length ? appm.employees[0].id : '',
+      title: 'TITLE',
       category: 'time',
-      dueDateClass: '',
-      start: new Date(new Date().setHours(13)),
-      end: new Date(new Date().setHours(14)),
-    },
-    {
-      id: '2',
-      calendarId: '1',
-      title: 'Practice',
-      category: 'time',
-      dueDateClass: '',
-      start: new Date(new Date().setHours(12)),
-      end: new Date(new Date().setHours(15)),
-      isReadOnly: true,
-    },
-    {
-      id: '3',
-      calendarId: '2',
-      title: 'FE Workshop',
-      category: 'time',
-      dueDateClass: '',
-      start: new Date(new Date().setHours(14)),
-      end: new Date(new Date().setHours(16)),
-      isReadOnly: true,
-    },
-    {
-      id: '4',
-      calendarId: '3',
-      title: 'Report',
-      category: 'time',
-      dueDateClass: '',
-      start: new Date(new Date().setDate(today.getDay() - 1)),
-      end: new Date(new Date().setDate(today.getDay() - 1)),
-    },
-  ]);
-  const [employees, setEmployees] = useState([
-    {
-      id: '1',
-      name: 'Employee X',
-      color: '#ffffff',
-      bgColor: 'red',
+      start: appm.datetime,
+      end: new Date(new Date(appm.datetime).getTime() + appm.duration * 60000),
+      attendees: appm.employees.map((emp) => [emp.first_name, emp.last_name].join(' ')),
+      raw: {
+        customer: appm.client_id,
+        notes: appm.notes || '',
+      }
+    }))
+  );
+
+  const [employees, setEmployees] = useState(
+    employeeList.map((emp) => ({
+      id: emp.id,
+      name: [emp.first_name, emp.last_name].join(' '),
+      color: 'white',
+      bgColor: colorHash.hex(emp.id),
       dragBgColor: '#9e5fff',
       borderColor: '#9e5fff',
       visible: true,
-    },
-    {
-      id: '2',
-      name: 'Employee Y',
-      color: '#ffffff',
-      bgColor: 'green',
-      dragBgColor: '#00a9ff',
-      borderColor: '#00a9ff',
-      visible: true,
-    },
-    {
-      id: '3',
-      name: 'Employee Z',
-      color: '#ffffff',
-      bgColor: 'blue',
-      dragBgColor: '#00a9ff',
-      borderColor: '#00a9ff',
-      visible: true,
-    },
-  ]);
+    }))
+  );
 
   const onClickSchedule = useCallback(
     (e) => {
