@@ -277,6 +277,7 @@ function Appointment({ initAppointments, employeeList }) {
         isOpen={openStatusDialog}
         onClose={() => {
           setOpenStatusDialog(false);
+          setClickTarget(null);
         }}
       />
       <AddAppointmentDialog

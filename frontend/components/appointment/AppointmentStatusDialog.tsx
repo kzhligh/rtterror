@@ -57,7 +57,7 @@ const blankForm: IAppointmentForm = {
   duration: 60,
   notes: 'empty',
   feedback: 'N/A',
-  status: 'Pending',
+  status: [],
   date: new Date(),
 };
 
@@ -89,7 +89,7 @@ const AppointmentStatusDialog = ({ isOpen, onClose, target }) => {
   }, [target]);
 
   return (
-    <Dialog fullWidth open={isOpen}>
+    <Dialog fullWidth open={isOpen} transitionDuration={{ exit: 0 }}>
       <DialogTitle>
         <Grid container justifyContent='space-evenly'>
           <Button
@@ -140,9 +140,10 @@ const AppointmentStatusDialog = ({ isOpen, onClose, target }) => {
               <AppointmentTime date={form.date} duration={form.duration} />
               <AppointmentStatus statuses={form.status} setForm={setForm} />
 
-              <InputLabel style={{ marginTop: '5%' }}>Notes:</InputLabel>
               <TextField
+                label='Memo'
                 multiline
+                fullWidth
                 margin='normal'
                 value={form.notes}
                 onChange={(e) =>
@@ -151,6 +152,8 @@ const AppointmentStatusDialog = ({ isOpen, onClose, target }) => {
                     notes: e.target.value,
                   }))
                 }
+                variant='filled'
+                color='warning'
               />
             </Grid>
             <Grid item xs={6}>
