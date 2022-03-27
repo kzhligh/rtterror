@@ -17,7 +17,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DateTimePicker } from '@mui/lab';
 import { useState, useEffect } from 'react';
 import { AppointmentDropdown } from './AppointmentDropdown';
-//import { http } from "../../utils/http";
+import { http } from "../../utils/http";
 
 const blankAppointment = {
   plan: { serviceName: 'TestService' },
@@ -34,19 +34,49 @@ interface Props extends DialogProps {
   onClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
 }
 
+export async function getServerSideProps() {
+  let therapists = await http('/api/v1/employees');
+  therapists = therapists.map(t => ({ ...t, name: t.first_name + ' ' + t.last_name }));
+  let services = await http('/api/v1/services');
+  services = services.map(s => ({ ...s, serviceName: s.name }));
+  let existingClients = await http('/api/v1/customer');
+  existingClients = existingClients.map(c => ({ ...c, name: c.firstName + ' ' + c.lastName }))
+
+  return {
+    props: { therapists, services, existingClients }
+  };
+}
+
 export const AddAppointmentDialog = ({ therapists, services, existingClients, isOpen, onClose }) => {
-  console.log('AddAppointmentDialog...')
-
-//  const services = [{ serviceName: 'massage' }];
-
-//  const existingClients = [
-//    { name: 'Bean' },
-//    { name: 'Ben' },
-//    { name: 'Bobert' },
-//  ];
+  console.log('therapists: ', therapists)
+  console.log('services: ', services)
+  console.log('existingClients: ', existingClients)
 
   const [expanded, setExpanded] = useState<string | false>(false);
-  const [appointmentForm, setAppointment] = useState(blankAppointment);
+  //const [appointmentForm, setAppointment] = useState(blankAppointment);
+  //initialize DTO.
+  const [appointmentForm, setAppointment] = useState({
+    rmq_id: '',
+    client_id: '',
+    employee_ids: [],
+    service_ids: [],
+    pro_rmq_id: '',         // optional
+    datetime: '',
+    duration: 30,            // in minutes
+    repeat: false,
+    cycle_start: new Date(),    // optional
+    cycle_end: new Date(),    // optional
+    status: [],
+    feedback: '',           // optional
+    notes: ''
+  });
+  useEffect(() => {
+    console.log('appointmentForm: ', appointmentForm)
+  }, [appointmentForm])
+
+  const validateAppointment = () => {
+    return true;
+  }
 
   return (
     <Dialog fullWidth open={isOpen}>
@@ -57,7 +87,7 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
           style={{ width: '100%' }}
           onSubmit={(e) => {
             e.preventDefault();
-            setAppointment((state) => ({ ...state, status: 'Pending' }));
+            // setAppointment((state) => ({ ...state, status: 'Pending' }));
             console.log(appointmentForm);
             onClose(e, 'backdropClick');
           }}
@@ -72,8 +102,8 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
 
           <InputLabel>Choose a starting time</InputLabel>
           <DateTimePicker
-            label={appointmentForm.date ?? 'Date'}
-            value={appointmentForm.date}
+            label={appointmentForm.datetime ?? 'Date'}
+            value={appointmentForm.datetime}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -81,11 +111,13 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
                 disabled
               />
             )}
-            onChange={(date: Date) =>
+            onChange={(date: Date) => {
+              // console.log('DateTimePicker/date: ', date)
               setAppointment((state) => ({
                 ...state,
-                date: date.toLocaleDateString(),
+                datetime: date.toLocaleString(),
               }))
+            }
             }
           />
           <InputLabel>Set Duration</InputLabel>
@@ -96,7 +128,7 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
             onChange={(e) => {
               setAppointment((state) => ({
                 ...state,
-                duration: e.target.value,
+                duration: parseInt(e.target.value.toString()),
               }));
             }}
           >
@@ -123,11 +155,13 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
             <AccordionDetails
               onClick={(e) => {
                 e.stopPropagation();
+                console.log('client.event: ', e);
+                setAppointment({...appointmentForm, client_id: e.target.id})
               }}
             >
               <Select id="existing" style={{ width: '100%' }}>
                 {existingClients.map((client) => (
-                  <option key={client.name}>{client.name}</option>
+                  <option id={client.id}>{client.name}</option>
                 ))}
               </Select>
             </AccordionDetails>
