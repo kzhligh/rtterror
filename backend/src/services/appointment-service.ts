@@ -8,15 +8,18 @@ import sequelize from "src/modules/sequelize";
 class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDto> {
   private readonly employeeModel: any;
   private readonly serviceModel: any;
+  private readonly customerModel: any;
 
   constructor(
     appointmentModelName: string,
     employeeModelName: string,
-    serviceModelName: string
+    serviceModelName: string,
+    customerModelName: string
   ) {
     super(appointmentModelName);
     this.employeeModel = sequelize.model(employeeModelName);
     this.serviceModel = sequelize.model(serviceModelName);
+    this.customerModel = sequelize.model(customerModelName);
   }
 
   async createItem(itemDto: IAppointmentDto): Promise<IAppointmentJson> {
@@ -25,9 +28,9 @@ class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDt
       // data validation
       if (itemDto.repeat && (!itemDto.cycle_start || !itemDto.cycle_end))
         throw new Error('AppointmentService/createItem()/ERROR - cycle_start and cycle_end are mandatory fields if repeat field is TRUE')
-      const { employee_ids, service_ids, status, ...appointmentInfo } = itemDto;
+      const { employee_ids, service_ids, client_id, status, ...appointmentInfo } = itemDto;
       const newAppointment = await this.model.create(
-        { ...appointmentInfo, status: JSON.stringify(status) },
+        { ...appointmentInfo, client_id: client_id, status: JSON.stringify(status) },
         { transaction: t }
       );
       for (const employeeId of employee_ids) {
@@ -51,7 +54,7 @@ class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDt
     try {
       const allItems = await this.model.findAll({
         where: { hidden: false },
-        include: [this.employeeModel, this.serviceModel]
+        include: [this.employeeModel, this.serviceModel, {model: this.customerModel, as: 'Client'}]
       });
       return allItems.map((item: Model) => item.toJSON() as IAppointmentJson);
     } catch (error) {
@@ -62,7 +65,7 @@ class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDt
 
   async getItemById(id: string): Promise<IAppointmentJson> {
     try {
-      const appointmentItem = await this.model.findByPk(id, { include: [this.employeeModel, this.serviceModel] });
+      const appointmentItem = await this.model.findByPk(id, { include: [this.employeeModel, this.serviceModel, {model: this.customerModel, as: 'Client'}] });
       return appointmentItem.toJSON() as IAppointmentJson
     } catch (error) {
       console.error('AppointmentService/getItemById()/ERROR: ', error);
@@ -74,7 +77,7 @@ class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDt
     try {
       const filteredItems = await this.model.findAll({
         where: { ...filter },
-        include: [this.employeeModel, this.serviceModel]
+        include: [this.employeeModel, this.serviceModel, {model: this.customerModel, as: 'Client'}]
       });
       return filteredItems.map((item: Model) => item.toJSON() as IAppointmentJson);
     } catch (error) {
@@ -133,4 +136,9 @@ class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDt
   }
 }
 
-export default new AppointmentService('appointment', 'employee', 'service');
+export default new AppointmentService(
+  'appointment',
+  'employee',
+  'service',
+  'customers'
+);
