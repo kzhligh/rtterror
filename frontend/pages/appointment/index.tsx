@@ -102,7 +102,7 @@ const Appointment = ({ initAppointments, employeeList }) => {
       id: emp.id,
       name: [emp.first_name, emp.last_name].join(' '),
       color: 'white',
-      bgColor: colorHash.hex(emp.id),
+      bgColor: colorHash.hex('' + emp.id),
       dragBgColor: '#9e5fff',
       borderColor: '#9e5fff',
       visible: true,
