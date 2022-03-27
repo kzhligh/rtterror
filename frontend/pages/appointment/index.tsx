@@ -28,8 +28,14 @@ const appointmentApiPath = `/api/v1/appointments`;
 const employeeApiPath = `/api/v1/employees`;
 
 export async function getServerSideProps () {
-  const initAppointments = await http(appointmentApiPath);
+  const appointmentList = await http(appointmentApiPath);
   const employeeList = await http(employeeApiPath);
+  const initAppointments = appointmentList.map((appm) => ({
+    ...appm,
+    feedback: appm.feedback || '',
+    notes: appm.notes || 'insert memo here',
+    status: JSON.parse(appm.status) || [],
+  }));
   return {
     props: {
       initAppointments,
@@ -69,7 +75,7 @@ interface IAppointmentResponse {
   repeat: boolean;
   cycle_start: Date;
   cycle_end: Date;
-  status: string | any;
+  status: any[];
   feedback: string;
   notes: string;
   employees?: any[];
@@ -270,7 +276,7 @@ const Appointment = ({ initAppointments, employeeList }) => {
       duration: appm.duration,
       feedback: appm.feedback || '',
       notes: appm.notes || 'insert memo here',
-      status: JSON.parse(appm.status) || [],
+      status: appm.status,
       services: appm.services,
       therapists: appm.employees,
     },
