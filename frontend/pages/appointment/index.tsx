@@ -54,15 +54,36 @@ interface ISchedule {
   start: Date;
   end: Date;
   attendees: any[];
-  raw: {
-    customer: string;
-    duration: string | number;
-    feedback: string;
-    notes: string;
-    status: any[];
-    services: any[];
-    therapists: any[];
-  };
+  raw?:
+    | {
+        customer: string;
+        duration: string | number;
+        feedback: string;
+        notes: string;
+        status: any[];
+        services: any[];
+        therapists: any[];
+      }
+    | any;
+}
+
+interface IAppointmentResponse {
+  id: string;
+  rmq_id: string;
+  client_id: string;
+  pro_rmq_id: string;
+  datetime: Date;
+  duration: number;
+  repeat: boolean;
+  cycle_start: Date;
+  cycle_end: Date;
+  status: string | any;
+  feedback: string;
+  notes: string;
+  employees?: any[];
+  services?: any[];
+  employee_ids?: string[] | number[];
+  service_ids?: string[];
 }
 
 const Appointment = ({ initAppointments, employeeList }) => {
@@ -71,31 +92,17 @@ const Appointment = ({ initAppointments, employeeList }) => {
   const [openStatusDialog, setOpenStatusDialog] = useState(false);
   const [openDropDialog, setOpenDropDialog] = useState(false);
 
-  const [selectedSchedule, setSelectedSchedule] = useState<ISchedule>(null);
+  const [selectedAppointment, setSelectedAppointment] = useState<
+    IAppointmentResponse
+  >(null);
   const [updateEvent, setUpdateEvent] = useState(null);
 
-  const [schedules, setSchedules] = useState<ISchedule[]>(
-    initAppointments.map((appm) => ({
-      id: appm.id,
-      calendarId: appm.employees?.length ? appm.employees[0].id : '',
-      title: 'TITLE',
-      category: 'time',
-      start: appm.datetime,
-      end: new Date(new Date(appm.datetime).getTime() + appm.duration * 60000),
-      attendees: appm.employees.map((emp) =>
-        [emp.first_name, emp.last_name].join(' ')
-      ),
-      raw: {
-        customer: appm.client_id,
-        duration: appm.duration,
-        feedback: appm.feedback || '',
-        notes: appm.notes || 'default notes',
-        status: JSON.parse(appm.status) || [],
-        services: appm.services,
-        therapists: appm.employees,
-      },
-    }))
-  );
+  const initAppointmentMap = new Map<string, IAppointmentResponse>();
+  initAppointments.forEach((appm) => {
+    initAppointmentMap.set(appm.id, appm);
+  });
+
+  const [appointmentMap, setAppointmentMap] = useState(initAppointmentMap);
 
   const [employees, setEmployees] = useState(
     employeeList.map((emp) => ({
@@ -111,8 +118,8 @@ const Appointment = ({ initAppointments, employeeList }) => {
 
   const onClickSchedule = useCallback(
     (e) => {
-      const { id: scheduleId } = e.schedule;
-      setSelectedSchedule(schedules.find((el) => el.id === scheduleId));
+      const { id: appointmentId } = e.schedule;
+      setSelectedAppointment(appointmentMap.get(appointmentId));
 
       setOpenStatusDialog(true);
     },
@@ -165,42 +172,45 @@ const Appointment = ({ initAppointments, employeeList }) => {
         changes
       );
 
-      const idx = schedules.findIndex((el) => el.id === schedule.id);
-      changes.start = new Date(changes.start);
-      changes.end = new Date(changes.end);
-      const newSchedule = {
-        ...schedules[idx],
-        ...changes,
-      };
-      setSchedules([
-        ...schedules.slice(0, idx),
-        newSchedule,
-        ...schedules.slice(idx + 1),
-      ]);
-      editAppointment(newSchedule, null);
+      const oldSchedule = appointmentMap.get(schedule.id);
+      let newDatetime = new Date(oldSchedule.datetime);
+      let newDuration = oldSchedule.duration;
+      if ('start' in changes) {
+        newDatetime = new Date(changes.start);
+      }
+      if ('end' in changes) {
+        newDuration = new Date(changes.end).getTime() - newDatetime.getTime();
+        newDuration = Math.floor(newDuration / 1000 / 60);
+      }
+      editAppointment(oldSchedule, {
+        datetime: newDatetime,
+        duration: newDuration,
+      });
     }
 
     setUpdateEvent(null);
   };
 
-  const editAppointment = async (schedule: ISchedule, changes: Object) => {
-    if (schedule)
-      await http(appointmentApiPath, {
-        method: 'PUT',
-        body: {
-          id: schedule.id,
-          client_id: schedule.raw.customer,
-          datetime: schedule.start,
-          duration: schedule.raw.duration,
-          status: schedule.raw.status,
-          feedback: schedule.raw.feedback,
-          notes: schedule.raw.notes,
-          updatedAt: Date(),
-          employees: schedule.raw.therapists,
-          services: schedule.raw.services,
-          ...changes,
-        },
-      });
+  const editAppointment = async (
+    oldAppointment: IAppointmentResponse,
+    changes: any
+  ) => {
+    const newAppointment = {
+      ...appointmentMap.get(oldAppointment.id),
+      ...changes,
+    };
+    setAppointmentMap(
+      new Map(appointmentMap.set(oldAppointment.id, newAppointment))
+    );
+
+    await http(appointmentApiPath, {
+      method: 'PUT',
+      body: {
+        ...newAppointment,
+        employee_ids: newAppointment.employees.map((emp) => emp.id),
+        service_ids: newAppointment.services.map((serv) => serv.id),
+      },
+    });
   };
 
   const changeCalendarView = (viewName) => {
@@ -250,6 +260,46 @@ const Appointment = ({ initAppointments, employeeList }) => {
   const handleClickNextButton = () => {
     const calendar = cal.current.calendarInst;
     calendar.next();
+  };
+
+  const initSchedules: ISchedule[] = initAppointments.map((appm) => ({
+    id: appm.id,
+    calendarId: appm.employees?.length ? appm.employees[0].id : '',
+    title: 'TITLE',
+    category: 'time',
+    start: appm.datetime,
+    end: new Date(new Date(appm.datetime).getTime() + appm.duration * 60000),
+    attendees: appm.employees.map((emp) =>
+      [emp.first_name, emp.last_name].join(' ')
+    ),
+    raw: {
+      customer: appm.client_id,
+      duration: appm.duration,
+      feedback: appm.feedback || '',
+      notes: appm.notes || 'insert memo here',
+      status: JSON.parse(appm.status) || [],
+      services: appm.services,
+      therapists: appm.employees,
+    },
+  }));
+
+  const TuiCalendarProps = {
+    ref: cal,
+    view: 'day',
+    taskView: false,
+    scheduleView: ['time'],
+    week: { hourStart: 8, hourEnd: 22 },
+    useCreationPopup: false,
+    useDetailPopup: false,
+    theme: theme,
+    template: template,
+    calendars: employees,
+    schedules: initSchedules,
+    onClickDayname: onClickDayname,
+    onClickSchedule: onClickSchedule,
+    onBeforeCreateSchedule: onBeforeCreateSchedule,
+    onBeforeDeleteSchedule: onBeforeDeleteSchedule,
+    onBeforeUpdateSchedule: onBeforeUpdateSchedule,
   };
 
   return (
@@ -309,36 +359,19 @@ const Appointment = ({ initAppointments, employeeList }) => {
           </Button>
         </MenuItem>
       </MenuList>
-      <TuiCalendar
-        ref={cal}
-        view='day'
-        taskView={false}
-        scheduleView={['time']}
-        week={{ hourStart: 8, hourEnd: 22 }}
-        useCreationPopup={false}
-        useDetailPopup={false}
-        theme={theme}
-        template={template}
-        calendars={employees}
-        schedules={schedules}
-        onClickDayname={onClickDayname}
-        onClickSchedule={onClickSchedule}
-        onBeforeCreateSchedule={onBeforeCreateSchedule}
-        onBeforeDeleteSchedule={onBeforeDeleteSchedule}
-        onBeforeUpdateSchedule={onBeforeUpdateSchedule}
-      />
+      <TuiCalendar {...TuiCalendarProps} />
       <AppointmentStatusDialog
         updateMemo={(value: string) => {
-          if (selectedSchedule) {
-            selectedSchedule.raw.notes = value;
-            editAppointment(selectedSchedule, { notes: value });
+          if (selectedAppointment) {
+            editAppointment(selectedAppointment, { notes: value });
+            setSelectedAppointment(appointmentMap.get(selectedAppointment.id));
           }
         }}
-        target={selectedSchedule}
+        target={selectedAppointment}
         isOpen={openStatusDialog}
         onClose={() => {
           setOpenStatusDialog(false);
-          setSelectedSchedule(null);
+          setSelectedAppointment(null);
         }}
       />
       <AddAppointmentDialog
