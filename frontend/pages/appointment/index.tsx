@@ -27,7 +27,7 @@ const TuiCalendarWrapper = dynamic(
   () => import('../../components/appointment/TuiCalendarWrapper'),
   { ssr: false }
 );
-const TuiCalendar = forwardRef((props, ref) => (
+const TuiCalendar: any = forwardRef((props, ref) => (
   <TuiCalendarWrapper {...props} forwardedRef={ref} />
 ));
 TuiCalendar.displayName = 'TuiCalendar';
