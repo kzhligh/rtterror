@@ -100,15 +100,15 @@ class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDt
       await appointmentServiceService.deleteItemsByAppointmentId(id, t);
       // add new relationships from given info
       if (employee_ids && employee_ids.length > 0) {
-        for (const employeeId of employee_ids) {
-          const employeeItem = this.employeeModel.findByPk(employeeId);
-          updatedAppointment.addEmployee(employeeItem, { transaction: t });
+        for (let i = 0; i < employee_ids.length; i++) {
+          const employeeItem = await this.employeeModel.findByPk(employee_ids[i]);
+          updatedAppointment.addEmployee(employeeItem);
         }
       }
       if (service_ids && service_ids.length > 0) {
-        for (const serviceId of service_ids) {
-          const serviceItem = await this.serviceModel.findByPk(serviceId);
-          updatedAppointment.addService(serviceItem, { transaction: t });
+        for (let i = 0; i < service_ids.length; i++) {
+          const serviceItem = await this.serviceModel.findByPk(service_ids[i]);
+          updatedAppointment.addService(serviceItem);
         }
       }
       await t.commit();
@@ -118,6 +118,7 @@ class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDt
       console.error('AppointmentService/updateItem()/ERROR: ', error);
       throw error;
     }
+    return await this.getItemById(itemInfo.id)
   }
 
   async hideItemById(id: string): Promise<void> {
