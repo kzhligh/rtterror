@@ -17,7 +17,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DateTimePicker } from '@mui/lab';
 import { useState, useEffect } from 'react';
 import { AppointmentDropdown } from './AppointmentDropdown';
-import { http } from "../../utils/http";
+//import { http } from "../../utils/http";
 
 const blankAppointment = {
   plan: { serviceName: 'TestService' },
@@ -34,55 +34,10 @@ interface Props extends DialogProps {
   onClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
 }
 
-export const AddAppointmentDialog = ({ isOpen, onClose }) => {
+export const AddAppointmentDialog = ({ therapists, services, existingClients, isOpen, onClose }) => {
   console.log('AddAppointmentDialog...')
 
-  const [ therapists, setTherapists] = useState([]);
-  useEffect( () => {
-    if (therapists.length === 0) {
-      http('/api/v1/employees/')
-      .then(allEmployees => {
-        console.log('allEmployees: ', allEmployees);
-        setTherapists(allEmployees.map(employee => ({...employee, name: employee.first_name + ' ' + employee.last_name})))
-      })
-      .catch(error => console.error(error));
-    }
-  }, [therapists])
-
-//  const therapists = [
-//   { name: 'mark' },
-//    { name: 'Walhberg' },
-//    { name: 'Johnathan' },
-//  ];
-
-
-//const therapists = employees;
-
-const [ services, setServices ] = useState([]);
-useEffect( () => {
-  if (services.length === 0) {
-    http('/api/v1/services')
-      .then(allServices => {
-        console.log('allServices: ', allServices);
-        setServices(allServices.map(service => ({...service, serviceName: service.name})))
-      })
-      .catch(error => console.error(error));
-  }
-}, [services])
-
-
 //  const services = [{ serviceName: 'massage' }];
-const [ existingClients, setClients ] = useState([]);
-useEffect( () => {
-  if (existingClients.length === 0) {
-    http('/api/v1/customer')
-      .then(allClients => {
-        console.log('allClients: ', allClients);
-        setClients(allClients.map(client => ({...client, name: client.firstName + ' ' + client.lastName})))
-      })
-      .catch(error => console.error('error: get all clients', error));
-  }
-}, [existingClients])
 
 //  const existingClients = [
 //    { name: 'Bean' },

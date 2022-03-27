@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, forwardRef, useState } from 'react';
+import React, { useRef, useCallback, forwardRef, useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { randomBytes } from 'crypto';
 import {
@@ -17,6 +17,7 @@ import DropConfirmationDialog from '../../components/appointment/dropConfirmatio
 import theme from '../../components/appointment/themeConfig';
 import template from '../../components/appointment/templateConfig';
 import { AddAppointmentDialog } from 'components/appointment/AddAppointmentDialog';
+import { http } from "../../utils/http";
 
 import 'tui-calendar/dist/tui-calendar.css';
 
@@ -112,6 +113,38 @@ function Appointment() {
       visible: true,
     },
   ]);
+
+  // add new appointment
+  const [ therapists, setTherapists ] = useState([]);
+  useEffect(() => {
+    // console.log('therapists: ', therapists);
+    if (therapists.length === 0) {
+      http('/api/v1/employees')
+        .then(data => setTherapists(data.map(t => ({ ...t, name: t.first_name + ' ' + t.last_name }))))
+        .catch(error => console.error('get employees error: ', error));
+    }
+  }, [therapists]);
+  const [ services, setServices ] = useState([]);
+  useEffect(() => {
+    if (services.length === 0) {
+      http('/api/v1/services')
+        .then(data => setServices(data.map(s => ({ ...s, serviceName: s.name }))))
+        .catch(error => console.error('get services error: ', error));
+    }
+  }, [services]);
+  const [ existingClients, setExistingClients ] = useState([]);
+  useEffect(() => {
+    // console.log('therapists: ', therapists);
+    if (existingClients.length === 0) {
+      http('/api/v1/customer')
+        .then(data => {
+          console.log('clients: ', data);
+          setExistingClients(data.map(c => ({...c, name: c.firstName + ' ' + c.lastName})));
+        })
+        .catch(error => console.error('get existingClients error: ', error));
+    }
+  }, [existingClients]);
+
 
   const onClickSchedule = useCallback(
     (e) => {
@@ -313,6 +346,9 @@ function Appointment() {
         onClose={() => {
           setOpenCreateDialog(false);
         }}
+        therapists = {therapists}
+        services = {services}
+        existingClients = {existingClients}
       />
       <DropConfirmationDialog
         open={openDropDialog}
