@@ -2,29 +2,21 @@ import React, { useRef, useCallback, forwardRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { http } from 'utils/http';
 import { randomBytes } from 'crypto';
-import {
-  Typography,
-  MenuList,
-  MenuItem,
-  Autocomplete,
-  TextField,
-  Button,
-} from '@mui/material';
-import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { Typography } from '@mui/material';
 import ColorHash from 'color-hash';
 
-import AppointmentStatusDialog from '../../components/appointment/AppointmentStatusDialog';
-import DropConfirmationDialog from '../../components/appointment/dropConfirmationDialog';
-
-import theme from '../../components/appointment/themeConfig';
-import template from '../../components/appointment/templateConfig';
+import theme from 'components/appointment/themeConfig';
+import template from 'components/appointment/templateConfig';
 import { AddAppointmentDialog } from 'components/appointment/AddAppointmentDialog';
+import { AppointmentControls } from 'components/appointment/AppointmentControls';
+import AppointmentStatusDialog from 'components/appointment/AppointmentStatusDialog';
+import DropConfirmationDialog from 'components/appointment/dropConfirmationDialog';
 
 import 'tui-calendar/dist/tui-calendar.css';
 
 const colorHash = new ColorHash();
 const TuiCalendarWrapper = dynamic(
-  () => import('../../components/appointment/TuiCalendarWrapper'),
+  () => import('components/appointment/TuiCalendarWrapper'),
   { ssr: false }
 );
 const TuiCalendar: any = forwardRef((props, ref) => (
@@ -103,18 +95,6 @@ const Appointment = ({ initAppointments, employeeList }) => {
   });
 
   const [appointmentMap, setAppointmentMap] = useState(initAppointmentMap);
-
-  const [employees, setEmployees] = useState(
-    employeeList.map((emp) => ({
-      id: emp.id,
-      name: [emp.first_name, emp.last_name].join(' '),
-      color: 'white',
-      bgColor: colorHash.hex('' + emp.id),
-      dragBgColor: '#9e5fff',
-      borderColor: '#9e5fff',
-      visible: true,
-    }))
-  );
 
   const onClickSchedule = useCallback(
     (e) => {
@@ -213,12 +193,6 @@ const Appointment = ({ initAppointments, employeeList }) => {
     });
   };
 
-  const changeCalendarView = (viewName) => {
-    const calendar = cal.current.calendarInst;
-    calendar.changeView(viewName, true);
-    calendar.render();
-  };
-
   const onClickDayname = useCallback((e) => {
     const calendar = cal.current.calendarInst;
     if (calendar.getViewName() === 'day') {
@@ -237,29 +211,48 @@ const Appointment = ({ initAppointments, employeeList }) => {
     calendar.render();
   }, []);
 
+  const changeCalendarView = (viewName) => {
+    const calendar = cal.current.calendarInst;
+    calendar.changeView(viewName, true);
+    calendar.render();
+  };
+
+  const handleClickToday = () => {
+    const calendar = cal.current.calendarInst;
+
+    if (
+      calendar.getDate().setHours(0, 0, 0, 0) !==
+      new Date().setHours(0, 0, 0, 0)
+    ) {
+      calendar.today();
+    } else {
+      changeCalendarView('day');
+    }
+  };
+
+  const calendarList = employeeList.map((emp) => ({
+    id: emp.id,
+    name: [emp.first_name, emp.last_name].join(' '),
+    color: 'white',
+    bgColor: colorHash.hex('' + emp.id),
+    dragBgColor: '#9e5fff',
+    borderColor: '#9e5fff',
+    visible: true,
+  }));
+
   const handleFilterEmployee = (_event, selectedEmployee, reason) => {
     const calendar = cal.current.calendarInst;
     if (reason === 'selectOption') {
-      employees.forEach((emp) => {
+      calendarList.forEach((emp) => {
         calendar.toggleSchedules(emp.id, true, false);
       });
       calendar.toggleSchedules(selectedEmployee.id, false, false);
     } else if (reason === 'clear') {
-      employees.forEach((emp) => {
+      calendarList.forEach((emp) => {
         calendar.toggleSchedules(emp.id, false, false);
       });
     }
     calendar.render();
-  };
-
-  const handleClickPrevButton = () => {
-    const calendar = cal.current.calendarInst;
-    calendar.prev();
-  };
-
-  const handleClickNextButton = () => {
-    const calendar = cal.current.calendarInst;
-    calendar.next();
   };
 
   const initSchedules: ISchedule[] = initAppointments.map((appm) => ({
@@ -293,7 +286,7 @@ const Appointment = ({ initAppointments, employeeList }) => {
     useDetailPopup: false,
     theme: theme,
     template: template,
-    calendars: employees,
+    calendars: calendarList,
     schedules: initSchedules,
     onClickDayname: onClickDayname,
     onClickSchedule: onClickSchedule,
@@ -305,60 +298,16 @@ const Appointment = ({ initAppointments, employeeList }) => {
   return (
     <>
       <Typography variant='h6'>Appointment</Typography>
-      <MenuList sx={{ display: 'flex', flexDirection: 'row', maxHeight: 64 }}>
-        <MenuItem
-          onClick={() => {
-            cal.current.calendarInst.today();
-            changeCalendarView('day');
-          }}
-        >
-          Today
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            changeCalendarView('week');
-          }}
-        >
-          Week
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            changeCalendarView('month');
-          }}
-        >
-          Month
-        </MenuItem>
-        <MenuItem onClick={handleClickPrevButton}>
-          <ChevronLeft />
-        </MenuItem>
-        <MenuItem onClick={handleClickNextButton}>
-          <ChevronRight />
-        </MenuItem>
-        <MenuItem disabled />
-        <Autocomplete
-          id='employee-calendar-filter'
-          disablePortal
-          clearOnEscape
-          openOnFocus
-          options={employees}
-          getOptionLabel={(option) => option.name}
-          onChange={handleFilterEmployee}
-          sx={{ width: 300 }}
-          renderInput={(params) => (
-            <TextField {...params} label='Employee' size='small' />
-          )}
-        />
-        <MenuItem>
-          <Button
-            variant='outlined'
-            onClick={() => {
-              setOpenCreateDialog(true);
-            }}
-          >
-            New appointment
-          </Button>
-        </MenuItem>
-      </MenuList>
+      <AppointmentControls
+        onClickToday={handleClickToday}
+        onClickWeek={() => changeCalendarView('week')}
+        onClickMonth={() => changeCalendarView('month')}
+        onClickPrevButton={() => cal.current.calendarInst.prev()}
+        onClickNextButton={() => cal.current.calendarInst.next()}
+        employees={calendarList}
+        handleFilterEmployee={handleFilterEmployee}
+        onClickNewAppointment={() => setOpenCreateDialog(true)}
+      />
       <TuiCalendar {...TuiCalendarProps} />
       <AppointmentStatusDialog
         updateMemo={(value: string) => {
