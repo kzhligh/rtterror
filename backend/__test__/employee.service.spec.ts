@@ -165,7 +165,7 @@ describe('Employee Service', () => {
     const transaction = new Transaction(sequelize, {});
 
     jest.spyOn(sequelize, 'transaction').mockResolvedValueOnce(transaction);
-    jest.spyOn(EmployeeModel, 'update').mockResolvedValueOnce([1, []]);
+    jest.spyOn(EmployeeModel, 'update').mockResolvedValueOnce([1]);
     jest.spyOn(employeeService, 'getAllItems').mockResolvedValueOnce([]);
     jest.spyOn(serviceEmployeeService, 'deleteItemByEmployeeId');
 
