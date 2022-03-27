@@ -61,7 +61,7 @@ const blankForm: IAppointmentForm = {
   date: new Date(),
 };
 
-const AppointmentStatusDialog = ({ isOpen, onClose, target }) => {
+const AppointmentStatusDialog = ({ isOpen, onClose, target, updateMemo }) => {
   const [form, setForm] = useState(blankForm);
   const [editDialog, setEdit] = useState(false);
   const [deleteDialog, setDelete] = useState(false);
@@ -88,8 +88,18 @@ const AppointmentStatusDialog = ({ isOpen, onClose, target }) => {
       });
   }, [target]);
 
+  const onCloseDialog = (e, reason) => {
+    updateMemo(form.notes);
+    onClose(e, reason);
+  };
+
   return (
-    <Dialog fullWidth open={isOpen} transitionDuration={{ exit: 0 }}>
+    <Dialog
+      fullWidth
+      open={isOpen}
+      transitionDuration={{ exit: 0 }}
+      onClose={onCloseDialog}
+    >
       <DialogTitle>
         <Grid container justifyContent='space-evenly'>
           <Button
@@ -119,7 +129,7 @@ const AppointmentStatusDialog = ({ isOpen, onClose, target }) => {
         <IconButton
           aria-label='close'
           onClick={(e) => {
-            onClose(e, 'backdropClick');
+            onCloseDialog(e, 'backdropClick');
           }}
           sx={{
             position: 'absolute',
@@ -181,11 +191,11 @@ const AppointmentStatusDialog = ({ isOpen, onClose, target }) => {
       <ConfirmDeleteAlert
         open={deleteDialog}
         handleClose={(e) => {
-          onClose(e, 'backdropClick');
+          onCloseDialog(e, 'backdropClick');
           setDelete(false);
         }}
         onConfirm={(e) => {
-          onClose(e, 'backdropClick');
+          onCloseDialog(e, 'backdropClick');
           setDelete(false);
         }}
       />

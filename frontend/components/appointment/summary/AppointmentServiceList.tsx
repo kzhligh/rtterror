@@ -16,33 +16,36 @@ export const AppointmentServiceList = ({
 }) => {
   return (
     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      {services
-        .map((serv, idx: number) => (
-          <ListItem alignItems='flex-start'>
-            <ListItemAvatar>
-              <Avatar alt='Remy Sharp' src='' />
-            </ListItemAvatar>
-            <ListItemText
-              primary={serv.name}
-              secondary={
-                <React.Fragment>
-                  <Typography
-                    sx={{ display: 'inline' }}
-                    component='span'
-                    variant='body2'
-                    color='text.primary'
-                  >
-                    {therapistNames[idx]}
-                  </Typography>
-                  — {serv.description}
-                </React.Fragment>
-              }
-            />
-          </ListItem>
-        ))
-        .reduce(
-          (prev, cur) => prev + <Divider variant='inset' component='li' /> + cur
-        )}
+      {!services.length
+        ? ''
+        : services
+            .map((serv, idx: number) => (
+              <ListItem alignItems='flex-start'>
+                <ListItemAvatar>
+                  <Avatar alt='Remy Sharp' src='' />
+                </ListItemAvatar>
+                <ListItemText
+                  primary={serv.name}
+                  secondary={
+                    <React.Fragment>
+                      <Typography
+                        sx={{ display: 'inline' }}
+                        component='span'
+                        variant='body2'
+                        color='text.primary'
+                      >
+                        {therapistNames[idx]}
+                      </Typography>
+                      — {serv.description}
+                    </React.Fragment>
+                  }
+                />
+              </ListItem>
+            ))
+            .reduce(
+              (prev, cur) =>
+                prev + <Divider variant='inset' component='li' /> + cur
+            )}
     </List>
   );
 };

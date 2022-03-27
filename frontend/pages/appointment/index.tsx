@@ -23,35 +23,58 @@ import { AddAppointmentDialog } from 'components/appointment/AddAppointmentDialo
 import 'tui-calendar/dist/tui-calendar.css';
 
 const colorHash = new ColorHash();
-const TuiCalendarWrapper = dynamic(() => import('../../components/appointment/TuiCalendarWrapper'), { ssr: false });
+const TuiCalendarWrapper = dynamic(
+  () => import('../../components/appointment/TuiCalendarWrapper'),
+  { ssr: false }
+);
 const TuiCalendar = forwardRef((props, ref) => (
   <TuiCalendarWrapper {...props} forwardedRef={ref} />
 ));
 TuiCalendar.displayName = 'TuiCalendar';
 
-export async function getServerSideProps() {
-  const initAppointments = await http(`/api/v1/appointments`);
-  const employeeList = await http(`/api/v1/employees`);
-  const customerList = await http(`/api/v1/customer`);
+const appointmentApiPath = `/api/v1/appointments`;
+const employeeApiPath = `/api/v1/employees`;
+
+export async function getServerSideProps () {
+  const initAppointments = await http(appointmentApiPath);
+  const employeeList = await http(employeeApiPath);
   return {
     props: {
       initAppointments,
-      employeeList
+      employeeList,
     },
   };
 }
 
-function Appointment({ initAppointments, employeeList }) {
+interface ISchedule {
+  id: string;
+  calendarId: string;
+  title: string;
+  category: 'time';
+  start: Date;
+  end: Date;
+  attendees: any[];
+  raw: {
+    customer: string;
+    duration: string | number;
+    feedback: string;
+    notes: string;
+    status: any[];
+    services: any[];
+    therapists: any[];
+  };
+}
 
+const Appointment = ({ initAppointments, employeeList }) => {
   const cal = useRef(null);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [openStatusDialog, setOpenStatusDialog] = useState(false);
   const [openDropDialog, setOpenDropDialog] = useState(false);
 
-  const [clickTarget, setClickTarget] = useState(null);
+  const [selectedSchedule, setSelectedSchedule] = useState<ISchedule>(null);
   const [updateEvent, setUpdateEvent] = useState(null);
 
-  const [schedules, setSchedules] = useState(
+  const [schedules, setSchedules] = useState<ISchedule[]>(
     initAppointments.map((appm) => ({
       id: appm.id,
       calendarId: appm.employees?.length ? appm.employees[0].id : '',
@@ -59,7 +82,9 @@ function Appointment({ initAppointments, employeeList }) {
       category: 'time',
       start: appm.datetime,
       end: new Date(new Date(appm.datetime).getTime() + appm.duration * 60000),
-      attendees: appm.employees.map((emp) => [emp.first_name, emp.last_name].join(' ')),
+      attendees: appm.employees.map((emp) =>
+        [emp.first_name, emp.last_name].join(' ')
+      ),
       raw: {
         customer: appm.client_id,
         duration: appm.duration,
@@ -67,8 +92,8 @@ function Appointment({ initAppointments, employeeList }) {
         notes: appm.notes || 'default notes',
         status: JSON.parse(appm.status) || [],
         services: appm.services,
-        therapists: appm.employees
-      }
+        therapists: appm.employees,
+      },
     }))
   );
 
@@ -87,9 +112,7 @@ function Appointment({ initAppointments, employeeList }) {
   const onClickSchedule = useCallback(
     (e) => {
       const { id: scheduleId } = e.schedule;
-      setClickTarget(schedules.find(
-        (el) => el.id === scheduleId
-      ));
+      setSelectedSchedule(schedules.find((el) => el.id === scheduleId));
 
       setOpenStatusDialog(true);
     },
@@ -136,15 +159,48 @@ function Appointment({ initAppointments, employeeList }) {
 
     if (ok && updateEvent) {
       const { schedule, changes } = updateEvent;
-
       cal.current.calendarInst.updateSchedule(
         schedule.id,
         schedule.calendarId,
         changes
       );
+
+      const idx = schedules.findIndex((el) => el.id === schedule.id);
+      changes.start = new Date(changes.start);
+      changes.end = new Date(changes.end);
+      const newSchedule = {
+        ...schedules[idx],
+        ...changes,
+      };
+      setSchedules([
+        ...schedules.slice(0, idx),
+        newSchedule,
+        ...schedules.slice(idx + 1),
+      ]);
+      editAppointment(newSchedule, null);
     }
 
     setUpdateEvent(null);
+  };
+
+  const editAppointment = async (schedule: ISchedule, changes: Object) => {
+    if (schedule)
+      await http(appointmentApiPath, {
+        method: 'PUT',
+        body: {
+          id: schedule.id,
+          client_id: schedule.raw.customer,
+          datetime: schedule.start,
+          duration: schedule.raw.duration,
+          status: schedule.raw.status,
+          feedback: schedule.raw.feedback,
+          notes: schedule.raw.notes,
+          updatedAt: Date(),
+          employees: schedule.raw.therapists,
+          services: schedule.raw.services,
+          ...changes,
+        },
+      });
   };
 
   const changeCalendarView = (viewName) => {
@@ -171,7 +227,7 @@ function Appointment({ initAppointments, employeeList }) {
     calendar.render();
   }, []);
 
-  const handleFilterEmployee = (event, selectedEmployee, reason) => {
+  const handleFilterEmployee = (_event, selectedEmployee, reason) => {
     const calendar = cal.current.calendarInst;
     if (reason === 'selectOption') {
       employees.forEach((emp) => {
@@ -198,7 +254,7 @@ function Appointment({ initAppointments, employeeList }) {
 
   return (
     <>
-      <Typography variant="h6">Appointment</Typography>
+      <Typography variant='h6'>Appointment</Typography>
       <MenuList sx={{ display: 'flex', flexDirection: 'row', maxHeight: 64 }}>
         <MenuItem
           onClick={() => {
@@ -230,7 +286,7 @@ function Appointment({ initAppointments, employeeList }) {
         </MenuItem>
         <MenuItem disabled />
         <Autocomplete
-          id="employee-calendar-filter"
+          id='employee-calendar-filter'
           disablePortal
           clearOnEscape
           openOnFocus
@@ -239,12 +295,12 @@ function Appointment({ initAppointments, employeeList }) {
           onChange={handleFilterEmployee}
           sx={{ width: 300 }}
           renderInput={(params) => (
-            <TextField {...params} label="Employee" size="small" />
+            <TextField {...params} label='Employee' size='small' />
           )}
         />
         <MenuItem>
           <Button
-            variant="outlined"
+            variant='outlined'
             onClick={() => {
               setOpenCreateDialog(true);
             }}
@@ -255,7 +311,7 @@ function Appointment({ initAppointments, employeeList }) {
       </MenuList>
       <TuiCalendar
         ref={cal}
-        view="week"
+        view='day'
         taskView={false}
         scheduleView={['time']}
         week={{ hourStart: 8, hourEnd: 22 }}
@@ -272,12 +328,17 @@ function Appointment({ initAppointments, employeeList }) {
         onBeforeUpdateSchedule={onBeforeUpdateSchedule}
       />
       <AppointmentStatusDialog
-        onSubmit={onBeforeUpdateSchedule}
-        target={clickTarget}
+        updateMemo={(value: string) => {
+          if (selectedSchedule) {
+            selectedSchedule.raw.notes = value;
+            editAppointment(selectedSchedule, { notes: value });
+          }
+        }}
+        target={selectedSchedule}
         isOpen={openStatusDialog}
         onClose={() => {
           setOpenStatusDialog(false);
-          setClickTarget(null);
+          setSelectedSchedule(null);
         }}
       />
       <AddAppointmentDialog
@@ -293,6 +354,6 @@ function Appointment({ initAppointments, employeeList }) {
       />
     </>
   );
-}
+};
 
 export default Appointment;

@@ -49,7 +49,7 @@ export const AppointmentStatus = ({ statuses, setForm }) => {
       <InputLabel style={{ marginTop: '5%' }}>
         Current Status: <span>&emsp;</span>
         <Typography variant='button' color='InfoText'>
-          {statuses.length && statuses[statuses.length - 1].name}
+          {!statuses.length ? '' : statuses[statuses.length - 1].name}
         </Typography>
         <span>&nbsp;</span>
         <IconButton onClick={handleClickHistory} size='small'>
