@@ -113,7 +113,7 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
       <TextField
         onChange={handleSearch}
         style={{ marginBottom: '45px', width: '50%' }}
-        placeholder="Search a client by name..."
+        placeholder="Search a client by name/id/telephone..."
         label="Search"
         variant="outlined"
         InputProps={{
@@ -163,7 +163,6 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
                 First Name
               </MenuItem>
               <MenuItem value={'lastName'}>Last Name</MenuItem>
-              <MenuItem value={'email'}>Email</MenuItem>
             </Select>
           </FormControl>
 

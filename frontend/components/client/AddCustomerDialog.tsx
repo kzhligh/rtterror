@@ -27,6 +27,7 @@ interface Props extends DialogProps {
 }
 
 const initialFormValue = {
+  cid: '',
   firstName: '',
   lastName: '',
   email: '',
@@ -34,7 +35,9 @@ const initialFormValue = {
   gender: 'N/A',
   address: '',
   postalCode: '',
+  province: '',
   phone: '',
+  city: '',
   confirmationType: 'email',
 };
 
@@ -156,6 +159,17 @@ export const AddCustomerDialog = ({
           fullWidth
           margin="normal"
           required
+          label="Client ID"
+          data-cy="clientID"
+          value={formInputs.cid}
+          onChange={(e) =>
+            setFormInputs((state) => ({ ...state, cid: e.target.value }))
+          }
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          required
           label="First Name"
           data-cy="clientFirstName"
           value={formInputs.firstName}
@@ -203,11 +217,44 @@ export const AddCustomerDialog = ({
           fullWidth
           margin="normal"
           required
+          label="Province"
+          data-cy="clientProvince"
+          value={formInputs.province}
+          onChange={(e) =>
+            setFormInputs((state) => ({ ...state, province: e.target.value }))
+          }
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          required
+          label="City"
+          data-cy="clientCity"
+          value={formInputs.city}
+          onChange={(e) =>
+            setFormInputs((state) => ({ ...state, city: e.target.value }))
+          }
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          required
           label="Address"
           data-cy="clientAddress"
           value={formInputs.address}
           onChange={(e) =>
             setFormInputs((state) => ({ ...state, address: e.target.value }))
+          }
+        />
+        <TextField
+          fullWidth
+          margin="normal"
+          required
+          label="Postal Code"
+          data-cy="clientPostalCode"
+          value={formInputs.postalCode}
+          onChange={(e) =>
+            setFormInputs((state) => ({ ...state, postalCode: e.target.value }))
           }
         />
 
@@ -260,21 +307,16 @@ export const AddCustomerDialog = ({
             <h3>Date of Birth</h3>
           </Box>
 
-          <DatePicker
-            label={formInputs.dob ?? 'Date of birth'}
-            value={formInputs.dob}
+          <TextField
+            style={{ marginLeft: '60px' }}
+            required
+            label="MM-DD-YYYY"
             data-cy="clientdob"
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                inputProps={{ placeholder: 'YYYY-MM-DD' }}
-                disabled
-              />
-            )}
-            onChange={(date: Date) =>
+            value={formInputs.dob}
+            onChange={(e) =>
               setFormInputs((state) => ({
                 ...state,
-                dob: Intl.DateTimeFormat('sv-SE').format(date),
+                dob: e.target.value,
               }))
             }
           />
