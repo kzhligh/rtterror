@@ -34,7 +34,13 @@ const blankForm = {
   services: [],
 };
 
-const AppointmentStatusDialog = ({ isOpen, onClose, target, updateMemo }) => {
+const AppointmentStatusDialog = ({
+  isOpen,
+  onClose,
+  target,
+  editAppointment,
+  deleteAppointment,
+}) => {
   const [formContent, setFormContent] = useState(
     target ? { ...target } : blankForm
   );
@@ -47,7 +53,7 @@ const AppointmentStatusDialog = ({ isOpen, onClose, target, updateMemo }) => {
   }, [target]);
 
   const onCloseDialog = (e, reason) => {
-    updateMemo(formContent.notes);
+    editAppointment(target, { notes: formContent.notes });
     onClose(e, reason);
   };
   console.log(formContent.status);
@@ -157,11 +163,10 @@ const AppointmentStatusDialog = ({ isOpen, onClose, target, updateMemo }) => {
       <ConfirmDeleteAlert
         open={deleteDialog}
         handleClose={(e) => {
-          onCloseDialog(e, 'backdropClick');
           setDelete(false);
         }}
         onConfirm={(e) => {
-          onCloseDialog(e, 'backdropClick');
+          onClose(e, 'backdropClick');
           setDelete(false);
         }}
       />

@@ -316,12 +316,8 @@ const Appointment = ({ initAppointments, employeeList }) => {
       />
       <TuiCalendar {...TuiCalendarProps} />
       <AppointmentStatusDialog
-        updateMemo={(value: string) => {
-          if (selectedAppointment) {
-            editAppointment(selectedAppointment, { notes: value });
-            setSelectedAppointment(appointmentMap.get(selectedAppointment.id));
-          }
-        }}
+        editAppointment={editAppointment}
+        deleteAppointment={onBeforeDeleteSchedule}
         target={selectedAppointment}
         isOpen={openStatusDialog}
         onClose={() => {
