@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Grid,
+  Box,
   Dialog,
   DialogTitle,
   DialogContent,
-  InputLabel,
   Button,
   IconButton,
   DialogProps,
@@ -26,6 +25,7 @@ interface Props extends DialogProps {
 }
 
 const blankForm = {
+  id: 'null',
   datetime: Date(),
   duration: 60,
   status: [],
@@ -56,7 +56,7 @@ const AppointmentStatusDialog = ({
     editAppointment(target, { notes: formContent.notes });
     onClose(e, reason);
   };
-  console.log(formContent.status);
+
   return (
     <Dialog
       fullWidth
@@ -65,7 +65,7 @@ const AppointmentStatusDialog = ({
       onClose={onCloseDialog}
     >
       <DialogTitle>
-        <Grid container justifyContent='space-evenly'>
+        <Box display='flex' justifyContent='space-evenly'>
           <Button
             variant='contained'
             color='info'
@@ -89,7 +89,7 @@ const AppointmentStatusDialog = ({
           >
             Delete
           </Button>
-        </Grid>
+        </Box>
         <IconButton
           aria-label='close'
           onClick={(e) => {
@@ -107,10 +107,17 @@ const AppointmentStatusDialog = ({
       </DialogTitle>
 
       <DialogContent style={{ width: '100%' }}>
-        <Grid container>
+        <Box display='grid'>
           <AppointmentHeader appointmentForm={formContent} />
-          <Grid container direction='row'>
-            <Grid item xs={6}>
+          <Box
+            sx={{
+              display: 'grid',
+              gap: 1,
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gridTemplateRows: 'repeat(1, 50vh)',
+            }}
+          >
+            <Box>
               <AppointmentTime
                 date={formContent.datetime}
                 duration={formContent.duration}
@@ -135,8 +142,12 @@ const AppointmentStatusDialog = ({
                 variant='filled'
                 color='warning'
               />
-            </Grid>
-            <Grid item xs={6}>
+            </Box>
+            <Box
+              sx={{
+                overflowY: 'scroll',
+              }}
+            >
               <AppointmentServiceList
                 services={formContent.services}
                 therapists={formContent.employees}
@@ -144,9 +155,9 @@ const AppointmentStatusDialog = ({
                   [emp.first_name, emp.last_name].join(' ')
                 )}
               />
-            </Grid>
-          </Grid>
-        </Grid>
+            </Box>
+          </Box>
+        </Box>
         <div
           style={{
             display: 'flex',

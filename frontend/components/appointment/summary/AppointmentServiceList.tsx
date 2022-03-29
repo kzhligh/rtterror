@@ -7,45 +7,53 @@ import {
   ListItemText,
   Typography,
   Divider,
+  InputLabel,
 } from '@mui/material';
 
 export const AppointmentServiceList = ({
   services,
   therapistNames,
   therapists,
-}) => {
-  return (
-    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      {!services.length
-        ? ''
-        : services
-            .map((serv, idx: number) => (
-              <ListItem alignItems='flex-start'>
-                <ListItemAvatar>
-                  <Avatar alt='Remy Sharp' src='' />
-                </ListItemAvatar>
-                <ListItemText
-                  primary={serv.name}
-                  secondary={
-                    <React.Fragment>
-                      <Typography
-                        sx={{ display: 'inline' }}
-                        component='span'
-                        variant='body2'
-                        color='text.primary'
-                      >
-                        {therapistNames[idx]}
-                      </Typography>
-                      — {serv.description}
-                    </React.Fragment>
-                  }
-                />
-              </ListItem>
-            ))
-            .reduce(
-              (prev, cur) =>
-                prev + <Divider variant='inset' component='li' /> + cur
-            )}
-    </List>
-  );
-};
+}) => (
+  <List
+    sx={{
+      padding: 0,
+    }}
+  >
+    {services.length === 0
+      ? ''
+      : services
+          .map((serv, idx: number) => (
+            <ListItem key={serv.id} alignItems='flex-start'>
+              <ListItemAvatar>
+                <Avatar alt='Remy Sharp' src='' />
+              </ListItemAvatar>
+              <ListItemText
+                primary={serv.name + ' — ' + serv.duration / 60000 + 'min'}
+                secondary={
+                  <React.Fragment>
+                    <Typography
+                      sx={{ display: 'inline' }}
+                      component='span'
+                      variant='body2'
+                      color='text.primary'
+                    >
+                      {therapistNames[idx]}
+                    </Typography>
+                    — {serv.description}
+                  </React.Fragment>
+                }
+              />
+            </ListItem>
+          ))
+          .reduce(
+            (prev, cur) => [
+              prev,
+              <Divider variant='inset' component='li' />,
+              cur,
+            ],
+
+            <InputLabel>Scheduled Services</InputLabel>
+          )}
+  </List>
+);
