@@ -16,18 +16,20 @@ export const AppointmentStatusUpdatePopup = ({
   toggleOpen,
   name,
   setName,
+  updateStatus,
 }) => {
   const [changedBy, setChangedBy] = useState('');
   const handleClose = () => {
     setName('');
+    setChangedBy('');
 
     toggleOpen(false);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(event);
 
+    updateStatus(name, changedBy);
     handleClose();
   };
 

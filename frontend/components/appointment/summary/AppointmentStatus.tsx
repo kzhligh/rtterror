@@ -4,7 +4,6 @@ import {
   Tooltip,
   Typography,
   Menu,
-  MenuItem,
   IconButton,
   TextField,
 } from '@mui/material';
@@ -31,7 +30,7 @@ interface IStatus {
   at: Date;
 }
 
-export const AppointmentStatus = ({ statuses, setForm }) => {
+export const AppointmentStatus = ({ statuses, updateStatus }) => {
   const [historyAnchor, setHistoryAnchor] = useState(null);
   const openHistory = Boolean(historyAnchor);
   const [openUpdateStatus, setOpenUpdateStatus] = useState(false);
@@ -49,7 +48,7 @@ export const AppointmentStatus = ({ statuses, setForm }) => {
       <InputLabel style={{ marginTop: '5%' }}>
         Current Status: <span>&emsp;</span>
         <Typography variant='button' color='InfoText'>
-          {!statuses.length ? '' : statuses[statuses.length - 1].name}
+          {statuses.length === 0 ? '' : statuses[0].name}
         </Typography>
         <span>&nbsp;</span>
         <IconButton onClick={handleClickHistory} size='small'>
@@ -64,33 +63,34 @@ export const AppointmentStatus = ({ statuses, setForm }) => {
       >
         <Timeline position='left'>
           {statuses.map((status: IStatus) => (
-            <MenuItem
-              disableRipple
-              style={{ cursor: 'default', backgroundColor: 'transparent' }}
+            <Tooltip
+              key={status.at.toString()}
+              title={`by ${status.by}`}
+              enterDelay={0}
             >
-              <Tooltip title={`by ${status.by}`} enterDelay={0}>
-                <TimelineItem>
-                  <TimelineOppositeContent color='text.secondary'>
-                    <Typography variant='caption'>
-                      {moment(status.at).calendar()}
-                    </Typography>
-                  </TimelineOppositeContent>
-                  <TimelineSeparator>
-                    <TimelineConnector />
-                    <TimelineDot />
-                  </TimelineSeparator>
-                  <TimelineContent>
-                    <Typography variant='button'>{status.name}</Typography>
-                  </TimelineContent>
-                </TimelineItem>
-              </Tooltip>
-            </MenuItem>
+              <TimelineItem
+                style={{ cursor: 'default', backgroundColor: 'transparent' }}
+              >
+                <TimelineOppositeContent color='text.secondary'>
+                  <Typography variant='caption'>
+                    {moment(status.at).calendar()}
+                  </Typography>
+                </TimelineOppositeContent>
+                <TimelineSeparator>
+                  <TimelineConnector />
+                  <TimelineDot />
+                </TimelineSeparator>
+                <TimelineContent>
+                  <Typography variant='button'>{status.name}</Typography>
+                </TimelineContent>
+              </TimelineItem>
+            </Tooltip>
           ))}
         </Timeline>
       </Menu>
       <Autocomplete
         value={statusName}
-        onChange={(event, newValue: any) => {
+        onChange={(_event, newValue: any) => {
           if (typeof newValue === 'string') {
             // timeout to avoid instant validation of the dialog's form.
             setTimeout(() => {
@@ -129,6 +129,7 @@ export const AppointmentStatus = ({ statuses, setForm }) => {
         toggleOpen={setOpenUpdateStatus}
         name={statusName}
         setName={setStatusName}
+        updateStatus={updateStatus}
       />
     </>
   );

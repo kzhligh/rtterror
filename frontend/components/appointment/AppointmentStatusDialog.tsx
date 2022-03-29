@@ -24,6 +24,12 @@ interface Props extends DialogProps {
   onClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
 }
 
+interface IStatus {
+  name: string;
+  by: string;
+  at: Date;
+}
+
 const blankForm = {
   id: 'null',
   datetime: Date(),
@@ -53,7 +59,8 @@ const AppointmentStatusDialog = ({
   }, [target]);
 
   const onCloseDialog = (e, reason) => {
-    editAppointment(target, { notes: formContent.notes });
+    if (formContent.notes !== target.notes)
+      editAppointment(target, { notes: formContent.notes });
     onClose(e, reason);
   };
 
@@ -124,7 +131,22 @@ const AppointmentStatusDialog = ({
               />
               <AppointmentStatus
                 statuses={formContent.status}
-                setForm={setFormContent}
+                updateStatus={(name, changedBy) => {
+                  const newStatus: IStatus = {
+                    name: name,
+                    by: changedBy,
+                    at: new Date(),
+                  };
+
+                  setFormContent((prevContent) => ({
+                    ...prevContent,
+                    status: [newStatus, ...prevContent.status],
+                  }));
+
+                  editAppointment(formContent, {
+                    status: [newStatus, ...formContent.status],
+                  });
+                }}
               />
 
               <TextField
@@ -158,12 +180,6 @@ const AppointmentStatusDialog = ({
             </Box>
           </Box>
         </Box>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-around',
-          }}
-        ></div>
       </DialogContent>
       <EditAppointmentDialog
         isOpen={editDialog}
