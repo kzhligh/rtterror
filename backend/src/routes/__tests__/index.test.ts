@@ -2,6 +2,7 @@ import serviceRouter from '../service';
 import comboRouter from '../combo';
 import { customerRouter } from '../customer.route';
 import employeeRouter from '../employee';
+import appointmentRouter from "../appointment";
 
 const spyRouterInstance = jest.fn();
 
@@ -16,6 +17,7 @@ jest.mock('../service', () => jest.fn());
 jest.mock('../combo', () => jest.fn());
 jest.mock('../customer.route', () => jest.fn());
 jest.mock('../employee', () => jest.fn());
+jest.mock('../appointment', () => jest.fn());
 
 describe('should test server configuration', () => {
   require('../index.ts');
@@ -37,5 +39,9 @@ describe('should test server configuration', () => {
       '/employees',
       employeeRouter
     );
+  });
+
+  it('should route /appointments to Appointment Router', () => {
+    expect(spyRouterInstance).toHaveBeenCalledWith('/appointments', appointmentRouter);
   });
 });
