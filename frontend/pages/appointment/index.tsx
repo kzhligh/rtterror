@@ -131,15 +131,16 @@ const Appointment = ({ initAppointments, employeeList }) => {
     setOpenStatusDialog(true);
   }, []);
 
-  const onBeforeDeleteSchedule = useCallback((res) => {
-    console.log('onBeforeDeleteSchedule');
-    console.log(res);
-
-    const { id, calendarId } = res.schedule;
+  const onBeforeDeleteSchedule = useCallback(async (event) => {
+    const { id, calendarId } = event.schedule;
 
     cal.current.calendarInst.deleteSchedule(id, calendarId);
 
-    // TODO: delete schedule
+    await http(appointmentApiPath + '/' + id, { method: 'DELETE' });
+
+    const newAppointmentMap = new Map(appointmentMap);
+    newAppointmentMap.delete(id);
+    setAppointmentMap(newAppointmentMap);
   }, []);
 
   const onBeforeUpdateSchedule = useCallback((e) => {

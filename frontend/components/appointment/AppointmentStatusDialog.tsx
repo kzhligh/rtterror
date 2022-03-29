@@ -166,8 +166,16 @@ const AppointmentStatusDialog = ({
           setDelete(false);
         }}
         onConfirm={(e) => {
-          onClose(e, 'backdropClick');
+          deleteAppointment({
+            schedule: {
+              id: formContent.id,
+              calendarId: formContent.employees?.length
+                ? formContent.employees[0].id
+                : '',
+            },
+          });
           setDelete(false);
+          onClose(e, 'backdropClick');
         }}
       />
     </Dialog>
