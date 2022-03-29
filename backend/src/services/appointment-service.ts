@@ -118,7 +118,6 @@ class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDt
       console.error('AppointmentService/updateItem()/ERROR: ', error);
       throw error;
     }
-    return await this.getItemById(itemInfo.id)
   }
 
   async hideItemById(id: string): Promise<void> {

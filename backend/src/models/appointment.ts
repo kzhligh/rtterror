@@ -19,6 +19,10 @@ AppointmentModel.init({
     type: DataTypes.STRING,
     allowNull: true
   },
+  client_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
   datetime: {
     type: DataTypes.DATE,
     allowNull: false,
