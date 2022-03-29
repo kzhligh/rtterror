@@ -22,6 +22,12 @@ router.get('/filter', (req, res) => {
     .catch(error => sendBackErrorMessage(req, res, error));
 });
 
+router.get('/period', (req, res) => {
+  appointmentService.getItemsWithin(req.query.startDate, req.query.endDate)
+    .then(periodicAppointments => res.status(200).send(periodicAppointments))
+    .catch(error => sendBackErrorMessage(req, res, error));
+})
+
 router.get('/:id', (req, res) => {
   appointmentService.getItemById(req.params.id)
     .then(appointmentItem => res.status(200).send(appointmentItem))

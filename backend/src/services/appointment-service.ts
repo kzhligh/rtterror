@@ -1,4 +1,4 @@
-import {Model} from "sequelize";
+import {Model, Op} from "sequelize";
 import GeneralService from "src/services/general-service";
 import appointmentServiceService from './appointment-service-service';
 import appointmentEmployeeService from './appointment-employee-service';
@@ -86,6 +86,28 @@ class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDt
     }
   }
 
+  async getItemsWithin(startDate: any, endDate: any): Promise<IAppointmentJson[]> {
+    try {
+      let start = new Date(startDate)
+      let end = new Date(endDate)
+      const periodicItems = await this.model.findAll({
+        where: {
+          datetime: {
+            [Op.and]: {
+              [Op.gte]: start,
+              [Op.lte]: end
+            }
+          }
+        }
+      });
+      return periodicItems.map((item: Model) => item.toJSON() as IAppointmentJson)
+    }
+    catch (error) {
+      console.error('AppointmentService/getItemsWithin()/ERROR: ', error);
+      throw error;
+    }
+  }
+
   async updateItem(itemInfo: IAppointmentJson): Promise<IAppointmentJson> {
     const t = await sequelize.transaction();
     try {
@@ -128,6 +150,7 @@ class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDt
         { where: { id } }
       );
       await t.commit();
+      return;
     } catch (error) {
       await t.rollback();
       console.error('AppointmentService/hideItemById()/ERROR: ', error);
