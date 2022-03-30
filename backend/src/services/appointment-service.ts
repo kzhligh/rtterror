@@ -142,7 +142,7 @@ class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDt
     }
   }
 
-  async hideItemById(id: string): Promise<void> {
+  async hideItemById(id: string): Promise<boolean> {
     const t = await sequelize.transaction();
     try {
       await this.model.update(
@@ -150,7 +150,7 @@ class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDt
         { where: { id } }
       );
       await t.commit();
-      return;
+      return true;
     } catch (error) {
       await t.rollback();
       console.error('AppointmentService/hideItemById()/ERROR: ', error);
