@@ -55,7 +55,7 @@ export class CustomerService {
           lastName: {
             [Op.startsWith]: query,
           },
-          email: {
+          client_id: {
             [Op.startsWith]: query,
           },
           phone: {

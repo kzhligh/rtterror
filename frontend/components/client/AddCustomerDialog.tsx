@@ -16,7 +16,6 @@ import {
   CircularProgress,
   DialogProps,
 } from '@mui/material';
-import DatePicker from '@mui/lab/DatePicker';
 import { useState } from 'react';
 import { http } from 'utils/http';
 import { formatPhoneNumber } from 'utils';
@@ -27,7 +26,9 @@ interface Props extends DialogProps {
 }
 
 const initialFormValue = {
-  cid: '',
+  client_id: '',
+  balance: 0,
+  discount: 0,
   firstName: '',
   lastName: '',
   email: '',
@@ -161,9 +162,9 @@ export const AddCustomerDialog = ({
           required
           label="Client ID"
           data-cy="clientID"
-          value={formInputs.cid}
+          value={formInputs.client_id}
           onChange={(e) =>
-            setFormInputs((state) => ({ ...state, cid: e.target.value }))
+            setFormInputs((state) => ({ ...state, client_id: e.target.value }))
           }
         />
         <TextField
@@ -310,7 +311,7 @@ export const AddCustomerDialog = ({
           <TextField
             style={{ marginLeft: '60px' }}
             required
-            label="MM-DD-YYYY"
+            label="YYYY-MM-DD"
             data-cy="clientdob"
             value={formInputs.dob}
             onChange={(e) =>

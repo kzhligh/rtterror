@@ -1,4 +1,4 @@
-import { BIGINT, DataTypes, INTEGER } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import sequelize from 'src/modules/sequelize';
 import { Appointment } from './appointment.model';
 
@@ -9,6 +9,11 @@ export const Customer = sequelize.define(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+    },
+    client_id: {
+      type: DataTypes.STRING,
+      unique: true,
+      defaultValue: '',
     },
     firstName: {
       type: DataTypes.STRING,
@@ -29,6 +34,15 @@ export const Customer = sequelize.define(
       type: DataTypes.STRING,
     },
     postalCode: {
+      type: DataTypes.STRING,
+    },
+    city: {
+      type: DataTypes.STRING,
+    },
+    province: {
+      type: DataTypes.STRING,
+    },
+    unit: {
       type: DataTypes.STRING,
     },
     phone: {

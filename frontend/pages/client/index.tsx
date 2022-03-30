@@ -33,8 +33,8 @@ interface ClientProps {
 
 const columns: GridColumns = [
   { field: 'firstName', headerName: 'First name', width: 250, sortable: false },
-  { field: 'lastName', headerName: 'Last name', width: 300, sortable: false },
-  { field: 'id', headerName: 'ID', width: 70, sortable: false },
+  { field: 'lastName', headerName: 'Last name', width: 250, sortable: false },
+  { field: 'client_id', headerName: 'ID', width: 170, sortable: false },
   {
     field: 'gender',
     headerName: 'Gender',
@@ -45,7 +45,7 @@ const columns: GridColumns = [
     field: 'phone',
     headerName: 'Phone Number',
     sortable: false,
-    width: 300,
+    width: 200,
     valueFormatter: (params: GridValueFormatterParams) =>
       formatPhoneNumber(params.value as string),
   },
