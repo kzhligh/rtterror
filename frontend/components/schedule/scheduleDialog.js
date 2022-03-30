@@ -128,11 +128,6 @@ const ScheduleDialog = (props)=>{
             <DialogContent>
                 <h1></h1>
                 <Grid container direction="column" alignItems="stretch" spacing={2}>
-
-                    {/*name="services"
-                        label="Services"
-                        value={serviceList}
-                        defaultValue={employeeValue.services}*/}
                     <Autocomplete
                         label='employee'
                         name='employee'

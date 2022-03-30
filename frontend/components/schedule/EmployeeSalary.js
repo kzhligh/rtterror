@@ -1,6 +1,7 @@
 import {Typography} from "@mui/material";
 import React, {useState} from "react";
 import {DataGrid} from "@mui/x-data-grid";
+import SalaryCalculation from "./salaryCalculation";
 
 const EmployeeSalary =()=>{
     const [rows, setRows] = useState([]);
@@ -14,7 +15,9 @@ const EmployeeSalary =()=>{
     return (
         <>
             <Typography variant="h6">Employee Salary</Typography>
-            <div style={{ height: 400, width: '100%' }}>
+
+            <div style={{ height: 400, width: '100%', maxWidth: '1000px'}}>
+                <SalaryCalculation />
                 <DataGrid
                     rows={rows}
                     columns={columns}

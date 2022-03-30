@@ -7,13 +7,14 @@ import Box from "@mui/material/Box";
 import EmployeeSalary from "../../components/schedule/EmployeeSalary";
 import EmployeeAppointment from "../../components/schedule/EmployeeAppointment";
 import _reduce from "lodash/reduce"
-import randomColor from 'randomcolor';
+import ColorHash from 'color-hash'
 import formatSchedule from "../../utils/formatSchedule";
 
 export async function getServerSideProps(context) {
+    var colorHash = new ColorHash();
     let employeeList = await http(`/api/v1/employees`);
     employeeList = _reduce(employeeList, (accumulator, emp) => {
-        const color = randomColor();
+        const color = colorHash.hex(emp.id);
         return [...accumulator,
             {
                 id: emp.id,

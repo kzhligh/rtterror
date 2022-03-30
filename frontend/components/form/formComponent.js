@@ -138,7 +138,7 @@ const DropDownList = (props) => {
                 onChange={(e) =>
                     props.onChange({target: {name: props.name, value: e.target.value}})}
                 sx={{
-                    minWidth: '100px',
+                    minWidth: '300px',
                 }}
             >
                 {props.list.map((val) => (
