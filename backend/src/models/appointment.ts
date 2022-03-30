@@ -15,7 +15,7 @@ AppointmentModel.init({
     allowNull: true
   },
   client_id: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   pro_rmq_id: {

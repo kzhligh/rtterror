@@ -12,12 +12,15 @@ import {
   Typography,
   Accordion,
   AccordionDetails,
+  Autocomplete
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DateTimePicker } from '@mui/lab';
 import { useState, useEffect } from 'react';
 import { AppointmentDropdown } from './AppointmentDropdown';
 import { http } from "../../utils/http";
+import {AddCustomerDialog} from "../client/AddCustomerDialog";
+import {data} from "browserslist";
 
 const blankAppointment = {
   plan: { serviceName: 'TestService' },
@@ -30,34 +33,47 @@ const blankAppointment = {
   cancellationTime: '',
   date: '',
 };
+
+interface IAppointment {
+  rmq_id: string;
+  client_id: number;
+  employee_ids: string[];
+  service_ids: string[];
+  pro_rmq_id?: string;         // optional
+  datetime: Date;
+  duration: number;            // in minutes
+  repeat: boolean;
+  cycle_start?: Date;    // optional
+  cycle_end?: Date;    // optional
+  status: string[];
+  feedback?: string;           // optional
+  notes: string;
+}
+
+interface IClient {
+  id: number;
+  name: string;
+}
+
 interface Props extends DialogProps {
   onClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
 }
 
-export async function getServerSideProps() {
-  let therapists = await http('/api/v1/employees');
-  therapists = therapists.map(t => ({ ...t, name: t.first_name + ' ' + t.last_name }));
-  let services = await http('/api/v1/services');
-  services = services.map(s => ({ ...s, serviceName: s.name }));
-  let existingClients = await http('/api/v1/customer');
-  existingClients = existingClients.map(c => ({ ...c, name: c.firstName + ' ' + c.lastName }))
-
-  return {
-    props: { therapists, services, existingClients }
-  };
-}
-
 export const AddAppointmentDialog = ({ therapists, services, existingClients, isOpen, onClose }) => {
-  console.log('therapists: ', therapists)
-  console.log('services: ', services)
+  // console.log('therapists: ', therapists)
+  // console.log('services: ', services)
   console.log('existingClients: ', existingClients)
 
   const [expanded, setExpanded] = useState<string | false>(false);
-  //const [appointmentForm, setAppointment] = useState(blankAppointment);
-  //initialize DTO.
+  const [ showClientDialog, setShowClientDialog ] = useState(false);
+  const [ clients, setClients ] = useState([]);
+  useEffect(() => {
+    console.log('useEffect()/clients: ', clients);
+    if (existingClients.length !== clients.length) setClients([ ...existingClients ])
+  }, [existingClients]);
   const [appointmentForm, setAppointment] = useState({
     rmq_id: '',
-    client_id: '',
+    client_id: -1,
     employee_ids: [],
     service_ids: [],
     pro_rmq_id: '',         // optional
@@ -72,16 +88,42 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
   });
   useEffect(() => {
     console.log('appointmentForm: ', appointmentForm)
-  }, [appointmentForm])
+  }, [appointmentForm]);
 
-  const validateAppointment = () => {
-    return true;
+  const selectedClient = clients.filter(client => client.id === appointmentForm.client_id)[0]
+
+  const handleSubmit = () => {
+    http(
+      '/api/v1/appointments',
+      {
+        method: 'POST',
+        body: appointmentForm
+      }
+    )
+      .then((res) => {
+        console.log('the res of submitting an appointment: ', res)
+      })
+      .catch(error => {
+        console.error('ERROR - submitting appointment: ', error)
+      });
   }
 
-  return (
-    <Dialog fullWidth open={isOpen}>
-      <DialogTitle>New Appointment</DialogTitle>
+  console.log('rendered/clients: ', clients);
 
+  return (
+    showClientDialog ?
+      (<AddCustomerDialog
+        open={showClientDialog}
+        onClose={() => setShowClientDialog(false)}
+        onCustomerAdded={(newClient) => {
+          setAppointment({ ...appointmentForm, client_id: newClient.id })
+          setClients([...clients, {...newClient, name: newClient.firstName + ' ' + newClient.lastName}])
+        }}
+        maxWidth="md"
+        fullWidth
+      />) :
+      (<Dialog fullWidth open={isOpen}>
+      <DialogTitle>New Appointment</DialogTitle>
       <DialogContent style={{ width: '100%' }}>
         <form
           style={{ width: '100%' }}
@@ -89,6 +131,7 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
             e.preventDefault();
             // setAppointment((state) => ({ ...state, status: 'Pending' }));
             console.log(appointmentForm);
+            handleSubmit();
             onClose(e, 'backdropClick');
           }}
         >
@@ -155,15 +198,22 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
             <AccordionDetails
               onClick={(e) => {
                 e.stopPropagation();
-                console.log('client.event: ', e);
-                setAppointment({...appointmentForm, client_id: e.target.id})
               }}
             >
-              <Select id="existing" style={{ width: '100%' }}>
-                {existingClients.map((client) => (
-                  <option id={client.id}>{client.name}</option>
-                ))}
-              </Select>
+              <Autocomplete
+                renderInput={(params) => (
+                  <TextField { ...params } label="Client name" />
+                )}
+                options={clients}
+                value={selectedClient}
+                getOptionLabel={(option: IClient) => option.name}
+                style={{ width: "100%" }}
+                id="existing"
+                onChange={(event, value: any) => {
+                  console.log('Autocomplete/onChange()/clients: ', clients)
+                  setAppointment((state) => ({ ...state, client_id: value.id }))
+                }}
+              />
             </AccordionDetails>
           </Accordion>
           <Accordion
@@ -180,12 +230,12 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
               <Typography>New Client</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <TextField
-                style={{ width: '100%' }}
-                onClick={(E) => {
-                  E.stopPropagation();
-                }}
-              ></TextField>
+              <Button
+                variant="outlined"
+                onClick={() => setShowClientDialog(true)}
+              >
+                Create New Client
+              </Button>
             </AccordionDetails>
           </Accordion>
           <InputLabel>Notes</InputLabel>
@@ -196,7 +246,7 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
                 notes: e.target.value,
               }));
             }}
-          ></TextField>
+          />
           <div
             style={{
               display: 'flex',
@@ -217,6 +267,6 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
           </div>
         </form>
       </DialogContent>
-    </Dialog>
+    </Dialog>)
   );
 };
