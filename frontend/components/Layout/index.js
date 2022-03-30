@@ -1,9 +1,7 @@
-import MainMenu from './menu';
-import styled from '../../styles/layout.module.css';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Calendar from './calendar';
-import { Divider, Grid } from '@mui/material';
-import * as React from 'react';
+import MainMenu from './menu';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Divider, Box } from '@mui/material';
 
 const globalTheme = createTheme({
     typography: {
@@ -13,22 +11,23 @@ const globalTheme = createTheme({
 
 const Layout = ({ children }) => {
     return (
-        <ThemeProvider theme={globalTheme}>
-            <Grid container direction="row" className={styled.bodyWrapper}>
-                <Grid item style={{
-                    display: "flex",
-                    flexFlow: "column"
-                }}>
+        <Box display='grid'
+            gap={1}
+            gridTemplateAreas={`"menu main main main"`}
+            gridAutoColumns='1fr'>
+            <Box bgcolor='#c5c5c5'>
+                <ThemeProvider theme={globalTheme}>
                     <Calendar />
                     <Divider />
                     <MainMenu />
-                </Grid>
-                <Grid item style={{ minWidth: "75%", maxWidth: "85%" }}>
-                    {/* <PrimarySearchAppBar /> */}
-                    <Grid item className={styled.contentWrapper}>{children}</Grid>
-                </Grid>
-            </Grid>
-        </ThemeProvider>
+                </ThemeProvider>
+            </Box>
+            <Box gridArea='main'>
+                <ThemeProvider theme={globalTheme}>
+                    {children}
+                </ThemeProvider>
+            </Box>
+        </Box>
     );
 };
 export default Layout;

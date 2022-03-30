@@ -1,6 +1,7 @@
 import * as React from 'react';
 import cssStyled from '../../styles/service.module.css';
 import {
+    Box,
     Button,
     Card,
     CardHeader,
@@ -121,10 +122,10 @@ const ServiceCardRow = (props) => {
         return new Date(item['createdAt']).toDateString();
     };
     return (
-        <div className={cssStyled.flexServiceCombo}>
+        <Box display='grid'>
             <Card
-                className={cssStyled.cardWrapper}
-                style={{ backgroundColor: isBlocked() ? 'gray' : 'white' }} sx={{
+                style={{ backgroundColor: isBlocked() ? 'gray' : 'white' }}
+                sx={{
                     boxShadow: 3,
                     borderRadius: 2,
                 }}
@@ -214,7 +215,7 @@ const ServiceCardRow = (props) => {
                     />
                 ) : null
             }
-        </div >
+        </Box>
     );
 };
 export default ServiceCardRow;

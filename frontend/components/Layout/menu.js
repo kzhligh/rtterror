@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MenuList, MenuItem, ListItemIcon, ListItemText, Paper } from '@mui/material';
+import { MenuList, MenuItem, ListItemIcon, ListItemText, Box } from '@mui/material';
 import Link from 'next/link';
 import {
   AccessTime,
@@ -50,25 +50,20 @@ const Menu = () => {
     },
   ];
   return (
-    <Paper sx={{
+    <Box display='grid' sx={{
       background: '#c5c5c5',
-      minHeight: '60%',
-      bottom: 0
+      bottom: 0,
     }}>
-      <MenuList sx={{
-        alignItems: 'center',
-        flex: '1 1 auto',
-      }}>
+      <MenuList>
         {menuItems.map((item) => (
           <Link key={item.text} href={item.path} passHref>
             <MenuItem sx={{
-              alignItems: 'center',
-              paddingLeft: '25%',
-              marginBottom: '15px',
+              marginLeft: '25%',
+              marginBottom: '1em',
 
               fontFamily: 'Montserrat, sans-serif',
               fontWeight: 500,
-              fontSize: 18,
+              fontSize: '1em',
             }}>
               <ListItemIcon sx={{ minWidth: '35px' }}>{item.icon}</ListItemIcon>
               <ListItemText>{item.text}</ListItemText>
@@ -76,7 +71,7 @@ const Menu = () => {
           </Link>
         ))}
       </MenuList>
-    </Paper>
+    </Box>
   );
 };
 export default Menu;

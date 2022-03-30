@@ -124,9 +124,9 @@ const ServiceComponent = (props) => {
     };
 
     return (
-        <>
+        <Box display='grid'>
             <SearchInput handleSearch={handleSearch} />
-            <Box className={cssStyled.flexAlignContainer}>
+            <Box>
                 <Typography variant='h6'>Select a service</Typography>
                 <Link href={'/service/add'} passHref>
                     <Button
@@ -168,57 +168,55 @@ const ServiceComponent = (props) => {
                     </Select>
                 </FormControl>
             </Box>
-            <>
-                <Grid
-                    container
-                    direction='row'
-                    justifyContent='space-evenly'
-                    alignItems='flex-start'
-                >
-                    <Grid item xs={6}>
-                        {serviceListDisplay.map((item) => (
-                            <ServiceCardRow
-                                key={item.id}
-                                item={item}
-                                toggleBlocked={toggleBlocked}
-                                deleteService={deleteService}
-                                serviceCheckList={serviceCheckList}
-                                handleServiceCheck={handleServiceCheck}
-                                type={type}
-                                setType={setType}
-                                extractServiceCheckList={extractServiceCheckList}
-                                setServiceCheckList={setServiceCheckList}
-                                setComboDetail={setComboDetail}
-                                comboDetail={comboDetail}
-                                serviceListData={serviceListData}
-                                setRefresh={setRefresh}
-                                refresh={refresh}
-                            />
-                        ))}
-                    </Grid>
-                    <Grid item xs={6}>
-                        {comboListDisplay.map((item) => (
-                            <ServiceCardRow
-                                key={item.id}
-                                item={item}
-                                toggleBlocked={toggleBlocked}
-                                deleteService={deleteService}
-                                serviceCheckList={serviceCheckList}
-                                handleServiceCheck={handleServiceCheck}
-                                type={type}
-                                setType={setType}
-                                extractServiceCheckList={extractServiceCheckList}
-                                setServiceCheckList={setServiceCheckList}
-                                setComboDetail={setComboDetail}
-                                comboDetail={comboDetail}
-                                serviceListData={serviceListData}
-                                setRefresh={setRefresh}
-                                refresh={refresh}
-                            />
-                        ))}
-                    </Grid>
-                </Grid>
-            </>
+            <Box
+                display='grid'
+                gridTemplateColumns='repeat(2, 2fr)'
+                gap={2}
+                width='65%'
+            >
+                <Box>
+                    {serviceListDisplay.map((item) => (
+                        <ServiceCardRow
+                            key={item.id}
+                            item={item}
+                            toggleBlocked={toggleBlocked}
+                            deleteService={deleteService}
+                            serviceCheckList={serviceCheckList}
+                            handleServiceCheck={handleServiceCheck}
+                            type={type}
+                            setType={setType}
+                            extractServiceCheckList={extractServiceCheckList}
+                            setServiceCheckList={setServiceCheckList}
+                            setComboDetail={setComboDetail}
+                            comboDetail={comboDetail}
+                            serviceListData={serviceListData}
+                            setRefresh={setRefresh}
+                            refresh={refresh}
+                        />
+                    ))}
+                </Box>
+                <Box>
+                    {comboListDisplay.map((item) => (
+                        <ServiceCardRow
+                            key={item.id}
+                            item={item}
+                            toggleBlocked={toggleBlocked}
+                            deleteService={deleteService}
+                            serviceCheckList={serviceCheckList}
+                            handleServiceCheck={handleServiceCheck}
+                            type={type}
+                            setType={setType}
+                            extractServiceCheckList={extractServiceCheckList}
+                            setServiceCheckList={setServiceCheckList}
+                            setComboDetail={setComboDetail}
+                            comboDetail={comboDetail}
+                            serviceListData={serviceListData}
+                            setRefresh={setRefresh}
+                            refresh={refresh}
+                        />
+                    ))}
+                </Box>
+            </Box>
             {type == 'add' && (
                 <ComboForm
                     openDialog={comboDialog}
@@ -232,7 +230,7 @@ const ServiceComponent = (props) => {
                     refresh={refresh}
                 />
             )}
-        </>
+        </Box>
     );
 };
 
