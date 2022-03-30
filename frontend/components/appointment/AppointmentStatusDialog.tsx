@@ -167,7 +167,7 @@ const AppointmentStatusDialog = ({
             </Box>
             <Box
               sx={{
-                overflowY: 'scroll',
+                overflowY: 'auto',
               }}
             >
               <AppointmentServiceList
