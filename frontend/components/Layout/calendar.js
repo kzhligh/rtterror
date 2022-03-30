@@ -17,6 +17,7 @@ const theme = createTheme({
                 root: {
                     color: 'white',
                     background: '#888888',
+                    height: '100%',
                 },
             },
         },

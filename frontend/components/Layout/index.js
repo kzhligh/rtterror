@@ -1,7 +1,12 @@
-import Calendar from './calendar';
+import {
+    createTheme,
+    ThemeProvider,
+} from '@mui/material/styles';
+import { Box, Divider } from '@mui/material';
 import MainMenu from './menu';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Divider, Box } from '@mui/material';
+import Calendar from './calendar';
+import { useState } from 'react';
+import { Drawer } from './Drawer';
 
 const globalTheme = createTheme({
     typography: {
@@ -9,23 +14,28 @@ const globalTheme = createTheme({
     },
 });
 
-const Layout = ({ children }) => {
-    return (
-        <ThemeProvider theme={globalTheme}>
-            <Box display='grid'
-                gap={1}
-                gridTemplateAreas={`"menu main main main main main main"`}
-                gridAutoColumns='1fr'>
-                <Box bgcolor='#888888'>
-                    <Calendar />
-                    <Divider />
-                    <MainMenu />
+export
+    const Layout = ({ children }) => {
+        const [open, setOpen] = useState(false);
+
+        return (
+            <ThemeProvider theme={globalTheme}>
+                <Box display='flex'>
+                    <Drawer
+                        variant='permanent'
+                        open={open}
+                        onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}
+                    >
+                        <Calendar />
+                        <Divider>Clinique yuanQi Massage &amp; Acupuncture</Divider>
+                        <MainMenu />
+                    </Drawer>
+                    <Divider orientation="vertical" flexItem />
+                    <Box component='main' sx={{ flexGrow: 1, p: 3 }} bgcolor='#fff'>
+                        {children}
+                    </Box>
                 </Box>
-                <Box gridArea='main'>
-                    {children}
-                </Box>
-            </Box>
-        </ThemeProvider >
-    );
-};
+            </ThemeProvider>
+        );
+    };
 export default Layout;

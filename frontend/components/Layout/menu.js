@@ -53,12 +53,12 @@ const Menu = () => {
     <Box display='grid' sx={{
       background: '#c5c5c5',
       bottom: 0,
+      height: '100%',
     }}>
       <MenuList>
         {menuItems.map((item) => (
           <Link key={item.text} href={item.path} passHref>
             <MenuItem sx={{
-              marginLeft: '25%',
               marginBottom: '1em',
 
               fontFamily: 'Montserrat, sans-serif',
