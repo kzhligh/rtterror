@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { v4 as uuidv4 } from 'uuid';
 import { Grid, Button, Card, CardHeader, CardContent, Typography } from '@mui/material';
 import _cloneDeep from "lodash/cloneDeep";
@@ -8,7 +9,6 @@ import ServiceEmployeeDialog from './serviceEmployeeDialog';
 import DurationPriceDisplay from './durationPriceDisplay';
 import { InputTextField } from "../form/formComponent";
 import cssStyled from '../../styles/service.module.css';
-import Box from "@mui/material/Box";
 
 
 const ServiceDetailsCard = (props) => {
@@ -21,6 +21,7 @@ const ServiceDetailsCard = (props) => {
     const [durationPriceList, setDurationPriceList] = useState(item.durations_prices);
     const [reload, setReload] = useState(false);
     const [serviceValue, setServiceValue] = useState(_cloneDeep(item));
+    const router = useRouter();
 
     const handleAddEmployeeCheck = (val, employee) => {
         if (val) {
@@ -85,97 +86,95 @@ const ServiceDetailsCard = (props) => {
     };
 
     return (
-        <Box>
-            <Card>
-                <CardHeader title={serviceValue.name} />
-                <CardContent>
-                    <Grid container spacing={1} >
-                        <Grid container direction="row" justifyContent="space-between" alignItems="center"                        >
-                            <Typography>Created on {new Date(serviceValue.createdAt).toDateString()}</Typography>
-                            <Grid direction="row">
-                                <Button
-                                    className={cssStyled.buttonContainer}
-                                    variant="outlined"
-                                    onClick={() => { handleSaveService(); }}
-                                    color='success'
-                                >
-                                    Save
-                                </Button>
-                                <Button
-                                    className={cssStyled.buttonContainer}
-                                    variant="outlined"
-                                    color="inherit"
-                                    href='/service'
-                                    sx={{ color: 'text.secondary', borderColor: 'text.secondary' }}
-                                >
-                                    Back
-                                </Button>
-                            </Grid>
+        <Card>
+            <CardHeader title={serviceValue.name} />
+            <CardContent>
+                <Grid container spacing={1} >
+                    <Grid container direction="row" justifyContent="space-between" alignItems="center"                        >
+                        <Typography>Created on {new Date(serviceValue.createdAt).toDateString()}</Typography>
+                        <Grid direction="row">
+                            <Button
+                                className={cssStyled.buttonContainer}
+                                variant="outlined"
+                                onClick={() => { handleSaveService(); }}
+                                color='success'
+                            >
+                                Save
+                            </Button>
+                            <Button
+                                className={cssStyled.buttonContainer}
+                                variant="outlined"
+                                color="inherit"
+                                onClick={() => router.back()}
+                                sx={{ color: 'text.secondary', borderColor: 'text.secondary' }}
+                            >
+                                Back
+                            </Button>
                         </Grid>
+                    </Grid>
 
-                        <Grid item xs={8}>
-                            <InputTextField
-                                label='Service Code'
-                                name='service_code'
-                                value={serviceValue.service_code.split("-", 1)[0]}
-                                onChange={handleSetServiceValue}
-                            />
+                    <Grid item xs={8}>
+                        <InputTextField
+                            label='Service Code'
+                            name='service_code'
+                            value={serviceValue.service_code.split("-", 1)[0]}
+                            onChange={handleSetServiceValue}
+                        />
 
-                            <InputTextField
-                                label='Description'
-                                name='description'
-                                value={serviceValue.description}
-                                onChange={handleSetServiceValue}
-                                rows={4}
+                        <InputTextField
+                            label='Description'
+                            name='description'
+                            value={serviceValue.description}
+                            onChange={handleSetServiceValue}
+                            rows={4}
+                        />
+                        <Grid item>
+                            <ServiceEmployeeTable
+                                displayEmployeeList={serviceEmployList}
+                                handleEmployeeCheck={handleDeleteEmployeeCheck}
+                                employeeCheckList={deleteEmployeeCheckList}
                             />
-                            <Grid item>
-                                <ServiceEmployeeTable
-                                    displayEmployeeList={serviceEmployList}
-                                    handleEmployeeCheck={handleDeleteEmployeeCheck}
-                                    employeeCheckList={deleteEmployeeCheckList}
-                                />
-                                <Grid
-                                    container
-                                    rowSpacing={1}
-                                    columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-                                >
-                                    <Grid item xs={6}>
-                                        <Button
-                                            variant="outlined"
-                                            onClick={handleAddEmployee}
-                                            fullWidth
-                                        >
-                                            Assign Employee
-                                        </Button>
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Button
-                                            variant="outlined"
-                                            color="error"
-                                            onClick={() => handleDeleteEmployee()}
-                                            fullWidth
-                                        >
-                                            Unassign Employee
-                                        </Button>
-                                    </Grid>
+                            <Grid
+                                container
+                                rowSpacing={1}
+                                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                            >
+                                <Grid item xs={6}>
+                                    <Button
+                                        variant="outlined"
+                                        onClick={handleAddEmployee}
+                                        fullWidth
+                                    >
+                                        Assign Employee
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Button
+                                        variant="outlined"
+                                        color="error"
+                                        onClick={() => handleDeleteEmployee()}
+                                        fullWidth
+                                    >
+                                        Unassign Employee
+                                    </Button>
                                 </Grid>
                             </Grid>
                         </Grid>
-                        <Grid item xs={4} style={{ minHeight: '100%' }}>
-                            <DurationPriceDisplay durationPriceList={durationPriceList} setDurationPriceList={setDurationPriceList} reload={reload} setReload={setReload} />
-                        </Grid>
                     </Grid>
-                    <ServiceEmployeeDialog
-                        serviceEmployeeDialog={openEmployeeDialog}
-                        setServiceEmployeeDialog={setOpenEmployeeDialog}
-                        handleAddSelected={handleAddSelected}
-                        displayEmployeeList={remainEmployeeList}
-                        handleEmployeeCheck={handleAddEmployeeCheck}
-                        employeeCheckList={addEmployeeCheckList}
-                    />
-                </CardContent>
-            </Card>
-        </Box>
+                    <Grid item xs={4} style={{ minHeight: '100%' }}>
+                        <DurationPriceDisplay durationPriceList={durationPriceList} setDurationPriceList={setDurationPriceList} reload={reload} setReload={setReload} />
+                    </Grid>
+                </Grid>
+                <ServiceEmployeeDialog
+                    serviceEmployeeDialog={openEmployeeDialog}
+                    setServiceEmployeeDialog={setOpenEmployeeDialog}
+                    handleAddSelected={handleAddSelected}
+                    displayEmployeeList={remainEmployeeList}
+                    handleEmployeeCheck={handleAddEmployeeCheck}
+                    employeeCheckList={addEmployeeCheckList}
+                />
+            </CardContent>
+        </Card>
     );
 };
 export default ServiceDetailsCard;
