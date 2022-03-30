@@ -3,31 +3,38 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import {Divider, Grid,} from "@mui/material";
 import Button from "@mui/material/Button";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import styled from '../../styles/employee.module.css';
 import NewEmployeeDialog from "./newEmployeeDialog";
 import {useRouter} from "next/router";
 import {DataGrid} from "@mui/x-data-grid";
 import {formatPhoneNumber} from "../../utils";
+import cssStyled from "../../styles/service.module.css";
 
 
 const EmployeeComponent = (props) => {
     const router = useRouter();
-    const {employeeList, addEmployee, deleteEmployee, serviceList , displayEmployeeList , setDisplayEmployeeList} = props;
+    const {employeeList, addEmployee, deleteEmployee, serviceList } = props;
     const [addOpen, setAddOpen] = useState(false);
+    const [displayEmployeeList, setDisplayEmployeeList] = useState(employeeList);
     const [rowSelection, setRowSelection] = useState([]);
+    const [employees,setEmployees]=useState(employeeList);
+    useEffect(()=>{
+        setEmployees(employeeList)
+        setDisplayEmployeeList(employeeList);
+    },[employeeList])
 
     const handleSearch = (val) => {
         const searchValue = val.toLowerCase().trim()
         if (searchValue.length > 0) {
-            const empList = employeeList.filter(
+            const empList = employees.filter(
                 (emp) =>
                     emp.first_name.toLowerCase().includes(searchValue) ||
                     emp.last_name.toLowerCase().includes(searchValue)
             );
             setDisplayEmployeeList(empList);
         } else {
-            setDisplayEmployeeList(employeeList);
+            setDisplayEmployeeList(employees);
         }
     };
     const getStartDate = (params)=> {
@@ -48,10 +55,12 @@ const EmployeeComponent = (props) => {
     const handleDeleteEmployee = () => {
         deleteEmployee(rowSelection);
     }
-
+    const validateEmployeeId = (id)=>{
+        return employeeList.some(emp => emp.id == id);
+    }
     return (
 
-        <Box>
+        <Box >
             <SearchInput handleSearch={handleSearch}/>
 
             <Grid
@@ -89,7 +98,7 @@ const EmployeeComponent = (props) => {
                     router.push({
                         pathname: '/employee/details',
                         query: {empid: row.id}
-                    }, '/employee')
+                    }, '/employee/details')
                 }
                 rowsPerPageOptions={[8]}
                 checkboxSelection
@@ -99,8 +108,13 @@ const EmployeeComponent = (props) => {
                 onSelectionModelChange={(rows) => setRowSelection(rows)}
             />
 
-            <NewEmployeeDialog open={addOpen} setAddOpen={setAddOpen} addEmployee={addEmployee}
-                               serviceList={serviceList}/>
+            <NewEmployeeDialog
+                open={addOpen}
+                setAddOpen={setAddOpen}
+                addEmployee={addEmployee}
+                serviceList={serviceList}
+                validateEmployeeId={validateEmployeeId}
+            />
 
         </Box>
     );

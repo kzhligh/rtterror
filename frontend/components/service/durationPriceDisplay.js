@@ -25,7 +25,7 @@ const DurationPriceDisplay = (props) => {
     const [isEditingDurationPrice, setIsEditingDurationPrice] = useState(false);
 
     const handleAddDurationPrice = () => {
-        setDurationPriceList([...durationPriceList, { price: 50, duration: 0.5 }]);
+        setDurationPriceList([...durationPriceList, { price: 50, duration: 0 }]);
     };
     const handleRemoveDurationPrice = (index) => {
         setDurationPriceList([

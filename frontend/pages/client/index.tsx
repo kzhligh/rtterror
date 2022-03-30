@@ -13,7 +13,6 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { Search } from '@mui/icons-material';
-import styles from 'styles/client.module.css';
 import {
   GridOverlay,
   DataGrid,
@@ -22,11 +21,11 @@ import {
 } from '@mui/x-data-grid';
 import { http } from 'utils/http';
 import React, { useState, useEffect } from 'react';
-import { AddCustomerDialog } from 'components/client/AddCustomerDialog';
 import { useRouter } from 'next/router';
 import { formatPhoneNumber } from 'utils';
 import { GetServerSidePropsResult } from 'next';
 import { useCustomerSearchObservable } from 'hooks/useCustomerSearch';
+import { AddCustomerDialog } from 'components/client/AddCustomerDialog';
 
 interface ClientProps {
   customers: Array<any>;
@@ -113,7 +112,7 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
       <h1>Client</h1>
       <TextField
         onChange={handleSearch}
-        className={styles.searchbar}
+        style={{ marginBottom: '45px', width: '50%' }}
         placeholder="Search a client by name..."
         label="Search"
         variant="outlined"
@@ -229,7 +228,6 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
           ),
         }}
       />
-
       <AddCustomerDialog
         open={addCustomerDialogIsOpen}
         onClose={() => setAddCustomerDialogIsOpen(false)}

@@ -42,6 +42,9 @@ export default function ComboForm({
   const [comboValue, setComboValue] = useState(
     !_isEmpty(comboDetail) ? comboDetail : initValue
   );
+  const [autoPopulate, setAutoPopulate] = useState(false);
+  const [comboPlacholderValue, setComboPlacholderValue] = useState();
+
   const [errorMessage, setErrorMessage] = useState({});
   const [serviceListAddable, setServiceListAddable] = useState([]);
 
@@ -66,7 +69,26 @@ export default function ComboForm({
     services.durations_prices = durationsPriceList;
     servCheckList.splice(index, 1, services);
     setServiceCheckList([...servCheckList]);
+    setAutoPopulate(true);
   };
+
+  useEffect(() => {
+    let name = '';
+    let price = 0;
+    let duration = 0;
+    for (let serviceItem of serviceCheckList) {
+      name += serviceItem.service_code.split("-")[0] + ' + ';
+      price += serviceItem.durations_prices[0].price * 1;
+      duration += serviceItem.durations_prices[0].duration * 1;
+    }
+    let value = { ...comboValue };
+    value.name = name.slice(0, -2);
+    value.total_price = price;
+    value.total_duration = duration;
+    if (autoPopulate) {
+      setComboValue(value);
+    }
+  }, [serviceCheckList]);
 
   const closeClearValue = () => {
     setComboValue(initValue);
@@ -81,7 +103,6 @@ export default function ComboForm({
   const removeService = (item) => {
     handleServiceCheck(false, item);
     if (serviceCheckList.length === 1) {
-      // the update of component is kind of late
       closeClearValue();
     }
   };
@@ -173,7 +194,7 @@ export default function ComboForm({
               />
               <InputTextField
                 label='Total Price ($)'
-                name='total_duration'
+                name='total_price'
                 value={comboValue.total_price}
                 onChange={handleSetValue}
                 error={errorMessage.total_price}

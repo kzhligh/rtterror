@@ -1,5 +1,5 @@
 import EmployeeComponent from "../../components/employee";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {http} from "../../utils/http";
 import groupService from "../../utils/groupService";
 
@@ -14,8 +14,6 @@ export async function getServerSideProps(context) {
 
 const Employee = ({serviceList, employeesList}) => {
     const [employeeList, setEmployeeList] = useState(employeesList);
-    const [displayEmployeeList, setDisplayEmployeeList] = useState(employeeList);
-
 
     const addEmployee = async (empData) => {
         const result = await http('/api/v1/employees', {
@@ -41,8 +39,6 @@ const Employee = ({serviceList, employeesList}) => {
                 serviceList={serviceList}
                 addEmployee={addEmployee}
                 deleteEmployee={deleteEmployee}
-                displayEmployeeList={displayEmployeeList}
-                setDisplayEmployeeList={setDisplayEmployeeList}
             />
         </div>
     );

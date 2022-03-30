@@ -49,6 +49,7 @@ export const ComboItem = (props) => {
                     data-cy='clientSort'
                     aria-labelledby='demo-row-radio-buttons-group-label'
                     name='row-radio-buttons-group'
+                    value={0}
                 >
                     {!_isEmpty(serviceItem.durations_prices)
                         ? serviceItem.durations_prices.map((option, index) => (

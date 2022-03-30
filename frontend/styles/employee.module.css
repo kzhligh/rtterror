@@ -16,3 +16,7 @@
     width: 150px;
     height: 50px;
 }
+.container {
+    display: flex;
+    flex-direction: row;
+}
