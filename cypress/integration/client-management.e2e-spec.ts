@@ -1,10 +1,15 @@
 interface Client {
   firstName: string;
   lastName: string;
+  client_id: string;
   email: string;
   gender: string;
   address: string;
   phone: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  dob: string;
 }
 
 function formatPhoneNumber(phoneNumber: string) {
@@ -34,6 +39,11 @@ describe('Client', () => {
   it('Create new clients', function () {
     this.clients.forEach((client: Client) => {
       cy.get('[data-cy=clientCreate]').click();
+
+      cy.get('[data-cy=clientID] input')
+        .type(client.client_id)
+        .should('have.value', client.client_id);
+
       cy.get('[data-cy=clientFirstName] input')
         .type(client.firstName)
         .should('have.value', client.firstName);
@@ -50,24 +60,36 @@ describe('Client', () => {
         .type(client.email)
         .should('have.value', client.email);
 
+      cy.get('[data-cy=clientProvince] input')
+        .type(client.province)
+        .should('have.value', client.province);
+
+      cy.get('[data-cy=clientCity] input')
+        .type(client.city)
+        .should('have.value', client.city);
+
       cy.get('[data-cy=clientAddress] input')
         .type(client.address)
         .should('have.value', client.address);
+
+      cy.get('[data-cy=clientPostalCode] input')
+        .type(client.postalCode)
+        .should('have.value', client.postalCode);
 
       cy.get(`[data-cy=clientGender${client.gender}] input`)
         .check()
         .should('have.value', client.gender);
 
-      cy.get('[aria-label="Choose date"]').click();
-      cy.get(`[aria-label="${monthAbbrev} 22, ${currentDate.getFullYear()}"]`)
-        .eq(1)
-        .click();
+      cy.get('[data-cy=clientdob] input')
+        .type(client.dob)
+        .should('have.value', client.dob);
 
       cy.get('[data-cy=clientNotification]')
         .parent()
         .click()
         .get('[data-cy=typeEmail]')
         .click();
+
       cy.get('[data-cy=clientNotification] input').should(
         'have.value',
         'email'
@@ -117,6 +139,11 @@ describe('Client', () => {
     const { firstName, lastName } = client;
 
     cy.get('[data-cy=clientCreate]').click();
+
+    cy.get('[data-cy=clientID] input')
+      .type(client.client_id)
+      .should('have.value', client.client_id);
+
     cy.get('[data-cy=clientFirstName] input')
       .type(client.firstName)
       .should('have.value', client.firstName);
@@ -130,21 +157,32 @@ describe('Client', () => {
       .should('have.value', formatPhoneNumber(client.phone));
 
     cy.get('[data-cy=clientEmail] input')
-      .type('random@email.com')
-      .should('have.value', 'random@email.com');
+      .type(client.email)
+      .should('have.value', client.email);
+
+    cy.get('[data-cy=clientProvince] input')
+      .type(client.province)
+      .should('have.value', client.province);
+
+    cy.get('[data-cy=clientCity] input')
+      .type(client.city)
+      .should('have.value', client.city);
 
     cy.get('[data-cy=clientAddress] input')
       .type(client.address)
       .should('have.value', client.address);
 
+    cy.get('[data-cy=clientPostalCode] input')
+      .type(client.postalCode)
+      .should('have.value', client.postalCode);
+
     cy.get(`[data-cy=clientGender${client.gender}] input`)
       .check()
       .should('have.value', client.gender);
 
-    cy.get('[aria-label="Choose date"]').click();
-    cy.get(`[aria-label="${monthAbbrev} 22, ${currentDate.getFullYear()}"]`)
-      .eq(1)
-      .click();
+    cy.get('[data-cy=clientdob] input')
+      .type(client.dob)
+      .should('have.value', client.dob);
 
     cy.get('[data-cy=clientNotification]')
       .parent()
@@ -171,7 +209,7 @@ describe('Client', () => {
     cy.get(
       '.MuiButton-outlinedPrimary[data-cy=confirm-duplicate-customer]'
     ).click();
-    cy.wait('@createCustomer').its('response.statusCode').should('eq', 201);
+    cy.wait('@createCustomer').its('response.statusCode').should('eq', 400);
   });
 
   it('Delete clients', function () {

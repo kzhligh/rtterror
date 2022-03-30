@@ -220,7 +220,7 @@ describe('Customer Service', () => {
           lastName: {
             [Op.startsWith]: mockQuery,
           },
-          email: {
+          client_id: {
             [Op.startsWith]: mockQuery,
           },
           phone: {

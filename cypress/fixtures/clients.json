@@ -2,17 +2,27 @@
   {
     "firstName": "Amy",
     "lastName": "Zhang",
+    "client_id": "9f86d-08188-4c7d",
     "email": "amy.zhang@explorance.io",
     "gender": "F",
     "address": "4310 Boulevard Cléroux",
-    "phone": "5142385468"
+    "phone": "5142385468",
+    "city": "Brossard",
+    "province": "Québec",
+    "postalCode": "H5M 1R4",
+    "dob": "1988-01-15"
   },
   {
     "firstName": "Zed",
     "lastName": "Applehouse",
+    "client_id": "ad015a-3bf4f1b-2b0b8",
     "email": "zed.applehouse@solaris.com",
     "gender": "M",
     "address": "999 De Maisonneuve W.",
-    "phone": "4382305518"
+    "phone": "4382305518",
+    "city": "Laval",
+    "province": "Québec",
+    "postalCode": "H8R 1L4",
+    "dob": "1992-09-20"
   }
 ]
