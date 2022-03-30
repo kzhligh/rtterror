@@ -31,7 +31,6 @@ const Service = ({ employeeList }) => {
         comboList.sort((a, b) => (+a.blocked < +b.blocked ? -1 : 1));
         setServiceListData(serviceList);
         setComboListData(comboList);
-        console.log({ service: serviceList, combo: comboList });
     };
     useEffect(() => {
         setLoading(true);

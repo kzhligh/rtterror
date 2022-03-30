@@ -2,17 +2,12 @@ import * as React from 'react';
 import cssStyled from '../../styles/service.module.css';
 import {
     Box,
-    Button,
     Card,
     CardHeader,
     CardContent,
     CardActionArea,
     Checkbox,
     Collapse,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    Grid,
     Chip,
     Stack,
     Typography,
@@ -27,69 +22,17 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ComboForm from './comboForm';
 
-import { styled } from '@mui/material/styles';
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import ColorHash from 'color-hash';
+import { ConfirmDeleteDialog } from './ConfirmDeleteDialog';
+
+const colorHash = new ColorHash();
 
 const CardContentNoPadding = styled(CardContent)(`
   &:first-of-type {
     padding-top: 0;
   }
 `);
-
-const ConfirmDeleteDialog = (props) => {
-    const { open, setOpen, item, deleteService } = props;
-    const handleClose = () => {
-        setOpen(false);
-    };
-    const handleConfirm = () => {
-        deleteService(item);
-        handleClose();
-    };
-    const isACombo = () => item.hasOwnProperty('services');
-
-    return (
-        <Dialog
-            open={open}
-            onClose={handleClose}
-            fullWidth={true}
-            maxWidth='sm'
-            p={5}
-        >
-            <DialogTitle id='alert-dialog-title'>
-                Delete {isACombo() ? 'Combo' : 'Service'} {item.name}?
-            </DialogTitle>
-            <DialogContent>
-                <Grid
-                    container
-                    direction='row'
-                    justifyContent='center'
-                    alignItems='center'
-                >
-                    <Typography variant='body2'>
-                        This action cannot be undone.{' '}
-                    </Typography>
-                </Grid>
-                <Grid
-                    container
-                    direction='row'
-                    justifyContent='flex-end'
-                    alignItems='center'
-                >
-                    <Button
-                        className={cssStyled.buttonContainer}
-                        variant='contained'
-                        onClick={handleConfirm}
-                        color='error'
-                    >
-                        Delete
-                    </Button>
-                    <Button onClick={handleClose} className={cssStyled.buttonContainer}>
-                        Cancel
-                    </Button>
-                </Grid>
-            </DialogContent>
-        </Dialog>
-    );
-};
 
 const ServiceCardRow = (props) => {
     const router = useRouter();
@@ -136,21 +79,34 @@ const ServiceCardRow = (props) => {
     const getCreateDate = (item) => {
         return new Date(item['createdAt']).toDateString();
     };
+
+    const theme = createTheme({
+        palette: {
+            primary: {
+                main: `${colorHash.hex(serviceItem.service_code)}`,
+            },
+            // Used by `getContrastText()` to maximize the contrast between
+            // the background and the text.
+            contrastThreshold: 3,
+        },
+    });
+
     return (
         <Box display='grid'>
             <Card
-                style={{ backgroundColor: isBlocked() ? 'gray' : 'white' }}
+                style={{ backgroundColor: isBlocked() ? '#888' : '#fff' }}
                 sx={{
                     boxShadow: 3,
                     borderRadius: 2,
                 }}
+                variant='outline'
             >
                 <CardHeader
                     action={
                         <>
                             <IconButton color='error' onClick={() => setDeleteDialogOpen(true)}><DeleteForeverRounded /></IconButton>
                             <IconButton color='warning' onClick={() => toggleBlocked(serviceItem)}>
-                                {isBlocked() ? 'unblock' : <BlockRounded />}</IconButton>
+                                {isBlocked() ? "" : <BlockRounded />}</IconButton>
                             {!isACombo() ? (
                                 <Checkbox
                                     key={serviceItem.id}
@@ -171,13 +127,14 @@ const ServiceCardRow = (props) => {
                         </>
                     }
                     title={
-                        <>
+                        <ThemeProvider theme={theme}>
                             <Chip
-                                label={isACombo() ? 'Combo' : 'Service'}
-                                variant='outlined'
+                                color='primary'
+                                label={<Typography>
+                                    {isACombo() ? 'Combo' : 'Service'}</Typography>}
                             />{' '}
                             {serviceItem.name}
-                        </>
+                        </ThemeProvider>
                     }
                     subheader={
                         <>
