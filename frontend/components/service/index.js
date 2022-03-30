@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
     Button,
     Select,
@@ -8,7 +8,6 @@ import {
     Typography,
     Box,
     FormControl,
-    Grid,
 } from '@mui/material';
 import Link from 'next/link';
 import cssStyled from '/styles/service.module.css';
@@ -112,13 +111,13 @@ const ServiceComponent = (props) => {
     return (
         <Box display='grid'>
             <SearchInput handleSearch={handleSearch} />
-            <Box>
+            <Box display='flex' gap={5}>
                 <Typography variant='h6'>Select a service</Typography>
                 <Link href={'/service/add'} passHref>
                     <Button
                         className={cssStyled.buttonContainer}
                         variant='outlined'
-                        color='success'
+                        color='info'
                     >
                         New Service
                     </Button>
@@ -126,11 +125,11 @@ const ServiceComponent = (props) => {
                 <Button
                     className={cssStyled.buttonContainer}
                     variant='outlined'
-                    color='secondary'
+                    color='success'
                     onClick={handleCreateCombo}
                     disabled={serviceCheckList.length < 2}
                 >
-                    Create Combo
+                    {serviceCheckList.length > 0 ? 'Combine ' + serviceCheckList.length + ' Service(s)' : 'New Combo'}
                 </Button>
                 <FormControl size='small' sx={{ minWidth: 120 }}>
                     <InputLabel id='order-by-label'>
@@ -160,7 +159,7 @@ const ServiceComponent = (props) => {
                 gap={2}
                 width='100%'
             >
-                <Box>
+                <Box display='grid' gap={2}>
                     {serviceListDisplay.map((item) => (
                         <ServiceCardRow
                             key={item.id}
@@ -181,7 +180,7 @@ const ServiceComponent = (props) => {
                         />
                     ))}
                 </Box>
-                <Box>
+                <Box display='grid' gap={2}>
                     {comboListDisplay.map((item) => (
                         <ServiceCardRow
                             key={item.id}
