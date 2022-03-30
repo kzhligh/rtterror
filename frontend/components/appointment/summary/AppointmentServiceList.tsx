@@ -49,7 +49,7 @@ export const AppointmentServiceList = ({
           .reduce(
             (prev, cur) => [
               prev,
-              <Divider variant='inset' component='li' />,
+              <Divider key='' variant='inset' component='li' />,
               cur,
             ],
 

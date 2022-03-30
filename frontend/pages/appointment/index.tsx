@@ -109,7 +109,7 @@ const Appointment = ({ initAppointments, employeeList }) => {
 
       setOpenStatusDialog(true);
     },
-    [openStatusDialog]
+    [appointmentMap]
   );
 
   const onBeforeCreateSchedule = useCallback((scheduleData) => {
@@ -131,17 +131,20 @@ const Appointment = ({ initAppointments, employeeList }) => {
     setOpenStatusDialog(true);
   }, []);
 
-  const onBeforeDeleteSchedule = useCallback(async (event) => {
-    const { id, calendarId } = event.schedule;
+  const onBeforeDeleteSchedule = useCallback(
+    async (event) => {
+      const { id, calendarId } = event.schedule;
 
-    cal.current.calendarInst.deleteSchedule(id, calendarId);
+      cal.current.calendarInst.deleteSchedule(id, calendarId);
 
-    await http(appointmentApiPath + '/' + id, { method: 'DELETE' });
+      await http(appointmentApiPath + '/' + id, { method: 'DELETE' });
 
-    const newAppointmentMap = new Map(appointmentMap);
-    newAppointmentMap.delete(id);
-    setAppointmentMap(newAppointmentMap);
-  }, []);
+      const newAppointmentMap = new Map(appointmentMap);
+      newAppointmentMap.delete(id);
+      setAppointmentMap(newAppointmentMap);
+    },
+    [appointmentMap]
+  );
 
   const onBeforeUpdateSchedule = useCallback((e) => {
     setUpdateEvent(e);
