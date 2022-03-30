@@ -59,16 +59,12 @@ interface Props extends DialogProps {
   onClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
 }
 
-export const AddAppointmentDialog = ({ therapists, services, existingClients, isOpen, onClose, refreshAppointments}) => {
-  // console.log('therapists: ', therapists)
-  // console.log('services: ', services)
-  console.log('existingClients: ', existingClients)
+export const AddAppointmentDialog = ({ therapists, services, existingClients, isOpen, onClose, refreshAppointments }) => {
 
   const [expanded, setExpanded] = useState<string | false>(false);
   const [ showClientDialog, setShowClientDialog ] = useState(false);
   const [ clients, setClients ] = useState([]);
   useEffect(() => {
-    console.log('useEffect()/clients: ', clients);
     if (existingClients.length !== clients.length) setClients([ ...existingClients ])
   }, [existingClients]);
   const [appointmentForm, setAppointment] = useState({
@@ -86,11 +82,26 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
     feedback: '',           // optional
     notes: ''
   });
-  useEffect(() => {
-    console.log('appointmentForm: ', appointmentForm)
-  }, [appointmentForm]);
 
-  const selectedClient = clients.filter(client => client.id === appointmentForm.client_id)[0]
+  const selectedClient = clients.filter(client => client.id === appointmentForm.client_id)[0];
+
+  const resetAppointmentForm = () => {
+    setAppointment({
+      rmq_id: '',
+      client_id: -1,
+      employee_ids: [],
+      service_ids: [],
+      pro_rmq_id: '',         // optional
+      datetime: '',
+      duration: 30,            // in minutes
+      repeat: false,
+      cycle_start: new Date(),    // optional
+      cycle_end: new Date(),    // optional
+      status: [],
+      feedback: '',           // optional
+      notes: ''
+    })
+  }
 
   const handleSubmit = () => {
     http(
@@ -101,15 +112,13 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
       }
     )
       .then((res) => {
-        console.log('the res of submitting an appointment: ', res)
+        resetAppointmentForm();
         refreshAppointments();
       })
       .catch(error => {
         console.error('ERROR - submitting appointment: ', error)
       });
   }
-
-  console.log('rendered/clients: ', clients);
 
   return (
     showClientDialog ?
@@ -130,8 +139,6 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
           style={{ width: '100%' }}
           onSubmit={(e) => {
             e.preventDefault();
-            // setAppointment((state) => ({ ...state, status: 'Pending' }));
-            console.log(appointmentForm);
             handleSubmit();
             onClose(e, 'backdropClick');
           }}
@@ -156,7 +163,6 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
               />
             )}
             onChange={(date: Date) => {
-              // console.log('DateTimePicker/date: ', date)
               setAppointment((state) => ({
                 ...state,
                 datetime: date.toLocaleString(),
@@ -206,13 +212,13 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
                   <TextField { ...params } label="Client name" />
                 )}
                 options={clients}
-                value={selectedClient}
+                // value={selectedClient}
                 getOptionLabel={(option: IClient) => option.name}
                 style={{ width: "100%" }}
                 id="existing"
                 onChange={(event, value: any) => {
-                  console.log('Autocomplete/onChange()/clients: ', clients)
-                  setAppointment((state) => ({ ...state, client_id: value.id }))
+                  const clientId = value ? value.id : -1
+                  setAppointment((state) => ({ ...state, client_id: clientId }))
                 }}
               />
             </AccordionDetails>
@@ -257,6 +263,7 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
             <Button
               onClick={(e) => {
                 onClose(e, 'backdropClick');
+                resetAppointmentForm()
               }}
               variant="outlined"
             >
