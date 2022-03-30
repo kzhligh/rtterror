@@ -84,6 +84,26 @@ function Appointment() {
       end: new Date(new Date().setDate(today.getDay() - 1)),
     },
   ]);
+
+  const [ schedules1, setSchedules1 ] = useState([]);
+  useEffect ( () => {
+    if(schedules1.length === 0) {
+      // get appointments from db
+      http(
+        '/api/v1/appointments',
+        {
+          method: 'GET'
+        }
+      )
+        .then(appointments => {
+          console.log('appointments from DB: ', appointments);
+          // const allAppointments = appointments.map()
+          setSchedules1([''])
+        })
+        .catch(error => console.error('ERROR -'))
+    }
+  }, [schedules1])
+
   const [employees, setEmployees] = useState([
     {
       id: '1',
@@ -256,6 +276,15 @@ function Appointment() {
     calendar.next();
   };
 
+  const refreshAppointments = () => {
+    http('/api/v1/appointments', { method: 'GET'})
+      .then(appointments => {
+        console.log('refreshAppointments()/SUCCESS: ', appointments);
+        setSchedules(helpers.generateSchedules(appointments));
+      })
+      .catch(error => console.error('refreshAppointments()/ERROR: ', error));
+  }
+
   return (
     <>
       <Typography variant="h6">Appointment</Typography>
@@ -349,6 +378,7 @@ function Appointment() {
         therapists = {therapists}
         services = {services}
         existingClients = {existingClients}
+        refreshAppointments = {refreshAppointments}
       />
       <DropConfirmationDialog
         open={openDropDialog}

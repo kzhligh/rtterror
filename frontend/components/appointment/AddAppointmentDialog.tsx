@@ -59,7 +59,7 @@ interface Props extends DialogProps {
   onClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
 }
 
-export const AddAppointmentDialog = ({ therapists, services, existingClients, isOpen, onClose }) => {
+export const AddAppointmentDialog = ({ therapists, services, existingClients, isOpen, onClose, refreshAppointments}) => {
   // console.log('therapists: ', therapists)
   // console.log('services: ', services)
   console.log('existingClients: ', existingClients)
@@ -102,6 +102,7 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
     )
       .then((res) => {
         console.log('the res of submitting an appointment: ', res)
+        refreshAppointments();
       })
       .catch(error => {
         console.error('ERROR - submitting appointment: ', error)
