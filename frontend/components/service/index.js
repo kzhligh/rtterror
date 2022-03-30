@@ -1,16 +1,31 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import {Button, Select, MenuItem, InputLabel, Typography, Box, Divider, FormControl, Grid} from '@mui/material';
+import {
+    Button,
+    Select,
+    MenuItem,
+    InputLabel,
+    Typography,
+    Box,
+    FormControl,
+    Grid,
+} from '@mui/material';
 import Link from 'next/link';
-import cssStyled from '../../styles/service.module.css';
+import cssStyled from '/styles/service.module.css';
 import SearchInput from './search';
 import ServiceCardRow from './serviceCardRow';
 import ComboForm from './comboForm';
-import _orderBy from "lodash/orderBy";
-
+import _orderBy from 'lodash/orderBy';
 
 const ServiceComponent = (props) => {
-    const { serviceListData, toggleBlocked, deleteService, refresh, setRefresh , comboList} = props;
+    const {
+        serviceListData,
+        toggleBlocked,
+        deleteService,
+        refresh,
+        setRefresh,
+        comboList,
+    } = props;
     const [serviceListDisplay, setServiceListDisplay] = useState(serviceListData);
     const [comboListDisplay, setComboListDisplay] = useState(comboList);
     const [sortServiceList, setSortServiceList] = useState(serviceListData);
@@ -22,7 +37,6 @@ const ServiceComponent = (props) => {
     const [comboDialog, setComboDialog] = useState(false);
     const [type, setType] = useState('');
     const [comboDetail, setComboDetail] = useState({});
-
 
     const handleCloseComboDialog = () => {
         setComboDialog(false);
@@ -39,7 +53,9 @@ const ServiceComponent = (props) => {
             setServiceCheckList([...serviceCheckList, item]);
         } else {
             setServiceCheckList(
-                serviceCheckList.filter((itemService) => itemService.service_code != item.service_code)
+                serviceCheckList.filter(
+                    (itemService) => itemService.service_code != item.service_code
+                )
             );
         }
         return serviceCheckList.length;
@@ -101,7 +117,9 @@ const ServiceComponent = (props) => {
 
     const extractServiceCheckList = (serviceArray) => {
         let serviceCode = serviceArray.map((service) => service.service_code);
-        let checkList = serviceListData.filter((item) => serviceCode.includes(item.service_code));
+        let checkList = serviceListData.filter((item) =>
+            serviceCode.includes(item.service_code)
+        );
         setServiceCheckList(checkList);
     };
 
@@ -109,28 +127,39 @@ const ServiceComponent = (props) => {
         <>
             <SearchInput handleSearch={handleSearch} />
             <Box className={cssStyled.flexAlignContainer}>
-                <Typography variant="h6">Select a service</Typography>
+                <Typography variant='h6'>Select a service</Typography>
                 <Link href={'/service/add'} passHref>
-                    <Button className={cssStyled.buttonContainer} variant="outlined" color="success">
+                    <Button
+                        className={cssStyled.buttonContainer}
+                        variant='outlined'
+                        color='success'
+                    >
                         New Service
                     </Button>
                 </Link>
-                <Button className={cssStyled.buttonContainer} variant="outlined" color='secondary'
+                <Button
+                    className={cssStyled.buttonContainer}
+                    variant='outlined'
+                    color='secondary'
                     onClick={handleCreateCombo}
                     disabled={serviceCheckList.length === 0}
                 >
                     Create Combo
                 </Button>
                 <FormControl size='small' sx={{ minWidth: 120 }}>
-                    <InputLabel id="order-by-label"><Typography variant="button">Order By</Typography></InputLabel>
+                    <InputLabel id='order-by-label'>
+                        <Typography variant='button'>Order By</Typography>
+                    </InputLabel>
                     <Select
-                        labelId="order-by-label"
-                        id="select-order-by"
+                        labelId='order-by-label'
+                        id='select-order-by'
                         value={orderBy}
-                        label="Order By"
-                        onChange={(event) => { handleSelectOrderBy(event.target.value); }}
+                        label='Order By'
+                        onChange={(event) => {
+                            handleSelectOrderBy(event.target.value);
+                        }}
                     >
-                        <MenuItem value="">none</MenuItem>
+                        <MenuItem value=''>none</MenuItem>
                         {sortedList.map((name) => (
                             <MenuItem key={name} value={name}>
                                 {name}
@@ -140,10 +169,12 @@ const ServiceComponent = (props) => {
                 </FormControl>
             </Box>
             <>
-                <Grid  container
-                       direction="row"
-                       justifyContent="space-evenly"
-                       alignItems="flex-start">
+                <Grid
+                    container
+                    direction='row'
+                    justifyContent='space-evenly'
+                    alignItems='flex-start'
+                >
                     <Grid item xs={6}>
                         {serviceListDisplay.map((item) => (
                             <ServiceCardRow
@@ -187,7 +218,6 @@ const ServiceComponent = (props) => {
                         ))}
                     </Grid>
                 </Grid>
-
             </>
             {type == 'add' && (
                 <ComboForm
@@ -200,7 +230,7 @@ const ServiceComponent = (props) => {
                     setServiceCheckList={setServiceCheckList}
                     setRefresh={setRefresh}
                     refresh={refresh}
-                ></ComboForm>
+                />
             )}
         </>
     );
