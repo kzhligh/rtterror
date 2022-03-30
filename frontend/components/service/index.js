@@ -158,7 +158,7 @@ const ServiceComponent = (props) => {
                 display='grid'
                 gridTemplateColumns='repeat(2, 2fr)'
                 gap={2}
-                width='65%'
+                width='100%'
             >
                 <Box>
                     {serviceListDisplay.map((item) => (

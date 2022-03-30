@@ -11,23 +11,21 @@ const globalTheme = createTheme({
 
 const Layout = ({ children }) => {
     return (
-        <Box display='grid'
-            gap={1}
-            gridTemplateAreas={`"menu main main main"`}
-            gridAutoColumns='1fr'>
-            <Box bgcolor='#c5c5c5'>
-                <ThemeProvider theme={globalTheme}>
+        <ThemeProvider theme={globalTheme}>
+            <Box display='grid'
+                gap={1}
+                gridTemplateAreas={`"menu main main main main main main"`}
+                gridAutoColumns='1fr'>
+                <Box bgcolor='#888888'>
                     <Calendar />
                     <Divider />
                     <MainMenu />
-                </ThemeProvider>
-            </Box>
-            <Box gridArea='main'>
-                <ThemeProvider theme={globalTheme}>
+                </Box>
+                <Box gridArea='main'>
                     {children}
-                </ThemeProvider>
+                </Box>
             </Box>
-        </Box>
+        </ThemeProvider >
     );
 };
 export default Layout;

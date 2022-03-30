@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -12,7 +12,7 @@ const theme = createTheme({
         fontSize: 16,
     },
     components: {
-        MuiCalendarPicker: {
+        MuiPickerStaticWrapper: {
             styleOverrides: {
                 root: {
                     color: 'white',
@@ -64,7 +64,7 @@ const theme = createTheme({
 });
 
 const Calendar = () => {
-    const [date, setDate] = React.useState(new Date());
+    const [date, setDate] = useState(new Date());
 
     return (
         <ThemeProvider theme={theme}>
