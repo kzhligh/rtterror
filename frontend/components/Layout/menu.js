@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { MenuList, MenuItem, ListItemIcon, ListItemText, Paper } from '@mui/material';
+import {
+  MenuList,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+  Paper,
+} from '@mui/material';
 import Link from 'next/link';
 import {
   AccessTime,
@@ -50,26 +56,32 @@ const Menu = () => {
     },
   ];
   return (
-    <Paper sx={{
-      background: '#c5c5c5',
-      minHeight: '60%',
-      bottom: 0
-    }}>
-      <MenuList sx={{
-        alignItems: 'center',
-        flex: '1 1 auto',
-      }}>
+    <Paper
+      sx={{
+        background: '#c5c5c5',
+        minHeight: '60%',
+        bottom: 0,
+      }}
+    >
+      <MenuList
+        sx={{
+          alignItems: 'center',
+          flex: '1 1 auto',
+        }}
+      >
         {menuItems.map((item) => (
           <Link key={item.text} href={item.path} passHref>
-            <MenuItem sx={{
-              alignItems: 'center',
-              paddingLeft: '25%',
-              marginBottom: '15px',
+            <MenuItem
+              sx={{
+                alignItems: 'center',
+                paddingLeft: '25%',
+                marginBottom: '15px',
 
-              fontFamily: 'Montserrat, sans-serif',
-              fontWeight: 500,
-              fontSize: 18,
-            }}>
+                fontFamily: 'Montserrat, sans-serif',
+                fontWeight: 500,
+                fontSize: 18,
+              }}
+            >
               <ListItemIcon sx={{ minWidth: '35px' }}>{item.icon}</ListItemIcon>
               <ListItemText>{item.text}</ListItemText>
             </MenuItem>
