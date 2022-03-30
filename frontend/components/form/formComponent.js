@@ -74,11 +74,12 @@ const CustomAutoComplete = (props) => {
         props.onChange({target: {name: props.name, value: [...props.defaultValue]}})
     }, [])
     return (<Autocomplete
+        id={props.label}
         multiple
         label={props.label}
         name={props.name}
         options={props.value}
-        getOptionLabel={(option) => `${option.name} - ${option.service_code.split("-")[0]}`}
+        getOptionLabel={(option) => `${option.name} - ${option.service_code?option.service_code.split("-")[0]:""}`}
         defaultValue={props.defaultValue}
         filterSelectedOptions
         autoHighlight

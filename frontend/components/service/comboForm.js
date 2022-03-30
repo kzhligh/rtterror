@@ -1,29 +1,29 @@
 import * as React from 'react';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import {
-  Button,
-  Card,
-  CardHeader,
-  Checkbox,
-  Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Grid,
-  IconButton,
-  Radio,
-  RadioGroup,
-  Stack,
+    Button,
+    Card,
+    CardHeader,
+    Checkbox,
+    Chip,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    Grid,
+    IconButton,
+    Radio,
+    RadioGroup,
+    Stack,
 } from '@mui/material';
-import {Close} from '@mui/icons-material';
+import { Close } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import styled from '../../styles/service.module.css';
-import {http} from '../../utils/http';
-import {InputTextField} from '../form/formComponent';
+import { http } from '../../utils/http';
+import { InputTextField } from '../form/formComponent';
 import _isEmpty from 'lodash/isEmpty';
 import _findIndex from 'lodash/findIndex';
 import _pullAt from 'lodash/pullAt';
@@ -54,7 +54,7 @@ const ComboItem = (props) => {
                             />
                         ) : (
                             <IconButton onClick={() => removeService(serviceItem)}>
-                                <Close/>
+                                <Close />
                             </IconButton>
                         )}
                     </>
@@ -62,7 +62,7 @@ const ComboItem = (props) => {
                 title={<>{serviceItem.name}</>}
                 subheader={
                     <>
-                        <Chip label="Service Code" size="small"/>{' '}
+                        <Chip label="Service Code" size="small" />{' '}
                         {serviceItem.service_code.split('-', 1)[0]}
                     </>
                 }
@@ -78,13 +78,14 @@ const ComboItem = (props) => {
                     data-cy="clientSort"
                     aria-labelledby="demo-row-radio-buttons-group-label"
                     name="row-radio-buttons-group"
+                    value={0}
                 >
                     {!_isEmpty(serviceItem.durations_prices)
                         ? serviceItem.durations_prices.map((option, index) => (
                             <FormControlLabel
                                 value={index}
                                 key={index}
-                                control={<Radio/>}
+                                control={<Radio />}
                                 onClick={() =>
                                     changeDurationOfService(
                                         serviceItem.service_code,
@@ -139,7 +140,7 @@ const EditCombo = (props) => {
         >
             <Grid item={3}>
                 <IconButton onClick={extractAddServiceEdit}>
-                    <AddIcon/>
+                    <AddIcon />
                 </IconButton>
             </Grid>
             <Dialog open={editDialog} fullWidth={true} scroll="body">
@@ -155,7 +156,7 @@ const EditCombo = (props) => {
                             top: 10,
                         }}
                     >
-                        <Close/>
+                        <Close />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent>
@@ -209,6 +210,8 @@ const ComboForm = (props) => {
     const [comboValue, setComboValue] = useState(
         !_isEmpty(comboDetail) ? comboDetail : initValue
     );
+    const [autoPopulate,setAutoPopulate] = useState(false);
+    const [comboPlacholderValue, setComboPlacholderValue] = useState();
     const [errorMessage, setErrorMessage] = useState({});
     const [serviceListAddable, setServiceListAddable] = useState([]);
 
@@ -221,7 +224,9 @@ const ComboForm = (props) => {
         durationPrice,
         servCheckList
     ) => {
+        console.log({serviceCode: serviceCode,durationPrice: durationPrice,servCheckList: serviceCheckList})
         let index = _findIndex(serviceCheckList, ['service_code', serviceCode]);
+        console.log(index);
         let services = servCheckList[index];
         let durationsPriceList = services.durations_prices;
         let durationsPriceIndex = _findIndex(durationsPriceList, [
@@ -233,7 +238,26 @@ const ComboForm = (props) => {
         services.durations_prices = durationsPriceList;
         servCheckList.splice(index, 1, services);
         setServiceCheckList([...servCheckList]);
+        setAutoPopulate(true);
     };
+
+    useEffect(() =>{
+        let name = '';
+        let price = 0;
+        let duration = 0;
+        for (let serviceItem of serviceCheckList) {
+            name += serviceItem.service_code.split("-")[0] + ' + ';
+            price += serviceItem.durations_prices[0].price * 1;
+            duration += serviceItem.durations_prices[0].duration * 1;
+        }
+        let value = {...comboValue};
+        value.name=name.slice(0, -2);
+        value.total_price=price;
+        value.total_duration=duration
+        if(autoPopulate){
+            setComboValue(value);
+        }
+    }, [serviceCheckList]);
 
     const closeClearValue = () => {
         setComboValue(initValue);
@@ -242,17 +266,17 @@ const ComboForm = (props) => {
     };
 
     const handleSetValue = (obj) => {
-        const {name, value} = obj.target;
-        setComboValue({...comboValue, [name]: value});
+        const { name, value } = obj.target;
+        setComboValue({ ...comboValue, [name]: value });
     };
     const removeService = (item) => {
         handleServiceCheck(false, item);
         if (serviceCheckList.length === 1) {
-            // the update of component is kind of late
             closeClearValue();
         }
     };
 
+    const MS_H_CONVERSION_RATE = 600000;
     const handleCreateCombo = () => {
         if (validate()) {
             let serviceId = serviceCheckList.map(
@@ -260,7 +284,7 @@ const ComboForm = (props) => {
             );
             comboValue.service_ids = serviceId;
             comboValue.service_code = comboValue.name;
-            comboValue.total_duration = comboValue.total_duration * 600000;
+            comboValue.total_duration = comboValue.total_duration * MS_H_CONVERSION_RATE;
             http(`/api/v1/combos`, {
                 method: 'POST',
                 body: comboValue,
@@ -275,7 +299,7 @@ const ComboForm = (props) => {
         );
         comboValue.service_ids = serviceId;
         comboValue.service_code = comboValue.name;
-        comboValue.total_duration = comboValue.total_duration * 600000;
+        comboValue.total_duration = comboValue.total_duration * MS_H_CONVERSION_RATE;
         http(`/api/v1/combos`, {
             method: 'PUT',
             body: comboValue,
@@ -314,18 +338,12 @@ const ComboForm = (props) => {
                             top: 10,
                         }}
                     >
-                        <Close/>
+                        <Close />
                     </IconButton>
                 </DialogTitle>
                 <DialogContent>
                     <Stack spacing={2}>
-                        <InputTextField
-                            label="Name"
-                            name="name"
-                            value={comboValue.name}
-                            onChange={handleSetValue}
-                            error={errorMessage.name}
-                        />
+
                         {serviceCheckList &&
                             serviceCheckList.map((item) => (
                                 <ComboItem
@@ -351,7 +369,13 @@ const ComboForm = (props) => {
                                 serviceListAddable={serviceListAddable}
                             />
                         ) : null}
-
+                        <InputTextField
+                            label="Name"
+                            name="name"
+                            value={comboValue.name}
+                            onChange={handleSetValue}
+                            error={errorMessage.name}
+                        />
                         <div className={styled.flexAlignContainer}>
                             <label>Total Duration (MIN): </label>
                             <InputTextField
@@ -367,7 +391,7 @@ const ComboForm = (props) => {
                             <label>Total Price ($): </label>
                             <InputTextField
                                 label="Total Price"
-                                name="total_duration"
+                                name="total_price"
                                 value={comboValue.total_price}
                                 onChange={handleSetValue}
                                 error={errorMessage.total_price}

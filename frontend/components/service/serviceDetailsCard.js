@@ -8,6 +8,7 @@ import ServiceEmployeeDialog from './serviceEmployeeDialog';
 import DurationPriceDisplay from './durationPriceDisplay';
 import { InputTextField } from "../form/formComponent";
 import cssStyled from '../../styles/service.module.css';
+import Box from "@mui/material/Box";
 
 
 const ServiceDetailsCard = (props) => {
@@ -73,7 +74,7 @@ const ServiceDetailsCard = (props) => {
         serviceValue.service_code = serviceValue.service_code + "-" + uuidv4().substring(0, 8);
         serviceValue.employee_ids = serviceEmployList.map(emp => emp.id);
         serviceValue.durations_prices = durationPriceList.map(d => (
-            Object.assign({}, d, { duration: d.duration * 60000 })));
+            Object.assign({}, d, { duration: d.duration * 600000 })));
         delete serviceValue.employees;
         editHandle(serviceValue);
     };
@@ -84,6 +85,7 @@ const ServiceDetailsCard = (props) => {
     };
 
     return (
+        <Box sx={{maxWidth: '1000px'}}>
         <Card>
             <CardHeader title={serviceValue.name} />
             <CardContent>
@@ -173,6 +175,7 @@ const ServiceDetailsCard = (props) => {
                 />
             </CardContent>
         </Card>
+        </Box>
     );
 };
 export default ServiceDetailsCard;

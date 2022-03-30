@@ -17,17 +17,19 @@ const Service = ({ employeeList }) => {
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(undefined);
 
+    const MS_H_CONVERSION_RATE = 600000;
     const getServiceList = async () => {
         const serviceListResponse = await http(`${apiPath}/services`);
         const comboList = await http(`${apiPath}/combos`);
         for (const combo in comboList) {
-            comboList[combo].total_duration = (comboList[combo].total_duration * 1 / 600000).toFixed(2);
+            comboList[combo].total_duration = (comboList[combo].total_duration * 1 / MS_H_CONVERSION_RATE);
         }
-        var serviceList = groupService(serviceListResponse);
+        const serviceList = groupService(serviceListResponse);
         serviceList.sort((a, b) => (+a.blocked < +b.blocked ? -1 : 1));
         comboList.sort((a, b) => (+a.blocked < +b.blocked ? -1 : 1));
         setServiceListData(serviceList);
         setComboListData(comboList);
+        console.log({service:serviceList,combo:comboList})
     };
     useEffect(() => {
         setLoading(true);

@@ -1,23 +1,18 @@
 import Box from "@mui/material/Box";
-import {Tab, Grid} from "@mui/material";
 import {useState} from "react";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
 import * as React from "react";
 import EmployeeForm from "./employeeform";
+import { Grid, Card, CardHeader, CardContent, Typography,Tab} from '@mui/material';
 
-const EmployeeDetailComponent = (props) => {
-    const {employee, editEmployee, serviceList, serviceEmployeeList} = props;
+const Employeedetailcomponent = (props) => {
+    const {employee, editEmployee, serviceList, serviceEmployeeList , validateEmployeeId} = props;
     const [tabValue, setTabValue] = useState('1');
     const [employeeValue] = useState(employee);
 
     return (
-        <Box>
-            <Grid
-                container
-                direction="row"
-            >
-                <Grid item xs={12}>
-                    <Box sx={{width: '100%', typography: 'body1'}}>
+
+                    <Box sx={{maxWidth: '700px'}}>
                         <TabContext value={tabValue}>
                             <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                                 <TabList
@@ -31,28 +26,21 @@ const EmployeeDetailComponent = (props) => {
                                 </TabList>
                             </Box>
                             <TabPanel value="1">
-                                <div style={{height: 600, width: '100%'}}>
-                                    <EmployeeForm
-                                        initValues={employeeValue}
-                                        mode='edit'
-                                        editEmployee={editEmployee}
-                                        tabValue={tabValue}
-                                        serviceList={serviceList}
-                                        serviceEmployeeList={serviceEmployeeList}
-                                    />
-                                </div>
+                                <EmployeeForm
+                                    initValues={employeeValue}
+                                    mode='edit'
+                                    editEmployee={editEmployee}
+                                    tabValue={tabValue}
+                                    serviceList={serviceList}
+                                    serviceEmployeeList={serviceEmployeeList}
+                                    validateEmployeeId={validateEmployeeId}
+                                />
                             </TabPanel>
                             <TabPanel value="2">
-                                <div style={{height: 600, width: '100%'}}>
-
-                                </div>
                             </TabPanel>
                         </TabContext>
                     </Box>
-                </Grid>
-            </Grid>
-        </Box>
     );
 }
 
-export default EmployeeDetailComponent;
+export default Employeedetailcomponent;
