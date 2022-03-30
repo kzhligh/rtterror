@@ -14,10 +14,10 @@ import {
     IconButton,
 } from '@mui/material';
 import {
-    BlockRounded,
     DeleteForeverRounded,
+    DoNotDisturbOffOutlined,
+    DoNotDisturbAltOutlined,
 } from '@mui/icons-material';
-import { green } from '@mui/material/colors';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import ComboForm from './comboForm';
@@ -106,7 +106,7 @@ const ServiceCardRow = (props) => {
                         <>
                             <IconButton color='error' onClick={() => setDeleteDialogOpen(true)}><DeleteForeverRounded /></IconButton>
                             <IconButton color='warning' onClick={() => toggleBlocked(serviceItem)}>
-                                {isBlocked() ? "" : <BlockRounded />}</IconButton>
+                                {isBlocked() ? <DoNotDisturbOffOutlined /> : <DoNotDisturbAltOutlined />}</IconButton>
                             {!isACombo() ? (
                                 <Checkbox
                                     key={serviceItem.id}
@@ -116,12 +116,7 @@ const ServiceCardRow = (props) => {
                                         handleServiceCheck(event.target.checked, serviceItem);
                                     }}
                                     size='large'
-                                    sx={{
-                                        color: green[800],
-                                        '&.Mui-checked': {
-                                            color: green[600],
-                                        },
-                                    }}
+                                    color='success'
                                 />
                             ) : null}
                         </>
