@@ -9,6 +9,7 @@ import NewEmployeeDialog from "./newEmployeeDialog";
 import {useRouter} from "next/router";
 import {DataGrid} from "@mui/x-data-grid";
 import {formatPhoneNumber} from "../../utils";
+import cssStyled from "../../styles/service.module.css";
 
 
 const EmployeeComponent = (props) => {
@@ -59,7 +60,7 @@ const EmployeeComponent = (props) => {
     }
     return (
 
-        <Box>
+        <Box >
             <SearchInput handleSearch={handleSearch}/>
 
             <Grid
@@ -97,7 +98,7 @@ const EmployeeComponent = (props) => {
                     router.push({
                         pathname: '/employee/details',
                         query: {empid: row.id}
-                    }, '/employee')
+                    }, '/employee/details')
                 }
                 rowsPerPageOptions={[8]}
                 checkboxSelection

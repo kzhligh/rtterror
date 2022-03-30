@@ -343,13 +343,7 @@ const ComboForm = (props) => {
                 </DialogTitle>
                 <DialogContent>
                     <Stack spacing={2}>
-                        <InputTextField
-                            label="Name"
-                            name="name"
-                            value={comboValue.name}
-                            onChange={handleSetValue}
-                            error={errorMessage.name}
-                        />
+
                         {serviceCheckList &&
                             serviceCheckList.map((item) => (
                                 <ComboItem
@@ -375,7 +369,13 @@ const ComboForm = (props) => {
                                 serviceListAddable={serviceListAddable}
                             />
                         ) : null}
-
+                        <InputTextField
+                            label="Name"
+                            name="name"
+                            value={comboValue.name}
+                            onChange={handleSetValue}
+                            error={errorMessage.name}
+                        />
                         <div className={styled.flexAlignContainer}>
                             <label>Total Duration (MIN): </label>
                             <InputTextField

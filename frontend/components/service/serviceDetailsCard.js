@@ -8,6 +8,7 @@ import ServiceEmployeeDialog from './serviceEmployeeDialog';
 import DurationPriceDisplay from './durationPriceDisplay';
 import { InputTextField } from "../form/formComponent";
 import cssStyled from '../../styles/service.module.css';
+import Box from "@mui/material/Box";
 
 
 const ServiceDetailsCard = (props) => {
@@ -84,6 +85,7 @@ const ServiceDetailsCard = (props) => {
     };
 
     return (
+        <Box sx={{maxWidth: '1000px'}}>
         <Card>
             <CardHeader title={serviceValue.name} />
             <CardContent>
@@ -173,6 +175,7 @@ const ServiceDetailsCard = (props) => {
                 />
             </CardContent>
         </Card>
+        </Box>
     );
 };
 export default ServiceDetailsCard;

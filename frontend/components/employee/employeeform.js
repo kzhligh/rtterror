@@ -1,4 +1,4 @@
-import {Box, Grid, IconButton, InputAdornment, InputBase, TextField} from "@mui/material";
+import {Box, Chip, Grid, IconButton, InputAdornment, InputBase, TextField } from "@mui/material";
 import * as React from "react";
 import {useState} from "react";
 import {CustomDatePicker, CustomAutoComplete, InputTextField, DropDownList} from '../form/formComponent';
@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import {formatPhoneNumber} from "../../utils";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
-
+import Autocomplete from "@mui/material/Autocomplete";
 
 
 const EmployeeForm = (props) => {
@@ -73,16 +73,18 @@ const EmployeeForm = (props) => {
     const validate = () => {
 
         const error = {};
-        error.id = !validateEmployeeId(employeeValue.id) ? "" : "This id is already exist."
+        if(initValues.id != employeeValue.id){
+            error.id = !validateEmployeeId(employeeValue.id) ? "" : "This id is already exist."
+        }
         error.first_name = employeeValue.first_name ? "" : "This field is required."
         error.last_name = employeeValue.last_name ? "" : "This field is required."
-        error.sin = employeeValue.sin.length == 9 ? "" : 'sin has to have 9 digits'
+        error.sin = ( employeeValue.sin.length == 9)? "" : 'sin has to have 9 digits'
         setErrorMessage(error);
         return Object.values(error).every(x => x == "")
     }
 
     return (
-        <div>
+        <Box style={{height: 600, width: '100%'}}>
             <Grid
                 container
                 direction="column"
@@ -184,12 +186,11 @@ const EmployeeForm = (props) => {
                     />
                 </Grid>
                 <Grid item xs={12}>
-                    <DropDownList
+                    <InputTextField
                         name="title"
                         label="Title"
                         value={employeeValue.title}
                         onChange={handleSetEmployeeValue}
-                        list={titleList}
                     />
                     <DropDownList
                         name="gender"
@@ -249,7 +250,7 @@ const EmployeeForm = (props) => {
             }
             </DialogActions>
 
-        </div>
+        </Box>
     );
 }
 export default EmployeeForm;

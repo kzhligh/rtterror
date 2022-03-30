@@ -1,8 +1,9 @@
-import EmployeeDetailComponent from "../../components/employee/employeedetailcomponent";
+import Employeedetailcomponent from "../../components/employee/employeedetailcomponent";
 import _groupBy from "lodash/groupBy";
 import {http} from "../../utils/http";
 import {useRouter} from 'next/router';
 import groupService from "../../utils/groupService";
+import EmployeeDetailPage from "../../components/employee/employeedetailcomponent";
 
 export async function getServerSideProps(context) {
     const employeeList = await http(`/api/v1/employees`);
@@ -30,7 +31,7 @@ const EmployeeDetails = ({employee, serviceList, employeeList}) => {
         return employeeList.some(emp => emp.id == id);
     }
     return (
-        <EmployeeDetailComponent
+        <Employeedetailcomponent
             employee={employee}
             editEmployee={editEmployee}
             serviceList={serviceList}
