@@ -1,25 +1,25 @@
-import {Box, Chip, Grid, IconButton, InputAdornment, InputBase, TextField } from "@mui/material";
+import { Box, Chip, Grid, IconButton, InputAdornment, InputBase, TextField } from "@mui/material";
 import * as React from "react";
-import {useState} from "react";
-import {CustomDatePicker, CustomAutoComplete, InputTextField, DropDownList} from '../form/formComponent';
+import { useState } from "react";
+import { CustomDatePicker, CustomAutoComplete, InputTextField, DropDownList } from '../form/formComponent';
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
-import {formatPhoneNumber} from "../../utils";
-import {Visibility, VisibilityOff} from "@mui/icons-material";
+import { formatPhoneNumber } from "../../utils";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Autocomplete from "@mui/material/Autocomplete";
 
 
 const EmployeeForm = (props) => {
 
     const titleList = [
-        {id: 0, value: "General Practice"},
-        {id: 1, value: "Acupuncture"},
-        {id: 2, value: "Manager"}
+        { id: 0, value: "General Practice" },
+        { id: 1, value: "Acupuncture" },
+        { id: 2, value: "Manager" }
     ];
     const genderList = [
-        {id: '0', value: 'male', title: 'Male'},
-        {id: '1', value: 'female', title: 'Female'},
-        {id: '2', value: 'na', title: 'N/A'},
+        { id: '0', value: 'male', title: 'Male' },
+        { id: '1', value: 'female', title: 'Female' },
+        { id: '2', value: 'na', title: 'N/A' },
     ];
     const {
         setAddOpen,
@@ -33,16 +33,16 @@ const EmployeeForm = (props) => {
     } = props;
     const [employeeValue, setEmployeeValue] = useState(initValues);
     const [errorMessage, setErrorMessage] = useState({});
-    const [sinToggle,setSinToggle]=useState(false);
-    const toggleSinDisplay = ()=>{
+    const [sinToggle, setSinToggle] = useState(false);
+    const toggleSinDisplay = () => {
         setSinToggle(!sinToggle);
-    }
+    };
 
     const addNewEmployee = () => {
         if (validate()) {
             let service_ids = [];
             for (const service of employeeValue.services) {
-                const idArray = service.durations_prices.map(durationprice => durationprice.id)
+                const idArray = service.durations_prices.map(durationprice => durationprice.id);
                 service_ids = [...service_ids, ...idArray];
             }
             employeeValue.service_ids = service_ids;
@@ -54,37 +54,37 @@ const EmployeeForm = (props) => {
         if (validate()) {
             let service_ids = [];
             for (const service of employeeValue.services) {
-                const idArray = service.durations_prices.map(durationprice => durationprice.id)
+                const idArray = service.durations_prices.map(durationprice => durationprice.id);
                 service_ids = [...service_ids, ...idArray];
             }
             employeeValue.service_ids = service_ids;
             editEmployee(employeeValue);
         }
-    }
+    };
     const handleSetEmployeeValue = (obj) => {
-        let {name, value} = obj.target;
-        if(name == 'phone'){
-            value = value.replace(/\D/g, '').substring(0, 10)
+        let { name, value } = obj.target;
+        if (name == 'phone') {
+            value = value.replace(/\D/g, '').substring(0, 10);
         }
-        setEmployeeValue({...employeeValue, [name]: value});
+        setEmployeeValue({ ...employeeValue, [name]: value });
     };
 
 
     const validate = () => {
 
         const error = {};
-        if(initValues.id != employeeValue.id){
-            error.id = !validateEmployeeId(employeeValue.id) ? "" : "This id is already exist."
+        if (initValues.id != employeeValue.id) {
+            error.id = !validateEmployeeId(employeeValue.id) ? "" : "This id is already exist.";
         }
-        error.first_name = employeeValue.first_name ? "" : "This field is required."
-        error.last_name = employeeValue.last_name ? "" : "This field is required."
-        error.sin = ( employeeValue.sin.length == 9)? "" : 'sin has to have 9 digits'
+        error.first_name = employeeValue.first_name ? "" : "This field is required.";
+        error.last_name = employeeValue.last_name ? "" : "This field is required.";
+        error.sin = (employeeValue.sin.length == 9) ? "" : 'sin has to have 9 digits';
         setErrorMessage(error);
-        return Object.values(error).every(x => x == "")
-    }
+        return Object.values(error).every(x => x == "");
+    };
 
     return (
-        <Box style={{height: 600, width: '100%'}}>
+        <Box>
             <Grid
                 container
                 direction="column"
@@ -170,19 +170,19 @@ const EmployeeForm = (props) => {
                         name='sin'
                         value={employeeValue.sin}
                         onChange={handleSetEmployeeValue}
-                        {...(errorMessage.sin && {error: true, helperText: errorMessage.sin})}
+                        {...(errorMessage.sin && { error: true, helperText: errorMessage.sin })}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment>
                                     <IconButton
                                         onClick={() => toggleSinDisplay()}
                                     >
-                                        {sinToggle?<Visibility />:<VisibilityOff />}
+                                        {sinToggle ? <Visibility /> : <VisibilityOff />}
                                     </IconButton>
                                 </InputAdornment>
                             )
                         }}
-                        {...(sinToggle?{type:"password"}:"")}
+                        {...(sinToggle ? { type: "password" } : "")}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -227,16 +227,16 @@ const EmployeeForm = (props) => {
             </Grid>
             <DialogActions>
                 {mode == 'add' &&
-                <Grid
-                    container
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                >
+                    <Grid
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                    >
 
-                    <Button onClick={addNewEmployee}>Add New Employee</Button>
-                    <Button onClick={()=>setAddOpen(false)}>Close</Button>
-                </Grid> }
+                        <Button onClick={addNewEmployee}>Add New Employee</Button>
+                        <Button onClick={() => setAddOpen(false)}>Close</Button>
+                    </Grid>}
                 {mode != 'add' && tabValue == 1 &&
                     <Grid
                         container
@@ -247,10 +247,10 @@ const EmployeeForm = (props) => {
 
                         <Button onClick={saveEditEmployee}>Save</Button>
                     </Grid>
-            }
+                }
             </DialogActions>
 
         </Box>
     );
-}
+};
 export default EmployeeForm;

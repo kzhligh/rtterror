@@ -32,8 +32,6 @@ const Employee = ({serviceList, employeesList}) => {
     }
     return (
         <div>
-            <h1></h1>
-
             <EmployeeComponent
                 employeeList={employeeList}
                 serviceList={serviceList}

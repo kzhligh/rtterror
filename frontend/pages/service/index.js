@@ -1,6 +1,7 @@
 import ServiceComponent from '/components/service';
 import { useEffect, useState } from 'react';
 import { http } from '/utils/http';
+import { Typography } from '@mui/material';
 import groupService from '/utils/groupService';
 const apiPath = '/api/v1';
 
@@ -30,7 +31,7 @@ const Service = ({ employeeList }) => {
         comboList.sort((a, b) => (+a.blocked < +b.blocked ? -1 : 1));
         setServiceListData(serviceList);
         setComboListData(comboList);
-        console.log({service:serviceList,combo:comboList})
+        console.log({ service: serviceList, combo: comboList });
     };
     useEffect(() => {
         setLoading(true);
@@ -75,7 +76,7 @@ const Service = ({ employeeList }) => {
     };
     return (
         <div>
-            <h1>Service</h1>
+            <Typography variant='h6'>Service</Typography>
             {!loading && (
                 <ServiceComponent
                     comboList={comboListData}
