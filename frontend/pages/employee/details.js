@@ -3,7 +3,6 @@ import _groupBy from "lodash/groupBy";
 import {http} from "../../utils/http";
 import {useRouter} from 'next/router';
 import groupService from "../../utils/groupService";
-import EmployeeDetailPage from "../../components/employee/employeedetailcomponent";
 
 export async function getServerSideProps(context) {
     const employeeList = await http(`/api/v1/employees`);

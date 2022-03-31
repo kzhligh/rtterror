@@ -9,7 +9,6 @@ import NewEmployeeDialog from "./newEmployeeDialog";
 import {useRouter} from "next/router";
 import {DataGrid} from "@mui/x-data-grid";
 import {formatPhoneNumber} from "../../utils";
-import cssStyled from "../../styles/service.module.css";
 
 
 const EmployeeComponent = (props) => {

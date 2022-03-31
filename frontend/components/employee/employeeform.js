@@ -1,4 +1,4 @@
-import { Box, Chip, Grid, IconButton, InputAdornment, InputBase, TextField } from "@mui/material";
+import { Box, Grid, IconButton, InputAdornment,TextField } from "@mui/material";
 import * as React from "react";
 import { useState } from "react";
 import { CustomDatePicker, CustomAutoComplete, InputTextField, DropDownList } from '../form/formComponent';
@@ -6,16 +6,10 @@ import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
 import { formatPhoneNumber } from "../../utils";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import Autocomplete from "@mui/material/Autocomplete";
 
 
 const EmployeeForm = (props) => {
 
-    const titleList = [
-        { id: 0, value: "General Practice" },
-        { id: 1, value: "Acupuncture" },
-        { id: 2, value: "Manager" }
-    ];
     const genderList = [
         { id: '0', value: 'male', title: 'Male' },
         { id: '1', value: 'female', title: 'Female' },

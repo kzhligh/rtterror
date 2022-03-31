@@ -1,5 +1,5 @@
 import EmployeeComponent from "../../components/employee";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {http} from "../../utils/http";
 import groupService from "../../utils/groupService";
 

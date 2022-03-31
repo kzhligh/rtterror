@@ -43,7 +43,6 @@ export default function ComboForm({
     !_isEmpty(comboDetail) ? comboDetail : initValue
   );
   const [autoPopulate, setAutoPopulate] = useState(false);
-  const [comboPlacholderValue, setComboPlacholderValue] = useState();
 
   const [errorMessage, setErrorMessage] = useState({});
   const [serviceListAddable, setServiceListAddable] = useState([]);
@@ -242,4 +241,4 @@ export default function ComboForm({
       </Dialog>
     </div>
   );
-};
+}
