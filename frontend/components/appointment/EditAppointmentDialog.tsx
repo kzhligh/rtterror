@@ -1,86 +1,107 @@
 import React, { useState } from 'react';
 import {
+  Box,
   Dialog,
   DialogTitle,
   DialogContent,
+  DialogActions,
   InputLabel,
   Button,
-  DialogProps,
+  TextField,
 } from '@mui/material';
-import { AppointmentHeader } from './summary/AppointmentHeader';
+import { AppointmentHeader, AppointmentStatus, IStatus } from './summary';
 import { AppointmentDropdown } from './AppointmentDropdown';
-const blankAppointment = {
-  client: {
-    firstName: 'Jamal',
-    lastName: 'Green',
-    phoneNumber: '(123)456-7890',
-    email: 'jamalG@coldmail.com',
-  },
-  plan: { serviceName: 'TestService' },
-  therapist: { name: 'TestTherapist' },
-  branchLocation: 'TestLocation',
-  duration: 90,
-  notes: 'N/A',
-  feedback: 'N/',
-  status: 'Pending',
-  cancellationTime: '',
-  date: '2022-03-07',
-};
-interface Props extends DialogProps {
-  onClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
-}
-const EditAppointmentDialog = ({ isOpen, onClose }) => {
-  const [appointmentForm, setAppointment] = useState(blankAppointment);
-  const therapists = [{ name: 'John' }, { name: 'Boyega' }, { name: 'Malcom' }];
-  const services = [{ serviceName: 'acupuncture' }];
+import CustomDay from './DatePicker';
+
+const EditAppointmentDialog = ({
+  isOpen,
+  onClose,
+  appointmentObj,
+  setAppointmentObj,
+}) => {
+  const [editForm, setEditForm] = useState(appointmentObj);
 
   return (
-    <Dialog fullWidth open={isOpen}>
-      <DialogTitle style={{ textAlign: 'center' }}>
+    <Dialog fullScreen open={isOpen} onClose={onClose}>
+      <DialogTitle style={{ textAlign: 'center', paddingBottom: 0 }}>
         Edit Appointment
       </DialogTitle>
+      <form
+        style={{ width: '100%' }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          setAppointmentObj((state) => ({ ...state, ...editForm }));
+          onClose(e, editForm);
+        }}
+      >
+        <DialogContent style={{ width: '100%' }}>
+          <AppointmentHeader appointmentForm={editForm} />
+          <Box
+            display='grid'
+            gridTemplateColumns='repeat(3, 1fr)'
+            gridTemplateRows='repeat(1, 75vh)'
+            gap={3}
+          >
+            <CustomDay editForm={editForm} setEditForm={setEditForm} />
+            <Box>
+              <InputLabel style={{ marginTop: '5%' }}>Services</InputLabel>
 
-      <DialogContent style={{ width: '100%' }}>
-        <form
-          style={{ width: '100%' }}
-          onSubmit={(e) => {
-            e.preventDefault();
-            setAppointment((state) => ({ ...state, status: 'Pending' }));
-            console.log(appointmentForm);
-            onClose(e, 'backdropClick');
-          }}
-        >
-          <AppointmentHeader appointmentForm={appointmentForm} />
+              <AppointmentDropdown
+                therapists={editForm.employees}
+                services={editForm.services}
+                setAppointment={setEditForm}
+              />
+            </Box>
+            <Box>
+              <AppointmentStatus
+                statuses={editForm.status}
+                updateStatus={(name, changedBy) => {
+                  const newStatus: IStatus = {
+                    name: name,
+                    by: changedBy,
+                    at: new Date(),
+                  };
 
-          <InputLabel style={{ marginTop: '5%' }}>Services</InputLabel>
-
-          <AppointmentDropdown
-            therapists={therapists}
-            services={services}
-            setAppointment={setAppointment}
-          />
-
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-around',
+                  setEditForm((prevContent) => ({
+                    ...prevContent,
+                    status: [newStatus, ...prevContent.status],
+                  }));
+                }}
+                expanded={true}
+              />
+              <TextField
+                label='Memo'
+                multiline
+                fullWidth
+                margin='normal'
+                value={editForm.notes}
+                onChange={(e) =>
+                  setEditForm((state) => ({
+                    ...state,
+                    notes: e.target.value,
+                  }))
+                }
+                variant='filled'
+                color='warning'
+              />
+            </Box>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button type='submit' variant='contained' color='info' size='large'>
+            Confirm
+          </Button>
+          <Button
+            onClick={(e) => {
+              onClose(e);
             }}
-          ></div>
-          <div>
-            <Button
-              onClick={(e) => {
-                onClose(e, 'backdropClick');
-              }}
-              variant='outlined'
-            >
-              Cancel
-            </Button>
-            <Button variant='outlined' type='submit'>
-              Confirm
-            </Button>
-          </div>
-        </form>
-      </DialogContent>
+            color='inherit'
+            size='large'
+          >
+            Cancel
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 };

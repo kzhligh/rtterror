@@ -184,9 +184,14 @@ const AppointmentStatusDialog = ({
       </DialogContent>
       <EditAppointmentDialog
         isOpen={editDialog}
-        onClose={() => {
+        onClose={({ type }, editContent) => {
+          if (type === 'submit') {
+            editAppointment(formContent, { ...editContent });
+          }
           setEdit(false);
         }}
+        appointmentObj={formContent}
+        setAppointmentObj={setFormContent}
       />
       <ConfirmDeleteAlert
         open={deleteDialog}

@@ -44,7 +44,7 @@ export const AppointmentStatus = ({ statuses, updateStatus, expanded }) => {
   };
 
   const timeline = (
-    <Timeline position='left'>
+    <Timeline position='left' sx={{ maxHeight: '45vh' }}>
       {statuses.map((status: IStatus) => (
         <Tooltip
           key={status.at.toString()}
