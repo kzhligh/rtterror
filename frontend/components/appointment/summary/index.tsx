@@ -1,6 +1,6 @@
 import { AppointmentHeader } from './AppointmentHeader';
 import { AppointmentServiceList } from './AppointmentServiceList';
-import { AppointmentStatus } from './AppointmentStatus';
+import { AppointmentStatus, IStatus } from './AppointmentStatus';
 import { AppointmentTime } from './AppointmentTime';
 
 export {
@@ -9,3 +9,4 @@ export {
   AppointmentServiceList,
   AppointmentStatus,
 };
+export type { IStatus };

@@ -147,6 +147,7 @@ const AppointmentStatusDialog = ({
                     status: [newStatus, ...formContent.status],
                   });
                 }}
+                expanded={false}
               />
 
               <TextField

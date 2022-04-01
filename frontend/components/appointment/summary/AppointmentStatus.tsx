@@ -24,13 +24,13 @@ import { AppointmentStatusUpdatePopup } from './AppointmentStatusUpdatePopup';
 
 const filter = createFilterOptions();
 
-interface IStatus {
+export interface IStatus {
   name: string;
   by: string;
   at: Date;
 }
 
-export const AppointmentStatus = ({ statuses, updateStatus }) => {
+export const AppointmentStatus = ({ statuses, updateStatus, expanded }) => {
   const [historyAnchor, setHistoryAnchor] = useState(null);
   const openHistory = Boolean(historyAnchor);
   const [openUpdateStatus, setOpenUpdateStatus] = useState(false);
@@ -43,6 +43,35 @@ export const AppointmentStatus = ({ statuses, updateStatus }) => {
     setHistoryAnchor(null);
   };
 
+  const timeline = (
+    <Timeline position='left'>
+      {statuses.map((status: IStatus) => (
+        <Tooltip
+          key={status.at.toString()}
+          title={`by ${status.by}`}
+          enterDelay={0}
+        >
+          <TimelineItem
+            style={{ cursor: 'default', backgroundColor: 'transparent' }}
+          >
+            <TimelineOppositeContent color='text.secondary'>
+              <Typography variant='caption'>
+                {moment(status.at).calendar()}
+              </Typography>
+            </TimelineOppositeContent>
+            <TimelineSeparator>
+              <TimelineConnector />
+              <TimelineDot />
+            </TimelineSeparator>
+            <TimelineContent>
+              <Typography variant='button'>{status.name}</Typography>
+            </TimelineContent>
+          </TimelineItem>
+        </Tooltip>
+      ))}
+    </Timeline>
+  );
+
   return (
     <>
       <InputLabel style={{ marginTop: '5%' }}>
@@ -51,43 +80,24 @@ export const AppointmentStatus = ({ statuses, updateStatus }) => {
           {statuses.length === 0 ? '' : statuses[0].name}
         </Typography>
         <span>&nbsp;</span>
-        <IconButton onClick={handleClickHistory} size='small'>
+        <IconButton
+          onClick={handleClickHistory}
+          size='small'
+          disabled={expanded}
+        >
           <History />
         </IconButton>
       </InputLabel>
-      <Menu
-        anchorEl={historyAnchor}
-        id='account-menu'
-        open={openHistory}
-        onClose={handleCloseHistory}
-      >
-        <Timeline position='left'>
-          {statuses.map((status: IStatus) => (
-            <Tooltip
-              key={status.at.toString()}
-              title={`by ${status.by}`}
-              enterDelay={0}
-            >
-              <TimelineItem
-                style={{ cursor: 'default', backgroundColor: 'transparent' }}
-              >
-                <TimelineOppositeContent color='text.secondary'>
-                  <Typography variant='caption'>
-                    {moment(status.at).calendar()}
-                  </Typography>
-                </TimelineOppositeContent>
-                <TimelineSeparator>
-                  <TimelineConnector />
-                  <TimelineDot />
-                </TimelineSeparator>
-                <TimelineContent>
-                  <Typography variant='button'>{status.name}</Typography>
-                </TimelineContent>
-              </TimelineItem>
-            </Tooltip>
-          ))}
-        </Timeline>
-      </Menu>
+      {!expanded ? (
+        <Menu
+          anchorEl={historyAnchor}
+          id='account-menu'
+          open={openHistory}
+          onClose={handleCloseHistory}
+        >
+          {timeline}
+        </Menu>
+      ) : null}
       <Autocomplete
         value={statusName}
         onChange={(_event, newValue: any) => {
@@ -124,6 +134,7 @@ export const AppointmentStatus = ({ statuses, updateStatus }) => {
           <TextField {...params} fullWidth label='New Status' autoFocus />
         )}
       />
+      {expanded ? timeline : null}
       <AppointmentStatusUpdatePopup
         open={openUpdateStatus}
         toggleOpen={setOpenUpdateStatus}
