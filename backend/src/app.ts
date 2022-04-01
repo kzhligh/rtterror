@@ -6,13 +6,11 @@ import syncTables from './models/syncTables'; // this import should always befor
 import router from './routes';
 
 const app1 = express();
-app1.disable("x-powered-by");
-
+app1.disable('x-powered-by');
 
 const startServer = async () => {
   try {
-    let corsOptions = {
-    };
+    let corsOptions = {};
 
     app1.use(express.json());
     app1.use(cors(corsOptions));
@@ -31,11 +29,6 @@ const startServer = async () => {
       });
 
     await syncTables(); // syncTables() should always before app.use('/api/v1', router)
-    app1.use('/api/v1', router);
-
-    await syncTables(); // syncTables() should always before app.use('/api/v1', router)
-
-    // Set api path
     app1.use('/api/v1', router);
 
     // Set port
