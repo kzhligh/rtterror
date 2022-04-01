@@ -24,6 +24,7 @@ jest
 import employeeService from '../src/services/employee-service';
 
 const mockEmployee = {
+  id: 'mock',
   first_name: 'mock',
   last_name: 'mock',
   dob: 'mock',
@@ -101,7 +102,7 @@ describe('Employee Service', () => {
   });
 
   it('should be able to update employee by pk', async () => {
-    const id = 'mockID';
+    const id = 'mock';
     const mockEmployeeEntity = new MockEmployeeModel(mockEmployee);
     const { service_ids, ...mockEmployeeResult } = mockEmployee;
     const transaction = new Transaction(sequelize, {});
@@ -109,25 +110,22 @@ describe('Employee Service', () => {
     jest.spyOn(sequelize, 'transaction').mockResolvedValueOnce(transaction);
     jest
       .spyOn(employeeService, 'getItemById')
-      .mockResolvedValueOnce({ id, ...mockEmployee });
+      .mockResolvedValueOnce({ ...mockEmployee });
     jest
       .spyOn(EmployeeModel, 'upsert')
       .mockResolvedValueOnce([mockEmployeeEntity, false]);
 
-    expect(await employeeService.updateItem({ id, ...mockEmployee })).toEqual({
-      id,
-      ...mockEmployee,
-    });
+    expect(await employeeService.updateItem({ ...mockEmployee })).toEqual({ ...mockEmployee });
     expect(sequelize.transaction).toBeCalled();
     expect(EmployeeModel.upsert).toBeCalledWith(
-      { id, ...mockEmployeeResult },
+      { ...mockEmployeeResult },
       { transaction }
     );
     expect(EmployeeModel.findByPk).toBeCalledTimes(1);
   });
 
   it('should be able to handle thrown error when updating employee by pk', async () => {
-    const id = 'mockID';
+    const id = 'mock';
     const mockEmployeeEntity = new MockEmployeeModel(mockEmployee);
     const transaction = new Transaction(sequelize, {});
 
@@ -138,7 +136,7 @@ describe('Employee Service', () => {
 
     try {
       expect(
-        await employeeService.updateItem({ id, ...mockEmployee })
+        await employeeService.updateItem({ ...mockEmployee })
       ).toThrowError();
     } catch (error) {
       expect(error).toEqual(
@@ -148,21 +146,22 @@ describe('Employee Service', () => {
   });
 
   it('should be able to hide item by ID', async () => {
-    const id = 'mockID';
+    // const id = 'mock';
+    const { id, ...employeeInfo } = mockEmployee;
     const t = new Transaction(sequelize, {});
 
     jest.spyOn(sequelize, 'transaction').mockResolvedValueOnce(t);
     jest
       .spyOn(employeeService, 'getAllItems')
-      .mockResolvedValueOnce([{ id, ...mockEmployee }]);
+      .mockResolvedValueOnce([{ ...mockEmployee }]);
 
-    expect(await employeeService.hideItemById(id, mockEmployee)).toEqual([
-      { id, ...mockEmployee },
+    expect(await employeeService.hideItemById(id, employeeInfo)).toEqual([
+      { ...mockEmployee },
     ]);
   });
 
   it('should be able to hide multiple items by ID', async () => {
-    const mockIds = ['mockId'];
+    const mockIds = ['mock'];
     const transaction = new Transaction(sequelize, {});
 
     jest.spyOn(sequelize, 'transaction').mockResolvedValueOnce(transaction);
@@ -181,7 +180,7 @@ describe('Employee Service', () => {
   it('should throw errors on exceptions that are caught', async () => {
     const transaction = new Transaction(sequelize, {});
     const mockError = { name: 'error', message: 'bob' };
-    const mockId = 'mockID';
+    const mockId = 'mock';
 
     jest.spyOn(EmployeeModel, 'create').mockRejectedValueOnce(mockError);
     jest.spyOn(EmployeeModel, 'findByPk').mockRejectedValueOnce(mockError);
@@ -214,7 +213,7 @@ describe('Employee Service', () => {
         .spyOn(employeeService, 'updateItem')
         .mockRejectedValueOnce(mockError);
       expect(
-        await employeeService.updateItem({ id: mockId, ...mockEmployee })
+        await employeeService.updateItem({ ...mockEmployee })
       ).toThrowError(mockError);
     } catch (error) {
       expect(error).toEqual(mockError);
