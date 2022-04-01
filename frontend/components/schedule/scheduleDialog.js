@@ -179,11 +179,9 @@ const ScheduleDialog = (props)=>{
                     {!scheduleValue.id && <Grid item xs={12}>
                         <Card>
                             <Grid container direction="row" alignItems="stretch" spacing={2}>
-                                {/*value, onChange, item, key*/}
                                 {repeatDayList.map((day) => (
                                     <Grid item xs={3} key={day.id}>
                                         <Checkbox
-                                            // aria-label={ename}
                                             value={day}
                                             checked={(_find(repeatDayChecked,day) != undefined)}
                                             onChange={(event) => {

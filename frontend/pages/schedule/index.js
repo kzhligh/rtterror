@@ -35,6 +35,7 @@ const Employee = ({employeesList}) => {
     const [tabValue, setTabValue] = useState('1');
     const [rerender, setRerender] = useState(false);
     const [employee, setEmployee] = useState({});
+    const [appointmentsHistory, setAppointmentsHistory]= useState([]);
 
     useEffect(async () => {
         setLoading(true);
@@ -44,6 +45,38 @@ const Employee = ({employeesList}) => {
         setEventList(events);
         setLoading(false);
     }, [rerender]);
+
+    useEffect(async () => {
+        if (tabValue == 2) {
+            let appointments = await http(`/api/v1/appointments`);
+            appointments = formatAppointmentHistory(appointments);
+            appointments.sort((a, b) => (a.date < b.date ? -1 : 1));
+            setAppointmentsHistory(appointments);
+        }
+    }, [tabValue])
+    const formatAppointmentHistory =(appointments)=>{
+
+        var returnAppointments = _reduce(appointments, (accumulator, app) => {
+            var service = app.services.map(service => `${service.name}`);
+            var employee = app.employees.map(emp => `${emp.first_name}`);
+            console.log({service: service})
+            var client =`${app.Client.firstName}`;
+            // duration sum of all service or set by person who book appointment
+            return [...accumulator,
+                {
+                    id: app.id,
+                    date: app.datetime,
+                    time: app.datetime,
+                    service:service.join('-'),
+                    employee: employee.join('-'),
+                    client: client,
+                    duration: app.duration,
+                    price: app.price,
+                }
+            ];
+        }, []);
+        return returnAppointments;
+    }
 
     return (
         <div>
@@ -74,6 +107,7 @@ const Employee = ({employeesList}) => {
                 </TabPanel>
                 <TabPanel value="2">
                     <EmployeeAppointment
+                        appointmentsHistory={appointmentsHistory}
                     />
                 </TabPanel>
                 <TabPanel value="3">

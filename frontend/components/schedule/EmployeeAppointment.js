@@ -2,23 +2,25 @@ import {Typography} from "@mui/material";
 import React, {useState} from "react";
 import {DataGrid} from "@mui/x-data-grid";
 
-const EmployeeAppointment =()=>{
-    const [rows, setRows] = useState([]);
+const EmployeeAppointment =(props)=>{
+    const {appointmentsHistory} = props;
     const columns = [
         { field: 'date', headerName: 'DATE', width: 100 },
         { field: 'time', headerName: 'Time', width: 100 },
-        { field: 'plan', headerName: 'Service', width: 200 },
-        { field: 'therapist', headerName: 'Employee', width: 100 },
+        { field: 'service', headerName: 'Service', width: 200 },
+        { field: 'employee', headerName: 'Employee', width: 200 },
+        { field: 'client', headerName: 'Client', width: 200 },
         { field: 'duration', headerName: 'Duration', width: 100 },
+        { field: 'price', headerName: 'Price', width: 100 },
     ];
     return (
     <>
         <Typography variant="h6">Employee Appointment</Typography>
         <div style={{ height: 400, width: '100%' }}>
             <DataGrid
-                rows={rows}
+                rows={appointmentsHistory}
                 columns={columns}
-                pageSize={5}
+                pageSize={30}
                 rowsPerPageOptions={[5]}
                 checkboxSelection
             />

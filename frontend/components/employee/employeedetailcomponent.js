@@ -3,6 +3,8 @@ import * as React from "react";
 import {useState} from "react";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
 import EmployeeForm from "./employeeform";
+import {Tab} from "@mui/material";
+
 
 const Employeedetailcomponent = (props) => {
     const {employee, editEmployee, serviceList, serviceEmployeeList, validateEmployeeId} = props;
@@ -36,6 +38,7 @@ const Employeedetailcomponent = (props) => {
                     />
                 </TabPanel>
                 <TabPanel value="2">
+
                 </TabPanel>
             </TabContext>
         </Box>
