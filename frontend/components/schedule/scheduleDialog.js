@@ -35,13 +35,15 @@ const ScheduleDialog = (props)=>{
         data = {
             start_date: scheduleValue.start_date.toDateString(),
             end_date: scheduleValue.end_date.toDateString(),
-            start_time: scheduleValue.start_time.toTimeString(),
-            end_time: scheduleValue.end_time.toTimeString(),
+            start_time: scheduleValue.start_time.toTimeString().split(" ")[0],
+            end_time: scheduleValue.end_time.toTimeString().split(" ")[0],
             action: scheduleValue.action,
             employeeId: id,
             repeatedDay: repeatedDay
         };
-        if(scheduleValue.hasOwnProperty('id')){
+
+        if(scheduleValue.hasOwnProperty('id') && scheduleValue.id ){
+            console.log({data: data});
             data.id = scheduleValue.id
             await http('/api/v1/schedules', {
                 method: 'PUT',
@@ -49,9 +51,10 @@ const ScheduleDialog = (props)=>{
             });
         }
         else{
+            delete data.id;
             await http('/api/v1/schedules', {
                 method: 'POST',
-                body: data,
+                body: data ,
             });
         }
         setRerender(!rerender);
