@@ -26,8 +26,6 @@ const generateSchedules = (appointments) => {
         schedules.push(schedule);
       });
     });
-    console.log('generateSchedules()/appointments: ', appointments);
-    console.log('generateSchedules()/schedules: ', schedules);
     return schedules;
   }
   
@@ -65,7 +63,6 @@ const generateSchedules = (appointments) => {
       calendarEmployees.push(employee);
       counter++;
     });
-    console.log('generateCalendarEmployees()/calendarEmployees: ', calendarEmployees);
     return calendarEmployees;
   }
   

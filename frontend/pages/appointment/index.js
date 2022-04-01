@@ -18,7 +18,7 @@ import theme from '../../components/appointment/themeConfig';
 import template from '../../components/appointment/templateConfig';
 import { AddAppointmentDialog } from 'components/appointment/AddAppointmentDialog';
 import { http } from "../../utils/http";
-import {helpers} from "./helper";
+import {helpers} from "../../components/appointment/helpers";
 
 import 'tui-calendar/dist/tui-calendar.css';
 

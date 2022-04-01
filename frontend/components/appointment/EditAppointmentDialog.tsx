@@ -46,7 +46,6 @@ const EditAppointmentDialog = ({ isOpen, onClose }) => {
           onSubmit={(e) => {
             e.preventDefault();
             setAppointment((state) => ({ ...state, status: 'Pending' }));
-            console.log(appointmentForm);
             onClose(e, 'backdropClick');
           }}
         >

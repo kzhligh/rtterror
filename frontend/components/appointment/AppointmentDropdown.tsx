@@ -12,7 +12,6 @@ export const AppointmentDropdown = ({
         id="services"
         defaultValue="Choose a therapist"
         style={{ width: '100%' }}
-        // value={services.serviceName}
         onChange={(e) => {
           setAppointment((state) => ({
             ...state,
@@ -30,10 +29,8 @@ export const AppointmentDropdown = ({
       <Select
         id="therapists"
         defaultValue="Choose a therapist"
-        // value={therapists.name}
         style={{ width: '100%' }}
         onChange={(e) => {
-          console.log('select therapist: ', e);
           setAppointment((state) => ({
             ...state,
             employee_ids: [ ...state.employee_ids, e.target.value ],

@@ -212,7 +212,6 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
                   <TextField { ...params } label="Client name" />
                 )}
                 options={clients}
-                // value={selectedClient}
                 getOptionLabel={(option: IClient) => option.name}
                 style={{ width: "100%" }}
                 id="existing"
