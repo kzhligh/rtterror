@@ -104,7 +104,6 @@ describe('Employee Service', () => {
   });
 
   it('should be able to update employee by pk', async () => {
-    const id = 'mock';
     const mockEmployeeEntity = new MockEmployeeModel(mockEmployee);
     const { service_ids, ...mockEmployeeResult } = mockEmployee;
     const transaction = new Transaction(sequelize, {});
@@ -150,7 +149,6 @@ describe('Employee Service', () => {
   });
 
   it('should be able to hide item by ID', async () => {
-    // const id = 'mock';
     const { id, ...employeeInfo } = mockEmployee;
     const t = new Transaction(sequelize, {});
 

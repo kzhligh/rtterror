@@ -8,7 +8,7 @@ class ComboService extends GeneralService<ICombo, IComboDto> {
   public serviceComboModel: any;
   public serviceModel: any;
 
-  constructor(
+  constructor (
     comboModelName: string,
     serviceModelName: string,
     serviceComboModelName: string
@@ -18,7 +18,7 @@ class ComboService extends GeneralService<ICombo, IComboDto> {
     this.serviceComboModel = sequelize.model(serviceComboModelName);
   }
 
-  async getAllItems(): Promise<ICombo[]> {
+  async getAllItems (): Promise<ICombo[]> {
     try {
       const allItems = await this.model.findAll({ include: this.serviceModel });
       return allItems.map((item: Model) => {
@@ -30,7 +30,7 @@ class ComboService extends GeneralService<ICombo, IComboDto> {
     }
   }
 
-  async getItemById(id: string): Promise<ICombo | null> {
+  async getItemById (id: string): Promise<ICombo | null> {
     try {
       const comboItem = await this.model.findByPk(id, {
         include: this.serviceModel,
@@ -42,7 +42,7 @@ class ComboService extends GeneralService<ICombo, IComboDto> {
     }
   }
 
-  async createItem(itemInfo: IComboDto): Promise<ICombo | null> {
+  async createItem (itemInfo: IComboDto): Promise<ICombo | null> {
     const t = await sequelize.transaction();
     try {
       const { service_ids, ...comboInfo } = itemInfo;
@@ -60,7 +60,7 @@ class ComboService extends GeneralService<ICombo, IComboDto> {
     }
   }
 
-  async updateItem(comboObj: ICombo): Promise<ICombo | null> {
+  async updateItem (comboObj: ICombo): Promise<ICombo | null> {
     const t = await sequelize.transaction();
     try {
       const { id, service_ids, ...comboInfo } = comboObj;
@@ -107,7 +107,7 @@ class ComboService extends GeneralService<ICombo, IComboDto> {
     }
   }
 
-  async updateItemById(id: string, updateFields: any): Promise<ICombo | null> {
+  async updateItemById (id: string, updateFields: any): Promise<ICombo | null> {
     const t = await sequelize.transaction();
     try {
       await this.model.update(updateFields, {
@@ -125,10 +125,10 @@ class ComboService extends GeneralService<ICombo, IComboDto> {
     }
   }
 
-  async deleteItemById(id: string): Promise<void> {
+  async deleteItemById (id: string): Promise<void> {
     const t = await sequelize.transaction();
     try {
-      const numberOfDeletions = await this.model.destroy({
+      await this.model.destroy({
         where: {
           id: id,
         },
@@ -143,7 +143,7 @@ class ComboService extends GeneralService<ICombo, IComboDto> {
     }
   }
 
-  async deleteItemsByServiceId(serviceId: string, t?: any): Promise<void> {
+  async deleteItemsByServiceId (serviceId: string, t?: any): Promise<void> {
     let allComboIds = await this.serviceComboModel.findAll({
       where: {
         service_id: serviceId,
@@ -152,7 +152,7 @@ class ComboService extends GeneralService<ICombo, IComboDto> {
     allComboIds = allComboIds.map((item: Model) =>
       item.getDataValue('combo_id')
     );
-    let counter = 0;
+
     for (const comboId of allComboIds) {
       await this.model.destroy({
         where: {
@@ -160,9 +160,8 @@ class ComboService extends GeneralService<ICombo, IComboDto> {
         },
         transaction: t,
       });
-      counter++;
     }
-    console.log(counter + 'combos has been deleted');
+
     const leftComboIds = await this.serviceComboModel.findAll({
       where: {
         service_id: serviceId,
