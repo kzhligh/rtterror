@@ -3,24 +3,25 @@ import comboService from '../services/combo-service';
 
 const router = express.Router();
 
-router.use(function (req, res, next) {
-  console.log('%s %s %s', req.method, req.url, req.path);
+router.use(function (_req, _res, next) {
   next();
 });
 
-router.get('/', (req, res, next) => {
+router.get('/', (req, res, _next) => {
   comboService
     .getAllItems()
     .then((data) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
+      console.error(
+        `ERROR - (${req.method})/combos${req.path}/error: ${error}`
+      );
       res.status(400).send(error);
     });
 });
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id', (req, res, _next) => {
   const { params } = req;
   const { id } = params;
   comboService
@@ -29,12 +30,14 @@ router.get('/:id', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
+      console.error(
+        `ERROR - (${req.method})/combos${req.path}/error: ${error}`
+      );
       res.status(400).send(error);
     });
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', (req, res, _next) => {
   const { body } = req;
   comboService
     .createItem(body)
@@ -42,12 +45,14 @@ router.post('/', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
+      console.error(
+        `ERROR - (${req.method})/combos${req.path}/error: ${error}`
+      );
       res.status(400).send(error);
     });
 });
 
-router.put('/', (req, res, next) => {
+router.put('/', (req, res, _next) => {
   const { body } = req;
   comboService
     .updateItem(body)
@@ -55,12 +60,14 @@ router.put('/', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
+      console.error(
+        `ERROR - (${req.method})/combos${req.path}/error: ${error}`
+      );
       res.status(400).send(error);
     });
 });
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', (req, res, _next) => {
   const { params } = req;
   const { id } = params;
   comboService
@@ -69,12 +76,14 @@ router.delete('/:id', (req, res, next) => {
       res.sendStatus(200);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
+      console.error(
+        `ERROR - (${req.method})/combos${req.path}/error: ${error}`
+      );
       res.status(400).send(error);
     });
 });
 
-router.put('/:id/block', (req, res, next) => {
+router.put('/:id/block', (req, res, _next) => {
   const { params } = req;
   const { id } = params;
   comboService
@@ -83,12 +92,14 @@ router.put('/:id/block', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
+      console.error(
+        `ERROR - (${req.method})/combos${req.path}/error: ${error}`
+      );
       res.status(400).send(error);
     });
 });
 
-router.put('/:id/unblock', (req, res, next) => {
+router.put('/:id/unblock', (req, res, _next) => {
   const { params } = req;
   const { id } = params;
   comboService
@@ -97,7 +108,9 @@ router.put('/:id/unblock', (req, res, next) => {
       res.status(200).send(data);
     })
     .catch((error) => {
-      console.error(`ERROR - (${req.method})/combos${req.path}/error: ${error}`);
+      console.error(
+        `ERROR - (${req.method})/combos${req.path}/error: ${error}`
+      );
       res.status(400).send(error);
     });
 });
