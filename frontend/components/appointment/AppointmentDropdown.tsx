@@ -12,16 +12,15 @@ export const AppointmentDropdown = ({
         id="services"
         defaultValue="Choose a therapist"
         style={{ width: '100%' }}
-        value={services.serviceName}
         onChange={(e) => {
           setAppointment((state) => ({
             ...state,
-            plan: { serviceName: e.target.value as string },
+            service_ids: [ ...state.service_ids, e.target.value ],
           }));
         }}
       >
         {services.map((service) => (
-          <MenuItem key={service.serviceName} value={service.serviceName}>
+          <MenuItem key={service.id} value={service.id}>
             {service.serviceName}
           </MenuItem>
         ))}
@@ -30,17 +29,16 @@ export const AppointmentDropdown = ({
       <Select
         id="therapists"
         defaultValue="Choose a therapist"
-        value={therapists.name}
         style={{ width: '100%' }}
         onChange={(e) => {
           setAppointment((state) => ({
             ...state,
-            therapist: { name: e.target.value as string },
+            employee_ids: [ ...state.employee_ids, e.target.value ],
           }));
         }}
       >
         {therapists.map((therapist) => (
-          <MenuItem key={therapist.name} value={therapist.name}>
+          <MenuItem key={therapist.id} value={therapist.id}>
             {therapist.name}
           </MenuItem>
         ))}

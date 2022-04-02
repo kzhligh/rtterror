@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, forwardRef, useState } from 'react';
+import React, { useRef, useCallback, forwardRef, useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { randomBytes } from 'crypto';
 import {
@@ -17,6 +17,8 @@ import DropConfirmationDialog from '../../components/appointment/dropConfirmatio
 import theme from '../../components/appointment/themeConfig';
 import template from '../../components/appointment/templateConfig';
 import { AddAppointmentDialog } from 'components/appointment/AddAppointmentDialog';
+import { http } from "../../utils/http";
+import {helpers} from "../../components/appointment/helpers";
 
 import 'tui-calendar/dist/tui-calendar.css';
 
@@ -43,75 +45,78 @@ function Appointment() {
   });
   const [updateEvent, setUpdateEvent] = useState(null);
 
-  const [schedules, setSchedules] = useState([
-    {
-      id: '1',
-      calendarId: '3',
-      title: 'TOAST UI Calendar Study',
-      category: 'time',
-      dueDateClass: '',
-      start: new Date(new Date().setHours(13)),
-      end: new Date(new Date().setHours(14)),
-    },
-    {
-      id: '2',
-      calendarId: '1',
-      title: 'Practice',
-      category: 'time',
-      dueDateClass: '',
-      start: new Date(new Date().setHours(12)),
-      end: new Date(new Date().setHours(15)),
-      isReadOnly: true,
-    },
-    {
-      id: '3',
-      calendarId: '2',
-      title: 'FE Workshop',
-      category: 'time',
-      dueDateClass: '',
-      start: new Date(new Date().setHours(14)),
-      end: new Date(new Date().setHours(16)),
-      isReadOnly: true,
-    },
-    {
-      id: '4',
-      calendarId: '3',
-      title: 'Report',
-      category: 'time',
-      dueDateClass: '',
-      start: new Date(new Date().setDate(today.getDay() - 1)),
-      end: new Date(new Date().setDate(today.getDay() - 1)),
-    },
-  ]);
-  const [employees, setEmployees] = useState([
-    {
-      id: '1',
-      name: 'Employee X',
-      color: '#ffffff',
-      bgColor: 'red',
-      dragBgColor: '#9e5fff',
-      borderColor: '#9e5fff',
-      visible: true,
-    },
-    {
-      id: '2',
-      name: 'Employee Y',
-      color: '#ffffff',
-      bgColor: 'green',
-      dragBgColor: '#00a9ff',
-      borderColor: '#00a9ff',
-      visible: true,
-    },
-    {
-      id: '3',
-      name: 'Employee Z',
-      color: '#ffffff',
-      bgColor: 'blue',
-      dragBgColor: '#00a9ff',
-      borderColor: '#00a9ff',
-      visible: true,
-    },
-  ]);
+  const [ schedules, setSchedules ] = useState([]);
+  useEffect(() => {
+    console.log('my shcedues: ', schedules)
+    if (schedules.length === 0) {
+      // get appointments from db
+      http(
+        '/api/v1/appointments',
+        {
+          method: 'GET'
+        }
+      )
+        .then(appointments => {
+          console.log('appointments from DB: ', appointments);
+          setSchedules(helpers.generateSchedules(appointments))
+        })
+        .catch(error => console.error('ERROR - get appointments from DB: ', error));
+    }
+  }, [schedules])
+
+  const [employees, setEmployees] = useState([{
+    id: 'initialEmployee',
+    name: 'initialEmployee',
+    color: '#ffffff',
+    bgColor: 'blue',
+    dragBgColor: '#00a9ff',
+    borderColor: '#00a9ff',
+    visible: false
+  }]);
+  useEffect(() => {
+    if (employees.length === 1 && employees[0].id === 'initialEmployee') {
+      http(
+        '/api/v1/employees',
+        {
+          method: 'GET'
+        }
+      )
+        .then(employees => {
+          setEmployees(helpers.generateCalendarEmployees(employees));
+        })
+        .catch(error => console.error('ERROR - get employees from DB: ', error));
+    }
+  }, [employees])
+
+  // add new appointment
+  const [ therapists, setTherapists ] = useState([]);
+  useEffect(() => {
+    if (therapists.length === 0) {
+      http('/api/v1/employees')
+        .then(data => setTherapists(data.map(t => ({ ...t, name: t.first_name + ' ' + t.last_name }))))
+        .catch(error => console.error('get employees error: ', error));
+    }
+  }, [therapists]);
+  const [ services, setServices ] = useState([]);
+  useEffect(() => {
+    if (services.length === 0) {
+      http('/api/v1/services')
+        .then(data => setServices(data.map(s => ({ ...s, serviceName: s.name }))))
+        .catch(error => console.error('get services error: ', error));
+    }
+  }, [services]);
+  const [ existingClients, setExistingClients ] = useState([]);
+  useEffect(() => {
+    if (existingClients.length === 0) {
+      http('/api/v1/customer')
+        .then(data => {
+          console.log('clients: ', data);
+          setExistingClients(data.map(c => ({...c, name: c.firstName + ' ' + c.lastName})));
+        })
+        .catch(error => console.error('get existingClients error: ', error));
+    }
+  }, [existingClients]);
+
 
   const onClickSchedule = useCallback(
     (e) => {
@@ -223,6 +228,15 @@ function Appointment() {
     calendar.next();
   };
 
+  const refreshAppointments = () => {
+    http('/api/v1/appointments', { method: 'GET'})
+      .then(appointments => {
+        console.log('refreshAppointments()/SUCCESS: ', appointments);
+        setSchedules(helpers.generateSchedules(appointments));
+      })
+      .catch(error => console.error('refreshAppointments()/ERROR: ', error));
+  }
+
   return (
     <>
       <Typography variant="h6">Appointment</Typography>
@@ -313,11 +327,16 @@ function Appointment() {
         onClose={() => {
           setOpenCreateDialog(false);
         }}
+        therapists = {therapists}
+        services = {services}
+        existingClients = {existingClients}
+        refreshAppointments={refreshAppointments}
       />
       <DropConfirmationDialog
         open={openDropDialog}
         onClose={handleConfirmUpdateSchedule}
         changes={updateEvent?.changes}
+        updateEvent={updateEvent}
       />
     </>
   );
