@@ -5,12 +5,13 @@ import ServiceModel from '../src/models/service';
 import serviceEmployeeService from '../src/services/service-employee-service';
 
 class MockEmployeeModel extends EmployeeModel {
-  addService() {}
+  addService () {
+    // this does nothing
+  }
 }
 
-jest
-  .spyOn(sequelize, 'model')
-  .mockImplementation((modelName: string): ModelCtor<Model<any, any>> => {
+jest.spyOn(sequelize, 'model').mockImplementation(
+  (modelName: string): ModelCtor<Model<any, any>> => {
     switch (modelName) {
       case 'employee':
         return EmployeeModel;
@@ -19,7 +20,8 @@ jest
       default:
         return EmployeeModel;
     }
-  });
+  }
+);
 
 import employeeService from '../src/services/employee-service';
 
@@ -115,7 +117,9 @@ describe('Employee Service', () => {
       .spyOn(EmployeeModel, 'upsert')
       .mockResolvedValueOnce([mockEmployeeEntity, false]);
 
-    expect(await employeeService.updateItem({ ...mockEmployee })).toEqual({ ...mockEmployee });
+    expect(await employeeService.updateItem({ ...mockEmployee })).toEqual({
+      ...mockEmployee,
+    });
     expect(sequelize.transaction).toBeCalled();
     expect(EmployeeModel.upsert).toBeCalledWith(
       { ...mockEmployeeResult },
