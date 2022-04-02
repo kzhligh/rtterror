@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Grid, Button, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 import ServiceEmployeeTable from './serviceEmployeeTable';
 import DurationPriceItem from './durationPriceItem';
@@ -60,10 +60,6 @@ const AddServiceForm = (props) => {
             );
         }
     };
-
-    useEffect(() => {
-    }, [employeeCheckList, durationPriceList, reload]);
-
 
     const handleAddDurationPrice = () => {
         setDurationPriceList([...durationPriceList, { price: INIT_PRICE, duration: INIT_DURATION }]);
