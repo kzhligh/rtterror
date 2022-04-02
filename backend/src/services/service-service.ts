@@ -154,8 +154,8 @@ class ServiceService extends GeneralService<IService, IServicesDto> {
           },
         });
         // if any service has been delete - if yes, delete corresponding combo, service-combo, and service-employee
-        for (const service of allServices) {
-          const serviceId = service.getDataValue('id');
+        for (const curService of allServices) {
+          const serviceId = curService.getDataValue('id');
           if (!updateIds.includes(serviceId)) {
             // hide the service
             await this.model.update(
@@ -177,7 +177,7 @@ class ServiceService extends GeneralService<IService, IServicesDto> {
             const durationPrice = durations_prices.filter((dp) => {
               return serviceId === dp.id;
             });
-            await service.update(
+            await curService.update(
               {
                 name: name,
                 service_code: service_code,
@@ -194,7 +194,7 @@ class ServiceService extends GeneralService<IService, IServicesDto> {
               const employeeItem = await this.employeeModel.findByPk(
                 employeeId
               );
-              await service.addEmployee(employeeItem, { transaction: t });
+              await curService.addEmployee(employeeItem, { transaction: t });
             }
           }
         }
@@ -209,9 +209,7 @@ class ServiceService extends GeneralService<IService, IServicesDto> {
         },
         include: this.employeeModel,
       });
-      return updatedServices.map(
-        (service: Model) => service.toJSON() as IService
-      );
+      return updatedServices.map((item: Model) => item.toJSON() as IService);
     } catch (error) {
       console.error('ServiceService/updateItem()/ERROR: ', error);
       await t.rollback();
