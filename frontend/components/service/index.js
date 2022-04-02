@@ -157,7 +157,7 @@ const ServiceComponent = (props) => {
                 gap={2}
                 width='100%'
             >
-                {[serviceListDisplay, comboListDisplay].map((itemList) => <Box display='flex' flexDirection='column' gap={2}>{itemList.map((item) => (
+                {[serviceListDisplay, comboListDisplay].map((itemList, idx) => <Box key={idx} display='flex' flexDirection='column' gap={2}>{itemList.map((item) => (
                     <ServiceCardRow
                         key={item.id}
                         item={item}
