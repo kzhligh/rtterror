@@ -3,8 +3,8 @@ import IAll from "src/interfaces/IAll";
 export interface IAppointmentJson extends IAll {
   id: string;
   rmq_id?: string;
-  client_id: number;
   pro_rmq_id?: string;
+  client_id: number;
   datetime: Date;
   duration: number;
   repeat: boolean;
@@ -26,8 +26,8 @@ interface status {
 export interface IAppointmentObj extends IAll {
   id: string;
   rmq_id: string;
-  client_id: number;
   pro_rmq_id?: string;
+  client_id: number;
   datetime: Date;
   duration: number;
   repeat: boolean;
