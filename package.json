@@ -7,7 +7,6 @@
     "yarn": ">= 1.22.10"
   },
   "engineStrict": true,
-  "dependencies": {},
   "devDependencies": {
     "@commitlint/cli": "^13.2.1",
     "@commitlint/config-conventional": "^13.2.0",

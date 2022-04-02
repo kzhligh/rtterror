@@ -82,8 +82,6 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
     notes: ''
   });
 
-  //const selectedClient = clients.filter(client => client.id === appointmentForm.client_id)[0];
-
   const resetAppointmentForm = () => {
     setAppointment({
       rmq_id: '',
