@@ -1,7 +1,7 @@
 import SearchInput from "../service/search";
 import * as React from "react";
 import Box from "@mui/material/Box";
-import {Divider, Grid,} from "@mui/material";
+import {Divider, Grid, Typography} from "@mui/material";
 import Button from "@mui/material/Button";
 import {useEffect, useState} from "react";
 import styled from '../../styles/employee.module.css';
@@ -9,7 +9,6 @@ import NewEmployeeDialog from "./newEmployeeDialog";
 import {useRouter} from "next/router";
 import {DataGrid} from "@mui/x-data-grid";
 import {formatPhoneNumber} from "../../utils";
-import cssStyled from "../../styles/service.module.css";
 
 
 const EmployeeComponent = (props) => {
@@ -70,8 +69,7 @@ const EmployeeComponent = (props) => {
                 alignItems="center"
             >
                 <Grid item xs={6}>
-                    <h1>Employee List
-                    </h1>
+                    <Typography variant='h6'>Employee List</Typography>
                 </Grid>
                 <Grid item xs={3}>
                     <Button className={styled.addButton} variant="outlined" onClick={() => setAddOpen(true)}>

@@ -20,6 +20,7 @@
     "@mui/system": "^5.2.8",
     "@mui/x-data-grid": "^5.0.1",
     "@toast-ui/react-calendar": "^1.0.6",
+    "color-hash": "^2.0.1",
     "cross-env": "^7.0.3",
     "date-fns": "^2.25.0",
     "dotenv": "^16.0.0",

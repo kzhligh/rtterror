@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { v4 as uuidv4 } from 'uuid';
 import { Grid, Button, Card, CardHeader, CardContent, Typography } from '@mui/material';
 import _cloneDeep from "lodash/cloneDeep";
@@ -8,7 +9,6 @@ import ServiceEmployeeDialog from './serviceEmployeeDialog';
 import DurationPriceDisplay from './durationPriceDisplay';
 import { InputTextField } from "../form/formComponent";
 import cssStyled from '../../styles/service.module.css';
-import Box from "@mui/material/Box";
 
 
 const ServiceDetailsCard = (props) => {
@@ -21,6 +21,7 @@ const ServiceDetailsCard = (props) => {
     const [durationPriceList, setDurationPriceList] = useState(item.durations_prices);
     const [reload, setReload] = useState(false);
     const [serviceValue, setServiceValue] = useState(_cloneDeep(item));
+    const router = useRouter();
 
     const handleAddEmployeeCheck = (val, employee) => {
         if (val) {
@@ -85,7 +86,6 @@ const ServiceDetailsCard = (props) => {
     };
 
     return (
-        <Box sx={{maxWidth: '1000px'}}>
         <Card>
             <CardHeader title={serviceValue.name} />
             <CardContent>
@@ -105,7 +105,7 @@ const ServiceDetailsCard = (props) => {
                                 className={cssStyled.buttonContainer}
                                 variant="outlined"
                                 color="inherit"
-                                href='/service'
+                                onClick={() => router.back()}
                                 sx={{ color: 'text.secondary', borderColor: 'text.secondary' }}
                             >
                                 Back
@@ -175,7 +175,6 @@ const ServiceDetailsCard = (props) => {
                 />
             </CardContent>
         </Card>
-        </Box>
     );
 };
 export default ServiceDetailsCard;
