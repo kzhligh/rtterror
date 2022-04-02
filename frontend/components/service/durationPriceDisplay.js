@@ -6,7 +6,7 @@ import { DataGrid } from '@mui/x-data-grid';
 
 import { styled } from '@mui/material/styles';
 
-const ClassicButton = styled(Button)(({ theme }) => ({
+const ClassicButton = styled(Button)({
     border: '1px solid',
     borderColor: "#BBBBBB",
     backgroundColor: "#EFEFEF",
@@ -15,8 +15,8 @@ const ClassicButton = styled(Button)(({ theme }) => ({
     '&:hover': {
         color: "#707070",
         backgroundColor: "white",
-    },
-}));
+    }
+});
 
 
 const DurationPriceDisplay = (props) => {
