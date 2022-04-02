@@ -1,6 +1,5 @@
-function Invoice(props) {
-    const {text} = props;
-    return <h1>Invoices</h1>;
+function Invoice({ }) {
+    return 'This page is not ready.';
 }
 
 export default Invoice;
