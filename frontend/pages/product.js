@@ -1,4 +1,4 @@
-function Product({ }) {
+function Product() {
     return 'This page is not ready.';
 }
 

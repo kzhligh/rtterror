@@ -1,5 +1,6 @@
 import express from 'express';
 import comboService from '../services/combo-service';
+import { sendBackErrorMessage } from 'src/routes/errorProcess';
 
 const router = express.Router();
 
@@ -13,12 +14,7 @@ router.get('/', (req, res, _next) => {
     .then((data) => {
       res.status(200).send(data);
     })
-    .catch((error) => {
-      console.error(
-        `ERROR - (${req.method})/combos${req.path}/error: ${error}`
-      );
-      res.status(400).send(error);
-    });
+    .catch((error) => sendBackErrorMessage(req, res, error));
 });
 
 router.get('/:id', (req, res, _next) => {
@@ -29,12 +25,7 @@ router.get('/:id', (req, res, _next) => {
     .then((data) => {
       res.status(200).send(data);
     })
-    .catch((error) => {
-      console.error(
-        `ERROR - (${req.method})/combos${req.path}/error: ${error}`
-      );
-      res.status(400).send(error);
-    });
+    .catch((error) => sendBackErrorMessage(req, res, error));
 });
 
 router.post('/', (req, res, _next) => {
@@ -44,12 +35,7 @@ router.post('/', (req, res, _next) => {
     .then((data) => {
       res.status(200).send(data);
     })
-    .catch((error) => {
-      console.error(
-        `ERROR - (${req.method})/combos${req.path}/error: ${error}`
-      );
-      res.status(400).send(error);
-    });
+    .catch((error) => sendBackErrorMessage(req, res, error));
 });
 
 router.put('/', (req, res, _next) => {
@@ -59,12 +45,7 @@ router.put('/', (req, res, _next) => {
     .then((data) => {
       res.status(200).send(data);
     })
-    .catch((error) => {
-      console.error(
-        `ERROR - (${req.method})/combos${req.path}/error: ${error}`
-      );
-      res.status(400).send(error);
-    });
+    .catch((error) => sendBackErrorMessage(req, res, error));
 });
 
 router.delete('/:id', (req, res, _next) => {
@@ -75,12 +56,7 @@ router.delete('/:id', (req, res, _next) => {
     .then(() => {
       res.sendStatus(200);
     })
-    .catch((error) => {
-      console.error(
-        `ERROR - (${req.method})/combos${req.path}/error: ${error}`
-      );
-      res.status(400).send(error);
-    });
+    .catch((error) => sendBackErrorMessage(req, res, error));
 });
 
 router.put('/:id/block', (req, res, _next) => {
@@ -91,12 +67,7 @@ router.put('/:id/block', (req, res, _next) => {
     .then((data) => {
       res.status(200).send(data);
     })
-    .catch((error) => {
-      console.error(
-        `ERROR - (${req.method})/combos${req.path}/error: ${error}`
-      );
-      res.status(400).send(error);
-    });
+    .catch((error) => sendBackErrorMessage(req, res, error));
 });
 
 router.put('/:id/unblock', (req, res, _next) => {
@@ -107,12 +78,7 @@ router.put('/:id/unblock', (req, res, _next) => {
     .then((data) => {
       res.status(200).send(data);
     })
-    .catch((error) => {
-      console.error(
-        `ERROR - (${req.method})/combos${req.path}/error: ${error}`
-      );
-      res.status(400).send(error);
-    });
+    .catch((error) => sendBackErrorMessage(req, res, error));
 });
 
 export default router;

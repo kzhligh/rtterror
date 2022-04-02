@@ -11,7 +11,7 @@ export async function getServerSideProps(_context) {
     };
 }
 
-const Service = ({ }) => {
+const Service = () => {
     const [serviceListData, setServiceListData] = useState([]);
     const [comboListData, setComboListData] = useState([]);
     const [refresh, setRefresh] = useState(false);
