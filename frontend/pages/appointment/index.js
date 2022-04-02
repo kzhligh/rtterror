@@ -45,47 +45,6 @@ function Appointment() {
   });
   const [updateEvent, setUpdateEvent] = useState(null);
 
-  // const [schedules, setSchedules] = useState([
-  //   {
-  //     id: '1',
-  //     calendarId: '3',
-  //     title: 'TOAST UI Calendar Study',
-  //     category: 'time',
-  //     dueDateClass: '',
-  //     start: new Date(new Date().setHours(13)),
-  //     end: new Date(new Date().setHours(14)),
-  //   },
-  //   {
-  //     id: '2',
-  //     calendarId: '1',
-  //     title: 'Practice',
-  //     category: 'time',
-  //     dueDateClass: '',
-  //     start: new Date(new Date().setHours(12)),
-  //     end: new Date(new Date().setHours(15)),
-  //     isReadOnly: true,
-  //   },
-  //   {
-  //     id: '3',
-  //     calendarId: '2',
-  //     title: 'FE Workshop',
-  //     category: 'time',
-  //     dueDateClass: '',
-  //     start: new Date(new Date().setHours(14)),
-  //     end: new Date(new Date().setHours(16)),
-  //     isReadOnly: true,
-  //   },
-  //   {
-  //     id: '4',
-  //     calendarId: '3',
-  //     title: 'Report',
-  //     category: 'time',
-  //     dueDateClass: '',
-  //     start: new Date(new Date().setDate(today.getDay() - 1)),
-  //     end: new Date(new Date().setDate(today.getDay() - 1)),
-  //   },
-  // ]);
-
   const [ schedules, setSchedules ] = useState([]);
   useEffect(() => {
     console.log('my shcedues: ', schedules)
@@ -99,7 +58,6 @@ function Appointment() {
       )
         .then(appointments => {
           console.log('appointments from DB: ', appointments);
-          // const allAppointments = appointments.map()
           setSchedules(helpers.generateSchedules(appointments))
         })
         .catch(error => console.error('ERROR - get appointments from DB: ', error));
@@ -133,7 +91,6 @@ function Appointment() {
   // add new appointment
   const [ therapists, setTherapists ] = useState([]);
   useEffect(() => {
-    // console.log('therapists: ', therapists);
     if (therapists.length === 0) {
       http('/api/v1/employees')
         .then(data => setTherapists(data.map(t => ({ ...t, name: t.first_name + ' ' + t.last_name }))))
@@ -150,7 +107,6 @@ function Appointment() {
   }, [services]);
   const [ existingClients, setExistingClients ] = useState([]);
   useEffect(() => {
-    // console.log('therapists: ', therapists);
     if (existingClients.length === 0) {
       http('/api/v1/customer')
         .then(data => {

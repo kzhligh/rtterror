@@ -20,7 +20,6 @@ import { useState, useEffect } from 'react';
 import { AppointmentDropdown } from './AppointmentDropdown';
 import { http } from "../../utils/http";
 import {AddCustomerDialog} from "../client/AddCustomerDialog";
-import {data} from "browserslist";
 
 const blankAppointment = {
   plan: { serviceName: 'TestService' },
@@ -83,7 +82,7 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
     notes: ''
   });
 
-  const selectedClient = clients.filter(client => client.id === appointmentForm.client_id)[0];
+  //const selectedClient = clients.filter(client => client.id === appointmentForm.client_id)[0];
 
   const resetAppointmentForm = () => {
     setAppointment({
@@ -111,7 +110,7 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
         body: appointmentForm
       }
     )
-      .then((res) => {
+      .then((_res) => {
         resetAppointmentForm();
         refreshAppointments();
       })
@@ -215,7 +214,7 @@ export const AddAppointmentDialog = ({ therapists, services, existingClients, is
                 getOptionLabel={(option: IClient) => option.name}
                 style={{ width: "100%" }}
                 id="existing"
-                onChange={(event, value: any) => {
+                onChange={(_event, value: any) => {
                   const clientId = value ? value.id : -1
                   setAppointment((state) => ({ ...state, client_id: clientId }))
                 }}
