@@ -196,9 +196,9 @@ class SalaryRateParameter extends Parameter
     constructor(name1: string, min1: number, max1: number, value1: number)
     {
         super(name);
-        this.min1= min;
-        this.max1= max;
-        this.value1 = value;
+        this.min1= min1;
+        this.max1= max1;
+        this.value1 = value1;
     }
 
     //Mutator 
