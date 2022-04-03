@@ -84,7 +84,7 @@ class TimeBasedCalculation extends SalaryCalculation
      //Other methods
      calculate(){ return this.time.getValue() * this.salaryRate.getValue();}
 
-     params(){ return {param1: this.time.getValue(), param2: this.salaryRate.getValue() , name: 'TimeBasedCalculation'} };
+     params(){ return {param1: this.time.getValue(), param2: this.salaryRate.getValue() , name: 'TimeBasedCalculation'}; }
 
 }
 
@@ -107,7 +107,7 @@ class ServiceBasedCalculation extends SalaryCalculation
 
      //Other methods
      calculate(){ return this.fixedPrice.getValue() * this.numOfServices.getValue();}
-     params(){ return {param1: this.numOfServices.getValue(), param2: this.fixedPrice.getValue() , name: 'ServiceBasedCalculation'} };
+     params(){ return {param1: this.numOfServices.getValue(), param2: this.fixedPrice.getValue() , name: 'ServiceBasedCalculation'}; }
 }
 
 class CommissionBasedCalculation extends SalaryCalculation
@@ -130,7 +130,7 @@ class CommissionBasedCalculation extends SalaryCalculation
      //Other methods
      calculate(){ return this.serviceCost.getValue()* (this.commissionPercentage.getValue()/100);}
 
-     params(){ return {param1: this.serviceCost.getValue(), param2: this.commissionPercentage.getValue()/100 , name: 'CommissionBasedCalculation'} };
+     params(){ return {param1: this.serviceCost.getValue(), param2: this.commissionPercentage.getValue()/100 , name: 'CommissionBasedCalculation'}; }
 
 
 }
