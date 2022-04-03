@@ -42,7 +42,9 @@ abstract class SalaryCalculation
   protected parameters : Parameter[]=[];
 
     //Constructors
-    SalaryCalculation() { }
+    SalaryCalculation() {
+
+    }
 
     //Accessor 
     public getParameters() {return this.parameters.copyWithin;}
@@ -388,7 +390,7 @@ export class SalaryCalculationFactory
         if( nameOfSalaryCalculation === "TimeBasedCalculation" )
         {
             // duration
-            var totalDuration =  appointmentsList.reduce((acc, item) => acc + (1*item.appduration), 0);
+            var totalDuration =  appointmentsList.reduce((acc, item) => acc + (1*item.appduration), 0)/60;
             console.log({totalDuration:totalDuration});
             return new TimeBasedCalculation(new TimeParameter("TimeParameter",1,24,totalDuration),new SalaryRateParameter("SalaryRateParameter",1,500,+params));
         }

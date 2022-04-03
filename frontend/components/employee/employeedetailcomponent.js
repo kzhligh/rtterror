@@ -3,8 +3,7 @@ import {useState} from "react";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
 import * as React from "react";
 import EmployeeForm from "./employeeform";
-import { Grid, Card, CardHeader, CardContent, Typography,Tab} from '@mui/material';
-import ScheduleComponent from "../schedule";
+import { Tab} from '@mui/material';
 
 const Employeedetailcomponent = (props) => {
     const { employee, editEmployee, serviceList, serviceEmployeeList, validateEmployeeId } = props;

@@ -19,7 +19,7 @@ const ScheduleComponent =({employeeList,eventList,setRerender,rerender,employee,
     const [dialog, setDialog] = useState(false);
     const [schedule, setSchedule] = useState({});
     const [schedules, setSchedules] = useState(eventList);
-    const [employees, setEmployees] = useState(employeeList);
+    const [employees] = useState(employeeList);
     const [repeatDayChecked, setRepeatDayChecked] = useState([]);
 
     useEffect(()=>{
@@ -38,10 +38,10 @@ const ScheduleComponent =({employeeList,eventList,setRerender,rerender,employee,
             );
         }
     };
-    const handleSetSchedule = (e, employee)=>{
+    const handleSetSchedule = (e, emp)=>{
         const scheduleValue = {
             id: e.id,
-            employee : employee ,
+            employee : emp ,
             start_date : e.start.toDate() ,
             end_date : e.end.toDate(),
             start_time : e.start.toDate(),
@@ -58,9 +58,9 @@ const ScheduleComponent =({employeeList,eventList,setRerender,rerender,employee,
     }, [dialog]);
 
     const onBeforeCreateSchedule =(scheduleData) => {
-        let employee = cal.current.props.employee;
-        employee = Object.keys(employee).length == 0? employees[0]: employee;
-        handleSetSchedule(scheduleData, employee);
+        let empl = cal.current.props.employee;
+        empl = Object.keys(empl).length == 0? employees[0]: empl;
+        handleSetSchedule(scheduleData, empl);
         setDialog(true);
     }
 
@@ -71,15 +71,15 @@ const ScheduleComponent =({employeeList,eventList,setRerender,rerender,employee,
 
     const onBeforeUpdateSchedule = useCallback((e) => {
         const emp = _find(employees, ['id',e.schedule.calendarId]);
-        let schedule = {...e.schedule};
+        let sched = {...e.schedule};
         if(e.changes.start){
-            schedule.start = e.changes.start;
+            sched.start = e.changes.start;
         }
         if(e.changes.end){
-            schedule.end = e.changes.end;
+            sched.end = e.changes.end;
         }
 
-        handleSetSchedule(schedule,emp);
+        handleSetSchedule(sched,emp);
     }, []);
 
 
@@ -108,7 +108,7 @@ const ScheduleComponent =({employeeList,eventList,setRerender,rerender,employee,
         calendar.render();
     }, []);
 
-    const handleFilterEmployee = (event, selectedEmployee, reason) => {
+    const handleFilterEmployee = (_event, selectedEmployee, reason) => {
         const calendar = cal.current.calendarInst;
         if (reason === "selectOption") {
             employees.forEach((emp) => {

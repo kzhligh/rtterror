@@ -10,7 +10,7 @@ import _reduce from "lodash/reduce"
 import ColorHash from 'color-hash'
 import formatSchedule from "../../utils/formatSchedule";
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
     var colorHash = new ColorHash();
     let employeeList = await http(`/api/v1/employees`);
     employeeList = _reduce(employeeList, (accumulator, emp) => {
@@ -39,7 +39,6 @@ const Employee = ({employeesList}) => {
 
     useEffect(async () => {
         setLoading(true);
-        const today = new Date();
         let events = await http(`/api/v1/schedules`);
         events = formatSchedule(events,employeesList);
         setEventList(events);
@@ -57,19 +56,14 @@ const Employee = ({employeesList}) => {
     const formatAppointmentHistory =(appointments)=>{
 
         var returnAppointments = _reduce(appointments, (accumulator, app) => {
-            var service = app.services.map(service => `${service.name}`);
-            var employee = app.employees.map(emp => `${emp.first_name}`);
-            console.log({service: service})
-            var client =`${app.Client.firstName}`;
-            // duration sum of all service or set by person who book appointment
             return [...accumulator,
                 {
                     id: app.id,
                     date: app.datetime,
                     time: app.datetime,
-                    service:service.join('-'),
-                    employee: employee.join('-'),
-                    client: client,
+                    service:app.services.map(service => `${service.name}`).join('-'),
+                    employee: app.employees.map(emp => `${emp.first_name}`).join('-'),
+                    client: `${app.Client.firstName}`,
                     duration: app.duration,
                     price: app.price,
                 }

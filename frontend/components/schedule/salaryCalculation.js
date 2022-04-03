@@ -9,10 +9,9 @@ import {
     InputLabel,
     Select,
     MenuItem,
-    FormControl
+    FormControl, Button
 } from "@mui/material";
 import {CustomDatePicker} from "../form/formComponent";
-import {Button} from "@mui/material";
 import {http} from "../../utils/http";
 import {SalaryCalculationFactory,Employee} from "../../utils/salaryCalculation";
 
@@ -22,7 +21,6 @@ const SalaryCalculation =({setRows})=>{
         end_date: new Date(),
     }
     const [dataValue, setDataValue] = useState(initValue);
-    const [methodString,setMethodString] = useState();
     const handleSetDataValue = (obj) => {
         console.log({name:name,value:value})
         const {name, value} = obj.target;
@@ -48,7 +46,6 @@ const SalaryCalculation =({setRows})=>{
                     onChange={handleSetDataValue}
                     value={dataValue.ServiceBasedCalculation || 0}
                 />)
-                break;
             case 'CommissionBasedCalculation':
                 return (<TextField
                     sx={{
@@ -62,7 +59,6 @@ const SalaryCalculation =({setRows})=>{
                     onChange={handleSetDataValue}
                     value={dataValue.CommissionBasedCalculation || 0}
                 />)
-                break;
             default:
                 return (<TextField
                     sx={{
@@ -76,7 +72,6 @@ const SalaryCalculation =({setRows})=>{
                     onChange={handleSetDataValue}
                     value={dataValue.TimeBasedCalculation || 0}
                 />)
-                break;
         }
 
     }
@@ -110,10 +105,7 @@ const SalaryCalculation =({setRows})=>{
         });
         let appointmentByEmployeeList= {};
         let item = {};
-
-        for(let i = 0 ; i< appointmentList.length;i++){
-            item = {};
-            let appointment = appointmentList[i];
+        for (const appointment of appointmentList){
             let employeeId = appointment.employees[0].id
             if(appointmentByEmployeeList.hasOwnProperty(employeeId)){
                 item.appid =appointment.id ;
@@ -140,7 +132,6 @@ const SalaryCalculation =({setRows})=>{
             row={};
             employeeStrategy = SalaryCalculationFactory.createObject(submitData.method, appointmentByEmployeeList[empId], submitData.params);
             context = new Employee(employeeStrategy);
-            console.log("Client: Strategy is set to CommissionBasedCalculation.");
             context.setStrategy(employeeStrategy);
             row.id = empId
             row.employee = appointmentByEmployeeList[empId][0].employeename

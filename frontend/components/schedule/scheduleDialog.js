@@ -13,19 +13,8 @@ import {http} from "../../utils/http";
 
 const ScheduleDialog = (props)=>{
 
-    const {dialog, setDialog, event , employees, initValue , handleAddRepeatDayChecked , repeatDayChecked , setRepeatDayChecked , rerender , setRerender} =props
+    const {dialog, setDialog, event , employees, handleAddRepeatDayChecked , repeatDayChecked , setRepeatDayChecked , rerender , setRerender} =props
 
-    const handleActionsCheck = (val, index) => {
-
-        // add the same value
-        if (val) {
-            setScheduleValue({...scheduleValue, action: actionsList[index]});
-
-        } else {
-            setScheduleValue({...scheduleValue, action: actionsList[index+1%2]});
-        }
-
-    };
     const [scheduleValue, setScheduleValue] = useState(event);
 
     const handleSave =async () => {
@@ -146,7 +135,7 @@ const ScheduleDialog = (props)=>{
                                 placeholder="Employee"
                             />
                         )}
-                        onChange={(event, newValue) => handleSetScheduleValue({target: {name: 'employee', value: newValue}})}
+                        onChange={(_event, newValue) => handleSetScheduleValue({target: {name: 'employee', value: newValue}})}
                     />
                     <Grid item xs={12}>
                         <CustomDatePicker
