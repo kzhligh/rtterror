@@ -136,6 +136,9 @@ const SalaryCalculation =({setRows})=>{
             row.id = empId
             row.employee = appointmentByEmployeeList[empId][0].employeename
             row.earn = context.calculateSalary();
+            row.param1 = context.getParams().param1
+            row.param2 = context.getParams().param2;
+            row.method =  context.getParams().name;
             rows.push(row);
         }
         setRows(rows);

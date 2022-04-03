@@ -30,6 +30,13 @@ export class Employee {
         return result;
     }
 
+    public getParams(): any
+    {
+        const result = this.strategy.params();
+        console.log(result);
+        return result;
+    }
+
 }
 
 
@@ -52,6 +59,8 @@ abstract class SalaryCalculation
     //Other Methods 
     public abstract calculate() :number ;
 
+    public abstract params(): any;
+
 }
 
 class TimeBasedCalculation extends SalaryCalculation
@@ -71,11 +80,12 @@ class TimeBasedCalculation extends SalaryCalculation
             this.parameters[1] = this.salaryRate;
      }
 
-     
-
 
      //Other methods
      calculate(){ return this.time.getValue() * this.salaryRate.getValue();}
+
+     params(){ return {param1: this.time.getValue(), param2: this.salaryRate.getValue() , name: 'TimeBasedCalculation'} };
+
 }
 
 class ServiceBasedCalculation extends SalaryCalculation
@@ -97,6 +107,7 @@ class ServiceBasedCalculation extends SalaryCalculation
 
      //Other methods
      calculate(){ return this.fixedPrice.getValue() * this.numOfServices.getValue();}
+     params(){ return {param1: this.numOfServices.getValue(), param2: this.fixedPrice.getValue() , name: 'ServiceBasedCalculation'} };
 }
 
 class CommissionBasedCalculation extends SalaryCalculation
@@ -118,6 +129,8 @@ class CommissionBasedCalculation extends SalaryCalculation
 
      //Other methods
      calculate(){ return this.serviceCost.getValue()* (this.commissionPercentage.getValue()/100);}
+
+     params(){ return {param1: this.serviceCost.getValue(), param2: this.commissionPercentage.getValue()/100 , name: 'CommissionBasedCalculation'} };
 
 
 }
@@ -275,6 +288,6 @@ export class SalaryCalculationFactory
     }
 }
 
-function nameOfSalaryCalculation(CalculationMethod: any,string: any) {
+function nameOfSalaryCalculation(_CalculationMethod: any,_string: any) {
 throw new Error("Function not implemented.");
 }
