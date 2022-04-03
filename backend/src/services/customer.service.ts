@@ -1,28 +1,28 @@
 import { Customer } from 'src/models/customer.model';
 import { Frozen, Injectable } from 'src/utils/decorators';
 import { Op, Order, Sequelize, Transaction } from 'sequelize';
-import { Appointment } from 'src/models/appointment.model';
+import AppointmentModel from 'src/models/appointment';
 
 @Frozen()
 @Injectable()
 export class CustomerService {
-  constructor(private sqlService: Sequelize) {}
+  constructor (private sqlService: Sequelize) {}
 
-  createCustomer(customer: any) {
+  createCustomer (customer: any) {
     return Customer.create(customer);
   }
 
-  getAllCustomers(sortBy?: string) {
+  getAllCustomers (sortBy?: string) {
     return Customer.findAll({
       order: (sortBy && [[sortBy, 'ASC']]) as Order | undefined,
     });
   }
 
-  getCustomerById(customerId: string) {
+  getCustomerById (customerId: string) {
     return Customer.findByPk(customerId);
   }
 
-  async deleteCustomers(customers: Array<string | number>) {
+  async deleteCustomers (customers: Array<string | number>) {
     const t: Transaction = await this.sqlService.transaction();
     try {
       await Customer.destroy({
@@ -41,11 +41,11 @@ export class CustomerService {
     }
   }
 
-  updateCustomer(customer: any) {
+  updateCustomer (customer: any) {
     return Customer.upsert(customer);
   }
 
-  searchCustomer(query: string) {
+  searchCustomer (query: string) {
     return Customer.findAll({
       where: {
         [Op.or]: {
@@ -66,7 +66,7 @@ export class CustomerService {
     });
   }
 
-  async checkDuplicateCustomer(firstName: string, lastName: string) {
+  async checkDuplicateCustomer (firstName: string, lastName: string) {
     const count = await Customer.count({
       where: {
         [Op.and]: {
@@ -81,9 +81,9 @@ export class CustomerService {
     };
   }
 
-  getCustomerWithAppointments(customerId: string) {
+  getCustomerWithAppointments (customerId: string) {
     return Customer.findByPk(customerId, {
-      include: Appointment,
+      include: AppointmentModel,
     });
   }
 }

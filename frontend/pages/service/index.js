@@ -6,13 +6,12 @@ import groupService from '/utils/groupService';
 const apiPath = '/api/v1';
 
 export async function getServerSideProps(_context) {
-    const employeeList = await http(`${apiPath}/employees`);
     return {
-        props: { employeeList: employeeList },
+        props: {},
     };
 }
 
-const Service = ({ employeeList }) => {
+const Service = () => {
     const [serviceListData, setServiceListData] = useState([]);
     const [comboListData, setComboListData] = useState([]);
     const [refresh, setRefresh] = useState(false);

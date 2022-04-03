@@ -4,9 +4,9 @@ import { Close } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material';
 
-const ClassicSlider = styled(Slider)(({ theme }) => ({
+const ClassicSlider = styled(Slider)({
     color: "#707070",
-}));
+});
 
 const DurationPriceItem = (props) => {
     const {

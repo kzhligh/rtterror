@@ -1,6 +1,6 @@
 # TEAM RUNTIME TERROR - SOEN 490
 
-![CI](https://github.com/kevinlizh1992/rtterror/actions/workflows/pull-request.yml/badge.svg)
+![CI](https://github.com/kevinlizh1992/rtterror/actions/workflows/pull-request.yml/badge.svg) [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=kevinlizh1992_rtterror&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=kevinlizh1992_rtterror)
 
 ## Members
 

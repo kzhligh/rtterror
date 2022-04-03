@@ -1,6 +1,6 @@
 import { CustomerService } from '../src/services/customer.service';
 import { Customer } from '../src/models/customer.model';
-import { Appointment } from '../src/models/appointment.model';
+import Appointment from '../src/models/appointment';
 import { Op, Sequelize, Transaction, Model } from 'sequelize';
 
 const mockCustomer = {
