@@ -32,7 +32,7 @@ export const http = async <T = any>(
         body: method !== 'GET' ? JSON.stringify(options.body) : undefined,
     });
 
-    if (!data.ok) throw data.json() as Promise<T>;
+    if (!data.ok) throw new Error(JSON.stringify(data.json()));
 
     return data.json() as Promise<T>;
 };

@@ -42,7 +42,7 @@ jest.mock('../../services/service-service', () => ({
   hideItemsByServiceCode: jest
     .fn()
     .mockImplementationOnce(() => Promise.reject(errorServiceCode))
-    .mockImplementationOnce((serviceCode: string, content: any) =>
+    .mockImplementationOnce((_serviceCode: string, _content: any) =>
       Promise.resolve({
         method: hideItemsByServiceCodeMethodName,
         value: { hidden: true },
@@ -50,13 +50,13 @@ jest.mock('../../services/service-service', () => ({
     ),
   blockUnblockServices: jest
     .fn()
-    .mockImplementationOnce((serviceCode: string, content: any) =>
+    .mockImplementationOnce((_serviceCode: string, _content: any) =>
       Promise.resolve({
         method: blockUnblockServicesMethodName,
         value: { blocked: true },
       })
     )
-    .mockImplementationOnce((serviceCode: string, content: any) =>
+    .mockImplementationOnce((_serviceCode: string, _content: any) =>
       Promise.resolve({
         method: blockUnblockServicesMethodName,
         value: { blocked: false },
