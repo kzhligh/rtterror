@@ -15,6 +15,7 @@ import { AppointmentStatusUpdatePopup } from './summary';
 import { AppointmentDropdown } from './AppointmentDropdown';
 import { AddCustomerDialog } from '../client/AddCustomerDialog';
 import { ICustomer, IStatus } from './common/appointmentInterfaces';
+import { AlertError } from './common/AlertError';
 
 export const AddAppointmentDialog = ({
   therapists,
@@ -28,9 +29,31 @@ export const AddAppointmentDialog = ({
 }) => {
   const [showClientDialog, setShowClientDialog] = useState(false);
   const [openStatusUpdate, setOpenStatusUpdate] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleSubmit = (e) => {
+    setOpenAlert(false);
+    if (editForm.status.length === 0) {
+      setErrorMsg('Please sign your name. ');
+      setOpenStatusUpdate(true);
+      setOpenAlert(true);
+      return;
+    }
+
+    if (editForm.client_id === -1) {
+      setErrorMsg('Please select a client. ');
+      setOpenAlert(true);
+      return;
+    }
+
     createAppointment({ ...editForm, status: e.status });
+    handleClose(e);
+  };
+
+  const handleClose = (e) => {
+    setOpenAlert(false);
+    setErrorMsg('');
     onClose(e);
   };
 
@@ -174,14 +197,6 @@ export const AddAppointmentDialog = ({
                     ...prevContent,
                     status: [newStatus],
                   }));
-
-                  if (editForm.client_id === -1) {
-                    return;
-                  }
-
-                  handleSubmit({
-                    status: [newStatus],
-                  });
                 }}
               />
             </Box>
@@ -190,17 +205,19 @@ export const AddAppointmentDialog = ({
       </DialogContent>
       <DialogActions>
         <Button
-          onClick={() => setOpenStatusUpdate(true)}
+          onClick={handleSubmit}
+          type='submit'
           variant='contained'
           color='primary'
           size='large'
         >
           Confirm
         </Button>
-        <Button onClick={onClose} color='inherit' size='large'>
+        <Button onClick={handleClose} color='inherit' size='large'>
           Cancel
         </Button>
       </DialogActions>
+      <AlertError open={openAlert} setOpen={setOpenAlert} msg={errorMsg} />
     </Dialog>
   );
 };
