@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { DateTimePicker } from '@mui/lab';
 import { useState } from 'react';
-import { AppointmentStatus } from './summary';
+import { AppointmentStatusUpdatePopup } from './summary';
 import { AppointmentDropdown } from './AppointmentDropdown';
 import { AddCustomerDialog } from '../client/AddCustomerDialog';
 import { ICustomer, IStatus } from './common/appointmentInterfaces';
@@ -27,6 +27,12 @@ export const AddAppointmentDialog = ({
   setSelectedAppointment: setEditForm,
 }) => {
   const [showClientDialog, setShowClientDialog] = useState(false);
+  const [openStatusUpdate, setOpenStatusUpdate] = useState(false);
+
+  const handleSubmit = (e) => {
+    createAppointment({ ...editForm });
+    onClose(e, 'backdropClick');
+  };
 
   return showClientDialog ? (
     <AddCustomerDialog
@@ -54,13 +60,7 @@ export const AddAppointmentDialog = ({
     <Dialog fullWidth open={isOpen}>
       <DialogTitle>New Appointment</DialogTitle>
       <DialogContent>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            createAppointment({ ...editForm });
-            onClose(e, 'backdropClick');
-          }}
-        >
+        <form onSubmit={handleSubmit}>
           <Box display='grid' gap={3}>
             <Box display='grid' gridAutoColumns='1fr' marginTop={2}>
               <DateTimePicker
@@ -82,7 +82,7 @@ export const AddAppointmentDialog = ({
               />
               <TextField
                 id='duration'
-                label='Duration'
+                label='Duration (min)'
                 value={editForm.duration}
                 onChange={(e) => {
                   setEditForm((state) => ({
@@ -110,7 +110,7 @@ export const AddAppointmentDialog = ({
                 }}
                 sx={{ gridColumn: 'span 3' }}
                 renderInput={(params) => (
-                  <TextField {...params} label='Existing Client' />
+                  <TextField {...params} required label='Existing Client' />
                 )}
               />
               <Button
@@ -135,8 +135,34 @@ export const AddAppointmentDialog = ({
               />
             </Box>
             <Box display='grid' gridTemplateColumns='repeat(2, auto)' gap={1}>
-              <AppointmentStatus
-                statuses={editForm.status}
+              <TextField
+                label='Memo'
+                multiline
+                fullWidth
+                maxRows={3}
+                value={editForm.notes}
+                onChange={(e) =>
+                  setEditForm((state) => ({
+                    ...state,
+                    notes: e.target.value,
+                  }))
+                }
+                variant='filled'
+                color='warning'
+              />
+              <TextField
+                label='Created by'
+                required
+                value={
+                  editForm.status.length ? editForm.status[0].by : 'not signed'
+                }
+                disabled={true}
+              />
+              <AppointmentStatusUpdatePopup
+                open={openStatusUpdate}
+                toggleOpen={setOpenStatusUpdate}
+                name={'Created'}
+                setName={() => {}}
                 updateStatus={(name: string, changedBy: string) => {
                   const newStatus: IStatus = {
                     name: name,
@@ -146,43 +172,30 @@ export const AddAppointmentDialog = ({
 
                   setEditForm((prevContent) => ({
                     ...prevContent,
-                    status: [newStatus, ...prevContent.status],
+                    status: [newStatus],
                   }));
-                }}
-                expanded={false}
-              />
-              <Box>
-                <TextField
-                  label='Memo'
-                  multiline
-                  fullWidth
-                  maxRows={3}
-                  value={editForm.notes}
-                  onChange={(e) =>
-                    setEditForm((state) => ({
-                      ...state,
-                      notes: e.target.value,
-                    }))
+
+                  if (editForm.client_id === -1) {
+                    return;
                   }
-                  variant='filled'
-                  color='warning'
-                />
-              </Box>
+
+                  handleSubmit({});
+                }}
+              />
             </Box>
           </Box>
         </form>
       </DialogContent>
       <DialogActions>
-        <Button type='submit' variant='contained' color='primary' size='large'>
-          Confirm
-        </Button>
         <Button
-          onClick={(e) => {
-            onClose(e);
-          }}
-          color='inherit'
+          onClick={() => setOpenStatusUpdate(true)}
+          variant='contained'
+          color='primary'
           size='large'
         >
+          Confirm
+        </Button>
+        <Button onClick={onClose} color='inherit' size='large'>
           Cancel
         </Button>
       </DialogActions>

@@ -27,6 +27,9 @@ export const AppointmentStatusUpdatePopup = ({
   };
 
   const handleSubmit = (event) => {
+    if (name.trim() === '' || changedBy.trim() === '') {
+      return;
+    }
     updateStatus(name, changedBy);
     handleClose();
   };
@@ -52,7 +55,7 @@ export const AppointmentStatusUpdatePopup = ({
           id='by'
           value={changedBy}
           onChange={(event) => {
-            setChangedBy(event.target.value);
+            setChangedBy(event.target.value.trim());
           }}
           required
           label={'Changed by'}
