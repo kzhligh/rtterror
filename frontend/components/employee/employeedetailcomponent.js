@@ -4,6 +4,7 @@ import {TabContext, TabList, TabPanel} from "@mui/lab";
 import * as React from "react";
 import EmployeeForm from "./employeeform";
 import { Grid, Card, CardHeader, CardContent, Typography,Tab} from '@mui/material';
+import ScheduleComponent from "../schedule";
 
 const Employeedetailcomponent = (props) => {
     const { employee, editEmployee, serviceList, serviceEmployeeList, validateEmployeeId } = props;
@@ -22,7 +23,6 @@ const Employeedetailcomponent = (props) => {
                         aria-label="lab API tabs example"
                     >
                         <Tab label="Contact Information" value="1" />
-                        <Tab label="Work Schedule" value="2" />
                     </TabList>
                 </Box>
                 <TabPanel value="1">
@@ -35,8 +35,6 @@ const Employeedetailcomponent = (props) => {
                         serviceEmployeeList={serviceEmployeeList}
                         validateEmployeeId={validateEmployeeId}
                     />
-                </TabPanel>
-                <TabPanel value="2">
                 </TabPanel>
             </TabContext>
         </Box>
