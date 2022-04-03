@@ -12,6 +12,7 @@ export async function getServerSideProps(context) {
     const serviceArray = _groupBy(serviceItemResponse, 'service_code');
     let serviceItem, durationPriceList, durationPriceItem;
 
+    const MS_H_CONVERSION_RATE = 600000;
     for (const serviceCode in serviceArray) {
         serviceItem = _cloneDeep(serviceArray[serviceCode][0]);
         serviceItem.service_code = serviceCode;
@@ -20,10 +21,10 @@ export async function getServerSideProps(context) {
         delete serviceItem.id;
         delete serviceItem.updatedAt;
         durationPriceList = [];
-        for (let insideItem of serviceArray[serviceCode]) {
+        for (const insideItem of serviceArray[serviceCode]) {
             durationPriceItem = {};
             durationPriceItem.id = insideItem.id;
-            durationPriceItem.duration = (insideItem.duration * 1 / 60000).toFixed(2);
+            durationPriceItem.duration = (insideItem.duration * 1 / MS_H_CONVERSION_RATE);
             durationPriceItem.price = insideItem.price;
             durationPriceList.push(durationPriceItem);
         }

@@ -1,10 +1,10 @@
 import * as React from 'react';
-import {Card, Slider, Input, InputLabel, Grid, Box} from '@mui/material';
-import {Close} from '@mui/icons-material';
+import { Card, Slider, Input, InputLabel, Grid, Box } from '@mui/material';
+import { Close } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton';
-import {styled} from '@mui/material';
+import { styled } from '@mui/material';
 
-const ClassicSlider = styled(Slider)(({theme}) => ({
+const ClassicSlider = styled(Slider)(({ theme }) => ({
     color: "#707070",
 }));
 
@@ -28,14 +28,17 @@ const DurationPriceItem = (props) => {
         }
         setReload(!reload);
     };
+    const MAX_DURATION = 300;
+    const DURATION_STEP = 15;
+    const marks = Array(5).fill().map((_, i) => ({ value: (i + 1) * 60 }));
     return (
-        <Card sx={{borderRadius: 0, boxShadow: 0}}>
+        <Card sx={{ borderRadius: 0, boxShadow: 0 }}>
             <IconButton
                 aria-label="close"
                 onClick={() => handleRemoveDurationPrice(index)}
                 size="small"
             >
-                {amILast || <Close/>}
+                {amILast || <Close />}
             </IconButton>
             <Box padding="0 50px">
                 <Grid container spacing={4} alignItems="center">
@@ -45,9 +48,9 @@ const DurationPriceItem = (props) => {
                             aria-label="Always visible"
                             value={item.duration}
                             min={0}
-                            max={300}
-                            step={15}
-                            marks
+                            max={MAX_DURATION}
+                            step={DURATION_STEP}
+                            marks={marks}
                             valueLabelDisplay="on"
                         />
                     </Grid>
@@ -57,28 +60,23 @@ const DurationPriceItem = (props) => {
                             id={`hrs-for-${index}`}
                             value={item.duration}
                             size="small"
-                            onChange={(_event, value) => handleOnChange('duration', value)}
+                            onChange={(event) => handleOnChange('duration', event.target.value)}
                             inputProps={{
                                 min: 0,
-                                max: 2,
-                                step: 0.5,
+                                max: MAX_DURATION,
+                                step: DURATION_STEP,
                                 type: 'number',
                                 'aria-labelledby': 'input-slider',
                             }}
                         />
                     </Grid>
                     <Grid item xs={3}>
-                        <InputLabel htmlFor={`price-for-${index}`}>Price</InputLabel>
+                        <InputLabel htmlFor={`price-for-${index}`}>dollar</InputLabel>
                         <Input
                             id={`price-for-${index}`}
                             size="small"
                             value={item.price}
-                            onChange={(event) => handleOnChange('price', event.target.value)}
-                            inputProps={{
-                                min: 0,
-                                step: 5,
-                                type: 'number',
-                            }}
+                            onChange={(event) => handleOnChange('price', isNaN(event.target.value) ? 0 : parseInt(event.target.value))}
                         />
                     </Grid>
                 </Grid>

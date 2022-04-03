@@ -11,9 +11,9 @@ import {
   Stack,
   Button,
   CircularProgress,
+  Typography
 } from '@mui/material';
 import { Search } from '@mui/icons-material';
-import styles from 'styles/client.module.css';
 import {
   GridOverlay,
   DataGrid,
@@ -22,11 +22,11 @@ import {
 } from '@mui/x-data-grid';
 import { http } from 'utils/http';
 import React, { useState, useEffect } from 'react';
-import { AddCustomerDialog } from 'components/client/AddCustomerDialog';
 import { useRouter } from 'next/router';
 import { formatPhoneNumber } from 'utils';
 import { GetServerSidePropsResult } from 'next';
 import { useCustomerSearchObservable } from 'hooks/useCustomerSearch';
+import { AddCustomerDialog } from 'components/client/AddCustomerDialog';
 
 interface ClientProps {
   customers: Array<any>;
@@ -110,10 +110,10 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
     <Box>
       {error && <Alert severity="error">Something wrong happened!</Alert>}
 
-      <h1>Client</h1>
+      <Typography variant='h6'>Client</Typography>
       <TextField
         onChange={handleSearch}
-        className={styles.searchbar}
+        style={{ marginBottom: '45px', width: '50%' }}
         placeholder="Search a client by name..."
         label="Search"
         variant="outlined"
@@ -128,7 +128,7 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
 
       <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
         <Box gridColumn="span 4">
-          <h1>Client List</h1>
+        <Typography variant='h6'>Client List</Typography>
         </Box>
         <Box
           gridColumn="span 8"
@@ -229,7 +229,6 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
           ),
         }}
       />
-
       <AddCustomerDialog
         open={addCustomerDialogIsOpen}
         onClose={() => setAddCustomerDialogIsOpen(false)}
