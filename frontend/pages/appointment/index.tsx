@@ -16,6 +16,7 @@ import DropConfirmationDialog from 'components/appointment/dropConfirmationDialo
 import {
   ISchedule,
   IAppointmentResponse,
+  ICalendar,
 } from 'components/appointment/common/appointmentInterfaces';
 import { generateSchedules } from 'components/appointment/common/generateSchedules';
 
@@ -33,10 +34,15 @@ TuiCalendar.displayName = 'TuiCalendar';
 
 const appointmentApiPath = `/api/v1/appointments`;
 const employeeApiPath = `/api/v1/employees`;
+const customerApiPath = `/api/v1/customer`;
 
 export async function getServerSideProps () {
   const appointmentList = await http(appointmentApiPath);
   const employeeList = await http(employeeApiPath);
+  const customerList = (await http(customerApiPath)).map((c) => ({
+    ...c,
+    id: '' + c.id,
+  }));
   const initAppointments = appointmentList.map(
     (appm: IAppointmentResponse) => ({
     ...appm,
@@ -49,11 +55,12 @@ export async function getServerSideProps () {
     props: {
       initAppointments,
       employeeList,
+      customerList,
     },
   };
 }
 
-const Appointment = ({ initAppointments, employeeList }) => {
+const Appointment = ({ initAppointments, employeeList, customerList }) => {
   const cal = useRef(null);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [openStatusDialog, setOpenStatusDialog] = useState(false);
@@ -209,29 +216,38 @@ const Appointment = ({ initAppointments, employeeList }) => {
     }
   };
 
-  const calendarList = employeeList.map((emp) => ({
-    id: emp.id,
-    name: [emp.first_name, emp.last_name].join(' '),
+  const calendarList: ICalendar[] = customerList.map((customer) => ({
+    id: '' + customer.id,
+    name: [
+      customer.firstName,
+      customer.lastName,
+      customer.phone,
+      customer.id,
+    ].join(' '),
     color: 'white',
-    bgColor: colorHash.hex('' + emp.id),
+    bgColor: colorHash.hex('' + customer.id),
     dragBgColor: '#9e5fff',
     borderColor: '#9e5fff',
     visible: true,
   }));
 
-  const handleFilterEmployee = (_event, selectedEmployee, reason) => {
-    const calendar = cal.current.calendarInst;
+  const handleFilterCalendar = (
+    _event,
+    selected,
+    reason: 'selectOption' | 'clear'
+  ) => {
+    const tuiCal = cal.current.calendarInst;
     if (reason === 'selectOption') {
-      calendarList.forEach((emp) => {
-        calendar.toggleSchedules(emp.id, true, false);
+      calendarList.forEach((calendar) => {
+        tuiCal.toggleSchedules(calendar.id, true, false);
       });
-      calendar.toggleSchedules(selectedEmployee.id, false, false);
+      tuiCal.toggleSchedules(selected.id, false, false);
     } else if (reason === 'clear') {
-      calendarList.forEach((emp) => {
-        calendar.toggleSchedules(emp.id, false, false);
+      calendarList.forEach((calendar) => {
+        tuiCal.toggleSchedules(calendar.id, false, false);
       });
     }
-    calendar.render();
+    tuiCal.render();
   };
 
   const TuiCalendarProps = {
@@ -262,8 +278,8 @@ const Appointment = ({ initAppointments, employeeList }) => {
         onClickMonth={() => changeCalendarView('month')}
         onClickPrevButton={() => cal.current.calendarInst.prev()}
         onClickNextButton={() => cal.current.calendarInst.next()}
-        employees={calendarList}
-        handleFilterEmployee={handleFilterEmployee}
+        calendars={calendarList}
+        handleFilterCalendar={handleFilterCalendar}
         onClickNewAppointment={() => setOpenCreateDialog(true)}
       />
       <TuiCalendar {...TuiCalendarProps} />

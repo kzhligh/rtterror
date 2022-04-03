@@ -1,5 +1,4 @@
 import {
-  Typography,
   MenuList,
   MenuItem,
   Autocomplete,
@@ -8,6 +7,7 @@ import {
 } from '@mui/material';
 
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { ICalendar } from './common/appointmentInterfaces';
 
 export const AppointmentControls = ({
   onClickToday,
@@ -15,8 +15,8 @@ export const AppointmentControls = ({
   onClickMonth,
   onClickPrevButton,
   onClickNextButton,
-  employees,
-  handleFilterEmployee,
+  calendars,
+  handleFilterCalendar,
   onClickNewAppointment,
 }) => {
   return (
@@ -32,16 +32,21 @@ export const AppointmentControls = ({
       </MenuItem>
       <MenuItem disabled />
       <Autocomplete
-        id='employee-calendar-filter'
+        id='calendar-filter'
         disablePortal
         clearOnEscape
         openOnFocus
-        options={employees}
-        getOptionLabel={(option: any) => option.name}
-        onChange={handleFilterEmployee}
+        options={calendars}
+        getOptionLabel={(option: ICalendar) => option.name}
+        onChange={handleFilterCalendar}
         sx={{ width: 300 }}
         renderInput={(params) => (
-          <TextField {...params} label='Employee' size='small' />
+          <TextField
+            {...params}
+            autoFocus
+            label='Filter by Customer'
+            size='small'
+          />
         )}
       />
       <MenuItem>

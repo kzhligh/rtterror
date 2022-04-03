@@ -19,6 +19,16 @@ export interface ISchedule {
     | any;
 }
 
+export interface ICalendar {
+  id: string;
+  name: string;
+  color: string;
+  bgColor: string;
+  dragBgColor: string;
+  borderColor: string;
+  visible: boolean;
+}
+
 export interface IAppointmentResponse {
   id: string;
   rmq_id: string;
