@@ -14,6 +14,7 @@ const TuiCalendar = dynamic(
 let TuiCalendarComponent = forwardRef((props, ref) => (
     <TuiCalendar {...props} forwardedRef={ref}/>
 ));
+TuiCalendar.displayName = 'Schedule';
 
 const ScheduleComponent =({employeeList,eventList,setRerender,rerender,employee,setEmployee}) =>{
     const cal = useRef(null);
