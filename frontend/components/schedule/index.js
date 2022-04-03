@@ -7,14 +7,15 @@ import 'tui-calendar/dist/tui-calendar.css';
 import ScheduleDialog from "./scheduleDialog";
 import _find from "lodash/find";
 const TuiCalendar = dynamic(
-    () => import('../TuiCalendar'),
+    () => import('./TuiCalendar'),
     { ssr: false }
 );
+
 
 let TuiCalendarComponent = forwardRef((props, ref) => (
     <TuiCalendar {...props} forwardedRef={ref}/>
 ));
-TuiCalendar.displayName = 'Schedule';
+TuiCalendarComponent.displayName = 'Schedule';
 
 const ScheduleComponent =({employeeList,eventList,setRerender,rerender,employee,setEmployee}) =>{
     const cal = useRef(null);
