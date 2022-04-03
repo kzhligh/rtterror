@@ -177,7 +177,7 @@ export const AddAppointmentDialog = ({
                 label='Created by'
                 required
                 value={
-                  editForm.status.length === 0
+                  editForm.status.length !== 0
                     ? editForm.status[0].by
                     : 'not signed'
                 }
