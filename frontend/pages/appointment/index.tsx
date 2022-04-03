@@ -35,6 +35,7 @@ TuiCalendar.displayName = 'TuiCalendar';
 const appointmentApiPath = `/api/v1/appointments`;
 const employeeApiPath = `/api/v1/employees`;
 const customerApiPath = `/api/v1/customer`;
+const serviceApiPath = `/api/v1/services`;
 
 export async function getServerSideProps () {
   const appointmentList = await http(appointmentApiPath);
@@ -43,6 +44,7 @@ export async function getServerSideProps () {
     ...c,
     id: '' + c.id,
   }));
+  const serviceList = await http(serviceApiPath);
   const initAppointments = appointmentList.map(
     (appm: IAppointmentResponse) => ({
     ...appm,
@@ -56,11 +58,17 @@ export async function getServerSideProps () {
       initAppointments,
       employeeList,
       customerList,
+      serviceList,
     },
   };
 }
 
-const Appointment = ({ initAppointments, employeeList, customerList }) => {
+const Appointment = ({
+  initAppointments,
+  employeeList,
+  customerList,
+  serviceList,
+}) => {
   const cal = useRef(null);
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
   const [openStatusDialog, setOpenStatusDialog] = useState(false);
@@ -298,6 +306,8 @@ const Appointment = ({ initAppointments, employeeList, customerList }) => {
         onClose={() => {
           setOpenCreateDialog(false);
         }}
+        therapists={employeeList}
+        services={serviceList}
       />
       <DropConfirmationDialog
         open={openDropDialog}
