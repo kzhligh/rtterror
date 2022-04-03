@@ -1,276 +1,227 @@
 import {
-  AccordionSummary,
   Button,
   Dialog,
   DialogContent,
-  DialogProps,
   DialogTitle,
   InputLabel,
-  MenuItem,
-  Select,
   TextField,
-  Typography,
-  Accordion,
-  AccordionDetails,
-  Autocomplete
+  Autocomplete,
+  DialogActions,
+  Box,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { DateTimePicker } from '@mui/lab';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { AppointmentStatusUpdatePopup } from './summary';
 import { AppointmentDropdown } from './AppointmentDropdown';
-import { http } from "../../utils/http";
-import {AddCustomerDialog} from "../client/AddCustomerDialog";
+import { AddCustomerDialog } from '../client/AddCustomerDialog';
+import { ICustomer, IStatus } from './common/appointmentInterfaces';
+import { AlertError } from './common/AlertError';
 
-const blankAppointment = {
-  plan: { serviceName: 'TestService' },
-  therapist: { name: 'TestTherapist' },
-  branchLocation: '',
-  duration: '',
-  notes: '',
-  feedback: '',
-  status: '',
-  cancellationTime: '',
-  date: '',
-};
+export const AddAppointmentDialog = ({
+  therapists,
+  services,
+  existingCustomers,
+  isOpen,
+  onClose,
+  createAppointment,
+  selectedAppointment: editForm,
+  setSelectedAppointment: setEditForm,
+}) => {
+  const [showClientDialog, setShowClientDialog] = useState(false);
+  const [openStatusUpdate, setOpenStatusUpdate] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
-interface IAppointment {
-  rmq_id: string;
-  client_id: number;
-  employee_ids: string[];
-  service_ids: string[];
-  pro_rmq_id?: string;         // optional
-  datetime: Date;
-  duration: number;            // in minutes
-  repeat: boolean;
-  cycle_start?: Date;    // optional
-  cycle_end?: Date;    // optional
-  status: string[];
-  feedback?: string;           // optional
-  notes: string;
-}
+  const handleSubmit = (e) => {
+    setOpenAlert(false);
+    if (editForm.status.length === 0) {
+      setErrorMsg('Please sign your name. ');
+      setOpenStatusUpdate(true);
+      setOpenAlert(true);
+      return;
+    }
 
-interface IClient {
-  id: number;
-  name: string;
-}
+    if (editForm.client_id === -1) {
+      setErrorMsg('Please select a client. ');
+      setOpenAlert(true);
+      return;
+    }
 
-interface Props extends DialogProps {
-  onClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
-}
+    createAppointment({ ...editForm, status: e.status });
+    handleClose(e);
+  };
 
-export const AddAppointmentDialog = ({ therapists, services, existingClients, isOpen, onClose, refreshAppointments }) => {
+  const handleClose = (e) => {
+    setOpenAlert(false);
+    setErrorMsg('');
+    onClose(e);
+  };
 
-  const [expanded, setExpanded] = useState<string | false>(false);
-  const [ showClientDialog, setShowClientDialog ] = useState(false);
-  const [ clients, setClients ] = useState([]);
-  useEffect(() => {
-    if (existingClients.length !== clients.length) setClients([ ...existingClients ])
-  }, [existingClients]);
-  const [appointmentForm, setAppointment] = useState({
-    rmq_id: '',
-    client_id: -1,
-    employee_ids: [],
-    service_ids: [],
-    pro_rmq_id: '',         // optional
-    datetime: '',
-    duration: 30,            // in minutes
-    repeat: false,
-    cycle_start: new Date(),    // optional
-    cycle_end: new Date(),    // optional
-    status: [],
-    feedback: '',           // optional
-    notes: ''
-  });
-
-  const resetAppointmentForm = () => {
-    setAppointment({
-      rmq_id: '',
-      client_id: -1,
-      employee_ids: [],
-      service_ids: [],
-      pro_rmq_id: '',         // optional
-      datetime: '',
-      duration: 30,            // in minutes
-      repeat: false,
-      cycle_start: new Date(),    // optional
-      cycle_end: new Date(),    // optional
-      status: [],
-      feedback: '',           // optional
-      notes: ''
-    })
-  }
-
-  const handleSubmit = () => {
-    http(
-      '/api/v1/appointments',
-      {
-        method: 'POST',
-        body: appointmentForm
-      }
-    )
-      .then((_res) => {
-        resetAppointmentForm();
-        refreshAppointments();
-      })
-      .catch(error => {
-        console.error('ERROR - submitting appointment: ', error)
-      });
-  }
-
-  return (
-    showClientDialog ?
-      (<AddCustomerDialog
-        open={showClientDialog}
-        onClose={() => setShowClientDialog(false)}
-        onCustomerAdded={(newClient) => {
-          setAppointment({ ...appointmentForm, client_id: newClient.id })
-          setClients([...clients, {...newClient, name: newClient.firstName + ' ' + newClient.lastName}])
-        }}
-        maxWidth="md"
-        fullWidth
-      />) :
-      (<Dialog fullWidth open={isOpen}>
+  return showClientDialog ? (
+    <AddCustomerDialog
+      open={showClientDialog}
+      onClose={() => setShowClientDialog(false)}
+      onCustomerAdded={(newClient: ICustomer) => {
+        setEditForm({
+          ...editForm,
+          client_id: newClient.id,
+        });
+        existingCustomers.push({
+          ...newClient,
+          name: [
+            newClient.firstName,
+            newClient.lastName,
+            newClient.phone,
+            newClient.id,
+          ].join(' '),
+        });
+      }}
+      maxWidth='md'
+      fullWidth
+    />
+  ) : (
+    <Dialog fullWidth open={isOpen}>
       <DialogTitle>New Appointment</DialogTitle>
-      <DialogContent style={{ width: '100%' }}>
-        <form
-          style={{ width: '100%' }}
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit();
-            onClose(e, 'backdropClick');
-          }}
-        >
-          <InputLabel>Services</InputLabel>
-
-          <AppointmentDropdown
-            therapists={therapists}
-            services={services}
-            setAppointment={setAppointment}
-          />
-
-          <InputLabel>Choose a starting time</InputLabel>
-          <DateTimePicker
-            label={appointmentForm.datetime ?? 'Date'}
-            value={appointmentForm.datetime}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                inputProps={{ placeholder: 'YYYY-MM-DD-HH:MM' }}
-                disabled
-              />
-            )}
-            onChange={(date: Date) => {
-              setAppointment((state) => ({
-                ...state,
-                datetime: date.toLocaleString(),
-              }))
-            }
-            }
-          />
-          <InputLabel>Set Duration</InputLabel>
-          <Select
-            id="duration"
-            value={appointmentForm.duration}
-            style={{ width: '100%' }}
-            onChange={(e) => {
-              setAppointment((state) => ({
-                ...state,
-                duration: parseInt(e.target.value.toString()),
-              }));
-            }}
-          >
-            <MenuItem value={10}>15 minutes</MenuItem>
-            <MenuItem value={30}>30 minutes</MenuItem>
-            <MenuItem value={45}>45 minutes</MenuItem>
-            <MenuItem value={60}>60 minutes</MenuItem>
-            <MenuItem value={75}>75 minutes</MenuItem>
-            <MenuItem value={90}>90 minutes</MenuItem>
-          </Select>
-          <Accordion
-            expanded={expanded === 'existing'}
-            onClick={() => {
-              setExpanded(
-                expanded === false || expanded === 'newClient'
-                  ? 'existing'
-                  : false
-              );
-            }}
-          >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography>Existing Client</Typography>
-            </AccordionSummary>
-            <AccordionDetails
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-            >
-              <Autocomplete
+      <DialogContent>
+        <form onSubmit={handleSubmit}>
+          <Box display='grid' gap={3}>
+            <Box display='grid' gridAutoColumns='1fr' marginTop={2}>
+              <DateTimePicker
+                label='Start Time'
+                value={editForm.datetime}
                 renderInput={(params) => (
-                  <TextField { ...params } label="Client name" />
+                  <TextField
+                    {...params}
+                    size='small'
+                    sx={{ gridColumn: 'span 3' }}
+                  />
                 )}
-                options={clients}
-                getOptionLabel={(option: IClient) => option.name}
-                style={{ width: "100%" }}
-                id="existing"
-                onChange={(_event, value: any) => {
-                  const clientId = value ? value.id : -1
-                  setAppointment((state) => ({ ...state, client_id: clientId }))
+                onChange={(date: Date) => {
+                  setEditForm((state) => ({
+                    ...state,
+                    datetime: new Date(date),
+                  }));
                 }}
               />
-            </AccordionDetails>
-          </Accordion>
-          <Accordion
-            expanded={expanded === 'newClient'}
-            onClick={() => {
-              setExpanded(
-                expanded === false || expanded === 'existing'
-                  ? 'newClient'
-                  : false
-              );
-            }}
-          >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography>New Client</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
+              <TextField
+                id='duration'
+                label='Duration (min)'
+                value={editForm.duration}
+                onChange={(e) => {
+                  setEditForm((state) => ({
+                    ...state,
+                    duration: parseInt(e.target.value),
+                  }));
+                }}
+                size='small'
+                sx={{ gridColumn: '5' }}
+              />
+            </Box>
+            <Box display='grid' gridAutoColumns='1fr'>
+              <Autocomplete
+                id='existing'
+                openOnFocus
+                options={existingCustomers}
+                getOptionLabel={(option: ICustomer) => option.name}
+                onChange={(_event, selected: any) => {
+                  const clientId = selected ? selected.id : -1;
+                  setEditForm((state) => ({
+                    ...state,
+                    client_id: clientId,
+                    client: selected,
+                  }));
+                }}
+                sx={{ gridColumn: 'span 3' }}
+                renderInput={(params) => (
+                  <TextField {...params} required label='Existing Client' />
+                )}
+              />
               <Button
-                variant="outlined"
+                variant='outlined'
                 onClick={() => setShowClientDialog(true)}
+                sx={{
+                  gridColumn: '5',
+                }}
+                size='small'
               >
-                Create New Client
+                New Client
               </Button>
-            </AccordionDetails>
-          </Accordion>
-          <InputLabel>Notes</InputLabel>
-          <TextField
-            onChange={(e) => {
-              setAppointment((state) => ({
-                ...state,
-                notes: e.target.value,
-              }));
-            }}
-          />
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-around',
-            }}
-          >
-            <Button
-              onClick={(e) => {
-                onClose(e, 'backdropClick');
-                resetAppointmentForm()
-              }}
-              variant="outlined"
-            >
-              Cancel
-            </Button>
-            <Button variant="outlined" type="submit">
-              Confirm
-            </Button>
-          </div>
+            </Box>
+
+            <Box display='grid' gridAutoColumns='1fr'>
+              <InputLabel>Services</InputLabel>
+
+              <AppointmentDropdown
+                therapists={therapists}
+                services={services}
+                setAppointment={setEditForm}
+              />
+            </Box>
+            <Box display='grid' gridTemplateColumns='repeat(2, auto)' gap={1}>
+              <TextField
+                label='Memo'
+                multiline
+                fullWidth
+                maxRows={3}
+                value={editForm.notes}
+                onChange={(e) =>
+                  setEditForm((state) => ({
+                    ...state,
+                    notes: e.target.value,
+                  }))
+                }
+                variant='filled'
+                color='warning'
+              />
+              <TextField
+                label='Created by'
+                required
+                value={
+                  editForm.status.length !== 0
+                    ? editForm.status[0].by
+                    : 'not signed'
+                }
+                disabled={true}
+              />
+              <AppointmentStatusUpdatePopup
+                open={openStatusUpdate}
+                toggleOpen={setOpenStatusUpdate}
+                name={'Created'}
+                setName={() => {
+                  /*do nothing*/
+                }}
+                updateStatus={(name: string, changedBy: string) => {
+                  const newStatus: IStatus = {
+                    name: name,
+                    by: changedBy,
+                    at: new Date(),
+                  };
+
+                  setEditForm((prevContent) => ({
+                    ...prevContent,
+                    status: [newStatus],
+                  }));
+                }}
+              />
+            </Box>
+          </Box>
         </form>
       </DialogContent>
-    </Dialog>)
+      <DialogActions>
+        <Button
+          onClick={handleSubmit}
+          type='submit'
+          variant='contained'
+          color='primary'
+          size='large'
+        >
+          Confirm
+        </Button>
+        <Button onClick={handleClose} color='inherit' size='large'>
+          Cancel
+        </Button>
+      </DialogActions>
+      <AlertError open={openAlert} setOpen={setOpenAlert} msg={errorMsg} />
+    </Dialog>
   );
 };

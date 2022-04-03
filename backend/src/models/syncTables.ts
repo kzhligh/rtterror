@@ -1,5 +1,4 @@
-import { Appointment } from './appointment.model';
-import { Customer } from './customer.model';
+import { Customer as CustomerModel } from './customer.model';
 import ServiceModel from './service';
 import ComboModel from './combo';
 import ServiceComboModel from './service-combo';
@@ -16,14 +15,13 @@ const syncTables = async () => {
       ServiceModel.sync({ alter: true }),
       ComboModel.sync({ alter: true }),
       EmployeeModel.sync({ alter: true }),
-      Customer.sync({ alter: true }),
+      CustomerModel.sync({ alter: true }),
     ]);
     await AppointmentModel.sync({ alter: true });
     await ServiceComboModel.sync({ alter: true });
     await EmployeeServiceModel.sync({ alter: true });
     await AppointmentEmployeeModel.sync({ alter: true });
     await AppointmentServiceModel.sync({ alter: true });
-    await Appointment.sync({ alter: true });
     await Schedule.sync({ alter: true });
   } catch (error) {
     throw error;

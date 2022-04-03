@@ -1,6 +1,5 @@
-function Product(props) {
-    const {text} = props;
-    return <h1>Products</h1>;
+function Product() {
+    return 'This page is not ready.';
 }
 
 export default Product;
