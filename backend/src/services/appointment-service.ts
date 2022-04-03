@@ -54,7 +54,7 @@ class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDt
     try {
       const allItems = await this.model.findAll({
         where: { hidden: false },
-        include: [this.employeeModel, this.serviceModel, {model: this.customerModel, as: 'Client'}]
+        include: [this.employeeModel, this.serviceModel, {model: this.customerModel, as: 'client'}]
       });
       return allItems.map((item: Model) => item.toJSON() as IAppointmentJson);
     } catch (error) {
@@ -65,7 +65,7 @@ class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDt
 
   async getItemById(id: string): Promise<IAppointmentJson> {
     try {
-      const appointmentItem = await this.model.findByPk(id, { include: [this.employeeModel, this.serviceModel, {model: this.customerModel, as: 'Client'}] });
+      const appointmentItem = await this.model.findByPk(id, { include: [this.employeeModel, this.serviceModel, {model: this.customerModel, as: 'client'}] });
       return appointmentItem.toJSON() as IAppointmentJson
     } catch (error) {
       console.error('AppointmentService/getItemById()/ERROR: ', error);
@@ -77,7 +77,7 @@ class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDt
     try {
       const filteredItems = await this.model.findAll({
         where: { ...filter },
-        include: [this.employeeModel, this.serviceModel, {model: this.customerModel, as: 'Client'}]
+        include: [this.employeeModel, this.serviceModel, {model: this.customerModel, as: 'client'}]
       });
       return filteredItems.map((item: Model) => item.toJSON() as IAppointmentJson);
     } catch (error) {

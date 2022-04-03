@@ -72,6 +72,6 @@ AppointmentModel.init({
 
 AppointmentModel.belongsTo(CustomerModel, {
   foreignKey: 'client_id',
-  as: 'Client'
+  as: 'client'
 });
 CustomerModel.hasMany(AppointmentModel);
