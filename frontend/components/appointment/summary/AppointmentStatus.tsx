@@ -43,7 +43,7 @@ export const AppointmentStatus = ({ statuses, updateStatus, expanded }) => {
     <Timeline position='left' sx={{ maxHeight: '45vh' }}>
       {statuses.map((status: IStatus) => (
         <Tooltip
-          key={status.at.toLocaleDateString()}
+          key={new Date(status.at).getTime()}
           title={`by ${status.by}`}
           enterDelay={0}
         >

@@ -188,10 +188,17 @@ const Appointment = ({
         ...newAppointmentData,
         client_id: newAppointmentData.client_id,
       },
-    }).catch((error) => {
-      console.error('ERROR - submitting appointment: ', error);
-    });
-    console.log(newAppointment);
+    })
+      .then((appm) => ({
+        ...appm,
+        feedback: appm.feedback || '',
+        notes: appm.notes || 'insert memo here',
+        status: JSON.parse(appm.status) || [],
+      }))
+      .catch((error) => {
+        console.error('ERROR - submitting appointment: ', error);
+      });
+
     cal.current.calendarInst.createSchedules(
       generateSchedules([newAppointment])
     );

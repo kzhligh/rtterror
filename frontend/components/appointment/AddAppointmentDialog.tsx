@@ -30,8 +30,8 @@ export const AddAppointmentDialog = ({
   const [openStatusUpdate, setOpenStatusUpdate] = useState(false);
 
   const handleSubmit = (e) => {
-    createAppointment({ ...editForm });
-    onClose(e, 'backdropClick');
+    createAppointment({ ...editForm, status: e.status });
+    onClose(e);
   };
 
   return showClientDialog ? (
@@ -179,7 +179,9 @@ export const AddAppointmentDialog = ({
                     return;
                   }
 
-                  handleSubmit({});
+                  handleSubmit({
+                    status: [newStatus],
+                  });
                 }}
               />
             </Box>
