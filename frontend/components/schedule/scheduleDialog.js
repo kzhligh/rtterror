@@ -173,8 +173,8 @@ const ScheduleDialog = (props)=>{
                                         <Checkbox
                                             value={day}
                                             checked={(_find(repeatDayChecked,day) != undefined)}
-                                            onChange={(event) => {
-                                                handleAddRepeatDayChecked(event.target.checked, day);
+                                            onChange={(_event) => {
+                                                handleAddRepeatDayChecked(_event.target.checked, day);
                                             }}
                                         />
                                         {day.label}

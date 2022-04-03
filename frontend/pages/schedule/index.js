@@ -55,7 +55,7 @@ const Employee = ({employeesList}) => {
     }, [tabValue])
     const formatAppointmentHistory =(appointments)=>{
 
-        var returnAppointments = _reduce(appointments, (accumulator, app) => {
+        return _reduce(appointments, (accumulator, app) => {
             return [...accumulator,
                 {
                     id: app.id,
@@ -69,7 +69,6 @@ const Employee = ({employeesList}) => {
                 }
             ];
         }, []);
-        return returnAppointments;
     }
 
     return (

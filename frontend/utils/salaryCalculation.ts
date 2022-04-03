@@ -43,7 +43,7 @@ abstract class SalaryCalculation
 
     //Constructors
     SalaryCalculation() {
-
+        console.log('salary calculation Constructors');
     }
 
     //Accessor 
@@ -305,39 +305,39 @@ class NumOfServicesParameter extends Parameter
 class ServiceCostParameter extends Parameter
 {
     //Data members (Service Cost)
-    private min =0;
-    private max =100;
-    private value=1.00;
+    private min1 =0;
+    private max1 =100;
+    private value1=1.00;
 
     //Constructors
-    constructor(name: string, min: number, max: number, value: number)
+    constructor(name1: string, min1: number, max1: number, value1: number)
     {
-        super(name);
-        this.min= min;
-        this.max= max;
-        this.value = value;
+        super(name1);
+        this.min1= min1;
+        this.max1= max1;
+        this.value1 = value1;
     }
 
     //Mutator 
-    public setValue(value:number)
+    public setValue(value1:number)
     {
-        if(value < this.min)
+        if(value1 < this.min1)
         {
             console.log("Value is less than minimum");
             return;
         }
-        if (value > this.max)
+        if (value1 > this.max1)
         {
             console.log("Value is more than maximum");
             return;
         }
-        this.value = value;
+        this.value1 = value1;
     }
 
     //Accessor 
     public getValue()
     {
-        return this.value;
+        return this.value1;
     }
 
 }
@@ -345,39 +345,39 @@ class ServiceCostParameter extends Parameter
 class CommissionPercentageParameter extends Parameter
 {
     //Data members (Commission Percentage)
-    private min =0;
-    private max =100;
-    private value=1;
+    private min2 =0;
+    private max2 =100;
+    private value2=1;
 
     //Constructors
-    constructor(name: string, min: number, max: number, value: number)
+    constructor(name2: string, min2: number, max2: number, value2: number)
     {
-        super(name);
-        this.min= min;
-        this.max= max;
-        this.value = value;
+        super(name2);
+        this.min2= min2;
+        this.max2= max2;
+        this.value2 = value2;
     }
 
     //Mutator 
-    public setValue(value:number)
+    public setValue(value2:number)
     {
-        if(value < this.min)
+        if(value2 < this.min2)
         {
             console.log("Value is less than minimum");
             return;
         }
-        if (value > this.max)
+        if (value2 > this.max2)
         {
             console.log("Value is more than maximum");
             return;
         }
-        this.value = value;
+        this.value2 = value2;
     }
 
     //Accessor 
     public getValue()
     {
-        return this.value;
+        return this.value2;
     }
 }
 
@@ -385,16 +385,16 @@ class CommissionPercentageParameter extends Parameter
 
 export class SalaryCalculationFactory
 {
-    static createObject(nameOfSalaryCalculation: string, appointmentsList: any, params:any) : SalaryCalculation {
-        console.log(nameOfSalaryCalculation);
-        if( nameOfSalaryCalculation === "TimeBasedCalculation" )
+    static createObject(CalculationMethod: string, appointmentsList: any, params:any) : SalaryCalculation {
+        console.log(CalculationMethod);
+        if( CalculationMethod === "TimeBasedCalculation" )
         {
             // duration
             var totalDuration =  appointmentsList.reduce((acc, item) => acc + (1*item.appduration), 0)/60;
             console.log({totalDuration:totalDuration});
             return new TimeBasedCalculation(new TimeParameter("TimeParameter",1,24,totalDuration),new SalaryRateParameter("SalaryRateParameter",1,500,+params));
         }
-        else if(nameOfSalaryCalculation === "ServiceBasedCalculation")
+        else if(CalculationMethod === "ServiceBasedCalculation")
         {
             // number of service
             console.log({number: appointmentsList.length});
@@ -409,6 +409,6 @@ export class SalaryCalculationFactory
     }
 }
 
-function nameOfSalaryCalculation(nameOfSalaryCalculation: any,string: any) {
+function nameOfSalaryCalculation(CalculationMethod: any,string: any) {
 throw new Error("Function not implemented.");
 }

@@ -2,7 +2,7 @@ import _reduce from "lodash/reduce"
 import _find from "lodash/find";
 
 const formatSchedule = (events, employeesList) => {
-    const formatedEvents = _reduce(events, (accumulator, event) => {
+    return _reduce(events, (accumulator, event) => {
         let empName = _find(employeesList, ['id', event.employeeId]);
         empName = empName ? empName.name : '';
         return [...accumulator,
@@ -17,6 +17,5 @@ const formatSchedule = (events, employeesList) => {
             }
         ];
     }, []);
-    return formatedEvents;
 }
 export default formatSchedule;
