@@ -13,6 +13,11 @@ import { AddAppointmentDialog } from 'components/appointment/AddAppointmentDialo
 import { AppointmentControls } from 'components/appointment/AppointmentControls';
 import AppointmentStatusDialog from 'components/appointment/AppointmentStatusDialog';
 import DropConfirmationDialog from 'components/appointment/dropConfirmationDialog';
+import {
+  ISchedule,
+  IAppointmentResponse,
+} from 'components/appointment/common/appointmentInterfaces';
+import { generateSchedules } from 'components/appointment/common/generateSchedules';
 
 import 'tui-calendar/dist/tui-calendar.css';
 
@@ -32,58 +37,20 @@ const employeeApiPath = `/api/v1/employees`;
 export async function getServerSideProps () {
   const appointmentList = await http(appointmentApiPath);
   const employeeList = await http(employeeApiPath);
-  const initAppointments = appointmentList.map((appm) => ({
+  const initAppointments = appointmentList.map(
+    (appm: IAppointmentResponse) => ({
     ...appm,
     feedback: appm.feedback || '',
     notes: appm.notes || 'insert memo here',
     status: JSON.parse(appm.status) || [],
-  }));
+    })
+  );
   return {
     props: {
       initAppointments,
       employeeList,
     },
   };
-}
-
-interface ISchedule {
-  id: string;
-  calendarId: string;
-  title: string;
-  category: 'time';
-  start: Date;
-  end: Date;
-  attendees: any[];
-  raw?:
-    | {
-        customer: string;
-        duration: string | number;
-        feedback: string;
-        notes: string;
-        status: any[];
-        services: any[];
-        therapists: any[];
-      }
-    | any;
-}
-
-interface IAppointmentResponse {
-  id: string;
-  rmq_id: string;
-  client_id: string;
-  pro_rmq_id: string;
-  datetime: Date;
-  duration: number;
-  repeat: boolean;
-  cycle_start: Date;
-  cycle_end: Date;
-  status: any[];
-  feedback: string;
-  notes: string;
-  employees?: any[];
-  services?: any[];
-  employee_ids?: string[] | number[];
-  service_ids?: string[];
 }
 
 const Appointment = ({ initAppointments, employeeList }) => {
@@ -267,27 +234,6 @@ const Appointment = ({ initAppointments, employeeList }) => {
     calendar.render();
   };
 
-  const initSchedules: ISchedule[] = initAppointments.map((appm) => ({
-    id: appm.id,
-    calendarId: appm.employees?.length ? appm.employees[0].id : '',
-    title: 'TITLE',
-    category: 'time',
-    start: appm.datetime,
-    end: new Date(new Date(appm.datetime).getTime() + appm.duration * 60000),
-    attendees: appm.employees.map((emp) =>
-      [emp.first_name, emp.last_name].join(' ')
-    ),
-    raw: {
-      customer: appm.client_id,
-      duration: appm.duration,
-      feedback: appm.feedback || '',
-      notes: appm.notes || 'insert memo here',
-      status: appm.status,
-      services: appm.services,
-      therapists: appm.employees,
-    },
-  }));
-
   const TuiCalendarProps = {
     ref: cal,
     view: 'day',
@@ -299,7 +245,7 @@ const Appointment = ({ initAppointments, employeeList }) => {
     theme: tuiThemeConfig,
     template: tuiTemplateConfig,
     calendars: calendarList,
-    schedules: initSchedules,
+    schedules: generateSchedules(initAppointments),
     onClickDayname: onClickDayname,
     onClickSchedule: onClickSchedule,
     onBeforeCreateSchedule: onBeforeCreateSchedule,

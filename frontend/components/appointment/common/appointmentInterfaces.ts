@@ -1,0 +1,39 @@
+export interface ISchedule {
+  id: string;
+  calendarId: string;
+  title: string;
+  category: 'time';
+  start: Date;
+  end: Date;
+  attendees: any[];
+  raw?:
+    | {
+        customer: string;
+        duration: string | number;
+        feedback: string;
+        notes: string;
+        status: any[];
+        services: any[];
+        therapists: any[];
+      }
+    | any;
+}
+
+export interface IAppointmentResponse {
+  id: string;
+  rmq_id: string;
+  client_id: string;
+  pro_rmq_id: string;
+  datetime: Date;
+  duration: number;
+  repeat: boolean;
+  cycle_start: Date;
+  cycle_end: Date;
+  status: string;
+  feedback: string;
+  notes: string;
+  employees?: any[];
+  services?: any[];
+  employee_ids?: string[] | number[];
+  service_ids?: string[];
+}
