@@ -1,8 +1,7 @@
-import {CustomerService} from "src/services/customer.service";
 import express, {Request, Response} from "express";
 import {ScheduleService} from "src/services/schedule.service";
 import {Frozen, Injectable, ServiceLocator} from "src/utils/decorators";
-import core from "express-serve-static-core";
+
 @Frozen()
 @Injectable()
 class ScheduleController {
@@ -20,7 +19,7 @@ class ScheduleController {
 
     }
     private getAllSchedule() {
-        return async (req: Request, res: Response) => {
+        return async (_req: Request, res: Response) => {
             try {
                 const schedules = await this.scheduleService.getAll();
                 res.status(200).send(schedules);

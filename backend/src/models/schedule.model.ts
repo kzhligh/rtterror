@@ -1,5 +1,5 @@
 import sequelize from "src/modules/sequelize";
-import {DataTypes, Sequelize} from "sequelize";
+import {DataTypes} from "sequelize";
 import EmployeeModel from "src/models/employee";
 
 export const Schedule = sequelize.define(

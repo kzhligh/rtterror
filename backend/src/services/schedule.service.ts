@@ -1,6 +1,5 @@
 import {Frozen, Injectable} from "src/utils/decorators";
-import {Op, Sequelize, Transaction} from "sequelize";
-import {Customer} from "src/models/customer.model";
+import { Sequelize, Transaction} from "sequelize";
 import {Schedule} from "src/models/schedule.model";
 
 @Frozen()
@@ -62,7 +61,6 @@ export class ScheduleService {
             await t.commit();
 
             return remainingSchedules;
-            console.log("delete")
         } catch (error) {
             console.log(error);
             await t.rollback();
