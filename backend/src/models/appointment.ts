@@ -48,7 +48,8 @@ AppointmentModel.init({
   },
   status: {
     type: DataTypes.TEXT,
-    allowNull: false
+    allowNull: false,
+    defaultValue: '[]'
   },
   feedback: {
     type: DataTypes.STRING,
