@@ -12,9 +12,9 @@ const generateSchedules = (appointments: IAppointmentResponse[]): ISchedule[] =>
     end: new Date(
       new Date(appm.datetime).getTime() + appm.duration * 60 * 1000
     ),
-    attendees: appm.employees.map((emp) =>
-      [emp.first_name, emp.last_name].join(' ')
-    ),
+    attendees:
+      appm.employees?.map((emp) => [emp.first_name, emp.last_name].join(' ')) ||
+      [],
     raw: {
       ...appm,
       feedback: appm.feedback || '',

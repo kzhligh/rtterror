@@ -29,17 +29,23 @@ export interface ICalendar {
   visible: boolean;
 }
 
+export interface IStatus {
+  name: string;
+  by: string;
+  at: string;
+}
+
 export interface IAppointmentResponse {
   id: string;
-  rmq_id: string;
+  rmq_id?: string;
   client_id: string;
-  pro_rmq_id: string;
+  pro_rmq_id?: string;
   datetime: Date;
   duration: number;
   repeat: boolean;
-  cycle_start: Date;
-  cycle_end: Date;
-  status: string;
+  cycle_start?: Date;
+  cycle_end?: Date;
+  status: IStatus[];
   feedback: string;
   notes: string;
   employees?: any[];

@@ -1,7 +1,6 @@
 import React, { useRef, useCallback, forwardRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { http } from 'utils/http';
-import { randomBytes } from 'crypto';
 import { Typography } from '@mui/material';
 import ColorHash from 'color-hash';
 
@@ -43,16 +42,15 @@ export async function getServerSideProps () {
   const customerList = (await http(customerApiPath)).map((c) => ({
     ...c,
     id: '' + c.id,
+    name: [c.firstName, c.lastName, c.phone, c.id].join(' '),
   }));
   const serviceList = await http(serviceApiPath);
-  const initAppointments = appointmentList.map(
-    (appm: IAppointmentResponse) => ({
+  const initAppointments = appointmentList.map((appm) => ({
     ...appm,
     feedback: appm.feedback || '',
     notes: appm.notes || 'insert memo here',
     status: JSON.parse(appm.status) || [],
-    })
-  );
+  }));
   return {
     props: {
       initAppointments,
@@ -96,24 +94,27 @@ const Appointment = ({
     [appointmentMap]
   );
 
-  const onBeforeCreateSchedule = useCallback((scheduleData) => {
-    const schedule = {
-      id: String(randomBytes(8)),
-      title: scheduleData.title,
-      isAllDay: scheduleData.isAllDay,
-      start: scheduleData.start,
-      end: scheduleData.end,
-      category: scheduleData.isAllDay ? 'allday' : 'time',
-      dueDateClass: '',
-      location: scheduleData.location,
-      state: scheduleData.state,
-    };
+  const onBeforeCreateSchedule = useCallback(
+    (newAppointment) => {
+      setAppointmentMap(
+        new Map(appointmentMap.set(newAppointment.id, newAppointment))
+      );
 
-    cal.current.calendarInst.createSchedules([schedule]);
-    // TODO: create schedule
+      const schedule: ISchedule = generateSchedules(newAppointment)[0];
 
-    setOpenStatusDialog(true);
-  }, []);
+      cal.current.calendarInst.createSchedules([schedule]);
+
+      http('/api/v1/appointments', {
+        method: 'POST',
+        body: newAppointment,
+      }).catch((error) => {
+        console.error('ERROR - submitting appointment: ', error);
+      });
+
+      setOpenStatusDialog(true);
+    },
+    [appointmentMap]
+  );
 
   const onBeforeDeleteSchedule = useCallback(
     async (event) => {
@@ -226,12 +227,7 @@ const Appointment = ({
 
   const calendarList: ICalendar[] = customerList.map((customer) => ({
     id: '' + customer.id,
-    name: [
-      customer.firstName,
-      customer.lastName,
-      customer.phone,
-      customer.id,
-    ].join(' '),
+    name: customer.name,
     color: 'white',
     bgColor: colorHash.hex('' + customer.id),
     dragBgColor: '#9e5fff',
@@ -308,11 +304,14 @@ const Appointment = ({
         }}
         therapists={employeeList}
         services={serviceList}
+        existingCustomers={customerList}
+        createAppointment={onBeforeCreateSchedule}
       />
       <DropConfirmationDialog
         open={openDropDialog}
         onClose={handleConfirmUpdateSchedule}
         changes={updateEvent?.changes}
+        updateEvent={updateEvent}
       />
     </>
   );
