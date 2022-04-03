@@ -63,12 +63,14 @@ export class ServiceLocator {
     return instance;
   }
 
-  set<T>(target: Type<T>, instance: T): void {
+  set<T>(target: Type<T> | any, instance: T): ServiceLocator {
     const dependency: string = target.name;
 
     if (!this.container.has(dependency)) {
       this.container.set(dependency, instance);
     }
+
+    return this;
   }
 }
 
