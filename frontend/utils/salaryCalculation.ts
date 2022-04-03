@@ -259,7 +259,7 @@ class FixedPriceParameter extends Parameter
     //Accessor 
     public getValue()
     {
-        return this.value;
+        return this.value2;
     }
 }
 
