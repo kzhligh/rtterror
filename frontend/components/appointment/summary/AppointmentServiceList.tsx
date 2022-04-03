@@ -33,12 +33,12 @@ export const AppointmentServiceList = ({
         padding: 0,
       }}
     >
-      {services.length === 0
+      {services?.length === 0
         ? ''
         : services
             .map((serv, idx: number) => (
               <MenuItem
-                key={serv.id}
+                key={serv.id + serv.service_code}
                 onClick={() => gotoService(serv.service_code)}
               >
                 <ListItemAvatar>
@@ -69,7 +69,7 @@ export const AppointmentServiceList = ({
                 cur,
               ],
 
-              <InputLabel>Scheduled Services</InputLabel>
+              <InputLabel key=''>Scheduled Services</InputLabel>
             )}
     </MenuList>
   );

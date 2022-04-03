@@ -12,7 +12,7 @@ export interface ISchedule {
         duration: string | number;
         feedback: string;
         notes: string;
-        status: any[];
+        status: IStatus[];
         services: any[];
         therapists: any[];
       }
@@ -32,17 +32,35 @@ export interface ICalendar {
 export interface IStatus {
   name: string;
   by: string;
-  at: string;
+  at: Date;
+}
+
+export interface ICustomer {
+  id: number;
+  firstName: string;
+  lastName: string;
+  name?: string;
+  email: string;
+  dob?: Date;
+  gender?: string;
+  address?: string;
+  postalCode?: string;
+  phone: string;
+  confirmationType?: string;
+  balance?: number;
+  discount?: number;
+  notes?: string;
 }
 
 export interface IAppointmentResponse {
   id: string;
   rmq_id?: string;
-  client_id: string;
+  client_id: number;
+  client: ICustomer;
   pro_rmq_id?: string;
   datetime: Date;
   duration: number;
-  repeat: boolean;
+  repeat?: boolean;
   cycle_start?: Date;
   cycle_end?: Date;
   status: IStatus[];

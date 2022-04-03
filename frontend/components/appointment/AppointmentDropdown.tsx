@@ -7,10 +7,9 @@ export const AppointmentDropdown = ({
 }) => {
   return (
     <>
-      {' '}
       <Select
         id='services'
-        defaultValue='Choose a therapist'
+        defaultValue=''
         style={{ width: '100%' }}
         onChange={(e) => {
           setAppointment((state) => ({
@@ -28,7 +27,7 @@ export const AppointmentDropdown = ({
       <InputLabel>Therapists</InputLabel>
       <Select
         id='therapists'
-        defaultValue='Choose a therapist'
+        defaultValue=''
         style={{ width: '100%' }}
         onChange={(e) => {
           setAppointment((state) => ({

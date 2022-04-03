@@ -3,7 +3,7 @@ import { ISchedule, IAppointmentResponse } from './appointmentInterfaces';
 const generateSchedules = (appointments: IAppointmentResponse[]): ISchedule[] =>
   appointments.map((appm: IAppointmentResponse) => ({
     id: appm.id,
-    calendarId: appm.client_id,
+    calendarId: '' + appm.client_id,
     title:
       appm.services?.reduce((a, b) => a.name + '^' + b.name, '') ||
       'no service scheduled',

@@ -18,25 +18,7 @@ import { DateTimePicker } from '@mui/lab';
 import { useState } from 'react';
 import { AppointmentDropdown } from './AppointmentDropdown';
 import { AddCustomerDialog } from '../client/AddCustomerDialog';
-import { IAppointmentResponse } from './common/appointmentInterfaces';
-
-interface IClient {
-  id: number;
-  name: string;
-}
-
-const blankAppointment: IAppointmentResponse = {
-  id: '',
-  client_id: '',
-  employee_ids: [],
-  service_ids: [],
-  datetime: new Date(),
-  duration: 30, // in minutes
-  repeat: false,
-  status: [],
-  feedback: '', // optional
-  notes: '',
-};
+import { ICustomer } from './common/appointmentInterfaces';
 
 export const AddAppointmentDialog = ({
   therapists,
@@ -45,20 +27,21 @@ export const AddAppointmentDialog = ({
   isOpen,
   onClose,
   createAppointment,
+  selectedAppointment,
+  setSelectedAppointment,
 }) => {
   const [expanded, setExpanded] = useState<string | false>(false);
   const [showClientDialog, setShowClientDialog] = useState(false);
-
-  const [appointmentForm, setAppointment] = useState<IAppointmentResponse>(
-    blankAppointment
-  );
 
   return showClientDialog ? (
     <AddCustomerDialog
       open={showClientDialog}
       onClose={() => setShowClientDialog(false)}
-      onCustomerAdded={(newClient) => {
-        setAppointment({ ...appointmentForm, client_id: newClient.id });
+      onCustomerAdded={(newClient: ICustomer) => {
+        setSelectedAppointment({
+          ...selectedAppointment,
+          client_id: newClient.id,
+        });
         existingCustomers.push({
           ...newClient,
           name: [
@@ -80,8 +63,7 @@ export const AddAppointmentDialog = ({
           style={{ width: '100%' }}
           onSubmit={(e) => {
             e.preventDefault();
-            createAppointment(appointmentForm);
-            setAppointment(blankAppointment);
+            createAppointment({ ...selectedAppointment });
             onClose(e, 'backdropClick');
           }}
         >
@@ -90,34 +72,31 @@ export const AddAppointmentDialog = ({
           <AppointmentDropdown
             therapists={therapists}
             services={services}
-            setAppointment={setAppointment}
+            setAppointment={setSelectedAppointment}
           />
 
           <InputLabel>Choose a starting time</InputLabel>
           <DateTimePicker
-            label={appointmentForm.datetime ?? 'Date'}
-            value={appointmentForm.datetime}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                inputProps={{ placeholder: 'YYYY-MM-DD-HH:MM' }}
-                disabled
-              />
-            )}
+            label={
+              new Date(selectedAppointment?.datetime).toLocaleDateString() ??
+              'Date'
+            }
+            value={selectedAppointment.datetime}
+            renderInput={(params) => <TextField {...params} />}
             onChange={(date: Date) => {
-              setAppointment((state) => ({
+              setSelectedAppointment((state) => ({
                 ...state,
-                datetime: date,
+                datetime: new Date(date),
               }));
             }}
           />
           <InputLabel>Set Duration</InputLabel>
           <Select
             id='duration'
-            value={appointmentForm.duration}
+            value={selectedAppointment.duration}
             style={{ width: '100%' }}
             onChange={(e) => {
-              setAppointment((state) => ({
+              setSelectedAppointment((state) => ({
                 ...state,
                 duration: parseInt(e.target.value.toString()),
               }));
@@ -153,14 +132,15 @@ export const AddAppointmentDialog = ({
                   <TextField {...params} label='Look for Client' />
                 )}
                 options={existingCustomers}
-                getOptionLabel={(option: IClient) => option.name}
+                getOptionLabel={(option: ICustomer) => option.name}
                 style={{ width: '100%' }}
                 id='existing'
-                onChange={(_event, value: any) => {
-                  const clientId = value ? value.id : -1;
-                  setAppointment((state) => ({
+                onChange={(_event, selected: any) => {
+                  const clientId = selected ? selected.id : '';
+                  setSelectedAppointment((state) => ({
                     ...state,
                     client_id: clientId,
+                    client: selected,
                   }));
                 }}
               />
@@ -191,7 +171,7 @@ export const AddAppointmentDialog = ({
           <InputLabel>Notes</InputLabel>
           <TextField
             onChange={(e) => {
-              setAppointment((state) => ({
+              setSelectedAppointment((state) => ({
                 ...state,
                 notes: e.target.value,
               }));
@@ -206,7 +186,6 @@ export const AddAppointmentDialog = ({
             <Button
               onClick={(e) => {
                 onClose(e, 'backdropClick');
-                setAppointment(blankAppointment);
               }}
               variant='outlined'
             >

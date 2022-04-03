@@ -57,9 +57,7 @@ const CustomPickersDay = styled(PickersDay, {
 })) as React.ComponentType<CustomPickerDayProps>;
 
 export default function CustomDay ({ editForm, setEditForm }) {
-  const [value, setValue] = React.useState<Date | null>(
-    new Date(editForm.datetime)
-  );
+  const [value, setValue] = React.useState<Date>(new Date(editForm.datetime));
 
   const renderWeekPickerDay = (
     date: Date,
@@ -97,7 +95,7 @@ export default function CustomDay ({ editForm, setEditForm }) {
           value={value}
           onChange={(newValue) => {
             setValue(newValue);
-            setEditForm({ ...editForm, datetime: newValue });
+            setEditForm({ ...editForm, datetime: new Date(newValue) });
           }}
           renderInput={(params) => <TextField {...params} />}
           renderDay={renderWeekPickerDay}

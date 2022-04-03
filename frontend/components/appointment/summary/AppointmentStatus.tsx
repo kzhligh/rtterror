@@ -21,14 +21,9 @@ import moment from 'moment';
 
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { AppointmentStatusUpdatePopup } from './AppointmentStatusUpdatePopup';
+import { IStatus } from '../common/appointmentInterfaces';
 
 const filter = createFilterOptions();
-
-export interface IStatus {
-  name: string;
-  by: string;
-  at: Date;
-}
 
 export const AppointmentStatus = ({ statuses, updateStatus, expanded }) => {
   const [historyAnchor, setHistoryAnchor] = useState(null);
@@ -47,7 +42,7 @@ export const AppointmentStatus = ({ statuses, updateStatus, expanded }) => {
     <Timeline position='left' sx={{ maxHeight: '45vh' }}>
       {statuses.map((status: IStatus) => (
         <Tooltip
-          key={status.at.toString()}
+          key={status.at.toLocaleDateString()}
           title={`by ${status.by}`}
           enterDelay={0}
         >

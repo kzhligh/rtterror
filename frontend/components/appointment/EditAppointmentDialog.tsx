@@ -9,9 +9,10 @@ import {
   Button,
   TextField,
 } from '@mui/material';
-import { AppointmentHeader, AppointmentStatus, IStatus } from './summary';
+import { AppointmentHeader, AppointmentStatus } from './summary';
 import { AppointmentDropdown } from './AppointmentDropdown';
 import CustomDay from './DatePicker';
+import { IAppointmentResponse, IStatus } from './common/appointmentInterfaces';
 
 const EditAppointmentDialog = ({
   isOpen,
@@ -19,7 +20,9 @@ const EditAppointmentDialog = ({
   appointmentObj,
   setAppointmentObj,
 }) => {
-  const [editForm, setEditForm] = useState(appointmentObj);
+  const [editForm, setEditForm] = useState<IAppointmentResponse>(
+    appointmentObj
+  );
 
   return (
     <Dialog fullScreen open={isOpen} onClose={onClose}>

@@ -10,7 +10,7 @@ export const AppointmentHeader = ({ appointmentForm }) => {
       </Grid>
       <Grid item xs={4}>
         <Typography variant='subtitle2'>
-          {appointmentForm.client.phoneNumber}
+          {appointmentForm.client.phone}
         </Typography>
         <Typography variant='subtitle2'>
           {appointmentForm.client.email}

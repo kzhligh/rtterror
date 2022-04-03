@@ -61,6 +61,22 @@ export async function getServerSideProps () {
   };
 }
 
+const blankAppointment: IAppointmentResponse = {
+  id: '',
+  client_id: -1,
+  employee_ids: [],
+  service_ids: [],
+  employees: [],
+  services: [],
+  datetime: new Date(),
+  duration: 30, // in minutes
+  repeat: false,
+  status: [],
+  feedback: '', // optional
+  notes: '',
+  client: { id: -1, firstName: '', lastName: '', phone: '', email: '' },
+};
+
 const Appointment = ({
   initAppointments,
   employeeList,
@@ -74,11 +90,12 @@ const Appointment = ({
 
   const [selectedAppointment, setSelectedAppointment] = useState<
     IAppointmentResponse
-  >(null);
+  >(blankAppointment);
   const [updateEvent, setUpdateEvent] = useState(null);
 
   const initAppointmentMap = new Map<string, IAppointmentResponse>();
   initAppointments.forEach((appm) => {
+    appm.datetime = new Date(appm.datetime);
     initAppointmentMap.set(appm.id, appm);
   });
 
@@ -95,23 +112,17 @@ const Appointment = ({
   );
 
   const onBeforeCreateSchedule = useCallback(
-    (newAppointment) => {
-      setAppointmentMap(
-        new Map(appointmentMap.set(newAppointment.id, newAppointment))
-      );
-
-      const schedule: ISchedule = generateSchedules(newAppointment)[0];
-
-      cal.current.calendarInst.createSchedules([schedule]);
-
-      http('/api/v1/appointments', {
-        method: 'POST',
-        body: newAppointment,
-      }).catch((error) => {
-        console.error('ERROR - submitting appointment: ', error);
+    (event) => {
+      setSelectedAppointment({
+        ...blankAppointment,
+        datetime: new Date(event.start),
+        duration: Math.floor(
+          ((event.end || event.start).getTime() - event.start.getTime()) /
+            1000 /
+            60
+        ),
       });
-
-      setOpenStatusDialog(true);
+      setOpenCreateDialog(true);
     },
     [appointmentMap]
   );
@@ -164,6 +175,30 @@ const Appointment = ({
     }
 
     setUpdateEvent(null);
+  };
+
+  const createAppointment = async (
+    newAppointmentData: IAppointmentResponse
+  ) => {
+    delete newAppointmentData.id;
+
+    const newAppointment = await http(appointmentApiPath, {
+      method: 'POST',
+      body: {
+        ...newAppointmentData,
+        client_id: newAppointmentData.client_id,
+      },
+    }).catch((error) => {
+      console.error('ERROR - submitting appointment: ', error);
+    });
+    console.log(newAppointment);
+    cal.current.calendarInst.createSchedules(
+      generateSchedules([newAppointment])
+    );
+
+    setAppointmentMap(
+      new Map(appointmentMap.set(newAppointment.id, newAppointment))
+    );
   };
 
   const editAppointment = async (
@@ -294,18 +329,24 @@ const Appointment = ({
         isOpen={openStatusDialog}
         onClose={() => {
           setOpenStatusDialog(false);
-          setSelectedAppointment(null);
+          setSelectedAppointment(blankAppointment);
         }}
       />
       <AddAppointmentDialog
         isOpen={openCreateDialog}
         onClose={() => {
           setOpenCreateDialog(false);
+          setSelectedAppointment(blankAppointment);
         }}
         therapists={employeeList}
         services={serviceList}
         existingCustomers={customerList}
-        createAppointment={onBeforeCreateSchedule}
+        createAppointment={(data: IAppointmentResponse) => {
+          createAppointment({ ...data });
+          setSelectedAppointment(blankAppointment);
+        }}
+        selectedAppointment={selectedAppointment}
+        setSelectedAppointment={setSelectedAppointment}
       />
       <DropConfirmationDialog
         open={openDropDialog}

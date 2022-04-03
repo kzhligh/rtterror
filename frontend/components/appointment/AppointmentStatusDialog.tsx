@@ -6,7 +6,6 @@ import {
   DialogContent,
   Button,
   IconButton,
-  DialogProps,
   TextField,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -19,25 +18,19 @@ import {
   AppointmentStatus,
   AppointmentTime,
 } from './summary';
-
-interface Props extends DialogProps {
-  onClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
-}
-
-interface IStatus {
-  name: string;
-  by: string;
-  at: Date;
-}
+import { IAppointmentResponse, IStatus } from './common/appointmentInterfaces';
 
 const blankForm = {
   id: 'null',
-  datetime: Date(),
+  datetime: new Date(),
   duration: 60,
   status: [],
   notes: 'insert memo here',
   employees: [],
   services: [],
+  client_id: -1,
+  feedback: '',
+  client: { id: -1, firstName: '', lastName: '', phone: '', email: '' },
 };
 
 const AppointmentStatusDialog = ({
@@ -47,7 +40,7 @@ const AppointmentStatusDialog = ({
   editAppointment,
   deleteAppointment,
 }) => {
-  const [formContent, setFormContent] = useState(
+  const [formContent, setFormContent] = useState<IAppointmentResponse>(
     target ? { ...target } : blankForm
   );
   const [editDialog, setEdit] = useState(false);
@@ -131,7 +124,7 @@ const AppointmentStatusDialog = ({
               />
               <AppointmentStatus
                 statuses={formContent.status}
-                updateStatus={(name, changedBy) => {
+                updateStatus={(name: string, changedBy: string) => {
                   const newStatus: IStatus = {
                     name: name,
                     by: changedBy,
@@ -202,9 +195,7 @@ const AppointmentStatusDialog = ({
           deleteAppointment({
             schedule: {
               id: formContent.id,
-              calendarId: formContent.employees?.length
-                ? formContent.employees[0].id
-                : '',
+              calendarId: '' + formContent.client_id,
             },
           });
           setDelete(false);
