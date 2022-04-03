@@ -2,11 +2,7 @@ import { SyntheticEvent } from 'react';
 import { Snackbar, Alert } from '@mui/material';
 
 export const AlertError = ({ open, setOpen, msg }) => {
-  const handleClick = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (event?: SyntheticEvent | Event, reason?: string) => {
+  const handleClose = (_event?: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }

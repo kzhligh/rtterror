@@ -18,8 +18,11 @@ import {
   AppointmentStatus,
   AppointmentTime,
 } from './summary';
-import { IAppointmentResponse, IStatus } from './common/appointmentInterfaces';
-import { blankAppointment } from './common/appointmentInterfaces';
+import {
+  IAppointmentResponse,
+  IStatus,
+  blankAppointment,
+} from './common/appointmentInterfaces';
 
 const AppointmentStatusDialog = ({
   isOpen,
@@ -154,7 +157,6 @@ const AppointmentStatusDialog = ({
             >
               <AppointmentServiceList
                 services={formContent.services}
-                therapists={formContent.employees}
                 therapistNames={formContent.employees?.map((emp) =>
                   [emp.first_name, emp.last_name].join(' ')
                 )}
@@ -176,9 +178,7 @@ const AppointmentStatusDialog = ({
       />
       <ConfirmDeleteAlert
         open={deleteDialog}
-        handleClose={(e) => {
-          setDelete(false);
-        }}
+        handleClose={() => setDelete(false)}
         onConfirm={(e) => {
           deleteAppointment({
             schedule: {

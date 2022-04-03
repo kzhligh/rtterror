@@ -13,7 +13,6 @@ import { AppointmentControls } from 'components/appointment/AppointmentControls'
 import AppointmentStatusDialog from 'components/appointment/AppointmentStatusDialog';
 import DropConfirmationDialog from 'components/appointment/dropConfirmationDialog';
 import {
-  ISchedule,
   IAppointmentResponse,
   ICalendar,
   blankAppointment,
@@ -37,6 +36,13 @@ const employeeApiPath = `/api/v1/employees`;
 const customerApiPath = `/api/v1/customer`;
 const serviceApiPath = `/api/v1/services`;
 
+const preprocessAppointment = (appm) => ({
+  ...appm,
+  feedback: appm.feedback || '',
+  notes: appm.notes || 'insert memo here',
+  status: JSON.parse(appm.status) || [],
+});
+
 export async function getServerSideProps () {
   const appointmentList = await http(appointmentApiPath);
   const employeeList = await http(employeeApiPath);
@@ -46,12 +52,7 @@ export async function getServerSideProps () {
     name: [c.firstName, c.lastName, c.phone, c.id].join(' '),
   }));
   const serviceList = await http(serviceApiPath);
-  const initAppointments = appointmentList.map((appm) => ({
-    ...appm,
-    feedback: appm.feedback || '',
-    notes: appm.notes || 'insert memo here',
-    status: JSON.parse(appm.status) || [],
-  }));
+  const initAppointments = appointmentList.map(preprocessAppointment);
   return {
     props: {
       initAppointments,
@@ -174,12 +175,7 @@ const Appointment = ({
         client_id: newAppointmentData.client_id,
       },
     })
-      .then((appm) => ({
-        ...appm,
-        feedback: appm.feedback || '',
-        notes: appm.notes || 'insert memo here',
-        status: JSON.parse(appm.status) || [],
-      }))
+      .then(preprocessAppointment)
       .catch((error) => {
         console.error('ERROR - submitting appointment: ', error);
       });

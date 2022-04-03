@@ -10,11 +10,7 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/router';
 
-export const AppointmentServiceList = ({
-  services,
-  therapistNames,
-  therapists,
-}) => {
+export const AppointmentServiceList = ({ services, therapistNames }) => {
   const router = useRouter();
 
   const gotoService = (serviceCode) => {

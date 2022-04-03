@@ -26,7 +26,7 @@ export const AppointmentStatusUpdatePopup = ({
     toggleOpen(false);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (_event) => {
     if (name.trim() === '' || changedBy.trim() === '') {
       return;
     }

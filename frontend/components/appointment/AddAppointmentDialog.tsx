@@ -177,7 +177,9 @@ export const AddAppointmentDialog = ({
                 label='Created by'
                 required
                 value={
-                  editForm.status.length ? editForm.status[0].by : 'not signed'
+                  editForm.status.length === 0
+                    ? editForm.status[0].by
+                    : 'not signed'
                 }
                 disabled={true}
               />
@@ -185,7 +187,9 @@ export const AddAppointmentDialog = ({
                 open={openStatusUpdate}
                 toggleOpen={setOpenStatusUpdate}
                 name={'Created'}
-                setName={() => {}}
+                setName={() => {
+                  /*do nothing*/
+                }}
                 updateStatus={(name: string, changedBy: string) => {
                   const newStatus: IStatus = {
                     name: name,

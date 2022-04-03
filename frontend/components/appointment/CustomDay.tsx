@@ -11,7 +11,7 @@ import isWithinInterval from 'date-fns/isWithinInterval';
 import startOfWeek from 'date-fns/startOfWeek';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-const theme = createTheme({
+const customTheme = createTheme({
   typography: {
     fontFamily: 'Montserrat, sans-serif',
   },
@@ -88,7 +88,7 @@ export default function CustomDay ({ editForm, setEditForm }) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={customTheme}>
         <StaticDatePicker
           openTo='day'
           label='Appointment Date'

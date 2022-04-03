@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { AppointmentHeader, AppointmentStatus } from './summary';
 import { AppointmentDropdown } from './AppointmentDropdown';
-import CustomDay from './DatePicker';
+import CustomDay from './CustomDay';
 import { IAppointmentResponse, IStatus } from './common/appointmentInterfaces';
 
 const EditAppointmentDialog = ({

@@ -83,7 +83,7 @@ const tuiTemplateConfig = {
     monthGridFooter: function () {
         return '';
     },
-    monthGridFooterExceed: function (hiddenSchedules) {
+    monthGridFooterExceed: function () {
         return '';
     },
     monthDayname: function (model) {
