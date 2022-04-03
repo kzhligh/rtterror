@@ -1,5 +1,6 @@
 import { BIGINT, DataTypes, INTEGER } from 'sequelize';
 import sequelize from 'src/modules/sequelize';
+import Appointment from 'src/models/appointment';
 
 export const Customer = sequelize.define(
   'customers',
@@ -57,3 +58,6 @@ export const Customer = sequelize.define(
     freezeTableName: true,
   }
 );
+
+Customer?.hasMany(Appointment);
+Appointment?.belongsTo(Customer, { as: 'client', foreignKey: 'client_id' });

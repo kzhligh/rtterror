@@ -1,6 +1,5 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from 'src/modules/sequelize';
-import { Customer as CustomerModel } from './customer.model';
 
 export default class AppointmentModel extends Model {}
 
@@ -72,9 +71,3 @@ AppointmentModel.init(
     modelName: 'appointment',
   }
 );
-
-AppointmentModel.belongsTo(CustomerModel, {
-  foreignKey: 'client_id',
-  as: 'client',
-});
-CustomerModel.hasMany(AppointmentModel);
