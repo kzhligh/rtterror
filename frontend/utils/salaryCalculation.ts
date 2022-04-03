@@ -227,33 +227,33 @@ class SalaryRateParameter extends Parameter
 class FixedPriceParameter extends Parameter
 {
     //Data members (Fixed Price)
-    private min =0;
-    private max =100;
-    private value=1.00;
+    private min2 =0;
+    private max2 =100;
+    private value2=1.00;
 
     //Constructors
     constructor(name2: string, min2: number, max2: number, value2: number)
     {
-        super(name);
-        this.min= min;
-        this.max= max;
-        this.value = value;
+        super(name2);
+        this.min2= min2;
+        this.max2= max2;
+        this.value2 = value2;
     }
 
     //Mutator 
-    public setValue(value:number)
+    public setValue(value2:number)
     {
-        if(value < this.min)
+        if(value2 < this.min2)
         {
             console.log("Value is less than minimum");
             return;
         }
-        if (value > this.max)
+        if (value2 > this.max2)
         {
             console.log("Value is more than maximum");
             return;
         }
-        this.value = value;
+        this.value2 = value2;
     }
 
     //Accessor 
