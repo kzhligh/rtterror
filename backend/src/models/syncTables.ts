@@ -5,6 +5,10 @@ import ComboModel from './combo';
 import ServiceComboModel from './service-combo';
 import EmployeeModel from "src/models/employee";
 import EmployeeServiceModel from "src/models/employee-service";
+import AppointmentModel from "src/models/appointment";
+import AppointmentEmployeeModel from "src/models/appointment-employee";
+import AppointmentServiceModel from "src/models/appointment-service";
+import {Schedule} from "./schedule.model";
 
 const syncTables = async () => {
   try {

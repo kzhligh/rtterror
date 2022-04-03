@@ -1,6 +1,7 @@
 import {Frozen, Injectable} from "src/utils/decorators";
 import { Sequelize, Transaction} from "sequelize";
 import {Schedule} from "src/models/schedule.model";
+import appointmentService from "src/services/appointment-service";
 
 @Frozen()
 @Injectable()
