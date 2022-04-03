@@ -11,50 +11,56 @@ import {
     MenuItem,
     FormControl
 } from "@mui/material";
-import {CustomDatePicker, DropDownList} from "../form/formComponent";
+import {CustomDatePicker} from "../form/formComponent";
 import {Button} from "@mui/material";
 import {http} from "../../utils/http";
+import {SalaryCalculationFactory,Employee} from "../../utils/salaryCalculation";
 
-const SalaryCalculation =()=>{
-
-    const [dataValue, setDataValue] = useState({});
+const SalaryCalculation =({setRows})=>{
+    var initValue = {
+        start_date:new Date(),
+        end_date: new Date(),
+    }
+    const [dataValue, setDataValue] = useState(initValue);
+    const [methodString,setMethodString] = useState();
     const handleSetDataValue = (obj) => {
+        console.log({name:name,value:value})
         const {name, value} = obj.target;
         setDataValue({...dataValue, [name]: value});
     };
     const method = [
-        {id: '0', value: 'timebase', title: 'Time Base'},
-        {id: '1', value: 'fixprice', title: 'Fix Price'},
-        {id: '2', value: 'comission', title: 'Commission Percentage'},
+        {id: '0', value: 'TimeBasedCalculation', title: 'Time Based Calculation'},
+        {id: '1', value: 'ServiceBasedCalculation', title: 'Service Based Calculation'},
+        {id: '2', value: 'CommissionBasedCalculation', title: 'Commission Based Calculation'},
     ];
     const getMethodParam =()=>{
         switch (dataValue.method){
-            case 'fixprice':
+            case 'ServiceBasedCalculation':
                 return (<TextField
                     sx={{
                         minWidth: '300px',
                     }}
                     id="outlined-number"
-                    name="fixedrate"
+                    name="ServiceBasedCalculation"
                     label="Fixed price per service"
                     variant="outlined"
                     inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                     onChange={handleSetDataValue}
-                    value={dataValue.fixedrate}
+                    value={dataValue.ServiceBasedCalculation || 0}
                 />)
                 break;
-            case 'comission':
+            case 'CommissionBasedCalculation':
                 return (<TextField
                     sx={{
                         minWidth: '300px',
                     }}
                     id="outlined-number"
-                    name="comissionpercentage"
+                    name="CommissionBasedCalculation"
                     label="Comission percentage"
                     inputProps={{ inputMode: 'numeric', pattern: '[0-9]*'}}
                     variant="outlined"
                     onChange={handleSetDataValue}
-                    value={dataValue.comissionpercentage}
+                    value={dataValue.CommissionBasedCalculation || 0}
                 />)
                 break;
             default:
@@ -63,41 +69,86 @@ const SalaryCalculation =()=>{
                         minWidth: '300px',
                     }}
                     id="outlined-number"
-                    name="hourrate"
+                    name="TimeBasedCalculation"
                     label="Hour Rate"
                     inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                     variant="outlined"
                     onChange={handleSetDataValue}
-                    value={dataValue.hourrate}
+                    value={dataValue.TimeBasedCalculation || 0}
                 />)
                 break;
         }
 
     }
     const submitCalculation=async () => {
-        //if date the same not
-        console.log(dataValue)
+        var submitData = {};
+
         switch (dataValue.method) {
-            case 'fixprice':
-                delete dataValue.comissionpercentage;
-                delete dataValue.hourrate;
+            case 'ServiceBasedCalculation':
+                submitData.method = 'ServiceBasedCalculation';
+                submitData.params = dataValue.ServiceBasedCalculation;
                 break;
-            case 'comission':
-                delete dataValue.fixedrate;
-                delete dataValue.hourrate;
+            case 'CommissionBasedCalculation':
+                submitData.method = 'CommissionBasedCalculation';
+                submitData.params = dataValue.CommissionBasedCalculation;
                 break;
             default:
-                delete dataValue.fixedrate;
-                delete dataValue.comissionpercentage;
+                submitData.method = 'TimeBasedCalculation';
+                submitData.params = dataValue.TimeBasedCalculation;
                 break;
         }
-        await http('/api/v1/schedules/salary', {
-            method: 'GET',
-            body: dataValue,
-        });
-        console.log(dataValue)
-    }
 
+        if(!submitData.params){
+            return
+        }
+        submitData.startDate = dataValue.start_date.toString().slice(0,15);
+        submitData.endDate = dataValue.end_date.toString().slice(0,15);
+        console.log(submitData)
+        const appointmentList = await http('/api/v1/schedules/salary', {
+            method: 'POST',
+            body: submitData,
+        });
+        let appointmentByEmployeeList= {};
+        let item = {};
+
+        for(let i = 0 ; i< appointmentList.length;i++){
+            item = {};
+            let appointment = appointmentList[i];
+            let employeeId = appointment.employees[0].id
+            if(appointmentByEmployeeList.hasOwnProperty(employeeId)){
+                item.appid =appointment.id ;
+                item.appduration = appointment.duration;
+                item.servicename=appointment.services[0].name;
+                item.serviceprice=appointment.services[0].price;
+                item.employeename = `${appointment.employees[0].first_name} ${appointment.employees[0].last_name}`
+                appointmentByEmployeeList[employeeId] = appointmentByEmployeeList.employeeId.push(item);
+            }
+            else{
+                item.appid =appointment.id ;
+                item.appduration = appointment.duration;
+                item.servicename=appointment.services[0].name;
+                item.serviceprice=appointment.services[0].price;
+                item.employeename = `${appointment.employees[0].first_name} ${appointment.employees[0].last_name}`
+                appointmentByEmployeeList[employeeId] = [item];
+
+            }
+        }
+        var employeeStrategy, context;
+        var rows = [];
+        var row={};
+        for(const empId in appointmentByEmployeeList){
+            row={};
+            employeeStrategy = SalaryCalculationFactory.createObject(submitData.method, appointmentByEmployeeList[empId], submitData.params);
+            context = new Employee(employeeStrategy);
+            console.log("Client: Strategy is set to CommissionBasedCalculation.");
+            context.setStrategy(employeeStrategy);
+            row.id = empId
+            row.employee = appointmentByEmployeeList[empId][0].employeename
+            row.earn = context.calculateSalary();
+            rows.push(row);
+        }
+        setRows(rows);
+    }
 
 
     return (
@@ -133,8 +184,9 @@ const SalaryCalculation =()=>{
                         <InputLabel>Method of calculation</InputLabel>
                         <Select
                             value={dataValue.method}
-                            onChange={(e) =>
-                                handleSetDataValue({target: {name: "method", value: e.target.value}})}
+                            onChange={(e) => {
+                                handleSetDataValue({target: {name: "method", value: e.target.value}});
+                            }}
                             sx={{
                                 minWidth: '300px',
                             }}

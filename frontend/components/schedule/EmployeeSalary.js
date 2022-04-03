@@ -6,18 +6,17 @@ import SalaryCalculation from "./salaryCalculation";
 const EmployeeSalary =()=>{
     const [rows, setRows] = useState([]);
     const columns = [
-        { field: 'date', headerName: 'DATE', width: 100 },
-        { field: 'time', headerName: 'Time', width: 100 },
-        { field: 'plan', headerName: 'Service', width: 200 },
-        { field: 'therapist', headerName: 'Employee', width: 100 },
-        { field: 'duration', headerName: 'Duration', width: 100 },
+        { field: 'employee', headerName: 'Employee', width: 300 },
+        { field: 'earn', headerName: 'Total Earn', width: 300 },
     ];
     return (
         <>
             <Typography variant="h6">Employee Salary</Typography>
 
             <div style={{ height: 400, width: '100%', maxWidth: '1000px'}}>
-                <SalaryCalculation />
+                <SalaryCalculation
+                    setRows={setRows}
+                />
                 <DataGrid
                     rows={rows}
                     columns={columns}
