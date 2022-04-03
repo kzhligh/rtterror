@@ -7,6 +7,7 @@ import EmployeeServiceModel from 'src/models/employee-service';
 import AppointmentModel from 'src/models/appointment';
 import AppointmentEmployeeModel from 'src/models/appointment-employee';
 import AppointmentServiceModel from 'src/models/appointment-service';
+import { Schedule } from './schedule.model';
 
 const syncTables = async () => {
   try {
@@ -21,6 +22,7 @@ const syncTables = async () => {
     await EmployeeServiceModel.sync({ alter: true });
     await AppointmentEmployeeModel.sync({ alter: true });
     await AppointmentServiceModel.sync({ alter: true });
+    await Schedule.sync({ alter: true });
   } catch (error) {
     throw error;
   }
