@@ -5,8 +5,10 @@ import { randomBytes } from 'crypto';
 import { Typography } from '@mui/material';
 import ColorHash from 'color-hash';
 
-import theme from 'components/appointment/themeConfig';
-import template from 'components/appointment/templateConfig';
+import {
+  tuiThemeConfig,
+  tuiTemplateConfig,
+} from 'components/appointment/config';
 import { AddAppointmentDialog } from 'components/appointment/AddAppointmentDialog';
 import { AppointmentControls } from 'components/appointment/AppointmentControls';
 import AppointmentStatusDialog from 'components/appointment/AppointmentStatusDialog';
@@ -294,8 +296,8 @@ const Appointment = ({ initAppointments, employeeList }) => {
     week: { hourStart: 8, hourEnd: 22 },
     useCreationPopup: false,
     useDetailPopup: false,
-    theme: theme,
-    template: template,
+    theme: tuiThemeConfig,
+    template: tuiTemplateConfig,
     calendars: calendarList,
     schedules: initSchedules,
     onClickDayname: onClickDayname,

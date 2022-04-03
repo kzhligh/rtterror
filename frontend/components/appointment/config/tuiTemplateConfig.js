@@ -31,7 +31,7 @@ function _getTimeTemplate(schedule, isAllDay) {
     return html.join("");
 }
 
-const templateConfig = {
+const tuiTemplateConfig = {
     milestone: function (schedule) {
         return '<span class="calendar-font-icon ic-milestone-b"></span> <span style="background-color: ' + schedule.bgColor + '">' + schedule.title + '</span>';
     },
@@ -203,4 +203,4 @@ const templateConfig = {
     }
 };
 
-export default templateConfig;
+export default tuiTemplateConfig;
