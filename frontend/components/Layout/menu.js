@@ -37,17 +37,7 @@ const Menu = () => {
       text: 'Schedule',
       icon: <Event />,
       path: '/schedule',
-    },
-    {
-      text: 'Product',
-      icon: <Healing />,
-      path: '/product',
-    },
-    {
-      text: 'Invoice',
-      icon: <Receipt />,
-      path: '/invoice',
-    },
+    }
   ];
   return (
     <Box display='grid' sx={{

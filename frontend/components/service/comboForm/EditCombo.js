@@ -74,7 +74,9 @@ export const EditCombo = ({
                                     handleServiceCheck={handleAddRemoveService}
                                     removeService={removeService}
                                     isEdit={true}
-                                    serviceCheckList={serviceToAdd} />
+                                    choosenTime={false}
+                                    serviceCheckList={serviceToAdd}
+                                />
                             ))}
                     </Stack>
                 </DialogContent>

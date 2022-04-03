@@ -12,7 +12,7 @@ import _isEmpty from 'lodash/isEmpty';
 
 export const ComboItem = (props) => {
     const {
-        item: serviceItem, handleServiceCheck, removeService, isEdit, serviceCheckList, changeDurationOfService,
+        item: serviceItem, handleServiceCheck, removeService, isEdit, serviceCheckList, changeDurationOfService,choosenTime
     } = props;
 
     return (
@@ -38,7 +38,7 @@ export const ComboItem = (props) => {
                     <Chip label='Service Code' size='small' />{' '}
                     {serviceItem.service_code.split('-', 1)[0]}
                 </>} />
-            <FormControl
+            {choosenTime && <FormControl
                 sx={{
                     marginX: '10px',
                 }}
@@ -66,7 +66,8 @@ export const ComboItem = (props) => {
                         ))
                         : null}
                 </RadioGroup>
-            </FormControl>
+            </FormControl>}
+
         </Card>
     );
 };
