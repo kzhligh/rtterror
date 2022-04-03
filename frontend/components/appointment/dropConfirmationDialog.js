@@ -1,5 +1,6 @@
 import React from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
+import moment from "moment";
 
 const ConfirmationDialog = (props) => {
     const { onClose, open, changes, updateEvent } = props;
@@ -23,11 +24,11 @@ const ConfirmationDialog = (props) => {
                 <div>
                     <label style={{ marginTop: "20px", fontSize: "24px", fontWeight: "500" }}>{'Appointment: ' + (updateEvent ? updateEvent.schedule.title : '')}</label><br />
                     <div style={{ marginTop: "20px", fontSize: "20px", fontWeight: "500" }}>From:</div>
-                    <div>{'Previous start at: ' + ((updateEvent && updateEvent.schedule) ? updateEvent.schedule.start._date.toString().substr(4, 20) : '')}</div>
-                    <div>{'Previous end at: ' + ((updateEvent && updateEvent.schedule) ? updateEvent.schedule.end._date.toString().substr(4, 20) : '')}</div>
+                    <div>{'Previous start at: ' + ((updateEvent && updateEvent.schedule) ? moment(updateEvent.schedule.start).calendar() : '')}</div>
+                    <div>{'Previous end at: ' + ((updateEvent && updateEvent.schedule) ? moment(updateEvent.schedule.end).calendar() : '')}</div>
                     <div style={{ marginTop: "20px", fontSize: "20px", fontWeight: "500" }}>To:</div>
-                    <div>{'Now start at: ' + (changes ?new Date(changes.start).toString() : '')}</div>
-                    <div>{'Now end at: ' + (changes ? new Date(changes.end).toString() : '')}</div>
+                    <div>{'Now start at: ' + (changes ? moment(changes.start).calendar() : '')}</div>
+                    <div>{'Now end at: ' + (changes ? moment(changes.end).calendar() : '')}</div>
                 </div>
             </DialogContent>
             <DialogActions>
