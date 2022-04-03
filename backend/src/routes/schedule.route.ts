@@ -13,16 +13,28 @@ class ScheduleController {
         return express
             .Router()
             .get('/', this.getAllSchedule())
+            .post('/salary', this.Salary())
             .post('/', this.createSchedule())
             .put('/', this.updateSchedule())
             .delete('/', this.deleteSchedule());
-    }
 
+    }
     private getAllSchedule() {
         return async (req: Request, res: Response) => {
             try {
                 const schedules = await this.scheduleService.getAll();
                 res.status(200).send(schedules);
+            } catch (error) {
+                res.status(400).send(error);
+            }
+        };
+    }
+
+    private Salary() {
+        return async (req: Request, res: Response) => {
+            try {
+                const appointmentJsons = await this.scheduleService.salaryCalculation(req.body);
+                res.status(200).send(appointmentJsons);
             } catch (error) {
                 res.status(400).send(error);
             }
@@ -60,6 +72,18 @@ class ScheduleController {
                     req.body
                 );
                 res.status(200).send(remainingSchedule);
+            } catch (error) {
+                res.status(400).send(error);
+            }
+        };
+    }
+    private getScheduleById() {
+        return async (req: Request, res: Response) => {
+            const { id } = req.params;
+
+            try {
+                const schedule = await this.scheduleService.getScheduleById(id);
+                res.status(200).send(schedule);
             } catch (error) {
                 res.status(400).send(error);
             }

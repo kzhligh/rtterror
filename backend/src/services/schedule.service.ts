@@ -28,8 +28,8 @@ export class ScheduleService {
                 while (currDate <= endDate) {
                     if(repeatedDay.includes(currDate.getDay())){
                         let currSchedule = {...schedule};
-                        currSchedule.start_date = currDate;
-                        currSchedule.end_date = currDate;
+                        currSchedule.start_date = Intl.DateTimeFormat('sv-SE').format(currDate) ;
+                        currSchedule.end_date = Intl.DateTimeFormat('sv-SE').format(currDate) ;
                         await Schedule.create(currSchedule);
                     }
                     currDate = new Date(currDate.setDate(currDate.getDate() + 1));
@@ -68,6 +68,31 @@ export class ScheduleService {
             await t.rollback();
             throw error;
         }
+    }
+
+    async salaryCalculation(data: any){
+        let {startDate,endDate} = data;
+        startDate= new Date(startDate).toISOString().slice(0,10);
+        endDate= new Date(endDate).toISOString().slice(0,10);
+        var appointmentsList = await appointmentService.getAllValidItems();
+        appointmentsList = appointmentsList.filter(
+            (item) =>{
+                let date= item.datetime.toISOString().slice(0,10);
+                console.log({date: date, start:startDate,end:endDate})
+                console.log(date>=startDate && date<=endDate)
+                return date>=startDate && date<=endDate;
+            }
+        );
+        return appointmentsList;
+    }
+    async getScheduleById(Id: string) {
+        var schedules = Schedule.findAll({
+            where: {
+                employeeId: Id
+            }
+        });
+        console.log(schedules);
+        return schedules;
     }
 
 }
