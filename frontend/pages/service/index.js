@@ -1,7 +1,8 @@
-import ServiceComponent from '../../components/service';
+import ServiceComponent from '/components/service';
 import { useEffect, useState } from 'react';
-import { http } from "../../utils/http";
-import groupService from "../../utils/groupService";
+import { http } from '/utils/http';
+import { Typography } from '@mui/material';
+import groupService from '/utils/groupService';
 const apiPath = '/api/v1';
 
 export async function getServerSideProps(_context) {
@@ -17,13 +18,15 @@ const Service = ({ employeeList }) => {
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(undefined);
 
+    const MS_H_CONVERSION_RATE = 600000;
     const getServiceList = async () => {
         const serviceListResponse = await http(`${apiPath}/services`);
         const comboList = await http(`${apiPath}/combos`);
         for (const combo in comboList) {
-            comboList[combo].total_duration = (comboList[combo].total_duration * 1 / 600000).toFixed(2);
+            comboList[combo].total_duration =
+                (comboList[combo].total_duration * 1) / MS_H_CONVERSION_RATE;
         }
-        var serviceList = groupService(serviceListResponse);
+        const serviceList = groupService(serviceListResponse);
         serviceList.sort((a, b) => (+a.blocked < +b.blocked ? -1 : 1));
         comboList.sort((a, b) => (+a.blocked < +b.blocked ? -1 : 1));
         setServiceListData(serviceList);
@@ -41,12 +44,12 @@ const Service = ({ employeeList }) => {
     const deleteService = (item) => {
         if (item.hasOwnProperty('services')) {
             http(`${apiPath}/combos/${item.id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
             }).then();
             setRefresh(!refresh);
         } else {
             http(`${apiPath}/services/${item.service_code}`, {
-                method: 'DELETE'
+                method: 'DELETE',
             }).then((_r) => {
                 setRefresh(!refresh);
             });
@@ -62,7 +65,8 @@ const Service = ({ employeeList }) => {
             });
         } else {
             http(
-                `${apiPath}/services/${item.service_code}/${item.blocked ? 'unblock' : 'block'}`,
+                `${apiPath}/services/${item.service_code}/${item.blocked ? 'unblock' : 'block'
+                }`,
                 { method: 'PUT' }
             ).then((_r) => {
                 setRefresh(!refresh);
@@ -71,7 +75,7 @@ const Service = ({ employeeList }) => {
     };
     return (
         <div>
-            <h1>Service</h1>
+            <Typography variant='h6'>Service</Typography>
             {!loading && (
                 <ServiceComponent
                     comboList={comboListData}

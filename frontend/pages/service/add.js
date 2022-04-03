@@ -23,7 +23,6 @@ function ServiceFormPage({ employeeList }) {
       method: 'POST',
       body: data,
     });
-    closeDialog();
   };
   return (
     <AddServiceForm

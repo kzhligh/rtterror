@@ -1,9 +1,12 @@
+import {
+    createTheme,
+    ThemeProvider,
+} from '@mui/material/styles';
+import { Box, Divider } from '@mui/material';
 import MainMenu from './menu';
-import styled from '../../styles/layout.module.css';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Calendar from './calendar';
-import { Divider, Grid } from '@mui/material';
-import * as React from 'react';
+import { useState } from 'react';
+import { Drawer } from './Drawer';
 
 const globalTheme = createTheme({
     typography: {
@@ -11,24 +14,28 @@ const globalTheme = createTheme({
     },
 });
 
-const Layout = ({ children }) => {
-    return (
-        <ThemeProvider theme={globalTheme}>
-            <Grid container direction="row" className={styled.bodyWrapper}>
-                <Grid item style={{
-                    display: "flex",
-                    flexFlow: "column"
-                }}>
-                    <Calendar />
-                    <Divider />
-                    <MainMenu />
-                </Grid>
-                <Grid item style={{ minWidth: "75%", maxWidth: "85%" }}>
-                    {/* <PrimarySearchAppBar /> */}
-                    <Grid item className={styled.contentWrapper}>{children}</Grid>
-                </Grid>
-            </Grid>
-        </ThemeProvider>
-    );
-};
+export
+    const Layout = ({ children }) => {
+        const [open, setOpen] = useState(false);
+
+        return (
+            <ThemeProvider theme={globalTheme}>
+                <Box display='flex'>
+                    <Drawer
+                        variant='permanent'
+                        open={open}
+                        onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}
+                    >
+                        <Calendar />
+                        <Divider>Clinique yuanQi Massage &amp; Acupuncture</Divider>
+                        <MainMenu />
+                    </Drawer>
+                    <Divider orientation="vertical" flexItem />
+                    <Box component='main' sx={{ flexGrow: 1, p: 3 }} bgcolor='#fff'>
+                        {children}
+                    </Box>
+                </Box>
+            </ThemeProvider>
+        );
+    };
 export default Layout;
