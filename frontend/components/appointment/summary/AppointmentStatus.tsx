@@ -6,6 +6,7 @@ import {
   Menu,
   IconButton,
   TextField,
+  Box,
 } from '@mui/material';
 import { History } from '@mui/icons-material';
 import {
@@ -68,7 +69,7 @@ export const AppointmentStatus = ({ statuses, updateStatus, expanded }) => {
   );
 
   return (
-    <>
+    <Box display='grid'>
       <InputLabel style={{ marginTop: '5%' }}>
         Current Status: <span>&emsp;</span>
         <Typography variant='button' color='InfoText'>
@@ -137,7 +138,7 @@ export const AppointmentStatus = ({ statuses, updateStatus, expanded }) => {
         setName={setStatusName}
         updateStatus={updateStatus}
       />
-    </>
+    </Box>
   );
 };
 

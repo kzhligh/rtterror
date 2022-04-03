@@ -27,54 +27,55 @@ export const AppointmentStatusUpdatePopup = ({
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault();
-
     updateStatus(name, changedBy);
     handleClose();
   };
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <form onSubmit={handleSubmit}>
-        <DialogTitle>Confirm update?</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin='dense'
-            id='name'
-            value={name}
-            onChange={setName}
-            label={<Typography>{moment().calendar()}</Typography>}
-            type='text'
-            variant='standard'
-            size='small'
+      <DialogTitle>Confirm update?</DialogTitle>
+      <DialogContent>
+        <TextField
+          autoFocus
+          margin='dense'
+          id='name'
+          value={name}
+          onChange={setName}
+          label={<Typography>{moment().calendar()}</Typography>}
+          type='text'
+          variant='standard'
+          size='small'
+          color='success'
+        />
+        <TextField
+          margin='dense'
+          id='by'
+          value={changedBy}
+          onChange={(event) => {
+            setChangedBy(event.target.value);
+          }}
+          required
+          label={'Changed by'}
+          placeholder='Sign Here'
+          type='text'
+          variant='filled'
+          size='small'
+          color='secondary'
+        />
+        <DialogActions>
+          <Button onClick={handleClose} color='inherit'>
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            type='submit'
+            variant='contained'
             color='success'
-          />
-          <TextField
-            margin='dense'
-            id='by'
-            value={changedBy}
-            onChange={(event) => {
-              setChangedBy(event.target.value);
-            }}
-            required
-            label={'Changed by'}
-            placeholder='Sign Here'
-            type='text'
-            variant='filled'
-            size='small'
-            color='secondary'
-          />
-          <DialogActions>
-            <Button onClick={handleClose} color='inherit'>
-              Cancel
-            </Button>
-            <Button type='submit' variant='contained' color='success'>
-              Update
-            </Button>
-          </DialogActions>
-        </DialogContent>
-      </form>
+          >
+            Update
+          </Button>
+        </DialogActions>
+      </DialogContent>
     </Dialog>
   );
 };
