@@ -4,7 +4,7 @@ import serviceRouter from './service';
 import comboRouter from './combo';
 import employeeRouter from './employee';
 import appointmentRouter from './appointment';
-import {scheduleRouter} from "./schedule.route";
+import { scheduleRouter } from './schedule.route';
 
 const router = express.Router();
 
