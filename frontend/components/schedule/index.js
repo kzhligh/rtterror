@@ -6,13 +6,13 @@ import 'tui-calendar/dist/tui-calendar.css';
 
 import ScheduleDialog from "./scheduleDialog";
 import _find from "lodash/find";
-const TuiCalendarWrapper = dynamic(
-    () => import('../appointment/TuiCalendarWrapper'),
+const TuiCalendar = dynamic(
+    () => import('../TuiCalendar'),
     { ssr: false }
 );
 
-let TuiCalendar = forwardRef((props, ref) => (
-    <TuiCalendarWrapper {...props} forwardedRef={ref}/>
+let TuiCalendarComponent = forwardRef((props, ref) => (
+    <TuiCalendar {...props} forwardedRef={ref}/>
 ));
 
 const ScheduleComponent =({employeeList,eventList,setRerender,rerender,employee,setEmployee}) =>{
@@ -160,7 +160,7 @@ const ScheduleComponent =({employeeList,eventList,setRerender,rerender,employee,
                     renderInput={(params) => <TextField {...params} label="Employee" size="small" />}
                 />
             </MenuList>
-            <TuiCalendar
+            <TuiCalendarComponent
                 employee={employee}
                 beforeSchedule={onBeforeCreateSchedule}
                 ref={cal}

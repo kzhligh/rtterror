@@ -29,7 +29,7 @@ export async function getServerSideProps() {
     };
 }
 
-const Employee = ({employeesList}) => {
+const Schedule = ({employeesList}) => {
     const [eventList, setEventList] = useState([])
     const [loading, setLoading] = useState(false);
     const [tabValue, setTabValue] = useState('1');
@@ -112,4 +112,4 @@ const Employee = ({employeesList}) => {
         </div>
     );
 }
-export default Employee;
+export default Schedule;
