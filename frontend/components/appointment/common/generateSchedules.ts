@@ -5,7 +5,7 @@ const generateSchedules = (appointments: IAppointmentResponse[]): ISchedule[] =>
     id: appm.id,
     calendarId: '' + appm.client_id,
     title:
-      appm.services?.reduce((a, b) => a.name + '^' + b.name, '') ||
+      appm.services?.map((serv) => serv.name).join('&') ||
       'no service scheduled',
     category: 'time',
     start: new Date(appm.datetime),

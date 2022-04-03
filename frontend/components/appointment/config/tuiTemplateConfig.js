@@ -46,7 +46,7 @@ const tuiTemplateConfig = {
         return '<span class="tui-full-calendar-left-content">ALL DAY</span>';
     },
     time: function (schedule) {
-        return _getTimeTemplate(schedule, false);
+        return '<strong>' + moment(schedule.start.getTime()).format('HH:mm') + '</strong> ' + schedule.title;
     },
     goingDuration: function (schedule) {
         return '<span class="calendar-icon ic-travel-time"></span>' + schedule.goingDuration + 'min.';
@@ -78,7 +78,7 @@ const tuiTemplateConfig = {
     monthGridFooter: function () {
         return '';
     },
-    monthGridFooterExceed: function () {
+    monthGridFooterExceed: function (_hiddenSchedules) {
         return '';
     },
     monthDayname: function (model) {
