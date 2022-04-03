@@ -119,6 +119,7 @@ class CommissionBasedCalculation extends SalaryCalculation
      //Other methods
      calculate(){ return this.serviceCost.getValue()* (this.commissionPercentage.getValue()/100);}
 
+
 }
 
 
@@ -128,19 +129,40 @@ class CommissionBasedCalculation extends SalaryCalculation
 /**  Parameter Class */
  abstract class Parameter
 {
-    //Data member
-    public parameterName = "";
+    //Data members (hours)
+    public min =0;
+    public max =24
+    public value=1;
+
 
     //Constructors
-    constructor(parameterName: string)
+    constructor(min: number, max: number, value: number)
     {
-        this.parameterName = parameterName;
+        this.min= min;
+        this.max= max;
+        this.value = value;
     }
-    
-    //Accessor 
-    public getParameterName()
+
+    //Mutator
+    public setValue(value:number)
     {
-        return this.parameterName;
+        if(value < this.min)
+        {
+            console.log("Value is less than minimum");
+            return;
+        }
+        if (value > this.max)
+        {
+            console.log("Value is more than maximum");
+            return;
+        }
+        this.value = value;
+    }
+
+    //Accessor
+    public getValue()
+    {
+        return this.value;
     }
 
 }
@@ -148,196 +170,66 @@ class CommissionBasedCalculation extends SalaryCalculation
 class TimeParameter extends Parameter
 {
     //Data members (hours)
-    private min =0;
-    private max =24
-    private value=1;
+    public name ='';
 
     
     //Constructors
     constructor(name: string, min: number, max: number, value: number)
     {
-        super(name);
-        this.min= min;
-        this.max= max;
-        this.value = value;
-    }
-
-    //Mutator 
-    public setValue(value:number)
-    {
-        if(value < this.min)
-        {
-            console.log("Value is less than minimum");
-            return;
-        }
-        if (value > this.max)
-        {
-            console.log("Value is more than maximum");
-            return;
-        }
-        this.value = value;
-    }
-
-    //Accessor 
-    public getValue()
-    {
-        return this.value;
+        super(min, max, value);
+        this.name = name;
     }
 }
 
 class SalaryRateParameter extends Parameter
 {
-    //Data members (Salary Rate)
-    private min1 =0;
-    private max1 =100;
-    private value1=13.50;
+    //Data members (Comission)
+    public name1 ='';
 
     //Constructors
     constructor(name1: string, min1: number, max1: number, value1: number)
     {
-        super(name1);
-        this.min1= min1;
-        this.max1= max1;
-        this.value1 = value1;
-    }
-
-    //Mutator 
-    public setValue(value1:number)
-    {
-        if(value1 < this.min1)
-        {
-            console.log("Value is less than minimum");
-            return;
-        }
-        if (value1 > this.max1)
-        {
-            console.log("Value is more than maximum");
-            return;
-        }
-        this.value1 = value1;
-    }
-
-    //Accessor 
-    public getValue()
-    {
-        return this.value1;
+        super(min1, max1, value1);
+        this.name1 = name1;
     }
 }
 
 class FixedPriceParameter extends Parameter
 {
     //Data members (Fixed Price)
-    private min2 =0;
-    private max2 =100;
-    private value2=1.00;
+    public name3 = '';
 
     //Constructors
-    constructor(name2: string, min2: number, max2: number, value2: number)
+    constructor(name3: string, min3: number, max3: number, value3: number)
     {
-        super(name2);
-        this.min2= min2;
-        this.max2= max2;
-        this.value2 = value2;
-    }
-
-    //Mutator 
-    public setValue(value2:number)
-    {
-        if(value2 < this.min2)
-        {
-            console.log("Value is less than minimum");
-            return;
-        }
-        if (value2 > this.max2)
-        {
-            console.log("Value is more than maximum");
-            return;
-        }
-        this.value2 = value2;
-    }
-
-    //Accessor 
-    public getValue()
-    {
-        return this.value2;
+        super(min3, max3, value3);
+        this.name3 = name3;
     }
 }
 
 class NumOfServicesParameter extends Parameter
 {
     //Data members (Number Of Services)
-    private min =0;
-    private max =100;
-    private value=1;
+    public name2 = '';
 
     //Constructors
-    constructor(name: string, min: number, max: number, value: number)
+    constructor(name2: string, min2: number, max2: number, value2: number)
     {
-        super(name);
-        this.min= min;
-        this.max= max;
-        this.value = value;
-    }
-
-    //Mutator 
-    public setValue(value:number)
-    {
-        if(value < this.min)
-        {
-            console.log("Value is less than minimum");
-            return;
-        }
-        if (value > this.max)
-        {
-            console.log("Value is more than maximum");
-            return;
-        }
-        this.value = value;
-    }
-
-    //Accessor 
-    public getValue()
-    {
-        return this.value;
+        super(min2, max2, value2);
+        this.name2 = name2;
     }
 }
 
 class ServiceCostParameter extends Parameter
 {
     //Data members (Service Cost)
-    private min1 =0;
-    private max1 =100;
-    private value1=1.00;
+    public name4 = '';
 
     //Constructors
-    constructor(name1: string, min1: number, max1: number, value1: number)
+    constructor(name4: string, min4: number, max4: number, value4: number)
     {
-        super(name1);
-        this.min1= min1;
-        this.max1= max1;
-        this.value1 = value1;
-    }
-
-    //Mutator 
-    public setValue(value1:number)
-    {
-        if(value1 < this.min1)
-        {
-            console.log("Value is less than minimum");
-            return;
-        }
-        if (value1 > this.max1)
-        {
-            console.log("Value is more than maximum");
-            return;
-        }
-        this.value1 = value1;
-    }
-
-    //Accessor 
-    public getValue()
-    {
-        return this.value1;
+        super(min4, max4, value4);
+        this.name4 = name4;
     }
 
 }
@@ -345,39 +237,13 @@ class ServiceCostParameter extends Parameter
 class CommissionPercentageParameter extends Parameter
 {
     //Data members (Commission Percentage)
-    private min2 =0;
-    private max2 =100;
-    private value2=1;
+    public name5 = '';
 
     //Constructors
-    constructor(name2: string, min2: number, max2: number, value2: number)
+    constructor(name5: string, min5: number, max5: number, value5: number)
     {
-        super(name2);
-        this.min2= min2;
-        this.max2= max2;
-        this.value2 = value2;
-    }
-
-    //Mutator 
-    public setValue(value2:number)
-    {
-        if(value2 < this.min2)
-        {
-            console.log("Value is less than minimum");
-            return;
-        }
-        if (value2 > this.max2)
-        {
-            console.log("Value is more than maximum");
-            return;
-        }
-        this.value2 = value2;
-    }
-
-    //Accessor 
-    public getValue()
-    {
-        return this.value2;
+        super(min5, max5, value5);
+        this.name5 = name5;
     }
 }
 
