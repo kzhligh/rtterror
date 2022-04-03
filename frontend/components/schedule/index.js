@@ -3,16 +3,17 @@ import dynamic from 'next/dynamic';
 import { Typography, MenuList, MenuItem, Autocomplete, TextField } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import 'tui-calendar/dist/tui-calendar.css';
-import theme from '../appointment/themeConfig';
-import template from '../appointment/templateConfig';
+
 import ScheduleDialog from "./scheduleDialog";
 import _find from "lodash/find";
+const TuiCalendarWrapper = dynamic(
+    () => import('../appointment/TuiCalendarWrapper'),
+    { ssr: false }
+);
 
-const TuiCalendarWrapper = dynamic(() => import('../appointment/TuiCalendarWrapper'), { ssr: false });
-const TuiCalendar = forwardRef((props, ref) => {
-    return  <TuiCalendarWrapper {...props} forwardedRef={ref}/>
-});
-TuiCalendar.displayName = 'TuiCalendar';
+let TuiCalendar = forwardRef((props, ref) => (
+    <TuiCalendarWrapper {...props} forwardedRef={ref}/>
+));
 
 const ScheduleComponent =({employeeList,eventList,setRerender,rerender,employee,setEmployee}) =>{
     const cal = useRef(null);
@@ -169,8 +170,6 @@ const ScheduleComponent =({employeeList,eventList,setRerender,rerender,employee,
                 week={{ hourStart: 8, hourEnd: 22 }}
                 useCreationPopup={false}
                 useDetailPopup={false}
-                theme={theme}
-                template={template}
                 calendars={employees}
                 schedules={schedules}
                 onClickDayname={onClickDayname}
