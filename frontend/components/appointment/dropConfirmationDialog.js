@@ -1,6 +1,5 @@
 import React from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
-import { tuiTemplateConfig } from 'components/appointment/config';
 
 const ConfirmationDialog = (props) => {
     const { onClose, open, changes, updateEvent } = props;
@@ -27,8 +26,8 @@ const ConfirmationDialog = (props) => {
                     <div>{'Previous start at: ' + ((updateEvent && updateEvent.schedule) ? updateEvent.schedule.start._date.toString().substr(4, 20) : '')}</div>
                     <div>{'Previous end at: ' + ((updateEvent && updateEvent.schedule) ? updateEvent.schedule.end._date.toString().substr(4, 20) : '')}</div>
                     <div style={{ marginTop: "20px", fontSize: "20px", fontWeight: "500" }}>To:</div>
-                    <div>{'Now start at: ' + (changes ?new Date(changes.start).toString().substr(4, 20) : '')}</div>
-                    <div>{'Now end at: ' + (changes ? new Date(changes.end).toString().substr(4, 20) : '')}</div>
+                    <div>{'Now start at: ' + (changes ?new Date(changes.start).toString() : '')}</div>
+                    <div>{'Now end at: ' + (changes ? new Date(changes.end).toString() : '')}</div>
                 </div>
             </DialogContent>
             <DialogActions>
