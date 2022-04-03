@@ -19,19 +19,7 @@ import {
   AppointmentTime,
 } from './summary';
 import { IAppointmentResponse, IStatus } from './common/appointmentInterfaces';
-
-const blankForm = {
-  id: 'null',
-  datetime: new Date(),
-  duration: 60,
-  status: [],
-  notes: 'insert memo here',
-  employees: [],
-  services: [],
-  client_id: -1,
-  feedback: '',
-  client: { id: -1, firstName: '', lastName: '', phone: '', email: '' },
-};
+import { blankAppointment } from './common/appointmentInterfaces';
 
 const AppointmentStatusDialog = ({
   isOpen,
@@ -41,13 +29,13 @@ const AppointmentStatusDialog = ({
   deleteAppointment,
 }) => {
   const [formContent, setFormContent] = useState<IAppointmentResponse>(
-    target ? { ...target } : blankForm
+    target ? { ...target } : blankAppointment
   );
   const [editDialog, setEdit] = useState(false);
   const [deleteDialog, setDelete] = useState(false);
 
   useEffect(() => {
-    if (!target) setFormContent(blankForm);
+    if (!target) setFormContent(blankAppointment);
     else setFormContent({ ...target });
   }, [target]);
 

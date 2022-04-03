@@ -52,6 +52,30 @@ export interface ICustomer {
   notes?: string;
 }
 
+export const blankClient: ICustomer = {
+  id: -1,
+  firstName: '',
+  lastName: '',
+  phone: '',
+  email: '',
+};
+
+export const blankAppointment: IAppointmentResponse = {
+  id: '',
+  client_id: -1,
+  employee_ids: [],
+  service_ids: [],
+  employees: [],
+  services: [],
+  datetime: new Date(),
+  duration: 30, // in minutes
+  repeat: false,
+  status: [],
+  feedback: '', // optional
+  notes: '',
+  client: blankClient,
+};
+
 export interface IAppointmentResponse {
   id: string;
   rmq_id?: string;

@@ -16,6 +16,7 @@ import {
   ISchedule,
   IAppointmentResponse,
   ICalendar,
+  blankAppointment,
 } from 'components/appointment/common/appointmentInterfaces';
 import { generateSchedules } from 'components/appointment/common/generateSchedules';
 
@@ -60,22 +61,6 @@ export async function getServerSideProps () {
     },
   };
 }
-
-const blankAppointment: IAppointmentResponse = {
-  id: '',
-  client_id: -1,
-  employee_ids: [],
-  service_ids: [],
-  employees: [],
-  services: [],
-  datetime: new Date(),
-  duration: 30, // in minutes
-  repeat: false,
-  status: [],
-  feedback: '', // optional
-  notes: '',
-  client: { id: -1, firstName: '', lastName: '', phone: '', email: '' },
-};
 
 const Appointment = ({
   initAppointments,
