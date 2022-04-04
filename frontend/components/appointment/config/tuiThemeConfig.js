@@ -1,4 +1,4 @@
-const themeConfig = {
+const tuiThemeConfig = {
     'common.border': '1px solid #e5e5e5',
     'common.backgroundColor': 'white',
     'common.holiday.color': '#bbb',
@@ -118,4 +118,4 @@ const themeConfig = {
     'week.dayGridSchedule.marginRight': '8px'
 };
 
-export default themeConfig;
+export default tuiThemeConfig;

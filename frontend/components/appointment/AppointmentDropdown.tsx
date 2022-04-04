@@ -7,41 +7,38 @@ export const AppointmentDropdown = ({
 }) => {
   return (
     <>
-      {' '}
       <Select
-        id="services"
-        defaultValue="Choose a therapist"
+        id='services'
+        defaultValue=''
         style={{ width: '100%' }}
-        value={services.serviceName}
         onChange={(e) => {
           setAppointment((state) => ({
             ...state,
-            plan: { serviceName: e.target.value as string },
+            service_ids: [...state.service_ids, e.target.value],
           }));
         }}
       >
         {services.map((service) => (
-          <MenuItem key={service.serviceName} value={service.serviceName}>
-            {service.serviceName}
+          <MenuItem key={service.id} value={service.id}>
+            {service.name}
           </MenuItem>
         ))}
       </Select>
       <InputLabel>Therapists</InputLabel>
       <Select
-        id="therapists"
-        defaultValue="Choose a therapist"
-        value={therapists.name}
+        id='therapists'
+        defaultValue=''
         style={{ width: '100%' }}
         onChange={(e) => {
           setAppointment((state) => ({
             ...state,
-            therapist: { name: e.target.value as string },
+            employee_ids: [...state.employee_ids, e.target.value],
           }));
         }}
       >
         {therapists.map((therapist) => (
-          <MenuItem key={therapist.name} value={therapist.name}>
-            {therapist.name}
+          <MenuItem key={therapist.id} value={therapist.id}>
+            {therapist.first_name + ' ' + therapist.last_name}
           </MenuItem>
         ))}
       </Select>

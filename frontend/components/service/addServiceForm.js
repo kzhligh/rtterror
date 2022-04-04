@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Grid, Button, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 import ServiceEmployeeTable from './serviceEmployeeTable';
 import DurationPriceItem from './durationPriceItem';
@@ -17,10 +17,12 @@ const AddServiceForm = (props) => {
         barcode: '',
         sms_description: ''
     };
-    const mshconvertion = 600000;
+    const MS_H_CONVERSION_RATE = 60000;
+    const INIT_DURATION = 45;
+    const INIT_PRICE = 50;
     const { addHandle, employeeList, open, closeDialog } = props;
     const [employeeCheckList, setEmployeeCheckList] = useState([]);
-    const [durationPriceList, setDurationPriceList] = useState([{ price: 50, duration: 0.5 }]);
+    const [durationPriceList, setDurationPriceList] = useState([{ price: INIT_PRICE, duration: INIT_DURATION }]);
     const [reload, setReload] = useState(false);
     const [serviceValue, setServiceValue] = useState(initValue);
     const [errorMessage, setErrorMessage] = useState({});
@@ -43,7 +45,7 @@ const AddServiceForm = (props) => {
             serviceValue.service_code = serviceValue.service_code + "-" + uuidv4().substring(0, 4);
             serviceValue.employee_ids = employeeCheckList.map(emp => emp.id);
             serviceValue.durations_prices = durationPriceList.map(d => (
-                Object.assign({}, d, { duration: d.duration * mshconvertion })));
+                Object.assign({}, d, { duration: d.duration * MS_H_CONVERSION_RATE })));
             addHandle(serviceValue);
             closeAddDialog();
         }
@@ -59,12 +61,8 @@ const AddServiceForm = (props) => {
         }
     };
 
-    useEffect(() => {
-    }, [employeeCheckList, durationPriceList, reload]);
-
-
     const handleAddDurationPrice = () => {
-        setDurationPriceList([...durationPriceList, { price: 50, duration: 0.5 }]);
+        setDurationPriceList([...durationPriceList, { price: INIT_PRICE, duration: INIT_DURATION }]);
     };
     const handleRemoveDurationPrice = (index) => {
         setDurationPriceList([

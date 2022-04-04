@@ -46,9 +46,9 @@ const ClientPage = ({ customer: initialCustomer }) => {
         method: 'PUT',
         body: userForm,
       });
-    } catch (error) {
-      setError(error);
-      console.log(error);
+    } catch (err) {
+      setError(err);
+      console.error(err);
     } finally {
       setLoading(false);
       setConfirm(true);
@@ -59,8 +59,8 @@ const ClientPage = ({ customer: initialCustomer }) => {
     <Box>
       {confirmToast && (
         <Alert
-          variant="filled"
-          severity="success"
+          variant='filled'
+          severity='success'
           onClose={() => {
             setConfirm(false);
           }}
@@ -68,7 +68,7 @@ const ClientPage = ({ customer: initialCustomer }) => {
           Changes successfully saved!
         </Alert>
       )}
-      {error && <Alert severity="error">Something wrong happened!</Alert>}
+      {error && <Alert severity='error'>Something wrong happened!</Alert>}
       <h3>{`${userForm.firstName} ${userForm.lastName}`}</h3>
       <Box sx={{ width: '100%', typography: 'body1' }}>
         <TabContext value={tabValue}>
@@ -77,13 +77,13 @@ const ClientPage = ({ customer: initialCustomer }) => {
               onChange={(_event, newValue) => {
                 toggleTab(newValue);
               }}
-              aria-label="lab API tabs example"
+              aria-label='lab API tabs example'
             >
-              <Tab label="Information" value="1" />
-              <Tab label="Appointment History" value="2" />
+              <Tab label='Information' value='1' />
+              <Tab label='Appointment History' value='2' />
             </TabList>
           </Box>
-          <TabPanel value="1">
+          <TabPanel value='1'>
             <Box style={{ display: 'flex' }}>
               <Box style={{ flex: 1 }}>
                 <FormGroup className={styles.userFormGroup}>
@@ -92,7 +92,7 @@ const ClientPage = ({ customer: initialCustomer }) => {
                   </Box>
                   <TextField
                     className={styles.userTextField}
-                    margin="normal"
+                    margin='normal'
                     required
                     value={userForm.firstName}
                     onChange={(e) =>
@@ -109,7 +109,7 @@ const ClientPage = ({ customer: initialCustomer }) => {
                   </Box>
                   <TextField
                     className={styles.userTextField}
-                    margin="normal"
+                    margin='normal'
                     required
                     value={userForm.lastName}
                     onChange={(e) =>
@@ -126,7 +126,7 @@ const ClientPage = ({ customer: initialCustomer }) => {
                   </Box>
                   <TextField
                     className={styles.userTextField}
-                    margin="normal"
+                    margin='normal'
                     required
                     value={formatPhoneNumber(userForm.phone)}
                     onChange={(e) =>
@@ -147,7 +147,7 @@ const ClientPage = ({ customer: initialCustomer }) => {
                   </Box>
                   <TextField
                     className={styles.userTextField}
-                    margin="normal"
+                    margin='normal'
                     required
                     value={userForm.address}
                     onChange={(e) =>
@@ -166,7 +166,7 @@ const ClientPage = ({ customer: initialCustomer }) => {
                   </Box>
                   <TextField
                     className={styles.userTextField}
-                    margin="normal"
+                    margin='normal'
                     required
                     value={userForm.email}
                     onChange={(e) =>
@@ -185,7 +185,7 @@ const ClientPage = ({ customer: initialCustomer }) => {
                   </Box>
                   <TextField
                     className={styles.userTextField}
-                    margin="normal"
+                    margin='normal'
                     required
                     value={userForm.postalCode}
                     onChange={(e) =>
@@ -198,7 +198,7 @@ const ClientPage = ({ customer: initialCustomer }) => {
                 </FormGroup>
                 <FormGroup row>
                   <FormControlLabel
-                    value="F"
+                    value='F'
                     control={
                       <Checkbox
                         checked={userForm.gender === 'F'}
@@ -210,10 +210,10 @@ const ClientPage = ({ customer: initialCustomer }) => {
                         }
                       />
                     }
-                    label="Female"
+                    label='Female'
                   />
                   <FormControlLabel
-                    value="M"
+                    value='M'
                     control={
                       <Checkbox
                         checked={userForm.gender === 'M'}
@@ -225,10 +225,10 @@ const ClientPage = ({ customer: initialCustomer }) => {
                         }
                       />
                     }
-                    label="Male"
+                    label='Male'
                   />
                   <FormControlLabel
-                    value="N/A"
+                    value='N/A'
                     control={
                       <Checkbox
                         checked={!userForm.gender}
@@ -240,7 +240,7 @@ const ClientPage = ({ customer: initialCustomer }) => {
                         }
                       />
                     }
-                    label="Other"
+                    label='Other'
                   />
                 </FormGroup>
               </Box>
@@ -265,8 +265,8 @@ const ClientPage = ({ customer: initialCustomer }) => {
                 />
                 <InputLabel>Confirmation Type</InputLabel>
                 <Select
-                  placeholder="Sort..."
-                  label="Confirmation Type"
+                  placeholder='Sort...'
+                  label='Confirmation Type'
                   value={
                     userForm.confirmationType === 'email' ? 'email' : 'SMS'
                   }
@@ -280,13 +280,13 @@ const ClientPage = ({ customer: initialCustomer }) => {
                     minWidth: '100px',
                   }}
                 >
-                  <MenuItem value="email">Email</MenuItem>
-                  <MenuItem value="SMS">SMS</MenuItem>
+                  <MenuItem value='email'>Email</MenuItem>
+                  <MenuItem value='SMS'>SMS</MenuItem>
                 </Select>
                 <InputLabel>Package</InputLabel>
                 <Select
-                  placeholder="Select Type"
-                  label="Select Type"
+                  placeholder='Select Type'
+                  label='Select Type'
                   sx={{
                     minWidth: '100px',
                   }}
@@ -324,7 +324,7 @@ const ClientPage = ({ customer: initialCustomer }) => {
                     </InputLabel>
                     <TextField
                       className={styles.userTextField}
-                      margin="normal"
+                      margin='normal'
                       value={userForm.balance}
                       onChange={(e) =>
                         setUser((state) => ({
@@ -342,7 +342,7 @@ const ClientPage = ({ customer: initialCustomer }) => {
                     </InputLabel>
                     <TextField
                       className={styles.userTextField}
-                      margin="normal"
+                      margin='normal'
                       style={{ width: '100%' }}
                       value={userForm.notes}
                       onChange={(e) =>
@@ -357,7 +357,7 @@ const ClientPage = ({ customer: initialCustomer }) => {
               </Box>
             </Box>
           </TabPanel>
-          <TabPanel value="2">
+          <TabPanel value='2'>
             <div style={{ height: 400, width: '100%' }}>
               <DataGrid
                 rows={rows}
@@ -373,7 +373,7 @@ const ClientPage = ({ customer: initialCustomer }) => {
       {tabValue === '1' && (
         <>
           <Button
-            variant="outlined"
+            variant='outlined'
             style={{ width: '10%' }}
             onClick={editUser}
             disabled={loading}
@@ -381,7 +381,7 @@ const ClientPage = ({ customer: initialCustomer }) => {
             {loading ? <CircularProgress /> : 'Save'}
           </Button>
           <Button
-            variant="outlined"
+            variant='outlined'
             style={{ width: '10%' }}
             onClick={() => {
               router.back();

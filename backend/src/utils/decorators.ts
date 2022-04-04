@@ -34,7 +34,9 @@ export class ServiceLocator {
   private readonly container: Map<string, any> = new Map<string, any>();
   private static readonly instance = new ServiceLocator();
 
-  private constructor() {}
+  private constructor() {
+    // this is intentional
+  }
 
   static getInstance(): ServiceLocator {
     return this.instance;

@@ -7,9 +7,3 @@
   margin: 0;
   padding: 0;
 }
-
-.contentWrapper {
-  flex: 1 1 auto;
-  min-width: 75%;
-  padding-left: 10px;
-}

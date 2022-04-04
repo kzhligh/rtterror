@@ -11,6 +11,7 @@ import {
   Stack,
   Button,
   CircularProgress,
+  Typography,
 } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import {
@@ -79,8 +80,8 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
         body: rowSelection,
       });
       setCustomers(remainingCustomers);
-    } catch (error) {
-      setError(error);
+    } catch (err) {
+      setError(err);
     } finally {
       setLoading(false);
       setRowSelection([]);
@@ -97,8 +98,8 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
         });
         setCustomers(sortedCustomers);
       } else {
-        const customers = await http(`/api/v1/customer`);
-        setCustomers(customers);
+        const customerList = await http(`/api/v1/customer`);
+        setCustomers(customerList);
       }
     };
 
@@ -109,7 +110,7 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
     <Box>
       {error && <Alert severity="error">Something wrong happened!</Alert>}
 
-      <h1>Client</h1>
+      <Typography variant="h6">Client</Typography>
       <TextField
         onChange={handleSearch}
         style={{ marginBottom: '45px', width: '50%' }}
@@ -127,7 +128,7 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
 
       <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
         <Box gridColumn="span 4">
-          <h1>Client List</h1>
+          <Typography variant="h6">Client List</Typography>
         </Box>
         <Box
           gridColumn="span 8"
@@ -231,7 +232,7 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
         open={addCustomerDialogIsOpen}
         onClose={() => setAddCustomerDialogIsOpen(false)}
         onCustomerAdded={(newCustomer) => {
-          setCustomers((customers) => [newCustomer, ...customers]);
+          setCustomers((oldCustomers) => [newCustomer, ...oldCustomers]);
           setAddCustomerDialogIsOpen(false);
         }}
         maxWidth="md"

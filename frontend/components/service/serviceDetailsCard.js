@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { v4 as uuidv4 } from 'uuid';
 import { Grid, Button, Card, CardHeader, CardContent, Typography } from '@mui/material';
 import _cloneDeep from "lodash/cloneDeep";
@@ -20,6 +21,7 @@ const ServiceDetailsCard = (props) => {
     const [durationPriceList, setDurationPriceList] = useState(item.durations_prices);
     const [reload, setReload] = useState(false);
     const [serviceValue, setServiceValue] = useState(_cloneDeep(item));
+    const router = useRouter();
 
     const handleAddEmployeeCheck = (val, employee) => {
         if (val) {
@@ -69,11 +71,13 @@ const ServiceDetailsCard = (props) => {
         );
         setDeleteEmployeeCheckList([]);
     };
+
+    const MS_H_CONVERSION_RATE = 60000;
     const handleSaveService = () => {
         serviceValue.service_code = serviceValue.service_code + "-" + uuidv4().substring(0, 8);
         serviceValue.employee_ids = serviceEmployList.map(emp => emp.id);
         serviceValue.durations_prices = durationPriceList.map(d => (
-            Object.assign({}, d, { duration: d.duration * 60000 })));
+            Object.assign({}, d, { duration: d.duration * MS_H_CONVERSION_RATE })));
         delete serviceValue.employees;
         editHandle(serviceValue);
     };
@@ -103,7 +107,7 @@ const ServiceDetailsCard = (props) => {
                                 className={cssStyled.buttonContainer}
                                 variant="outlined"
                                 color="inherit"
-                                href='/service'
+                                onClick={() => router.back()}
                                 sx={{ color: 'text.secondary', borderColor: 'text.secondary' }}
                             >
                                 Back

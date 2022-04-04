@@ -80,8 +80,8 @@ export const AddCustomerDialog = ({
 
       onCustomerAdded(result);
       setFormInputs(initialFormValue);
-    } catch (error) {
-      setError(error);
+    } catch (err) {
+      setError(err);
     } finally {
       setLoading(false);
     }
@@ -96,8 +96,8 @@ export const AddCustomerDialog = ({
       });
       onCustomerAdded(result);
       setFormInputs(initialFormValue);
-    } catch (error) {
-      setError(error);
+    } catch (err) {
+      setError(err);
     } finally {
       setLoading(false);
       setWarning(false);
@@ -137,7 +137,7 @@ export const AddCustomerDialog = ({
           <Button
             variant="outlined"
             color="error"
-            onClick={(e) => {
+            onClick={(_e) => {
               setWarning(false);
             }}
           >

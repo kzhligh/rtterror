@@ -19,6 +19,7 @@ export interface IEmployee extends IAll {
 }
 
 export interface IEmployeeDto {
+    id: string;
     first_name: string;
     last_name: string;
     dob: string;

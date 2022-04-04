@@ -1,11 +1,5 @@
 import * as React from 'react';
-import {
-  MenuList,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-  Paper,
-} from '@mui/material';
+import { MenuList, MenuItem, ListItemIcon, ListItemText, Box } from '@mui/material';
 import Link from 'next/link';
 import {
   AccessTime,
@@ -43,52 +37,31 @@ const Menu = () => {
       text: 'Schedule',
       icon: <Event />,
       path: '/schedule',
-    },
-    {
-      text: 'Product',
-      icon: <Healing />,
-      path: '/product',
-    },
-    {
-      text: 'Invoice',
-      icon: <Receipt />,
-      path: '/invoice',
-    },
+    }
   ];
   return (
-    <Paper
-      sx={{
-        background: '#c5c5c5',
-        minHeight: '60%',
-        bottom: 0,
-      }}
-    >
-      <MenuList
-        sx={{
-          alignItems: 'center',
-          flex: '1 1 auto',
-        }}
-      >
+    <Box display='grid' sx={{
+      background: '#c5c5c5',
+      bottom: 0,
+      height: '100%',
+    }}>
+      <MenuList>
         {menuItems.map((item) => (
           <Link key={item.text} href={item.path} passHref>
-            <MenuItem
-              sx={{
-                alignItems: 'center',
-                paddingLeft: '25%',
-                marginBottom: '15px',
+            <MenuItem sx={{
+              marginBottom: '1em',
 
-                fontFamily: 'Montserrat, sans-serif',
-                fontWeight: 500,
-                fontSize: 18,
-              }}
-            >
+              fontFamily: 'Montserrat, sans-serif',
+              fontWeight: 500,
+              fontSize: '1em',
+            }}>
               <ListItemIcon sx={{ minWidth: '35px' }}>{item.icon}</ListItemIcon>
               <ListItemText>{item.text}</ListItemText>
             </MenuItem>
           </Link>
         ))}
       </MenuList>
-    </Paper>
+    </Box>
   );
 };
 export default Menu;

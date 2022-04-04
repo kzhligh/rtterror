@@ -1,37 +1,32 @@
 import moment from "moment";
 
 function _getFormattedTime(time) {
-    const date = new Date(time);
-
-    return date.toLocaleTimeString();
+    return moment(new Date(time)).format('hh:mm A');
 }
 
 function _getTimeTemplate(schedule, isAllDay) {
-    var html = [];
+    const html = [];
 
+    html.push(`<span style="font-size: 125%;">${schedule.title}</span>`);
+
+    html.push(`<div style="display: flex; justify-content: space-between;">${schedule.raw?.customer || ''}`);
     if (!isAllDay) {
-        html.push("<strong>" + _getFormattedTime(schedule.start) + "</strong> ");
-    }
-    if (schedule.isPrivate) {
-        html.push('<span class="calendar-font-icon ic-lock-b"></span>');
-        html.push(" Private");
+        html.push(`<span style="padding-right: 12px;">${_getFormattedTime(schedule.start)}</span></div>`);
     } else {
-        if (schedule.isReadOnly) {
-            html.push('<span class="calendar-font-icon ic-readonly-b"></span>');
-        } else if (schedule.recurrenceRule) {
-            html.push('<span class="calendar-font-icon ic-repeat-b"></span>');
-        } else if (schedule.attendees.length) {
-            html.push('<span class="calendar-font-icon ic-user-b"></span>');
-        } else if (schedule.location) {
-            html.push('<span class="calendar-font-icon ic-location-b"></span>');
-        }
-        html.push(" " + schedule.title);
+        html.push("</div>");
     }
 
+    const ulStyle = "margin: 0; padding: 0; overflow: hidden; font-weight: lighter;";
+    const liStyle = "display: inline; padding: 1px;";
+    html.push(`<ul style="${ulStyle}"><li style="${liStyle}">${(schedule.attendees || []).join(`</li>,<li style="${liStyle}">`)}</li></ul>`);
+
+    if (schedule.raw?.notes) {
+        html.push(`---<br><span style="font-weight: lighter;">${schedule.raw.notes}</span>`);
+    }
     return html.join("");
 }
 
-const templateConfig = {
+const tuiTemplateConfig = {
     milestone: function (schedule) {
         return '<span class="calendar-font-icon ic-milestone-b"></span> <span style="background-color: ' + schedule.bgColor + '">' + schedule.title + '</span>';
     },
@@ -83,7 +78,7 @@ const templateConfig = {
     monthGridFooter: function () {
         return '';
     },
-    monthGridFooterExceed: function (hiddenSchedules) {
+    monthGridFooterExceed: function (_hiddenSchedules) {
         return '';
     },
     monthDayname: function (model) {
@@ -203,4 +198,4 @@ const templateConfig = {
     }
 };
 
-export default templateConfig;
+export default tuiTemplateConfig;

@@ -1,71 +1,90 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
+  Box,
   Dialog,
   DialogTitle,
   DialogContent,
-  InputLabel,
-  MenuItem,
-  Select,
   Button,
   IconButton,
-  DialogProps,
   TextField,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import EditAppointmentDialog from './EditAppointmentDialog';
 import { ConfirmDeleteAlert } from './ConfirmDeleteAlert';
-import { AppointmentHeader } from './AppointmentHeader';
-const blankAppointment = {
-  client: {
-    firstName: 'Jamal',
-    lastName: 'Green',
-    phoneNumber: '(123)456-7890',
-    email: 'jamalG@coldmail.com',
-  },
-  plan: { serviceName: 'TestService' },
-  therapist: { name: 'TestTherapist' },
-  branchLocation: 'TestLocation',
-  duration: 90,
-  notes: 'N/A',
-  feedback: 'N/',
-  status: 'Pending',
-  cancellationTime: '',
-  date: '2022-03-07',
-};
-interface Props extends DialogProps {
-  onClose: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void;
-}
-const AppointmentStatusDialog = ({ isOpen, onClose }) => {
-  const [appointmentForm, setAppointment] = useState(blankAppointment);
+
+import {
+  AppointmentHeader,
+  AppointmentServiceList,
+  AppointmentStatus,
+  AppointmentTime,
+} from './summary';
+import {
+  IAppointmentResponse,
+  IStatus,
+  blankAppointment,
+} from './common/appointmentInterfaces';
+
+const AppointmentStatusDialog = ({
+  isOpen,
+  onClose,
+  target,
+  editAppointment,
+  deleteAppointment,
+}) => {
+  const [formContent, setFormContent] = useState<IAppointmentResponse>(
+    target ? { ...target } : blankAppointment
+  );
   const [editDialog, setEdit] = useState(false);
   const [deleteDialog, setDelete] = useState(false);
 
+  useEffect(() => {
+    if (!target) setFormContent(blankAppointment);
+    else setFormContent({ ...target });
+  }, [target]);
+
+  const onCloseDialog = (e, reason) => {
+    if (formContent.notes !== target.notes)
+      editAppointment(target, { notes: formContent.notes });
+    onClose(e, reason);
+  };
+
   return (
-    <Dialog fullWidth open={isOpen}>
+    <Dialog
+      fullWidth
+      open={isOpen}
+      transitionDuration={{ exit: 0 }}
+      onClose={onCloseDialog}
+    >
       <DialogTitle>
-        <div style={{ textAlign: 'center' }}>
+        <Box display='flex' justifyContent='space-evenly'>
           <Button
+            variant='contained'
+            color='info'
+            size='small'
             onClick={() => {
               setEdit(true);
             }}
-            variant="outlined"
           >
             Edit
           </Button>
-          <Button variant="outlined">Reschedule</Button>
+          <Button variant='contained' size='small' disabled>
+            Reschedule
+          </Button>
           <Button
-            variant="outlined"
+            variant='contained'
+            color='error'
+            size='small'
             onClick={() => {
               setDelete(true);
             }}
           >
             Delete
           </Button>
-        </div>
+        </Box>
         <IconButton
-          aria-label="close"
+          aria-label='close'
           onClick={(e) => {
-            onClose(e, 'backdropClick');
+            onCloseDialog(e, 'backdropClick');
           }}
           sx={{
             position: 'absolute',
@@ -79,60 +98,96 @@ const AppointmentStatusDialog = ({ isOpen, onClose }) => {
       </DialogTitle>
 
       <DialogContent style={{ width: '100%' }}>
-        <AppointmentHeader appointmentForm={appointmentForm} />
+        <Box display='grid'>
+          <AppointmentHeader appointmentForm={formContent} />
+          <Box
+            sx={{
+              display: 'grid',
+              gap: 1,
+              gridTemplateColumns: 'repeat(2, 1fr)',
+              gridTemplateRows: 'repeat(1, 50vh)',
+            }}
+          >
+            <Box>
+              <AppointmentTime
+                date={formContent.datetime}
+                duration={formContent.duration}
+              />
+              <AppointmentStatus
+                statuses={formContent.status}
+                updateStatus={(name: string, changedBy: string) => {
+                  const newStatus: IStatus = {
+                    name: name,
+                    by: changedBy,
+                    at: new Date(),
+                  };
 
-        <InputLabel style={{ marginTop: '5%' }}>Status</InputLabel>
+                  setFormContent((prevContent) => ({
+                    ...prevContent,
+                    status: [newStatus, ...prevContent.status],
+                  }));
 
-        <Select
-          id="status"
-          value={appointmentForm.status}
-          style={{ width: '100%' }}
-          onChange={(e) => {
-            setAppointment((state) => ({
-              ...state,
-              status: e.target.value,
-            }));
-          }}
-        >
-          <MenuItem value="Pending">Pending</MenuItem>
-          <MenuItem value="Checked In">Checked In</MenuItem>
-          <MenuItem value="No Show">No Show</MenuItem>
-        </Select>
-        <InputLabel style={{ marginTop: '5%' }}>Notes:</InputLabel>
-        <TextField
-          margin="normal"
-          style={{ width: '100%' }}
-          value={appointmentForm.notes}
-          onChange={(e) =>
-            setAppointment((state) => ({
-              ...state,
-              notes: e.target.value,
-            }))
-          }
-        />
+                  editAppointment(formContent, {
+                    status: [newStatus, ...formContent.status],
+                  });
+                }}
+                expanded={false}
+              />
 
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-around',
-          }}
-        ></div>
+              <TextField
+                label='Memo'
+                multiline
+                fullWidth
+                margin='normal'
+                value={formContent.notes}
+                onChange={(e) =>
+                  setFormContent((state) => ({
+                    ...state,
+                    notes: e.target.value,
+                  }))
+                }
+                variant='filled'
+                color='warning'
+              />
+            </Box>
+            <Box
+              sx={{
+                overflowY: 'auto',
+              }}
+            >
+              <AppointmentServiceList
+                services={formContent.services}
+                therapistNames={formContent.employees?.map((emp) =>
+                  [emp.first_name, emp.last_name].join(' ')
+                )}
+              />
+            </Box>
+          </Box>
+        </Box>
       </DialogContent>
       <EditAppointmentDialog
         isOpen={editDialog}
-        onClose={() => {
+        onClose={({ type }, editContent) => {
+          if (type === 'submit') {
+            editAppointment(formContent, { ...editContent });
+          }
           setEdit(false);
         }}
+        appointmentObj={formContent}
+        setAppointmentObj={setFormContent}
       />
       <ConfirmDeleteAlert
         open={deleteDialog}
-        handleClose={(e) => {
-          onClose(e, 'backdropClick');
-          setDelete(false);
-        }}
+        handleClose={() => setDelete(false)}
         onConfirm={(e) => {
-          onClose(e, 'backdropClick');
+          deleteAppointment({
+            schedule: {
+              id: formContent.id,
+              calendarId: '' + formContent.client_id,
+            },
+          });
           setDelete(false);
+          onClose(e, 'backdropClick');
         }}
       />
     </Dialog>

@@ -1,33 +1,51 @@
-import {Model} from "sequelize";
-import GeneralService from "src/services/general-service";
+import { Model, Op } from 'sequelize';
+import GeneralService from 'src/services/general-service';
 import appointmentServiceService from './appointment-service-service';
 import appointmentEmployeeService from './appointment-employee-service';
-import {IAppointmentJson, IAppointmentDto} from "src/interfaces/IAppointment";
-import sequelize from "src/modules/sequelize";
+import { IAppointmentJson, IAppointmentDto } from 'src/interfaces/IAppointment';
+import sequelize from 'src/modules/sequelize';
 
-class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDto> {
+class AppointmentService extends GeneralService<
+  IAppointmentJson,
+  IAppointmentDto
+> {
   private readonly employeeModel: any;
   private readonly serviceModel: any;
+  private readonly customerModel: any;
 
-  constructor(
+  constructor (
     appointmentModelName: string,
     employeeModelName: string,
-    serviceModelName: string
+    serviceModelName: string,
+    customerModelName: string
   ) {
     super(appointmentModelName);
     this.employeeModel = sequelize.model(employeeModelName);
     this.serviceModel = sequelize.model(serviceModelName);
+    this.customerModel = sequelize.model(customerModelName);
   }
 
-  async createItem(itemDto: IAppointmentDto): Promise<IAppointmentJson> {
+  async createItem (itemDto: IAppointmentDto): Promise<IAppointmentJson> {
     const t = await sequelize.transaction();
     try {
       // data validation
       if (itemDto.repeat && (!itemDto.cycle_start || !itemDto.cycle_end))
-        throw new Error('AppointmentService/createItem()/ERROR - cycle_start and cycle_end are mandatory fields if repeat field is TRUE')
-      const { employee_ids, service_ids, status, ...appointmentInfo } = itemDto;
+        throw new Error(
+          'AppointmentService/createItem()/ERROR - cycle_start and cycle_end are mandatory fields if repeat field is TRUE'
+        );
+      const {
+        employee_ids,
+        service_ids,
+        client_id,
+        status,
+        ...appointmentInfo
+      } = itemDto;
       const newAppointment = await this.model.create(
-        { ...appointmentInfo, status: JSON.stringify(status) },
+        {
+          ...appointmentInfo,
+          client_id: client_id,
+          status: JSON.stringify(status),
+        },
         { transaction: t }
       );
       for (const employeeId of employee_ids) {
@@ -43,15 +61,19 @@ class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDt
     } catch (error) {
       await t.rollback();
       console.error('AppointmentService/createItem()/ERROR: ', error);
-      throw error
+      throw error;
     }
   }
 
-  async getAllValidItems(): Promise<IAppointmentJson[]> {
+  async getAllValidItems (): Promise<IAppointmentJson[]> {
     try {
       const allItems = await this.model.findAll({
         where: { hidden: false },
-        include: [this.employeeModel, this.serviceModel]
+        include: [
+          this.employeeModel,
+          this.serviceModel,
+          { model: this.customerModel, as: 'client' },
+        ],
       });
       return allItems.map((item: Model) => item.toJSON() as IAppointmentJson);
     } catch (error) {
@@ -60,52 +82,101 @@ class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDt
     }
   }
 
-  async getItemById(id: string): Promise<IAppointmentJson> {
+  async getItemById (id: string): Promise<IAppointmentJson> {
     try {
-      const appointmentItem = await this.model.findByPk(id, { include: [this.employeeModel, this.serviceModel] });
-      return appointmentItem.toJSON() as IAppointmentJson
+      const appointmentItem = await this.model.findByPk(id, {
+        include: [
+          this.employeeModel,
+          this.serviceModel,
+          { model: this.customerModel, as: 'client' },
+        ],
+      });
+      return appointmentItem.toJSON() as IAppointmentJson;
     } catch (error) {
       console.error('AppointmentService/getItemById()/ERROR: ', error);
       throw error;
     }
   }
 
-  async getItemsByFilter(filter: any): Promise<IAppointmentJson[]> {
+  async getItemsByFilter (filter: any): Promise<IAppointmentJson[]> {
     try {
       const filteredItems = await this.model.findAll({
         where: { ...filter },
-        include: [this.employeeModel, this.serviceModel]
+        include: [
+          this.employeeModel,
+          this.serviceModel,
+          { model: this.customerModel, as: 'client' },
+        ],
       });
-      return filteredItems.map((item: Model) => item.toJSON() as IAppointmentJson);
+      return filteredItems.map(
+        (item: Model) => item.toJSON() as IAppointmentJson
+      );
     } catch (error) {
       console.error('AppointmentService/getItemsByFilter()/ERROR: ', error);
       throw error;
     }
   }
 
-  async updateItem(itemInfo: IAppointmentJson): Promise<IAppointmentJson> {
+  async getItemsWithin (
+    startDate: any,
+    endDate: any
+  ): Promise<IAppointmentJson[]> {
+    try {
+      let start = new Date(startDate);
+      let end = new Date(endDate);
+      const periodicItems = await this.model.findAll({
+        where: {
+          datetime: {
+            [Op.and]: {
+              [Op.gte]: start,
+              [Op.lte]: end,
+            },
+          },
+        },
+      });
+      return periodicItems.map(
+        (item: Model) => item.toJSON() as IAppointmentJson
+      );
+    } catch (error) {
+      console.error('AppointmentService/getItemsWithin()/ERROR: ', error);
+      throw error;
+    }
+  }
+
+  async updateItem (itemInfo: IAppointmentJson): Promise<IAppointmentJson> {
     const t = await sequelize.transaction();
     try {
-      const { id, employee_ids, service_ids, status, ...appointmentInfo } = itemInfo;
-      const [ updatedAppointment, hasCreated ] = await this.model.upsert(
+      const {
+        id,
+        employee_ids,
+        service_ids,
+        status,
+        ...appointmentInfo
+      } = itemInfo;
+      const [updatedAppointment, hasCreated] = await this.model.upsert(
         { id: id, ...appointmentInfo, status: JSON.stringify(status) },
         { transaction: t }
       );
-      if (hasCreated) throw new Error(`ERROR - no such an appointment with id ${id} has been found`);
+      if (hasCreated)
+        throw new Error(
+          `ERROR - no such an appointment with id ${id} has been found`
+        );
       // delete appointment-service and appointment-employee relationships of given appointment id
       await appointmentEmployeeService.deleteItemsByAppointmentId(id, t);
       await appointmentServiceService.deleteItemsByAppointmentId(id, t);
       // add new relationships from given info
       if (employee_ids && employee_ids.length > 0) {
-        for (const employeeId of employee_ids) {
-          const employeeItem = this.employeeModel.findByPk(employeeId);
-          updatedAppointment.addEmployee(employeeItem, { transaction: t });
+        for (let i = 0; i < employee_ids.length; i++) {
+          const employeeItem = await this.employeeModel.findByPk(
+            employee_ids[i]
+          );
+          updatedAppointment.addEmployee(employeeItem);
         }
       }
       if (service_ids && service_ids.length > 0) {
-        for (const serviceId of service_ids) {
-          const serviceItem = await this.serviceModel.findByPk(serviceId);
-          updatedAppointment.addService(serviceItem, { transaction: t });
+        for (let i = 0; i < service_ids.length; i++) {
+          const serviceItem = await this.serviceModel.findByPk(service_ids[i]);
+          updatedAppointment.addService(serviceItem);
         }
       }
       await t.commit();
@@ -117,20 +188,23 @@ class AppointmentService extends GeneralService<IAppointmentJson, IAppointmentDt
     }
   }
 
-  async hideItemById(id: string): Promise<void> {
+  async hideItemById (id: string): Promise<boolean> {
     const t = await sequelize.transaction();
     try {
-      await this.model.update(
-        { hidden: true },
-        { where: { id } }
-      );
+      await this.model.update({ hidden: true }, { where: { id } });
       await t.commit();
+      return true;
     } catch (error) {
       await t.rollback();
       console.error('AppointmentService/hideItemById()/ERROR: ', error);
-      throw error
+      throw error;
     }
   }
 }
 
-export default new AppointmentService('appointment', 'employee', 'service');
+export default new AppointmentService(
+  'appointment',
+  'employee',
+  'service',
+  'customers'
+);

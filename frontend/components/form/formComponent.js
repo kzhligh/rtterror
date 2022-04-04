@@ -2,7 +2,7 @@ import TextField from "@mui/material/TextField";
 import * as React from "react";
 import {Checkbox, FormControl, FormControlLabel, InputAdornment, InputLabel, MenuItem, Select} from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
-import {DatePicker} from "@mui/lab";
+import {DatePicker, TimePicker} from "@mui/lab";
 import {useEffect} from "react";
 
 const InputTextField = (props) => {
@@ -27,28 +27,16 @@ const InputTextField = (props) => {
             } : "")}
         />
     );
-}
-export {InputTextField};
+};
+export { InputTextField };
 
 const CustomCheckBox = (props) => {
-    const { value, onChange, item, key} = props;
-    const convertToTargetObject = (name, value, checked) => {
-
-        if (checked) {
-            return {
-                target: {
-                    name: name, value: value
-                }
-            }
-        } else {
-            return {
-                target: {
-                    name: name, value: 'na'
-                }
-            }
+    const { value, onChange, item, key } = props;
+    const convertToTargetObject = (rawName, rawValue, checked) => ({
+        target: {
+            name: rawName, value: checked ? rawValue : 'na'
         }
-
-    }
+    });
     return (
         <>
             <FormControlLabel
@@ -66,19 +54,20 @@ const CustomCheckBox = (props) => {
             />
         </>
     );
-}
-export {CustomCheckBox};
+};
+export { CustomCheckBox };
 
 const CustomAutoComplete = (props) => {
     useEffect(() => {
-        props.onChange({target: {name: props.name, value: [...props.defaultValue]}})
-    }, [])
+        props.onChange({ target: { name: props.name, value: [...props.defaultValue] } });
+    }, []);
     return (<Autocomplete
+        id={props.label}
         multiple
         label={props.label}
         name={props.name}
         options={props.value}
-        getOptionLabel={(option) => `${option.name} - ${option.service_code.split("-")[0]}`}
+        getOptionLabel={(option) => `${option.name} - ${option.service_code ? option.service_code.split("-")[0] : ""}`}
         defaultValue={props.defaultValue}
         filterSelectedOptions
         autoHighlight
@@ -89,10 +78,10 @@ const CustomAutoComplete = (props) => {
                 placeholder="Services"
             />
         )}
-        onChange={(event, newValue) => props.onChange({target: {name: props.name, value: newValue}})}
+        onChange={(_event, newValue) => props.onChange({ target: { name: props.name, value: newValue } })}
     />);
-}
-export {CustomAutoComplete};
+};
+export { CustomAutoComplete };
 
 const CustomDatePicker = (props) => {
     return (
@@ -101,7 +90,7 @@ const CustomDatePicker = (props) => {
             value={props.value}
             renderInput={(params) => <TextField {...params} />}
             onChange={(newValue) =>
-                props.onChange({target: {name: props.name, value: Intl.DateTimeFormat('sv-SE').format(newValue)}})
+                props.onChange({ target: { name: props.name, value: newValue } })
 
             }
         />
@@ -109,7 +98,21 @@ const CustomDatePicker = (props) => {
     );
 }
 export {CustomDatePicker};
+const CustomTimePicker = (props) => {
+    return (
+        <TimePicker
+            label={props.label}
+            value={props.value}
+            ampm={false}
+            renderInput={(params) => <TextField {...params} />}
+            onChange={(newValue) =>
+                props.onChange({target: {name: props.name, value: newValue}})
 
+            }
+        />
+    );
+}
+export {CustomTimePicker};
 const DropDownList = (props) => {
     return (
         <FormControl
@@ -121,7 +124,7 @@ const DropDownList = (props) => {
             <Select
                 value={props.value}
                 onChange={(e) =>
-                    props.onChange({target: {name: props.name, value: e.target.value}})}
+                    props.onChange({ target: { name: props.name, value: e.target.value } })}
                 sx={{
                     minWidth: '100px',
                 }}
@@ -134,5 +137,5 @@ const DropDownList = (props) => {
             </Select>
         </FormControl>
     );
-}
-export {DropDownList};
+};
+export { DropDownList };

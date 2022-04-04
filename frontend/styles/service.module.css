@@ -1,17 +1,3 @@
-.cardWrapper {
-  margin: 10px 0;
-  padding: 10px;
-  min-width: 65%;
-  max-width: 75%;
-}
-
-.flexAlignContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: left;
-  max-width: 75%;
-}
-
 .flexContainer {
   display: flex;
   max-width: 75%;
@@ -82,11 +68,6 @@
 .flexSpaceBetween {
   display: flex;
   justify-content: space-between;
-}
-
-.flexServiceCombo {
-  display: flex;
-  align-items: flex-start;
 }
 
 .redText {
