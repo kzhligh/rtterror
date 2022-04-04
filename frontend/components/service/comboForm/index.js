@@ -106,7 +106,7 @@ export default function ComboForm({
     }
   };
 
-  const MS_H_CONVERSION_RATE = 600000;
+  const MS_H_CONVERSION_RATE = 60000;
   const handleCreateCombo = () => {
     if (validate()) {
       let serviceId = serviceCheckList.map(

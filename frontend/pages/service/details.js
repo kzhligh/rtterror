@@ -12,7 +12,7 @@ export async function getServerSideProps(context) {
     const serviceArray = _groupBy(serviceItemResponse, 'service_code');
     let serviceItem, durationPriceList, durationPriceItem;
 
-    const MS_H_CONVERSION_RATE = 600000;
+    const MS_H_CONVERSION_RATE = 60000;
     for (const serviceCode in serviceArray) {
         serviceItem = _cloneDeep(serviceArray[serviceCode][0]);
         serviceItem.service_code = serviceCode;
