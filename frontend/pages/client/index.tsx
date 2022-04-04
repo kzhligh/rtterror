@@ -53,7 +53,7 @@ const columns: GridColumns = [
   { field: 'email', headerName: 'Email', width: 330, sortable: false },
 ];
 
-export default function Client({ customers: initialCustomers }: ClientProps) {
+export default function Client ({ customers: initialCustomers }: ClientProps) {
   const router = useRouter();
 
   const [searchResults, setSearchResults] = useState(undefined);
@@ -108,7 +108,7 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
 
   return (
     <Box>
-      {error && <Alert severity="error">Something wrong happened!</Alert>}
+      {error && <Alert severity='error'>Something wrong happened!</Alert>}
 
       <Typography variant="h6">Client</Typography>
       <TextField
@@ -119,7 +119,7 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
         variant="outlined"
         InputProps={{
           startAdornment: (
-            <InputAdornment position="start">
+            <InputAdornment position='start'>
               <Search />
             </InputAdornment>
           ),
@@ -131,7 +131,7 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
           <Typography variant="h6">Client List</Typography>
         </Box>
         <Box
-          gridColumn="span 8"
+          gridColumn='span 8'
           sx={{
             display: 'flex',
             alignItems: 'center',
@@ -147,20 +147,20 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
           >
             <InputLabel>Sort</InputLabel>
             <Select
-              placeholder="Sort..."
-              label="Sort"
-              data-cy="clientSort"
+              placeholder='Sort...'
+              label='Sort'
+              data-cy='clientSort'
               value={sortOption}
-              defaultValue=""
+              defaultValue=''
               onChange={(e) => setSortOption(e.target.value)}
               sx={{
                 minWidth: '100px',
               }}
             >
-              <MenuItem value="">
+              <MenuItem value=''>
                 <em>None</em>
               </MenuItem>
-              <MenuItem data-cy="sortFirstName" value={'firstName'}>
+              <MenuItem data-cy='sortFirstName' value={'firstName'}>
                 First Name
               </MenuItem>
               <MenuItem value={'lastName'}>Last Name</MenuItem>
@@ -169,22 +169,22 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
 
           <Stack
             spacing={2}
-            direction="row"
-            height="100%"
-            py="1.125rem"
-            mx="2rem"
+            direction='row'
+            height='100%'
+            py='1.125rem'
+            mx='2rem'
           >
             <Button
-              variant="outlined"
-              data-cy="clientCreate"
+              variant='outlined'
+              data-cy='clientCreate'
               onClick={() => setAddCustomerDialogIsOpen(true)}
             >
               New Client
             </Button>
             <Button
-              variant="outlined"
+              variant='outlined'
               disabled={!rowSelection.length}
-              data-cy="clientDelete"
+              data-cy='clientDelete'
               onClick={handleDelete}
             >
               Delete
@@ -235,14 +235,14 @@ export default function Client({ customers: initialCustomers }: ClientProps) {
           setCustomers((oldCustomers) => [newCustomer, ...oldCustomers]);
           setAddCustomerDialogIsOpen(false);
         }}
-        maxWidth="md"
+        maxWidth='md'
         fullWidth
       />
     </Box>
   );
 }
 
-export async function getServerSideProps(): Promise<
+export async function getServerSideProps (): Promise<
   GetServerSidePropsResult<ClientProps>
 > {
   const customers = await http(`/api/v1/customer`);

@@ -10,16 +10,16 @@ interface Type<T> {
   new (...args: any[]): T;
 }
 
-export function Frozen() {
+export function Frozen () {
   return function (constructor: Function) {
     Object.freeze(constructor);
     Object.freeze(constructor.prototype);
   };
 }
 
-function InjectorFactory(resolver: ServiceLocator) {
+function InjectorFactory (resolver: ServiceLocator) {
   return function () {
-    return function <T>(target: Type<T>) {
+    return function<T> (target: Type<T>) {
       if (resolver.has(target.name)) {
         return;
       } else {
@@ -35,18 +35,17 @@ export class ServiceLocator {
   private static readonly instance = new ServiceLocator();
 
   private constructor() {
-    // this is intentional
   }
 
-  static getInstance(): ServiceLocator {
+  static getInstance (): ServiceLocator {
     return this.instance;
   }
 
-  has(dependency: string): boolean {
+  has (dependency: string): boolean {
     return this.container.has(dependency);
   }
 
-  resolve<T>(target: Type<T>): T {
+  resolve<T> (target: Type<T>): T {
     const dependency: string = target.name;
 
     if (this.container.has(dependency)) {

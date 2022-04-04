@@ -106,12 +106,12 @@ export const AddCustomerDialog = ({
 
   return (
     <Dialog {...props}>
-      {error && <Alert severity="error">Something wrong happened!</Alert>}
+      {error && <Alert severity='error'>Something wrong happened!</Alert>}
 
       <Dialog open={warning}>
         <DialogTitle>Attention!</DialogTitle>
 
-        <Box padding="16px 40px">
+        <Box padding='16px 40px'>
           <h3>
             Client with name {`${formInputs.firstName} ${formInputs.lastName}`}{' '}
             already exists. A new client by the same name with a different ID
@@ -121,16 +121,16 @@ export const AddCustomerDialog = ({
 
         <Stack
           spacing={2}
-          direction="row"
-          justifyContent="space-between"
-          height="100%"
-          py="1.125rem"
-          mx="2rem"
+          direction='row'
+          justifyContent='space-between'
+          height='100%'
+          py='1.125rem'
+          mx='2rem'
         >
           <Button
-            variant="outlined"
+            variant='outlined'
             onClick={handleConfirm}
-            data-cy="confirm-duplicate-customer"
+            data-cy='confirm-duplicate-customer'
           >
             {loading ? <CircularProgress /> : 'Confirm'}
           </Button>
@@ -158,7 +158,7 @@ export const AddCustomerDialog = ({
       >
         <TextField
           fullWidth
-          margin="normal"
+          margin='normal'
           required
           label="Client ID"
           data-cy="clientID"
@@ -180,10 +180,10 @@ export const AddCustomerDialog = ({
         />
         <TextField
           fullWidth
-          margin="normal"
+          margin='normal'
           required
-          label="Last Name"
-          data-cy="clientLastName"
+          label='Last Name'
+          data-cy='clientLastName'
           value={formInputs.lastName}
           onChange={(e) =>
             setFormInputs((state) => ({ ...state, lastName: e.target.value }))
@@ -191,10 +191,10 @@ export const AddCustomerDialog = ({
         />
         <TextField
           fullWidth
-          margin="normal"
+          margin='normal'
           required
-          label="Phone Number"
-          data-cy="clientNumber"
+          label='Phone Number'
+          data-cy='clientNumber'
           value={formatPhoneNumber(formInputs.phone)}
           onChange={(e) =>
             setFormInputs((state) => ({
@@ -205,10 +205,10 @@ export const AddCustomerDialog = ({
         />
         <TextField
           fullWidth
-          margin="normal"
+          margin='normal'
           required
-          label="Email"
-          data-cy="clientEmail"
+          label='Email'
+          data-cy='clientEmail'
           value={formInputs.email}
           onChange={(e) =>
             setFormInputs((state) => ({ ...state, email: e.target.value }))
@@ -216,7 +216,7 @@ export const AddCustomerDialog = ({
         />
         <TextField
           fullWidth
-          margin="normal"
+          margin='normal'
           required
           label="Province"
           data-cy="clientProvince"
@@ -269,7 +269,7 @@ export const AddCustomerDialog = ({
             <h3>Gender</h3>
           </Box>
 
-          <Box display="flex" flex={5} justifyContent="center">
+          <Box display='flex' flex={5} justifyContent='center'>
             <RadioGroup
               row
               style={{
@@ -279,7 +279,7 @@ export const AddCustomerDialog = ({
                 margin: '0px 16px',
                 width: '100%',
               }}
-              aria-label="gender"
+              aria-label='gender'
               defaultValue={formInputs.gender}
               value={formInputs.gender}
               onChange={(e) =>
@@ -287,24 +287,24 @@ export const AddCustomerDialog = ({
               }
             >
               <FormControlLabel
-                data-cy="clientGenderF"
-                value="F"
+                data-cy='clientGenderF'
+                value='F'
                 control={<Radio />}
-                label="Female"
+                label='Female'
               />
               <FormControlLabel
-                data-cy="clientGenderM"
-                value="M"
+                data-cy='clientGenderM'
+                value='M'
                 control={<Radio />}
-                label="Male"
+                label='Male'
               />
-              <FormControlLabel value="N/A" control={<Radio />} label="Other" />
+              <FormControlLabel value='N/A' control={<Radio />} label='Other' />
             </RadioGroup>
           </Box>
         </Box>
 
-        <Box display="flex">
-          <Box mr="60px">
+        <Box display='flex'>
+          <Box mr='60px'>
             <h3>Date of Birth</h3>
           </Box>
 
@@ -323,8 +323,8 @@ export const AddCustomerDialog = ({
           />
         </Box>
 
-        <Box display="flex" mt="40px">
-          <Box mr="60px">
+        <Box display='flex' mt='40px'>
+          <Box mr='60px'>
             <h3>Confirmation Type</h3>
           </Box>
 
@@ -336,11 +336,11 @@ export const AddCustomerDialog = ({
           >
             <InputLabel>Confirmation Type</InputLabel>
             <Select
-              placeholder="Sort..."
-              label="Confirmation Type"
-              data-cy="clientNotification"
+              placeholder='Sort...'
+              label='Confirmation Type'
+              data-cy='clientNotification'
               value={formInputs.confirmationType}
-              defaultValue="email"
+              defaultValue='email'
               onChange={(e) =>
                 setFormInputs((state) => ({
                   ...state,
@@ -351,10 +351,10 @@ export const AddCustomerDialog = ({
                 minWidth: '100px',
               }}
             >
-              <MenuItem data-cy="typeEmail" value="email">
+              <MenuItem data-cy='typeEmail' value='email'>
                 Email
               </MenuItem>
-              <MenuItem data-cy="typeSMS" value="SMS">
+              <MenuItem data-cy='typeSMS' value='SMS'>
                 SMS
               </MenuItem>
             </Select>
@@ -363,18 +363,18 @@ export const AddCustomerDialog = ({
 
         <Stack
           spacing={2}
-          direction="row"
-          justifyContent="space-between"
-          height="100%"
-          py="1.125rem"
-          mx="2rem"
+          direction='row'
+          justifyContent='space-between'
+          height='100%'
+          py='1.125rem'
+          mx='2rem'
         >
-          <Button variant="outlined" data-cy="clientSubmit" type="submit">
+          <Button variant='outlined' data-cy='clientSubmit' type='submit'>
             {loading ? <CircularProgress /> : 'Add Client'}
           </Button>
           <Button
-            variant="outlined"
-            color="error"
+            variant='outlined'
+            color='error'
             onClick={(e) => {
               onClose(e, 'backdropClick');
             }}
