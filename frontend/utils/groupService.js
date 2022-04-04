@@ -5,7 +5,7 @@ const groupService = (serviceListResponse) => {
     const serviceArray = _groupBy(serviceListResponse, 'service_code');
     const serviceList = [];
     let item, durationPriceList, durationPriceItem;
-    const MS_H_CONVERSION_RATE = 600000;
+    const MS_H_CONVERSION_RATE = 60000;
     for (const serviceCode in serviceArray) {
         item = _cloneDeep(serviceArray[serviceCode][0]);
         item.service_code = serviceCode;
