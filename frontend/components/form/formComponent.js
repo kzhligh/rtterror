@@ -1,9 +1,9 @@
 import TextField from "@mui/material/TextField";
 import * as React from "react";
-import { Checkbox, FormControl, FormControlLabel, InputAdornment, InputLabel, MenuItem, Select } from "@mui/material";
+import {Checkbox, FormControl, FormControlLabel, InputAdornment, InputLabel, MenuItem, Select} from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
-import { DatePicker } from "@mui/lab";
-import { useEffect } from "react";
+import {DatePicker, TimePicker} from "@mui/lab";
+import {useEffect} from "react";
 
 const InputTextField = (props) => {
 
@@ -16,8 +16,8 @@ const InputTextField = (props) => {
             name={props.name}
             value={props.value}
             onChange={props.onChange}
-            {...(props.error && { error: true, helperText: props.error })}
-            {...(props.rows ? { multiline: true, rows: props.rows } : "")}
+            {...(props.error && {error: true, helperText: props.error})}
+            {...(props.rows ? {multiline: true, rows: props.rows} : "")}
             {...(props.InputProps ? {
                 InputProps: {
                     endAdornment: (
@@ -96,9 +96,23 @@ const CustomDatePicker = (props) => {
         />
 
     );
-};
-export { CustomDatePicker };
+}
+export {CustomDatePicker};
+const CustomTimePicker = (props) => {
+    return (
+        <TimePicker
+            label={props.label}
+            value={props.value}
+            ampm={false}
+            renderInput={(params) => <TextField {...params} />}
+            onChange={(newValue) =>
+                props.onChange({target: {name: props.name, value: newValue}})
 
+            }
+        />
+    );
+}
+export {CustomTimePicker};
 const DropDownList = (props) => {
     return (
         <FormControl

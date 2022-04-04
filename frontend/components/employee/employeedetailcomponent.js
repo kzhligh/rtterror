@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
+import Box from "@mui/material/Box";
+import {useState} from "react";
+import {TabContext, TabList, TabPanel} from "@mui/lab";
 import * as React from "react";
 import EmployeeForm from "./employeeform";
-import { Box, Tab } from '@mui/material';
+import { Tab} from '@mui/material';
 
 const Employeedetailcomponent = (props) => {
     const { employee, editEmployee, serviceList, serviceEmployeeList, validateEmployeeId } = props;
@@ -21,7 +22,6 @@ const Employeedetailcomponent = (props) => {
                         aria-label="lab API tabs example"
                     >
                         <Tab label="Contact Information" value="1" />
-                        <Tab label="Work Schedule" value="2" />
                     </TabList>
                 </Box>
                 <TabPanel value="1">
@@ -35,11 +35,9 @@ const Employeedetailcomponent = (props) => {
                         validateEmployeeId={validateEmployeeId}
                     />
                 </TabPanel>
-                <TabPanel value="2">
-                </TabPanel>
             </TabContext>
         </Box>
     );
-};
+}
 
 export default Employeedetailcomponent;

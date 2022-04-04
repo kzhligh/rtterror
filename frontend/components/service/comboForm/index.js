@@ -42,7 +42,7 @@ export default function ComboForm({
   const [comboValue, setComboValue] = useState(
     !_isEmpty(comboDetail) ? comboDetail : initValue
   );
-  const [autoPopulate, setAutoPopulate] = useState(false);
+  const [autoPopulate, setAutoPopulate] = useState(type == 'add'? true: false);
 
   const [errorMessage, setErrorMessage] = useState({});
   const [serviceListAddable, setServiceListAddable] = useState([]);
@@ -50,6 +50,7 @@ export default function ComboForm({
   const isEdit = () => type == 'edit';
   const handleSave = (serviceToAdd) => {
     setServiceCheckList(serviceToAdd.concat(serviceCheckList));
+    setAutoPopulate(true);
   };
   const changeDurationOfService = (
     serviceCode,
@@ -207,6 +208,7 @@ export default function ComboForm({
                   handleServiceCheck={handleServiceCheck}
                   removeService={removeService}
                   isEdit={false}
+                  choosenTime={true}
                   changeDurationOfService={changeDurationOfService}
                   serviceCheckList={serviceCheckList}
                 />
@@ -222,6 +224,7 @@ export default function ComboForm({
                 serviceListData={serviceListData}
                 extractAddServiceEdit={extractAddServiceEdit}
                 serviceListAddable={serviceListAddable}
+                changeDurationOfService={changeDurationOfService}
               />
             ) : null}
           </Box>
