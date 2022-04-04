@@ -47,7 +47,7 @@ export const AddAppointmentDialog = ({
       return;
     }
 
-    createAppointment({ ...editForm, status: e.status });
+    createAppointment({ ...editForm });
     handleClose(e);
   };
 
