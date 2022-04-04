@@ -17,7 +17,7 @@ const Service = () => {
     const [refresh, setRefresh] = useState(false);
     const [loading, setLoading] = useState(undefined);
 
-    const MS_H_CONVERSION_RATE = 600000;
+    const MS_H_CONVERSION_RATE = 60000;
     const getServiceList = async () => {
         const serviceListResponse = await http(`${apiPath}/services`);
         const comboList = await http(`${apiPath}/combos`);

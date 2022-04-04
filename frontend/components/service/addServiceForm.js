@@ -17,7 +17,7 @@ const AddServiceForm = (props) => {
         barcode: '',
         sms_description: ''
     };
-    const MS_H_CONVERSION_RATE = 600000;
+    const MS_H_CONVERSION_RATE = 60000;
     const INIT_DURATION = 45;
     const INIT_PRICE = 50;
     const { addHandle, employeeList, open, closeDialog } = props;
