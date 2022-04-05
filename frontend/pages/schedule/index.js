@@ -63,7 +63,7 @@ const Schedule = ({employeesList}) => {
                     time: app.datetime.slice(11,19),
                     service:app.services.map(service => `${service.name}`).join('-'),
                     employee: app.employees.map(emp => `${emp.first_name}`).join('-'),
-                    client: `${app.Client.firstName}`,
+                    client: `${app.client.firstName}`,
                     duration: app.duration,
                     price:app.services.reduce((acc, item) => acc + 1*item.price, 0),
                 }
