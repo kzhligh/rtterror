@@ -26,7 +26,7 @@ export default function SearchInput(props) {
             <InputBase
                 sx={{ ml: 1, flex: 1 }}
                 id="filled-search"
-                placeholder="Search Service"
+                placeholder="Search"
                 value={searchInput}
                 onChange={(event) => searchHandler(event.target.value)}
             />
