@@ -32,7 +32,7 @@ export const AppointmentDropdown = ({
       >
         {services.map((service) => (
           <MenuItem key={service.id} value={service}>
-            {service.name} {service.hasOwnProperty('services')?"(Combo)": "("+service.duration/60000+" min)"}
+            {service.name } {"("+service.duration/60000+" min)"}
           </MenuItem>
         ))}
       </Select>

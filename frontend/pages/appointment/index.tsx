@@ -54,8 +54,6 @@ export async function getServerSideProps () {
     name: [c.firstName, c.lastName, c.phone, c.id].join(' '),
   }));
   let serviceList = await http(serviceApiPath);
-  const comboList = await http(comboApiPath);
-  serviceList= [...serviceList,...comboList];
   const initAppointments = appointmentList.map(preprocessAppointment);
   return {
     props: {
@@ -335,7 +333,6 @@ const Appointment = ({
         services={serviceList}
         existingCustomers={customerList}
         createAppointment={(data: IAppointmentResponse) => {
-          console.log(data);
           createAppointment({ ...data });
           setSelectedAppointment(blankAppointment);
         }}

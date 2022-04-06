@@ -27,7 +27,7 @@ const ConfirmationDialog = (props) => {
                     <label style={{ marginTop: "20px", fontSize: "24px", fontWeight: "500" }}>{'Appointment: ' + (updateEventValue ? updateEventValue.schedule.title : '')}</label><br />
                     <div style={{ marginTop: "20px", fontSize: "20px", fontWeight: "500" }}>From:</div>
                     <div>{'Previous start at: ' + ((updateEventValue && updateEventValue.schedule!= undefined) ?moment(updateEventValue.schedule.start._date).calendar()  : '')}</div>
-                    <div>{'Previous end at: ' + ((updateEventValue && updateEventValue.schedule!= undefined) ?moment(updateEventValue.schedule.end_date).calendar()  : '')}</div>
+                    <div>{'Previous end at: ' + ((updateEventValue && updateEventValue.schedule!= undefined) ?moment(updateEventValue.schedule.end._date).calendar()  : '')}</div>
                     <div style={{ marginTop: "20px", fontSize: "20px", fontWeight: "500" }}>To:</div>
                     <div>{'Now start at: ' + ((updateEventValue && updateEventValue.changes!= undefined) ? (updateEventValue['changes'].start?moment(updateEventValue['changes'].start._date).calendar() :moment(updateEventValue.schedule.start._date).calendar()) : '')}</div>
                     <div>{'Now end at: ' + ((updateEventValue && updateEventValue.changes!= undefined) ? moment(updateEventValue['changes'].end._date).calendar() : '')}</div>
