@@ -12,15 +12,27 @@ export const AppointmentDropdown = ({
         defaultValue=''
         style={{ width: '100%' }}
         onChange={(e) => {
-          setAppointment((state) => ({
-            ...state,
-            service_ids: [...state.service_ids, e.target.value],
-          }));
+            setAppointment(state => {
+                const service = e.target.value;
+                // @ts-ignore
+                let serviceDuration = (service.duration)/60000;
+                if(service.hasOwnProperty('services')){
+                    // @ts-ignore
+                    serviceDuration = (service.total_duration)/60000;
+                }
+                const duration = serviceDuration != state.duration ? serviceDuration : state.duration;
+                return {
+                    ...state,
+                    // @ts-ignore
+                    service_ids: [...state.service_ids, e.target.value.id],
+                    duration: duration
+                }
+            });
         }}
       >
         {services.map((service) => (
-          <MenuItem key={service.id} value={service.id}>
-            {service.name}
+          <MenuItem key={service.id} value={service}>
+            {service.name} {service.hasOwnProperty('services')?"(Combo)": "("+service.duration/60000+" min)"}
           </MenuItem>
         ))}
       </Select>

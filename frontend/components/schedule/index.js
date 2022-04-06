@@ -3,6 +3,10 @@ import dynamic from 'next/dynamic';
 import { Typography, MenuList, MenuItem, Autocomplete, TextField } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import 'tui-calendar/dist/tui-calendar.css';
+import {
+    tuiThemeConfig,
+    tuiTemplateConfig,
+} from '../appointment/config';
 
 import ScheduleDialog from "./scheduleDialog";
 import _find from "lodash/find";
@@ -171,6 +175,8 @@ const ScheduleComponent =({employeeList,eventList,setRerender,rerender,employee,
                 scheduleView={['time']}
                 week={{ hourStart: 8, hourEnd: 22 }}
                 useCreationPopup={false}
+                theme ={tuiThemeConfig}
+                template={tuiTemplateConfig}
                 useDetailPopup={false}
                 calendars={employees}
                 schedules={schedules}

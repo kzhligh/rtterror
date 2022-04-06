@@ -20,6 +20,7 @@ import {
 import { generateSchedules } from 'components/appointment/common/generateSchedules';
 
 import 'tui-calendar/dist/tui-calendar.css';
+import moment from "moment";
 
 const colorHash = new ColorHash();
 const TuiCalendarWrapper = dynamic(
@@ -35,6 +36,7 @@ const appointmentApiPath = `/api/v1/appointments`;
 const employeeApiPath = `/api/v1/employees`;
 const customerApiPath = `/api/v1/customer`;
 const serviceApiPath = `/api/v1/services`;
+const comboApiPath = `/api/v1/combos`;
 
 const preprocessAppointment = (appm) => ({
   ...appm,
@@ -51,7 +53,9 @@ export async function getServerSideProps () {
     id: '' + c.id,
     name: [c.firstName, c.lastName, c.phone, c.id].join(' '),
   }));
-  const serviceList = await http(serviceApiPath);
+  let serviceList = await http(serviceApiPath);
+  const comboList = await http(comboApiPath);
+  serviceList= [...serviceList,...comboList];
   const initAppointments = appointmentList.map(preprocessAppointment);
   return {
     props: {
@@ -129,6 +133,7 @@ const Appointment = ({
   );
 
   const onBeforeUpdateSchedule = useCallback((e) => {
+    console.log(e);
     setUpdateEvent(e);
     setOpenDropDialog(true);
   }, []);
@@ -330,6 +335,7 @@ const Appointment = ({
         services={serviceList}
         existingCustomers={customerList}
         createAppointment={(data: IAppointmentResponse) => {
+          console.log(data);
           createAppointment({ ...data });
           setSelectedAppointment(blankAppointment);
         }}
@@ -339,7 +345,6 @@ const Appointment = ({
       <DropConfirmationDialog
         open={openDropDialog}
         onClose={handleConfirmUpdateSchedule}
-        changes={updateEvent?.changes}
         updateEvent={updateEvent}
       />
     </>

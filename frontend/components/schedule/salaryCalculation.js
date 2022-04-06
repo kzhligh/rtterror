@@ -106,6 +106,7 @@ const SalaryCalculation =({setRows})=>{
         let appointmentByEmployeeList= {};
         let item = {};
         for (const appointment of appointmentList){
+            item = {};
             let employeeId = appointment.employees[0].id
             if(appointmentByEmployeeList.hasOwnProperty(employeeId)){
                 item.appid =appointment.id ;
@@ -128,6 +129,7 @@ const SalaryCalculation =({setRows})=>{
         var employeeStrategy, context;
         var rows = [];
         var row={};
+
         for(const empId in appointmentByEmployeeList){
             row={};
             employeeStrategy = SalaryCalculationFactory.createObject(submitData.method, appointmentByEmployeeList[empId], submitData.params);

@@ -43,6 +43,18 @@ EmployeeModel.init({
         type: DataTypes.STRING,
         allowNull: false
     },
+    unit: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    city: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    province: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
     title: {
         type: DataTypes.STRING,
         allowNull: false

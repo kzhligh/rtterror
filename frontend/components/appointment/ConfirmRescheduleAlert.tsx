@@ -42,7 +42,7 @@ export const ConfirmRescheduleAlert = ({
           No
         </Button>
         <Button onClick={onConfirm} autoFocus>
-          Yea
+          Yes
         </Button>
       </DialogActions>
     </Dialog>
