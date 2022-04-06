@@ -2,7 +2,7 @@ import { Model, ModelCtor, Transaction } from 'sequelize';
 import sequelize from '../src/modules/sequelize';
 import EmployeeServiceModel from '../src/models/employee-service';
 import serviceEmployeeService from '../src/services/service-employee-service';
-import EmployeeModel from 'src/models/employee';
+import EmployeeModel from '../src/models/employee';
 
 jest.mock('sequelize');
 jest

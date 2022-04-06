@@ -1,7 +1,7 @@
-import { Model } from "sequelize";
-import sequelize from "src/modules/sequelize";
-import AppointmentModel from "src/models/appointment";
-import EmployeeModel from "src/models/employee";
+import { Model } from 'sequelize';
+import sequelize from 'src/modules/sequelize';
+import AppointmentModel from 'src/models/appointment';
+import EmployeeModel from 'src/models/employee';
 
 export default class AppointmentEmployeeModel extends Model {}
 
@@ -17,10 +17,10 @@ AppointmentEmployeeModel.init(
 
 AppointmentModel.belongsToMany(EmployeeModel, {
   through: AppointmentEmployeeModel,
-  foreignKey: 'appointment_id'
+  foreignKey: 'appointment_id',
 });
 
 EmployeeModel.belongsToMany(AppointmentModel, {
   through: AppointmentEmployeeModel,
-  foreignKey: 'employee_id'
+  foreignKey: 'employee_id',
 });

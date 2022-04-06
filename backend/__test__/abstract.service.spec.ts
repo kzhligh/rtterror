@@ -1,6 +1,6 @@
-import { Model, ModelCtor, Transaction } from 'sequelize';
-import sequelize from 'src/modules/sequelize';
-import GeneralService from 'src/services/general-service';
+import { Model, Transaction } from 'sequelize';
+import sequelize from '../src/modules/sequelize';
+import GeneralService from '../src/services/general-service';
 
 class MockModelEntity extends Model {
   toJSON() {

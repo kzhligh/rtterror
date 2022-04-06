@@ -34,8 +34,8 @@ interface ClientProps {
 
 const columns: GridColumns = [
   { field: 'firstName', headerName: 'First name', width: 250, sortable: false },
-  { field: 'lastName', headerName: 'Last name', width: 300, sortable: false },
-  { field: 'id', headerName: 'ID', width: 70, sortable: false },
+  { field: 'lastName', headerName: 'Last name', width: 250, sortable: false },
+  { field: 'client_id', headerName: 'ID', width: 170, sortable: false },
   {
     field: 'gender',
     headerName: 'Gender',
@@ -46,7 +46,7 @@ const columns: GridColumns = [
     field: 'phone',
     headerName: 'Phone Number',
     sortable: false,
-    width: 300,
+    width: 200,
     valueFormatter: (params: GridValueFormatterParams) =>
       formatPhoneNumber(params.value as string),
   },
@@ -110,13 +110,13 @@ export default function Client ({ customers: initialCustomers }: ClientProps) {
     <Box>
       {error && <Alert severity='error'>Something wrong happened!</Alert>}
 
-      <Typography variant='h6'>Client</Typography>
+      <Typography variant="h6">Client</Typography>
       <TextField
         onChange={handleSearch}
         style={{ marginBottom: '45px', width: '50%' }}
-        placeholder='Search a client by name...'
-        label='Search'
-        variant='outlined'
+        placeholder="Search a client by name/id/telephone..."
+        label="Search"
+        variant="outlined"
         InputProps={{
           startAdornment: (
             <InputAdornment position='start'>
@@ -126,9 +126,9 @@ export default function Client ({ customers: initialCustomers }: ClientProps) {
         }}
       />
 
-      <Box display='grid' gridTemplateColumns='repeat(12, 1fr)' gap={2}>
-        <Box gridColumn='span 4'>
-          <Typography variant='h6'>Client List</Typography>
+      <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
+        <Box gridColumn="span 4">
+          <Typography variant="h6">Client List</Typography>
         </Box>
         <Box
           gridColumn='span 8'
@@ -164,7 +164,6 @@ export default function Client ({ customers: initialCustomers }: ClientProps) {
                 First Name
               </MenuItem>
               <MenuItem value={'lastName'}>Last Name</MenuItem>
-              <MenuItem value={'email'}>Email</MenuItem>
             </Select>
           </FormControl>
 

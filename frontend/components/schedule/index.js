@@ -142,6 +142,11 @@ const ScheduleComponent =({employeeList,eventList,setRerender,rerender,employee,
         const calendar = cal.current.calendarInst;
         calendar.next();
     };
+    const template = {
+        monthDayname: function (dayname) {
+            return '<span class="calendar-week-dayname-name">' + dayname.label + '</span>';
+        }
+    };
 
     return (
         <>
@@ -174,6 +179,7 @@ const ScheduleComponent =({employeeList,eventList,setRerender,rerender,employee,
                 taskView={false}
                 scheduleView={['time']}
                 week={{ hourStart: 8, hourEnd: 22 }}
+                template={template}
                 useCreationPopup={false}
                 theme ={tuiThemeConfig}
                 template={tuiTemplateConfig}
