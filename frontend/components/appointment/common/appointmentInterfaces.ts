@@ -36,7 +36,7 @@ export interface IStatus {
 }
 
 export interface ICustomer {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   name?: string;
@@ -53,7 +53,7 @@ export interface ICustomer {
 }
 
 export const blankClient: ICustomer = {
-  id: -1,
+  id: '',
   firstName: '',
   lastName: '',
   phone: '',
@@ -62,7 +62,7 @@ export const blankClient: ICustomer = {
 
 export const blankAppointment: IAppointmentResponse = {
   id: '',
-  client_id: -1,
+  client_id: '',
   employee_ids: [],
   service_ids: [],
   employees: [],
@@ -79,7 +79,7 @@ export const blankAppointment: IAppointmentResponse = {
 export interface IAppointmentResponse {
   id: string;
   rmq_id?: string;
-  client_id: number;
+  client_id: string;
   client: ICustomer;
   pro_rmq_id?: string;
   datetime: Date;

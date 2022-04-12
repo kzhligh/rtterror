@@ -14,7 +14,11 @@ import { useState } from 'react';
 import { AppointmentStatusUpdatePopup } from './summary';
 import { AppointmentDropdown } from './AppointmentDropdown';
 import { AddCustomerDialog } from '../client/AddCustomerDialog';
-import { ICustomer, IStatus } from './common/appointmentInterfaces';
+import {
+  IAppointmentResponse,
+  ICustomer,
+  IStatus,
+} from './common/appointmentInterfaces';
 import { AlertError } from './common/AlertError';
 
 export const AddAppointmentDialog = ({
@@ -41,7 +45,7 @@ export const AddAppointmentDialog = ({
       return;
     }
 
-    if (editForm.client_id === -1) {
+    if (editForm.client_id === '') {
       setErrorMsg('Please select a client. ');
       setOpenAlert(true);
       return;
@@ -123,9 +127,9 @@ export const AddAppointmentDialog = ({
                 openOnFocus
                 options={existingCustomers}
                 getOptionLabel={(option: ICustomer) => option.name}
-                onChange={(_event, selected: any) => {
-                  const clientId = selected ? selected.id : -1;
-                  setEditForm((state) => ({
+                onChange={(_event, selected: ICustomer) => {
+                  const clientId = selected ? selected.id : '';
+                  setEditForm((state: IAppointmentResponse) => ({
                     ...state,
                     client_id: clientId,
                     client: selected,
