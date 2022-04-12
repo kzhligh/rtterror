@@ -130,7 +130,6 @@ const Appointment = ({
   );
 
   const onBeforeUpdateSchedule = useCallback((e) => {
-    console.log(e);
     setUpdateEvent(e);
     setOpenDropDialog(true);
   }, []);
@@ -202,7 +201,6 @@ const Appointment = ({
     setAppointmentMap(
       new Map(appointmentMap.set(oldAppointment.id, newAppointment))
     );
-
     await http(appointmentApiPath, {
       method: 'PUT',
       body: {

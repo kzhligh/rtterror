@@ -18,7 +18,7 @@ const NewEmployeeDialog = (props) => {
         postal_code: '',
         phone: '',
         email: '',
-        title: [],
+        title: '',
         gender: 'na',
         dob: new Date(),
         sin: '',

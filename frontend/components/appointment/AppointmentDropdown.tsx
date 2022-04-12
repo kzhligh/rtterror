@@ -34,7 +34,7 @@ export const AppointmentDropdown = ({
       >
         {serviceList.map((serv) => (
           <MenuItem key={serv.id} value={serv}>
-            {serv.first_name + ' ' + serv.last_name}{' '}
+            {serv.name }{' '}
             {'(' + serv.duration / 60000 + ' min)'}
           </MenuItem>
         ))}

@@ -40,6 +40,7 @@ const EmployeeForm = (props) => {
                 service_ids = [...service_ids, ...idArray];
             }
             employeeValue.service_ids = service_ids;
+            console.log(employeeValue);
             addEmployee(employeeValue);
             setAddOpen(false);
         }
@@ -52,6 +53,7 @@ const EmployeeForm = (props) => {
                 service_ids = [...service_ids, ...idArray];
             }
             employeeValue.service_ids = service_ids;
+            console.log(employeeValue);
             editEmployee(employeeValue);
         }
     };
@@ -73,6 +75,7 @@ const EmployeeForm = (props) => {
         error.first_name = employeeValue.first_name ? "" : "This field is required.";
         error.last_name = employeeValue.last_name ? "" : "This field is required.";
         error.sin = (employeeValue.sin.length == 9) ? "" : 'sin has to have 9 digits';
+        error.title = employeeValue.title ?"" : "This field is required." ;
         setErrorMessage(error);
         return Object.values(error).every(x => x == "");
     };
@@ -185,6 +188,7 @@ const EmployeeForm = (props) => {
                         label="Title"
                         value={employeeValue.title}
                         onChange={handleSetEmployeeValue}
+                        error={errorMessage.title}
                     />
                     <DropDownList
                         name="gender"

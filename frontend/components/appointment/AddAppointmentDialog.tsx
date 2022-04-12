@@ -46,8 +46,10 @@ export const AddAppointmentDialog = ({
       setOpenAlert(true);
       return;
     }
-
-    createAppointment({ ...editForm });
+    let submitValue = {...editForm};
+    submitValue.employee_ids= submitValue.employees.map(emp => emp.id);
+    submitValue.service_ids= submitValue.services.map(ser => ser.id);
+    createAppointment(submitValue);
     handleClose(e);
   };
 
