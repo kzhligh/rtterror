@@ -20,7 +20,6 @@ import {
 import { generateSchedules } from 'components/appointment/common/generateSchedules';
 
 import 'tui-calendar/dist/tui-calendar.css';
-import moment from "moment";
 
 const colorHash = new ColorHash();
 const TuiCalendarWrapper = dynamic(
@@ -316,6 +315,8 @@ const Appointment = ({
       <AppointmentStatusDialog
         editAppointment={editAppointment}
         deleteAppointment={onBeforeDeleteSchedule}
+        serviceList={serviceList}
+        employeeList={employeeList}
         target={selectedAppointment}
         isOpen={openStatusDialog}
         onClose={() => {

@@ -19,6 +19,8 @@ const EditAppointmentDialog = ({
   onClose,
   appointmentObj,
   setAppointmentObj,
+  serviceList,
+  employeeList,
 }) => {
   const [editForm, setEditForm] = useState<IAppointmentResponse>(
     appointmentObj
@@ -50,8 +52,8 @@ const EditAppointmentDialog = ({
               <InputLabel style={{ marginTop: '5%' }}>Services</InputLabel>
 
               <AppointmentDropdown
-                therapists={editForm.employees}
-                services={editForm.services}
+                employeeList={employeeList}
+                serviceList={serviceList}
                 setAppointment={setEditForm}
               />
             </Box>

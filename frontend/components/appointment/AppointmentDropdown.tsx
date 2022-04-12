@@ -1,8 +1,8 @@
 import { Select, MenuItem, InputLabel } from '@mui/material';
 
 export const AppointmentDropdown = ({
-  therapists,
-  services,
+  employeeList,
+  serviceList,
   setAppointment,
 }) => {
   return (
@@ -32,7 +32,7 @@ export const AppointmentDropdown = ({
           });
         }}
       >
-        {services.map((serv) => (
+        {serviceList.map((serv) => (
           <MenuItem key={serv.id} value={serv}>
             {serv.first_name + ' ' + serv.last_name}{' '}
             {'(' + serv.duration / 60000 + ' min)'}
@@ -51,7 +51,7 @@ export const AppointmentDropdown = ({
           }));
         }}
       >
-        {therapists.map((therapist) => (
+        {employeeList.map((therapist) => (
           <MenuItem key={therapist.id} value={therapist}>
             {therapist.first_name + ' ' + therapist.last_name}
           </MenuItem>

@@ -30,6 +30,8 @@ const AppointmentStatusDialog = ({
   target,
   editAppointment,
   deleteAppointment,
+  serviceList,
+  employeeList,
 }) => {
   const [formContent, setFormContent] = useState<IAppointmentResponse>(
     target ? { ...target } : blankAppointment
@@ -175,6 +177,8 @@ const AppointmentStatusDialog = ({
         }}
         appointmentObj={formContent}
         setAppointmentObj={setFormContent}
+        serviceList={serviceList}
+        employeeList={employeeList}
       />
       <ConfirmDeleteAlert
         open={deleteDialog}

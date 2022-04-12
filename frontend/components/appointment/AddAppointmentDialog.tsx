@@ -152,8 +152,8 @@ export const AddAppointmentDialog = ({
               <InputLabel>Services</InputLabel>
 
               <AppointmentDropdown
-                therapists={therapists}
-                services={services}
+                employeeList={therapists}
+                serviceList={services}
                 setAppointment={setEditForm}
               />
             </Box>
